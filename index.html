@@ -3,13 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MBF3C Unit 1: Quadratic Functions - Learning Portal</title>
+    <title>MBF3C - Foundations for College Mathematics - Practice Portal</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body {
             background-color: #f8fafc;
             font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
         }
+        details > summary { list-style: none; cursor: pointer; }
+        details > summary::-webkit-details-marker { display: none; }
+        details[open] .chevron { transform: rotate(90deg); }
+        .chevron { transition: transform 0.2s ease; }
     </style>
 </head>
 <body class="min-h-screen flex flex-col">
@@ -20,20 +24,20 @@
                 Ontario Curriculum | MBF3C Grade 11
             </span>
             <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight mt-4">
-                Unit 1: Quadratic Functions &amp; Factoring
+                MBF3C &mdash; Practice Portal
             </h1>
             <p class="text-slate-400 mt-2 text-base md:text-lg max-w-2xl mx-auto font-medium">
-                Interactive Practice Hub &amp; Lesson Adaptation Studio Portal
+                Foundations for College Mathematics &middot; Practice questions with step-by-step solutions and hints
             </p>
         </div>
     </header>
 
     <main class="flex-grow max-w-6xl w-full mx-auto px-4 py-12">
-        
+
         <div class="bg-white border border-slate-200 rounded-xl p-6 mb-10 shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
             <div>
-                <h2 class="text-xl font-bold text-[#0f172a]">Welcome to the Course Practice Index</h2>
-                <p class="text-slate-500 text-sm mt-1">Pick a lesson below to practice questions, see step-by-step solutions with hints, and have your results saved.</p>
+                <h2 class="text-xl font-bold text-[#0f172a]">Welcome</h2>
+                <p class="text-slate-500 text-sm mt-1">Open a unit, then pick a lesson. Each lesson has practice questions, a Hint button, and step-by-step solutions you can reveal one step at a time.</p>
             </div>
             <div class="flex items-center gap-3 bg-slate-100 px-4 py-2 rounded-lg border border-slate-200 font-semibold text-sm text-slate-700">
                 <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
@@ -41,107 +45,119 @@
             </div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            
-            <div class="bg-white border border-slate-200 rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 flex flex-col overflow-hidden group">
-                <div class="p-6 flex-grow">
-                    <div class="flex items-center justify-between mb-4">
-                        <span class="text-xs font-bold text-blue-600 bg-blue-50 px-2.5 py-1 rounded-md uppercase tracking-wider">
-                            Lesson 1 &amp; 2
-                        </span>
-                        <span class="text-slate-400 text-xs font-semibold">5 Problem Types</span>
-                    </div>
-                    <h3 class="text-lg font-bold text-[#0f172a] group-hover:text-blue-600 transition-colors duration-200">
-                        Polynomials &amp; Function Basics
-                    </h3>
-                    <p class="text-slate-500 text-sm mt-2 line-clamp-2">
-                        Practice GCF factoring, first and second differences, the vertical line test, and expanding binomials.
-                    </p>
-                    
-                    <div class="mt-6 space-y-2">
-                        <div class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Topics Covered:</div>
-                        <span class="inline-block text-xs bg-slate-100 text-slate-700 px-2.5 py-1 rounded font-medium mr-1.5 mb-1.5 border border-slate-200">Numerical GCF</span>
-                        <span class="inline-block text-xs bg-slate-100 text-slate-700 px-2.5 py-1 rounded font-medium mr-1.5 mb-1.5 border border-slate-200">Expression GCF</span>
-                        <span class="inline-block text-xs bg-slate-100 text-slate-700 px-2.5 py-1 rounded font-medium mr-1.5 mb-1.5 border border-slate-200">Table Differences</span>
-                        <span class="inline-block text-xs bg-slate-100 text-slate-700 px-2.5 py-1 rounded font-medium mr-1.5 mb-1.5 border border-slate-200">Vertical Line Test</span>
-                        <span class="inline-block text-xs bg-slate-100 text-slate-700 px-2.5 py-1 rounded font-medium border border-slate-200">Binomial Expansion</span>
+        <!-- ============================ UNIT 1 ============================ -->
+        <details open class="bg-white border border-slate-200 rounded-2xl shadow-sm mb-8 overflow-hidden">
+            <summary class="flex items-center justify-between gap-4 px-6 py-5 bg-slate-50 border-b border-slate-100 hover:bg-slate-100 transition-colors">
+                <div class="flex items-center gap-4">
+                    <span class="chevron text-blue-600 text-xl font-bold">&#9656;</span>
+                    <div>
+                        <div class="text-xs font-bold text-blue-600 uppercase tracking-widest">Unit 1</div>
+                        <div class="text-lg md:text-xl font-bold text-[#0f172a]">Quadratic Functions &amp; Factoring</div>
                     </div>
                 </div>
-                <div class="p-4 bg-slate-50 border-t border-slate-100">
-                    <a href="Unit_1_Lesson_1_and_2_Summer.html" class="block w-full text-center bg-[#0f172a] hover:bg-blue-600 text-white text-sm font-bold py-3 px-4 rounded-xl transition-colors duration-200 shadow-sm">
-                        Launch Lesson 1 &amp; 2 Module &rarr;
-                    </a>
+                <span class="text-slate-400 text-xs font-semibold whitespace-nowrap">3 lessons</span>
+            </summary>
+
+            <div class="p-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+                    <!-- Lesson 1 & 2 -->
+                    <div class="bg-white border border-slate-200 rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 flex flex-col overflow-hidden group">
+                        <div class="p-6 flex-grow">
+                            <div class="flex items-center justify-between mb-4">
+                                <span class="text-xs font-bold text-blue-600 bg-blue-50 px-2.5 py-1 rounded-md uppercase tracking-wider">Lesson 1 &amp; 2</span>
+                                <span class="text-slate-400 text-xs font-semibold">5 Problem Types</span>
+                            </div>
+                            <h3 class="text-lg font-bold text-[#0f172a] group-hover:text-blue-600 transition-colors duration-200">Polynomials &amp; Function Basics</h3>
+                            <p class="text-slate-500 text-sm mt-2">Practice GCF factoring, first and second differences, the vertical line test, and expanding binomials.</p>
+                            <div class="mt-6 space-y-2">
+                                <div class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Topics Covered:</div>
+                                <span class="inline-block text-xs bg-slate-100 text-slate-700 px-2.5 py-1 rounded font-medium mr-1.5 mb-1.5 border border-slate-200">Numerical GCF</span>
+                                <span class="inline-block text-xs bg-slate-100 text-slate-700 px-2.5 py-1 rounded font-medium mr-1.5 mb-1.5 border border-slate-200">Expression GCF</span>
+                                <span class="inline-block text-xs bg-slate-100 text-slate-700 px-2.5 py-1 rounded font-medium mr-1.5 mb-1.5 border border-slate-200">Table Differences</span>
+                                <span class="inline-block text-xs bg-slate-100 text-slate-700 px-2.5 py-1 rounded font-medium mr-1.5 mb-1.5 border border-slate-200">Vertical Line Test</span>
+                                <span class="inline-block text-xs bg-slate-100 text-slate-700 px-2.5 py-1 rounded font-medium border border-slate-200">Binomial Expansion</span>
+                            </div>
+                        </div>
+                        <div class="p-4 bg-slate-50 border-t border-slate-100">
+                            <a href="Unit_1_Lesson_1_and_2_Summer.html" class="block w-full text-center bg-[#0f172a] hover:bg-blue-600 text-white text-sm font-bold py-3 px-4 rounded-xl transition-colors duration-200 shadow-sm">Open Lesson 1 &amp; 2 &rarr;</a>
+                        </div>
+                    </div>
+
+                    <!-- Lesson 3 -->
+                    <div class="bg-white border border-slate-200 rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 flex flex-col overflow-hidden group">
+                        <div class="p-6 flex-grow">
+                            <div class="flex items-center justify-between mb-4">
+                                <span class="text-xs font-bold text-indigo-600 bg-indigo-50 px-2.5 py-1 rounded-md uppercase tracking-wider">Lesson 3</span>
+                                <span class="text-slate-400 text-xs font-semibold">5 Problem Types</span>
+                            </div>
+                            <h3 class="text-lg font-bold text-[#0f172a] group-hover:text-indigo-600 transition-colors duration-200">Special Polynomial Factoring</h3>
+                            <p class="text-slate-500 text-sm mt-2">Factor difference of squares and perfect square trinomials, including taking out a GCF first.</p>
+                            <div class="mt-6 space-y-2">
+                                <div class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Topics Covered:</div>
+                                <span class="inline-block text-xs bg-slate-100 text-slate-700 px-2.5 py-1 rounded font-medium mr-1.5 mb-1.5 border border-slate-200">GCF Extraction</span>
+                                <span class="inline-block text-xs bg-slate-100 text-slate-700 px-2.5 py-1 rounded font-medium mr-1.5 mb-1.5 border border-slate-200">Difference of Squares</span>
+                                <span class="inline-block text-xs bg-slate-100 text-slate-700 px-2.5 py-1 rounded font-medium mr-1.5 mb-1.5 border border-slate-200">Perfect Square (-)</span>
+                                <span class="inline-block text-xs bg-slate-100 text-slate-700 px-2.5 py-1 rounded font-medium mr-1.5 mb-1.5 border border-slate-200">Perfect Square (+)</span>
+                                <span class="inline-block text-xs bg-slate-100 text-slate-700 px-2.5 py-1 rounded font-medium border border-slate-200">GCF + Perfect Combo</span>
+                            </div>
+                        </div>
+                        <div class="p-4 bg-slate-50 border-t border-slate-100">
+                            <a href="Unit_1_Lesson_3_Summer.html" class="block w-full text-center bg-[#0f172a] hover:bg-indigo-600 text-white text-sm font-bold py-3 px-4 rounded-xl transition-colors duration-200 shadow-sm">Open Lesson 3 &rarr;</a>
+                        </div>
+                    </div>
+
+                    <!-- Lesson 4 -->
+                    <div class="bg-white border border-slate-200 rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 flex flex-col overflow-hidden group">
+                        <div class="p-6 flex-grow">
+                            <div class="flex items-center justify-between mb-4">
+                                <span class="text-xs font-bold text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-md uppercase tracking-wider">Lesson 4</span>
+                                <span class="text-slate-400 text-xs font-semibold">5 Problem Types</span>
+                            </div>
+                            <h3 class="text-lg font-bold text-[#0f172a] group-hover:text-emerald-600 transition-colors duration-200">Comprehensive Trinomial Factoring</h3>
+                            <p class="text-slate-500 text-sm mt-2">Factor trinomials using product &amp; sum or the criss-cross grid, including GCF and rectangle area problems.</p>
+                            <div class="mt-6 space-y-2">
+                                <div class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Topics Covered:</div>
+                                <span class="inline-block text-xs bg-slate-100 text-slate-700 px-2.5 py-1 rounded font-medium mr-1.5 mb-1.5 border border-slate-200">Multiply/Add Pairs</span>
+                                <span class="inline-block text-xs bg-slate-100 text-slate-700 px-2.5 py-1 rounded font-medium mr-1.5 mb-1.5 border border-slate-200">Trinomials (a=1)</span>
+                                <span class="inline-block text-xs bg-slate-100 text-slate-700 px-2.5 py-1 rounded font-medium mr-1.5 mb-1.5 border border-slate-200">Trinomials (a&gt;1)</span>
+                                <span class="inline-block text-xs bg-slate-100 text-slate-700 px-2.5 py-1 rounded font-medium mr-1.5 mb-1.5 border border-slate-200">GCF Mixed Systems</span>
+                                <span class="inline-block text-xs bg-slate-100 text-slate-700 px-2.5 py-1 rounded font-medium border border-slate-200">Geometric Area Model</span>
+                            </div>
+                        </div>
+                        <div class="p-4 bg-slate-50 border-t border-slate-100">
+                            <a href="Unit_1_Lesson_4_Summer.html" class="block w-full text-center bg-[#0f172a] hover:bg-emerald-600 text-white text-sm font-bold py-3 px-4 rounded-xl transition-colors duration-200 shadow-sm">Open Lesson 4 &rarr;</a>
+                        </div>
+                    </div>
+
                 </div>
             </div>
+        </details>
 
-            <div class="bg-white border border-slate-200 rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 flex flex-col overflow-hidden group">
-                <div class="p-6 flex-grow">
-                    <div class="flex items-center justify-between mb-4">
-                        <span class="text-xs font-bold text-indigo-600 bg-indigo-50 px-2.5 py-1 rounded-md uppercase tracking-wider">
-                            Lesson 3
-                        </span>
-                        <span class="text-slate-400 text-xs font-semibold">5 Problem Types</span>
-                    </div>
-                    <h3 class="text-lg font-bold text-[#0f172a] group-hover:text-indigo-600 transition-colors duration-200">
-                        Special Polynomial Factoring
-                    </h3>
-                    <p class="text-slate-500 text-sm mt-2 line-clamp-2">
-                        Factor difference of squares and perfect square trinomials, including taking out a GCF first.
-                    </p>
-                    
-                    <div class="mt-6 space-y-2">
-                        <div class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Topics Covered:</div>
-                        <span class="inline-block text-xs bg-slate-100 text-slate-700 px-2.5 py-1 rounded font-medium mr-1.5 mb-1.5 border border-slate-200">GCF Extraction</span>
-                        <span class="inline-block text-xs bg-slate-100 text-slate-700 px-2.5 py-1 rounded font-medium mr-1.5 mb-1.5 border border-slate-200">Difference of Squares</span>
-                        <span class="inline-block text-xs bg-slate-100 text-slate-700 px-2.5 py-1 rounded font-medium mr-1.5 mb-1.5 border border-slate-200">Perfect Square (-)</span>
-                        <span class="inline-block text-xs bg-slate-100 text-slate-700 px-2.5 py-1 rounded font-medium mr-1.5 mb-1.5 border border-slate-200">Perfect Square (+)</span>
-                        <span class="inline-block text-xs bg-slate-100 text-slate-700 px-2.5 py-1 rounded font-medium border border-slate-200">GCF + Perfect Combo</span>
+        <!-- ============================ UNIT 2 (placeholder) ============================ -->
+        <details class="bg-white border border-slate-200 rounded-2xl shadow-sm mb-8 overflow-hidden">
+            <summary class="flex items-center justify-between gap-4 px-6 py-5 bg-slate-50 border-b border-slate-100 hover:bg-slate-100 transition-colors">
+                <div class="flex items-center gap-4">
+                    <span class="chevron text-slate-400 text-xl font-bold">&#9656;</span>
+                    <div>
+                        <div class="text-xs font-bold text-slate-400 uppercase tracking-widest">Unit 2</div>
+                        <div class="text-lg md:text-xl font-bold text-slate-500">Coming soon</div>
                     </div>
                 </div>
-                <div class="p-4 bg-slate-50 border-t border-slate-100">
-                    <a href="Unit_1_Lesson_3_Summer.html" class="block w-full text-center bg-[#0f172a] hover:bg-indigo-600 text-white text-sm font-bold py-3 px-4 rounded-xl transition-colors duration-200 shadow-sm">
-                        Launch Lesson 3 Module &rarr;
-                    </a>
+                <span class="text-slate-400 text-xs font-semibold whitespace-nowrap">0 lessons</span>
+            </summary>
+            <div class="p-6">
+                <div class="border-2 border-dashed border-slate-200 rounded-xl p-8 text-center text-slate-400 text-sm font-medium">
+                    Lessons for Unit 2 will appear here. To add one: copy a Unit 1 lesson card, change the title and the link (href), and drop it into this grid.
                 </div>
             </div>
+        </details>
 
-            <div class="bg-white border border-slate-200 rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 flex flex-col overflow-hidden group">
-                <div class="p-6 flex-grow">
-                    <div class="flex items-center justify-between mb-4">
-                        <span class="text-xs font-bold text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-md uppercase tracking-wider">
-                            Lesson 4
-                        </span>
-                        <span class="text-slate-400 text-xs font-semibold">5 Problem Types</span>
-                    </div>
-                    <h3 class="text-lg font-bold text-[#0f172a] group-hover:text-emerald-600 transition-colors duration-200">
-                        Comprehensive Trinomial Factoring
-                    </h3>
-                    <p class="text-slate-500 text-sm mt-2 line-clamp-2">
-                        Factor trinomials using product & sum or the criss-cross grid, including GCF and rectangle area problems.
-                    </p>
-                    
-                    <div class="mt-6 space-y-2">
-                        <div class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Topics Covered:</div>
-                        <span class="inline-block text-xs bg-slate-100 text-slate-700 px-2.5 py-1 rounded font-medium mr-1.5 mb-1.5 border border-slate-200">Multiply/Add Pairs</span>
-                        <span class="inline-block text-xs bg-slate-100 text-slate-700 px-2.5 py-1 rounded font-medium mr-1.5 mb-1.5 border border-slate-200">Trinomials (a=1)</span>
-                        <span class="inline-block text-xs bg-slate-100 text-slate-700 px-2.5 py-1 rounded font-medium mr-1.5 mb-1.5 border border-slate-200">Trinomials (a&gt;1)</span>
-                        <span class="inline-block text-xs bg-slate-100 text-slate-700 px-2.5 py-1 rounded font-medium mr-1.5 mb-1.5 border border-slate-200">GCF Mixed Systems</span>
-                        <span class="inline-block text-xs bg-slate-100 text-slate-700 px-2.5 py-1 rounded font-medium border border-slate-200">Geometric Area Model</span>
-                    </div>
-                </div>
-                <div class="p-4 bg-slate-50 border-t border-slate-100">
-                    <a href="Unit_1_Lesson_4_Summer.html" class="block w-full text-center bg-[#0f172a] hover:bg-emerald-600 text-white text-sm font-bold py-3 px-4 rounded-xl transition-colors duration-200 shadow-sm">
-                        Launch Lesson 4 Module &rarr;
-                    </a>
-                </div>
-            </div>
-
-        </div>
     </main>
 
     <footer class="bg-slate-900 text-slate-500 py-6 px-4 text-center border-t border-slate-800 text-xs font-medium">
         <div class="max-w-6xl mx-auto">
-            &copy; 2026 Toronto District School Board Mathematics Department. All Rights Reserved. Practice Portal
+            &copy; 2026 Toronto District School Board Mathematics Department. MBF3C Practice Portal
         </div>
     </footer>
 

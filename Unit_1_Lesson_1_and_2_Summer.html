@@ -429,15 +429,15 @@
         <div class="profile-box">
             <label>Student Profile Setup:</label>
             <div class="profile-grid">
-                <input type="text" id="first-name" placeholder="Enter First Name..." autocomplete="off">
-                <input type="text" id="last-name" placeholder="Enter Last Name..." autocomplete="off">
+                <input type="text" id="first-name" placeholder="First name" autocomplete="off">
+                <input type="text" id="last-name" placeholder="Last name" autocomplete="off">
             </div>
         </div>
 
         <div class="selector-box">
-            <label for="question-select">Practice Questions Dynamic Pool:</label>
+            <label for="question-select">Practice Questions:</label>
             <select id="question-select" onchange="displaySolution()">
-                <option value="">-- Click to Select a Target Question --</option>
+                <option value="">-- Choose a question --</option>
                 <optgroup label="Type 1: Greatest Common Factor (GCF) of Numbers">
                     <option value="u1l12_t1q1">Type 1 Q1: GCF of Numbers 18 and 24</option>
                     <option value="u1l12_t1q2">Type 1 Q2: GCF of Numbers 36 and 54</option>
@@ -448,10 +448,10 @@
                     <option value="u1l12_t2q2">Type 2 Q2: Fully Factor 12xy - 4x²y + 16x</option>
                     <option value="u1l12_t2q3">Type 2 Q3: Fully Factor 15mn - 5m²n + 20m</option>
                 </optgroup>
-                <optgroup label="Type 3: First and Second Differences Classification">
-                    <option value="u1l12_t3q1">Type 3 Q1: Table Function Classification (y = -5 to 7)</option>
-                    <option value="u1l12_t3q2">Type 3 Q2: Table Function Classification (y = 7 to 7)</option>
-                    <option value="u1l12_t3q3">Type 3 Q3: Table Function Classification (y = 1 to 16)</option>
+                <optgroup label="Type 3: First and Second Differences">
+                    <option value="u1l12_t3q1">Type 3 Q1: Linear, Quadratic, or Neither? (y = -5 to 7)</option>
+                    <option value="u1l12_t3q2">Type 3 Q2: Linear, Quadratic, or Neither? (y = 7 to 7)</option>
+                    <option value="u1l12_t3q3">Type 3 Q3: Linear, Quadratic, or Neither? (y = 1 to 16)</option>
                 </optgroup>
                 <optgroup label="Type 4: Vertical Line Test & Function Properties">
                     <option value="u1l12_t4q1">Type 4 Q1: Structural Property of x² + y² = 9</option>
@@ -468,7 +468,7 @@
 
         <div class="solution-container" id="display-window">
             <div id="placeholder" class="placeholder-text">
-                Select an entry item from the target dropdown index above to initialize the testing module.
+                Choose a question from the menu above to begin.
             </div>
 
             <div id="quiz-station" class="quiz-interface-box" style="display: none;">
@@ -773,6 +773,7 @@
             if (!activeQuestionId || questionStates[activeQuestionId].answered) return;
             
             questionStates[activeQuestionId].selectedMcOption = letter;
+            var __fb = document.getElementById("feedback-msg"); if (__fb) __fb.style.display = "none";
             
             const activeProblem = problemDataPack[activeQuestionId];
             const mountPoint = document.getElementById("dynamic-input-mount-point");
@@ -798,26 +799,31 @@
             const lastNameInput = document.getElementById("last-name").value.trim();
 
             if (firstNameInput === "" || lastNameInput === "") {
-                alert("Identity verification required. Please enter your First Name and Last Name.");
+                alert("Please enter your first and last name first.");
                 return;
             }
 
             const state = questionStates[activeQuestionId];
             if (!state.selectedMcOption) {
-                alert("Please select an option card before verifying your submission.");
+                alert("Please choose an answer first.");
                 return;
             }
 
             let matchingCorrect = (state.selectedMcOption === answerRegistry[activeQuestionId]);
             let logString = "Option " + state.selectedMcOption;
 
-            state.answered = true;
-            state.isCorrect = matchingCorrect;
-
             globalAttempts++;
-            if (matchingCorrect) globalScore++;
+            state.attempts = (state.attempts || 0) + 1;
+            if (matchingCorrect && !state.isCorrect) globalScore++;
+            state.isCorrect = matchingCorrect;
             updateHudScoreboard();
-            lockQuizInterface(matchingCorrect);
+
+            if (matchingCorrect) {
+                state.answered = true;
+                lockQuizInterface(true);
+            } else {
+                showTryAgain();
+            }
 
             let payload = {
                 unitId: "Unit_1",
@@ -827,7 +833,7 @@
                 questionId: activeQuestionId,
                 userAnswer: logString,
                 isCorrect: matchingCorrect,
-                attempts: 1,
+                attempts: state.attempts,
                 methodUsed: "Multiple Choice Rows Selection",
                 totalScore: globalScore
             };
@@ -855,6 +861,14 @@
             }).catch(err => console.error("Database cloud logging failure:", err));
         }
 
+        function showTryAgain() {
+            document.getElementById("reveal-sol-btn").disabled = false;
+            const feedback = document.getElementById("feedback-msg");
+            feedback.style.display = "block";
+            feedback.className = "feedback-msg-area feedback-error";
+            feedback.innerHTML = "Not quite yet - pick another answer, or tap Hint for a clue. (You can tap Show Solution Steps any time.)";
+        }
+
         function lockQuizInterface(isCorrect) {
             document.querySelectorAll(".mc-option-card").forEach(c => c.classList.add("disabled"));
             document.getElementById("check-ans-btn").disabled = true;
@@ -864,10 +878,10 @@
             feedback.style.display = "block";
             if (isCorrect) {
                 feedback.className = "feedback-msg-area feedback-success";
-                feedback.innerHTML = "Correct entry! Classification parameters safely logged.";
+                feedback.innerHTML = "Correct! Nice work.";
             } else {
                 feedback.className = "feedback-msg-area feedback-error";
-                feedback.innerHTML = "Incorrect configuration values. Review step modules below.";
+                feedback.innerHTML = "Not quite - review the steps below.";
             }
         }
 
@@ -887,7 +901,7 @@
             const workspace = document.getElementById("solution-workspace-injected");
             const data = problemDataPack[activeQuestionId];
             
-            let html = `<h2>Solution Details for ${data.title}</h2>`;
+            let html = `<h2>Solution for ${data.title}</h2>`;
             data.steps.forEach(step => {
                 html += `
                 <div class="step-block" style="display:none;">
@@ -898,8 +912,8 @@
             });
             html += `
             <div class="final-answer-box" style="display:none;">
-                <span class="final-answer-label">Official Workbook Solution Reference</span>
-                <span class="final-answer-math">Correct Option: ${data.ans}</span>
+                <span class="final-answer-label">Answer</span>
+                <span class="final-answer-math">Correct answer: ${data.ans}</span>
             </div>`;
 
             workspace.innerHTML = html;
