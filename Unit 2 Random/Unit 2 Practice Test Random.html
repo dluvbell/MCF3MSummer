@@ -1,0 +1,1022 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MBF3C Unit 2 Cumulative Practice Test Simulator</title>
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        body {
+            background-color: #f8fafc;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+        .coord-svg {
+            width: 100%;
+            height: auto;
+            display: block;
+            background: #ffffff;
+            border-radius: 8px;
+        }
+        .math-render-viewport .coord-svg { width: 340px; max-width: 100%; }
+        .graph-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col text-slate-700 leading-relaxed">
+
+    <header class="bg-[#0f172a] text-white py-10 px-6 text-center shadow-md border-b-4 border-purple-600">
+        <div class="max-w-4xl mx-auto">
+            <span class="bg-purple-600 text-xs font-bold uppercase tracking-widest px-3 py-1.5 rounded-full shadow-sm">
+                Unit 2 Assessment Studio
+            </span>
+            <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight mt-4">
+                Unit 2 &mdash; Cumulative Practice Test
+            </h1>
+            <p class="text-slate-400 mt-2 text-base max-w-xl mx-auto font-medium">
+                Infinite Diagnostic Testing Simulator &middot; 13 Dynamic Modules Covering Quadratic Relations &amp; Functions
+            </p>
+            <div class="inline-flex gap-6 bg-slate-800 border border-slate-700 text-white font-bold px-6 py-2.5 rounded-full mt-6 shadow-md text-sm">
+                <div>Score: <span id="hud-score" class="text-purple-400 font-extrabold">0</span></div>
+                <div class="text-slate-500">|</div>
+                <div>Total Tries: <span id="hud-attempts" class="text-amber-400 font-extrabold">0</span></div>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow max-w-4xl w-full mx-auto px-4 py-10">
+        
+        <div class="bg-white border border-slate-200 rounded-2xl p-6 mb-8 shadow-sm">
+            <label class="block text-sm font-bold text-[#0f172a] uppercase tracking-wider mb-3">Student Identity Verification</label>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <input type="text" id="first-name" placeholder="Enter First Name..." autocomplete="off" class="w-full px-4 py-3 border border-slate-300 rounded-xl outline-none focus:border-purple-500 font-medium transition-colors">
+                <input type="text" id="last-name" placeholder="Enter Last Name..." autocomplete="off" class="w-full px-4 py-3 border border-slate-300 rounded-xl outline-none focus:border-purple-500 font-medium transition-colors">
+            </div>
+        </div>
+
+        <div class="bg-white border border-slate-200 rounded-2xl p-6 mb-8 shadow-sm">
+            <label for="question-select" class="block text-sm font-bold text-[#0f172a] uppercase tracking-wider mb-3">Test Navigation Directory</label>
+            <div class="flex flex-col md:flex-row gap-4">
+                <select id="question-select" class="flex-grow px-4 py-3.5 border-2 border-slate-300 rounded-xl outline-none bg-white text-[#0f172a] font-bold cursor-pointer focus:border-purple-500 transition-colors">
+                    <option value="">-- Select a Diagnostic Test Module --</option>
+                    <option value="m1">Module 1: Vertical Line Test &amp; Function Mapping</option>
+                    <option value="m2">Module 2: Algebraic Function Notation Evaluation f(a)</option>
+                    <option value="m3">Module 3: Graphical Coordinate Extrapolation g(-3)</option>
+                    <option value="m4">Module 4: Graph-Based Domain Set Boundaries</option>
+                    <option value="m5">Module 5: Graph-Based Range Set Boundaries</option>
+                    <option value="m6">Module 6: Vertex to Standard Polynomial Expansion</option>
+                    <option value="m7">Module 7: Completing the Square Algorithm Execution</option>
+                    <option value="m8">Module 8: Extrema Amplitude Parameter Extraction</option>
+                    <option value="m9">Module 9: Factored Form Metric Set Characterization</option>
+                    <option value="m10">Module 10: Optimization Contextual Application Problems</option>
+                    <option value="m11">Module 11: Graphical Key Characteristics Analysis</option>
+                    <option value="m12">Module 12: Step-by-Step Hand-Graphing Protocols</option>
+                    <option value="m13">Module 13: Equation-to-Graph Visual Matching</option>
+                </select>
+                <button class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-3.5 px-8 rounded-xl shadow-sm transition-colors whitespace-nowrap" onclick="triggerNewQuestion()">Generate New</button>
+            </div>
+        </div>
+
+        <div class="bg-white border border-slate-200 rounded-2xl p-8 shadow-sm min-h-[250px]" id="display-window">
+            <div id="placeholder" class="text-center py-16 text-slate-400 font-medium italic">
+                Select a diagnostic evaluation target module and click "Generate New" to initialize testing parameters.
+            </div>
+
+            <div id="quiz-station" style="display: none;">
+                <div id="asset-viewport-mount-point" class="border border-slate-200 rounded-xl p-6 bg-slate-50 mb-6 flex justify-center items-center shadow-inner" style="display: none;"></div>
+
+                <div id="question-statement-display" class="bg-slate-900 text-white border-l-4 border-purple-500 rounded-r-xl p-5 mb-6 text-base font-semibold shadow-sm"></div>
+
+                <label id="input-prompt-label" class="block font-bold text-[#0f172a] text-sm uppercase tracking-wider mb-3"></label>
+                
+                <div id="dynamic-input-mount-point" class="mb-6"></div>
+
+                <div id="hint-box" class="hidden bg-amber-50 border-l-4 border-amber-500 text-amber-900 rounded-r-xl p-4 mb-4 font-medium text-sm"></div>
+                <div id="feedback-msg" class="hidden p-4 rounded-xl border font-bold text-sm mb-6 transition-all"></div>
+
+                <div class="flex flex-wrap gap-3">
+                    <button class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-6 rounded-xl shadow-sm transition-colors text-sm" id="check-ans-btn" onclick="evaluateStudentAnswer()">Check Response</button>
+                    <button class="bg-amber-400 hover:bg-amber-500 text-amber-950 font-bold py-3 px-5 rounded-xl shadow-sm transition-colors text-sm" id="hint-btn" onclick="toggleHint()">Hint</button>
+                    <button class="bg-slate-100 border border-slate-300 hover:bg-slate-200 text-[#0f172a] font-bold py-3 px-6 rounded-xl transition-colors text-sm disabled:opacity-50 disabled:cursor-not-allowed" id="reveal-sol-btn" disabled onclick="unlockSolutionPanel()">Review Steps</button>
+                </div>
+            </div>
+
+            <div class="hidden border-t-2 border-dashed border-slate-200 mt-8 pt-8" id="solution-reveal-layer">
+                <div id="solution-workspace-injected" class="space-y-4"></div>
+                
+                <div class="flex justify-between items-center mt-8 pt-6 border-t border-slate-200 gap-4">
+                    <button class="bg-slate-100 border border-slate-300 hover:bg-slate-200 text-[#0f172a] font-bold py-2.5 px-5 rounded-xl transition-colors text-sm disabled:opacity-40" id="restart-btn" onclick="restartSolution()">Reset Breakdown</button>
+                    <button class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2.5 px-6 rounded-xl shadow-sm transition-colors text-sm disabled:opacity-40" id="next-btn" onclick="showNextStep()">Advance Next Step &rarr;</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-slate-900 text-slate-500 py-6 text-center text-xs font-semibold border-t border-slate-800 mt-10">
+        &copy; 2026 Toronto District School Board Mathematics Department. All Rights Reserved.
+    </footer>
+
+    <script>
+        const TEACHER_SPREADSHEET_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwygR6-l7XPRC1KL-Pqci33Yw_4pmCWa8mW7gNHJ_RsmN41ax15-d0sE-CrIxU0z22m/exec";
+
+        let globalScore = 0;
+        let globalAttempts = 0;
+        let currentProblemData = null;
+        let currentState = { answered: false, selectedMcOption: "", isCorrect: false, currentStep: 0, solRevealed: false, attempts: 0 };
+        let visibleStepElements = [];
+        let currentStepIndex = 0;
+
+        // --- Math & Logic Utilities ---
+        function randInt(min, max, exclude = []) {
+            let val;
+            let safety = 0;
+            do {
+                val = Math.floor(Math.random() * (max - min + 1)) + min;
+                safety++;
+            } while (exclude.includes(val) && safety < 100);
+            return val;
+        }
+
+        function fmtPoly(a, b, c, fnName = "f") {
+            let res = "";
+            if (a !== 0) res += (a === 1 ? "x^2" : (a === -1 ? "-x^2" : a + "x^2"));
+            if (b !== 0) res += (b > 0 ? (res ? " + " : "") + (b === 1 ? "x" : b + "x") : (res ? " - " : "-") + (b === -1 ? "x" : Math.abs(b) + "x"));
+            if (c !== 0) res += (c > 0 ? (res ? " + " : "") + c : (res ? " - " : "-") + Math.abs(c));
+            if (res === "") res = "0";
+            return `${fnName}(x) = ` + res;
+        }
+
+        function fmtVertex(a, h, k, fnName = "y") {
+            let aStr = a === 1 ? "" : (a === -1 ? "-" : a.toString());
+            let hStr = h === 0 ? "x^2" : "(x " + (h > 0 ? "- " + h : "+ " + Math.abs(h)) + ")^2";
+            let kStr = k === 0 ? "" : (k > 0 ? " + " + k : " - " + Math.abs(k));
+            return `${fnName} = ` + aStr + hStr + kStr;
+        }
+
+        function fmtVertexRight(a, h, k) {
+            let aStr = a === 1 ? "" : (a === -1 ? "-" : a.toString());
+            let hStr = h === 0 ? "x^2" : "(x " + (h > 0 ? "- " + h : "+ " + Math.abs(h)) + ")^2";
+            let kStr = k === 0 ? "" : (k > 0 ? " + " + k : " - " + Math.abs(k));
+            return aStr + hStr + kStr;
+        }
+
+        function shuffleMC(correct, distArr, fallbackArr) {
+            let opts = [correct];
+            let attempts = 0;
+            while(opts.length < 4 && attempts < 20) {
+                let d = distArr[Math.floor(Math.random() * distArr.length)];
+                if(!opts.includes(d)) opts.push(d);
+                attempts++;
+            }
+            let fbIdx = 0;
+            while(opts.length < 4 && fbIdx < fallbackArr.length) {
+                if(!opts.includes(fallbackArr[fbIdx])) opts.push(fallbackArr[fbIdx]);
+                fbIdx++;
+            }
+            while(opts.length < 4) {
+                opts.push("Alt " + Math.random().toString(36).slice(2,5));
+            }
+            
+            for (let i = opts.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [opts[i], opts[j]] = [opts[j], opts[i]];
+            }
+            
+            let ansLetter = "";
+            let finalOpts = [];
+            let letters = ["A", "B", "C", "D"];
+            for(let i=0; i<4; i++){
+                finalOpts.push(letters[i] + ") " + opts[i]);
+                if(opts[i] === correct) ansLetter = letters[i];
+            }
+            return { options: finalOpts, ansLetter: ansLetter, rawAns: correct };
+        }
+
+        function gdef(v, d) { return (v === undefined || v === null) ? d : v; }
+
+        // --- SVG Graphing Engine (Dynamic Grid Responsive) ---
+        function buildGraph(spec) {
+            let autoXmin = -7, autoXmax = 7, autoYmin = -7, autoYmax = 7;
+            
+            if (spec.curves) {
+                spec.curves.forEach(c => {
+                    if (c.kind === "parab" || c.kind === "abs" || c.kind === "xparab") {
+                        autoXmin = Math.min(autoXmin, (c.h || 0) - 5);
+                        autoXmax = Math.max(autoXmax, (c.h || 0) + 5);
+                        if (c.a > 0) {
+                            autoYmin = Math.min(autoYmin, (c.k || 0) - 2);
+                            autoYmax = Math.max(autoYmax, (c.k || 0) + 8);
+                        } else {
+                            autoYmin = Math.min(autoYmin, (c.k || 0) - 8);
+                            autoYmax = Math.max(autoYmax, (c.k || 0) + 2);
+                        }
+                    }
+                });
+            }
+
+            const xmin = gdef(spec.xmin, Math.floor(autoXmin));
+            const xmax = gdef(spec.xmax, Math.ceil(autoXmax));
+            const ymin = gdef(spec.ymin, Math.floor(autoYmin));
+            const ymax = gdef(spec.ymax, Math.ceil(autoYmax));
+            
+            const W = 320, H = 320, pad = 15;
+            const X = function (x) { return pad + (x - xmin) / (xmax - xmin) * (W - 2 * pad); };
+            const Y = function (y) { return pad + (ymax - y) / (ymax - ymin) * (H - 2 * pad); };
+            const uid = "g" + Math.random().toString(36).slice(2, 8);
+            
+            let s = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" class="coord-svg">`;
+            s += '<defs>';
+            s += `<clipPath id="clip-${uid}"><rect x="${pad}" y="${pad}" width="${W - 2 * pad}" height="${H - 2 * pad}"/></clipPath>`;
+            s += `<marker id="ax-${uid}" markerWidth="7" markerHeight="7" refX="3.5" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#0f172a"/></marker>`;
+            s += `<marker id="cv-${uid}" markerWidth="7" markerHeight="7" refX="3.5" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#2563eb"/></marker>`;
+            s += '</defs>';
+            
+            for (let gx = Math.ceil(xmin); gx <= xmax; gx++) s += `<line x1="${X(gx)}" y1="${Y(ymax)}" x2="${X(gx)}" y2="${Y(ymin)}" stroke="#cbd5e1" stroke-width="1.2"/>`;
+            for (let gy = Math.ceil(ymin); gy <= ymax; gy++) s += `<line x1="${X(xmin)}" y1="${Y(gy)}" x2="${X(xmax)}" y2="${Y(gy)}" stroke="#cbd5e1" stroke-width="1.2"/>`;
+            
+            if (0 >= ymin && 0 <= ymax) {
+                s += `<line x1="${X(xmin)}" y1="${Y(0)}" x2="${X(xmax)}" y2="${Y(0)}" stroke="#0f172a" stroke-width="2.5" marker-start="url(#ax-${uid})" marker-end="url(#ax-${uid})"/>`;
+            }
+            if (0 >= xmin && 0 <= xmax) {
+                s += `<line x1="${X(0)}" y1="${Y(ymin)}" x2="${X(0)}" y2="${Y(ymax)}" stroke="#0f172a" stroke-width="2.5" marker-start="url(#ax-${uid})" marker-end="url(#ax-${uid})"/>`;
+            }
+            
+            let xTick = (xmax - xmin) > 16 ? 4 : 2;
+            let yTick = (ymax - ymin) > 16 ? 4 : 2;
+
+            for (let gx = Math.ceil(xmin); gx <= xmax; gx++) { 
+                if (gx !== 0 && gx % xTick === 0) {
+                    let yPos = (0 >= ymin && 0 <= ymax) ? Y(0) + 14 : Y(ymin) - 5;
+                    s += `<text x="${X(gx)}" y="${yPos}" font-size="11" font-weight="900" fill="#0f172a" text-anchor="middle">${gx}</text>`; 
+                }
+            }
+            for (let gy = Math.ceil(ymin); gy <= ymax; gy++) { 
+                if (gy !== 0 && gy % yTick === 0) {
+                    let xPos = (0 >= xmin && 0 <= xmax) ? X(0) - 6 : X(xmin) + 15;
+                    s += `<text x="${xPos}" y="${Y(gy) + 3}" font-size="11" font-weight="900" fill="#0f172a" text-anchor="end">${gy}</text>`; 
+                }
+            }
+            
+            if (0 >= xmin && 0 <= xmax && 0 >= ymin && 0 <= ymax) {
+                s += `<text x="${X(0) - 6}" y="${Y(0) + 14}" font-size="11" font-weight="900" fill="#0f172a" text-anchor="end">0</text>`;
+            }
+            
+            const curves = spec.curves || [];
+            for (let i = 0; i < curves.length; i++) s += `<g clip-path="url(#clip-${uid})">${drawCurve(curves[i], X, Y, xmin, xmax, ymin, ymax, uid)}</g>`;
+            const dots = spec.dots || [];
+            for (let i = 0; i < dots.length; i++) { 
+                const dd = dots[i]; 
+                s += `<circle cx="${X(dd.x)}" cy="${Y(dd.y)}" r="5" fill="${dd.open ? '#ffffff' : '#2563eb'}" stroke="#2563eb" stroke-width="2.5"/>`; 
+            }
+            s += '</svg>';
+            return s;
+        }
+
+        function drawCurve(c, X, Y, xmin, xmax, ymin, ymax, uid) {
+            function path(pts, aStart, aEnd) {
+                if (pts.length < 2) return "";
+                let d = "";
+                for (let i = 0; i < pts.length; i++) d += (i === 0 ? "M" : "L") + X(pts[i][0]).toFixed(1) + "," + Y(pts[i][1]).toFixed(1) + " ";
+                let attr = 'stroke="#2563eb" stroke-width="3" fill="none" stroke-linejoin="round" stroke-linecap="round"';
+                if (aEnd) attr += ` marker-end="url(#cv-${uid})"`;
+                if (aStart) attr += ` marker-start="url(#cv-${uid})"`;
+                return `<path d="${d.trim()}" ${attr}/>`;
+            }
+            const lo = c.dom ? c.dom[0] : xmin, hi = c.dom ? c.dom[1] : xmax;
+            if (c.kind === "line") { return path([[lo, c.m * lo + c.b], [hi, c.m * hi + c.b]], c.arrowLeft, c.arrowRight); }
+            if (c.kind === "hline") { return path([[lo, c.y], [hi, c.y]], c.arrowLeft, c.arrowRight); }
+            if (c.kind === "vline") { const a = c.dom ? c.dom[0] : ymin, b = c.dom ? c.dom[1] : ymax; return path([[c.x, a], [c.x, b]], c.arrowLeft, c.arrowRight); }
+            if (c.kind === "abs") { const f = function (x) { return c.a * Math.abs(x - c.h) + c.k; }; return path([[lo, f(lo)], [c.h, f(c.h)], [hi, f(hi)]], c.arrowLeft, c.arrowRight); }
+            if (c.kind === "circle") { const rpx = (X(c.cx + c.r) - X(c.cx)).toFixed(1); return `<circle cx="${X(c.cx)}" cy="${Y(c.cy)}" r="${rpx}" stroke="#2563eb" stroke-width="3" fill="none"/>`; }
+            if (c.kind === "xparab") { const a = c.ydom ? c.ydom[0] : ymin, b = c.ydom ? c.ydom[1] : ymax; let pts = []; for (let i = 0; i <= 80; i++) { const y = a + (b - a) * i / 80; pts.push([c.a * (y - c.k) * (y - c.k) + c.h, y]); } return path(pts, false, false); }
+            let pts = [];
+            for (let i = 0; i <= 80; i++) {
+                const x = lo + (hi - lo) * i / 80; let y;
+                if (c.kind === "parab") y = c.a * (x - c.h) * (x - c.h) + c.k;
+                else if (c.kind === "cubic") y = c.a * (x - c.h) * (x - c.h) * (x - c.h) + c.k;
+                else y = 0;
+                pts.push([x, y]);
+            }
+            return path(pts, c.arrowLeft, c.arrowRight);
+        }
+
+        function buildOptionsHTML(problem, selectedLetter, disabled) {
+            const isGraph = problem.optionType === "graph";
+            let html = '<div class="' + (isGraph ? 'graph-grid' : 'flex flex-col gap-3') + '">';
+            for (let i = 0; i < problem.options.length; i++) {
+                const opt = problem.options[i];
+                const letter = opt.charAt(0);
+                const isSelected = selectedLetter === letter;
+                
+                let cardStyles = "border-2 rounded-xl p-4 font-semibold text-sm transition-all flex items-center gap-4 cursor-pointer ";
+                if (disabled) {
+                    cardStyles += isSelected ? "border-purple-500 bg-purple-50 text-purple-950 opacity-90 cursor-not-allowed " : "border-slate-200 bg-slate-50 text-slate-400 cursor-not-allowed ";
+                } else {
+                    cardStyles += isSelected ? "border-purple-600 bg-purple-50 text-purple-900 shadow-sm " : "border-slate-200 bg-white hover:border-purple-300 hover:bg-slate-50 text-slate-800 ";
+                }
+                
+                let badgeStyles = "w-7 h-7 rounded-full flex items-center justify-center text-xs font-black shrink-0 ";
+                badgeStyles += isSelected ? "bg-purple-600 text-white" : "bg-slate-100 text-slate-700";
+
+                const body = isGraph ? ('<div class="w-full mt-2 border border-slate-200 rounded-lg overflow-hidden">' + buildGraph(problem.optionSpecs[i]) + '</div>') : ('<span class="font-medium text-base">' + opt.substring(3) + '</span>');
+                html += '<div class="' + cardStyles + '" onclick="selectMcOptionCard(\'' + letter + '\')"><span class="' + badgeStyles + '">' + letter + '</span>' + body + '</div>';
+            }
+            html += '</div>';
+            return html;
+        }
+
+        // --- Core Module Generators ---
+        function generateProblem(typeId) {
+            if (!typeId) return null;
+            let p = {
+                title: "", type: "mc", assetType: "none", optionType: "text",
+                fullStatement: "", prompt: "", options: [], optionSpecs: [],
+                hint: "", steps: [], ans: "", rawAns: "", graphSpec: null
+            };
+
+            if (typeId === "m1") { // Vertical Line Test
+                p.title = "Vertical Line Test";
+                p.optionType = "graph";
+                p.fullStatement = "Which of the following graphical relations is <b>NOT</b> a function? Evaluate using the Vertical Line Test.";
+                p.prompt = "Tap the relation graph setup that fails the functional rule definition:";
+                
+                let funcs = [
+                    { kind: "line", m: randInt(-3,3,[0]), b: randInt(-2,2), arrowLeft: true, arrowRight: true },
+                    { kind: "parab", a: randInt(1,3)*Math.sign(randInt(-1,1)+0.5)*0.5, h: randInt(-3,3), k: randInt(-3,3), arrowLeft: true, arrowRight: true },
+                    { kind: "abs", a: randInt(1,2)*Math.sign(randInt(-1,1)+0.5), h: randInt(-2,2), k: randInt(-2,2), arrowLeft: true, arrowRight: true },
+                    { kind: "cubic", a: 0.2 * Math.sign(randInt(-1,1)+0.5), h: randInt(-2,2), k: randInt(-1,1), arrowLeft: true, arrowRight: true },
+                    { kind: "hline", y: randInt(-4,4), arrowLeft: true, arrowRight: true }
+                ];
+                let nonFuncs = [
+                    { kind: "circle", cx: randInt(-2,2), cy: randInt(-2,2), r: randInt(2,4) },
+                    { kind: "xparab", a: randInt(1,2)*Math.sign(randInt(-1,1)+0.5)*0.5, h: randInt(-2,2), k: randInt(-2,2), ydom: [-6, 6] },
+                    { kind: "vline", x: randInt(-4,4), arrowLeft: true, arrowRight: true }
+                ];
+                funcs.sort(() => 0.5 - Math.random());
+                nonFuncs.sort(() => 0.5 - Math.random());
+                
+                let specs = [{ curves: [funcs[0]] }, { curves: [funcs[1]] }, { curves: [funcs[2]] }, { curves: [nonFuncs[0]] }];
+                let indices = [0,1,2,3].sort(() => 0.5 - Math.random());
+                let letters = ["A", "B", "C", "D"];
+                let finalSpecs = [];
+                let ansLetter = "";
+                for(let i=0; i<4; i++){
+                    finalSpecs.push(specs[indices[i]]);
+                    if (indices[i] === 3) ansLetter = letters[i];
+                }
+                
+                p.options = ["A)", "B)", "C)", "D)"]; p.optionSpecs = finalSpecs; p.ans = ansLetter;
+                p.hint = "A system represents a function if and only if every vertical line drawn intersects the graph boundary structure at most once.";
+                p.steps = [
+                    { title: "Step 1: Define Vertical Line Test Criteria", math: "\\( 1 \\text{ Input } x \\rightarrow \\text{ At Most } 1 \\text{ Output } y \\)", explanation: "Slide an imaginary vertical line across each workspace mapping options horizontally." },
+                    { title: "Step 2: Isolate the Double Intersection Structural Breach", math: `\\( \\text{Option } ${ansLetter} \\text{ fails the test.} \\)`, explanation: `A vertical line intersects Option ${ansLetter}'s graph at multiple points, mapping one input to multiple outputs.` }
+                ];
+            }
+            else if (typeId === "m2") { // Evaluate f(a)
+                p.title = "Evaluate Algebraic Function";
+                let a = randInt(-4, 4, [0]);
+                let b = randInt(-6, 6, [0]);
+                let c = randInt(-10, 10, [0]);
+                let x_val = randInt(-5, 5);
+                
+                let funcStr = `\\( f(x) = ${a === 1 ? "x^2" : (a === -1 ? "-x^2" : a + "x^2")} ${b>0?'+':'-'} ${Math.abs(b)}x ${c>0?'+':'-'} ${Math.abs(c)} \\)`;
+                p.fullStatement = `Given the algebraic quadratic function relation expression: ${funcStr}. Determine the precise numerical output parameter value of \\( f(${x_val}) \\).`;
+                p.prompt = "Select the evaluated output constant integer value:";
+                
+                let ans = a * (x_val * x_val) + b * x_val + c;
+                let d1 = -a * (x_val * x_val) + b * x_val + c;
+                let d2 = a * (x_val * x_val) - b * x_val + c;
+                let d3 = ans + randInt(1, 4) * (Math.random()>0.5?1:-1);
+                
+                let mc = shuffleMC(ans.toString(), [d1.toString(), d2.toString(), d3.toString()], [(ans+3).toString(), (ans-3).toString(), (ans+2).toString()]);
+                p.options = mc.options; p.ans = mc.ansLetter;
+                
+                p.hint = `Substitute the value ${x_val} inside explicit bracket fields. Ensure BEDMAS rule compliance: execute \\((${x_val})^2\\) before multiplying by ${a}.`;
+                p.steps = [
+                    { title: "Step 1: Embed Parameter Value inside Expression Matrix", math: `\\( f(${x_val}) = ${a}(${x_val})^2 ${b>0?'+':'-'} ${Math.abs(b)}(${x_val}) ${c>0?'+':'-'} ${Math.abs(c)} \\)`, explanation: `Replace every occurrence of the variable x with brackets enclosing ${x_val}.` },
+                    { title: "Step 2: Evaluate Exponential Power Factors", math: `\\( f(${x_val}) = ${a * (x_val * x_val)} ${b * x_val > 0 ? '+' : '-'} ${Math.abs(b * x_val)} ${c > 0 ? '+' : '-'} ${Math.abs(c)} \\)`, explanation: `Calculate the squared value first, then multiply the coefficients.` },
+                    { title: "Step 3: Process Multiplications and Sum terms", math: `\\( f(${x_val}) = ${ans} \\)`, explanation: `Perform the final addition steps smoothly to achieve final answer.` }
+                ];
+            }
+            else if (typeId === "m3") { // Reading Graph
+                p.title = "Graphical Coordinate Extrapolation";
+                p.assetType = "graph";
+                let isLine = Math.random() > 0.5;
+                let targetX = randInt(-4, 4);
+                let targetY = 0;
+                
+                if (isLine) {
+                    let m = randInt(-3, 3, [0]);
+                    let b = randInt(-3, 3);
+                    targetY = m * targetX + b;
+                    while (targetY < -6 || targetY > 6) {
+                        m = randInt(-3, 3, [0]); b = randInt(-3, 3); targetY = m * targetX + b;
+                    }
+                    p.graphSpec = { curves: [{ kind: "line", m: m, b: b, arrowLeft: true, arrowRight: true }] };
+                } else {
+                    let a = Math.random() > 0.5 ? 1 : -1;
+                    let h = randInt(-3, 3);
+                    let k = randInt(-4, 4);
+                    targetX = h + randInt(-2, 2);
+                    targetY = a * (targetX - h) * (targetX - h) + k;
+                    while (targetY < -6 || targetY > 6 || targetX < -5 || targetX > 5) {
+                        h = randInt(-3, 3); k = randInt(-4, 4); targetX = h + randInt(-2, 2); targetY = a * (targetX - h) * (targetX - h) + k;
+                    }
+                    p.graphSpec = { curves: [{ kind: "parab", a: a, h: h, k: k, arrowLeft: true, arrowRight: true }] };
+                }
+
+                p.fullStatement = `The functional model profile of \\( g(x) \\) is mapped inside the coordinate workspace viewport above. Extrapolate the exact target value output of \\( g(${targetX}) \\).`;
+                p.prompt = `Select the accurate dependent value output coordinate:`;
+                
+                let mc = shuffleMC(targetY.toString(), [targetX.toString(), (-targetY).toString(), (targetY+2).toString()], [(targetY-2).toString(), "0", "1"]);
+                p.options = mc.options; p.ans = mc.ansLetter;
+                
+                p.hint = `Isolate horizontal position index x = ${targetX}, trace coordinate intersections vertically downwards or upwards until touching the path.`;
+                p.steps = [
+                    { title: "Step 1: Identify Target Input Point Index", math: `\\( x = ${targetX} \\)`, explanation: `Locate marker value ${targetX} on the horizontal grid line axis.` },
+                    { title: "Step 2: Read Intersecting Coordinate Height Vector", math: `\\( g(${targetX}) = ${targetY} \\)`, explanation: `Tracing vertically to intercept the structural curve maps directly to a vertical scale height level matching exactly ${targetY}.` }
+                ];
+            }
+            else if (typeId === "m4" || typeId === "m5") { // Domain or Range
+                let isDomain = (typeId === "m4");
+                p.title = isDomain ? "Graph-Based Domain Set Boundaries" : "Graph-Based Range Set Boundaries";
+                p.assetType = "graph";
+                
+                let shapeType = randInt(1, 3);
+                let correctStr = "", dist1 = "", dist2 = "", dist3 = "";
+                
+                if (shapeType === 1) { // Segment
+                    let x1 = randInt(-6, -1), x2 = randInt(1, 6);
+                    let y1 = randInt(-5, 5), y2 = randInt(-5, 5);
+                    p.graphSpec = { 
+                        curves: [{ kind: "line", m: (y2-y1)/(x2-x1), b: y1 - (y2-y1)/(x2-x1)*x1, dom: [x1, x2] }],
+                        dots: [{ x: x1, y: y1 }, { x: x2, y: y2 }]
+                    };
+                    let minY = Math.min(y1, y2), maxY = Math.max(y1, y2);
+                    let dStr = `\\( \\{x \\in \\mathbb{R} \\mid ${x1} \\le x \\le ${x2}\\} \\)`;
+                    let rStr = `\\( \\{y \\in \\mathbb{R} \\mid ${minY} \\le y \\le ${maxY}\\} \\)`;
+                    
+                    if (isDomain) {
+                        correctStr = dStr; dist1 = rStr; dist2 = `\\( \\{y \\in \\mathbb{R} \\mid ${x1} \\le y \\le ${x2}\\} \\)`; dist3 = `\\( \\{x \\in \\mathbb{R}\\} \\)`;
+                    } else {
+                        correctStr = rStr; dist1 = dStr; dist2 = `\\( \\{x \\in \\mathbb{R} \\mid ${minY} \\le x \\le ${maxY}\\} \\)`; dist3 = `\\( \\{y \\in \\mathbb{R}\\} \\)`;
+                    }
+                }
+                else if (shapeType === 2) { // Parabola/Abs
+                    let isAbs = Math.random() > 0.5;
+                    let a = Math.random() > 0.5 ? 1 : -1;
+                    let h = randInt(-3, 3), k = randInt(-4, 4);
+                    p.graphSpec = { curves: [{ kind: isAbs ? "abs" : "parab", a: a, h: h, k: k, arrowLeft: true, arrowRight: true }] };
+                    
+                    let dStr = `\\( \\{x \\in \\mathbb{R}\\} \\)`;
+                    let rStr = a > 0 ? `\\( \\{y \\in \\mathbb{R} \\mid y \\ge ${k}\\} \\)` : `\\( \\{y \\in \\mathbb{R} \\mid y \\le ${k}\\} \\)`;
+                    
+                    if (isDomain) {
+                        correctStr = dStr; dist1 = rStr; dist2 = `\\( \\{x \\in \\mathbb{R} \\mid x \\ge ${h}\\} \\)`; dist3 = `\\( \\{x \\in \\mathbb{R} \\mid x \\neq ${h}\\} \\)`;
+                    } else {
+                        correctStr = rStr; dist1 = dStr; dist2 = a > 0 ? `\\( \\{y \\in \\mathbb{R} \\mid y \\le ${k}\\} \\)` : `\\( \\{y \\in \\mathbb{R} \\mid y \\ge ${k}\\} \\)`; dist3 = `\\( \\{y \\in \\mathbb{R} \\mid y \\ge ${h}\\} \\)`;
+                    }
+                }
+                else { // Line
+                    let m = randInt(-2, 2, [0]);
+                    let b = randInt(-3, 3);
+                    p.graphSpec = { curves: [{ kind: "line", m: m, b: b, arrowLeft: true, arrowRight: true }] };
+                    let allR_X = `\\( \\{x \\in \\mathbb{R}\\} \\)`;
+                    let allR_Y = `\\( \\{y \\in \\mathbb{R}\\} \\)`;
+                    
+                    if (isDomain) {
+                        correctStr = allR_X; dist1 = `\\( \\{x \\in \\mathbb{R} \\mid x \\ge 0\\} \\)`; dist2 = `\\( \\{x \\in \\mathbb{R} \\mid x \\neq ${b}\\} \\)`; dist3 = `\\( \\{y \\in \\mathbb{R}\\} \\)`;
+                    } else {
+                        correctStr = allR_Y; dist1 = `\\( \\{y \\in \\mathbb{R} \\mid y \\ge 0\\} \\)`; dist2 = `\\( \\{y \\in \\mathbb{R} \\mid y \\neq ${b}\\} \\)`; dist3 = `\\( \\{x \\in \\mathbb{R}\\} \\)`;
+                    }
+                }
+
+                p.fullStatement = `Analyze the functional model mapped inside the coordinate workspace above. Isolate the exact **${isDomain ? 'Domain' : 'Range'}** parameter boundaries.`;
+                p.prompt = `Select the correct set declaration mapping defining the system ${isDomain ? 'domain' : 'range'}:`;
+                let mc = shuffleMC(correctStr, [dist1, dist2, dist3], ["None of the above", "\\( \\{x \\in \\mathbb{R} \\mid x \\ge 0\\} \\)", "\\( \\{y \\in \\mathbb{R} \\mid y \\ge 0\\} \\)"]);
+                p.options = mc.options; p.ans = mc.ansLetter;
+
+                if (isDomain) {
+                    p.hint = "Domain describes all valid horizontal x-inputs. Check for left/right boundaries or infinite arrows.";
+                    p.steps = [
+                        { title: "Step 1: Outline Domain Parameter Definitions", math: "\\( \\text{Domain} = x\\text{-axis coverage} \\)", explanation: "Look at how far the graph extends horizontally (left to right)." },
+                        { title: "Step 2: Read bounds or arrows", math: "\\( \\text{Identify endpoints or infinite continuation.} \\)", explanation: `Lines and curves with arrows on both ends extend infinitely horizontally.` },
+                        { title: "Step 3: Formulate Inequality Statement Range", math: correctStr, explanation: `Formulate the final domain inequality set.` }
+                    ];
+                } else {
+                    p.hint = "Range defines all possible valid vertical y-outputs. Find the maximum or minimum vertical values.";
+                    p.steps = [
+                        { title: "Step 1: Define Range Mapping Track Pathway", math: "\\( \\text{Range} = y\\text{-axis coverage} \\)", explanation: "Identify the absolute lowest (minimum) and highest (maximum) points on the curve." },
+                        { title: "Step 2: Evaluate Arm Trajectory Extension", math: "\\( \\text{Observe the direction of opening.} \\)", explanation: `Determine if the graph opens infinitely upwards, downwards, or has a set boundary.` },
+                        { title: "Step 3: Structure output matching configuration", math: correctStr, explanation: `Formulate the final range inequality set based on the y-axis boundaries.` }
+                    ];
+                }
+            }
+            else if (typeId === "m6") { // Vertex to Standard
+                p.title = "Vertex to Standard Polynomial Expansion";
+                let a = randInt(-5, 5, [0]);
+                let h = randInt(-8, 8, [0]);
+                let k = randInt(-20, 20, [0]);
+                let fnName = Math.random() > 0.5 ? "f" : "g";
+
+                let vForm = fmtVertex(a, h, k, fnName);
+                let b = -2 * a * h;
+                let c = a * h * h + k;
+                
+                let correctStr = "\\( " + fmtPoly(a, b, c, fnName) + " \\)";
+                let dist1 = "\\( " + fmtPoly(a, -b, c, fnName) + " \\)";
+                let dist2 = "\\( " + fmtPoly(a, b, c + randInt(2,10)*Math.sign(a), fnName) + " \\)";
+                let dist3 = "\\( " + fmtPoly(a, b, a * h * h - k, fnName) + " \\)";
+                let dist4 = "\\( " + fmtPoly(-a, b, c, fnName) + " \\)";
+
+                p.fullStatement = `Transform the vertex form quadratic relation function expression into its equivalent standard trinomial polynomial form layout: \\( ${vForm} \\)`;
+                p.prompt = "Select the correct matching standard form trinomial equation path:";
+                let mc = shuffleMC(correctStr, [dist1, dist2, dist3, dist4], []);
+                p.options = mc.options; p.ans = mc.ansLetter;
+                
+                let signH = h > 0 ? "-" : "+";
+                let absH = Math.abs(h);
+                let expandSq = `x^2 ${h>0?'-':'+'} ${2*absH}x + ${absH*absH}`;
+
+                p.hint = `Expand the perfect square binomial bracket system \\((x ${signH} ${absH})^2\\) first, multiply by ${a}, then add ${k}.`;
+                p.steps = [
+                    { title: "Step 1: Execute Perfect Square Binomial Expansion Framework", math: `\\( (x ${signH} ${absH})^2 = ${expandSq} \\)`, explanation: "Apply algebraic pattern rule: \\((x \\pm y)^2 = x^2 \\pm 2xy + y^2\\)." }
+                ];
+                if (a !== 1) {
+                    let distInner = `${a === -1 ? '-' : a}(${expandSq})`;
+                    let distOut = `${a===1?'':(a===-1?'-':a)}x^2 ${b>0?'+':'-'} ${Math.abs(b)}x ${a*absH*absH>0?'+':'-'} ${Math.abs(a*absH*absH)}`;
+                    p.steps.push({ title: "Step 2: Distribute Front Multiplier Factor", math: `\\( ${distInner} = ${distOut} \\)`, explanation: `Multiply each term inside the brackets by ${a}.` });
+                    p.steps.push({ title: "Step 3: Accumulate Final External Constant Integer", math: `\\( ${distOut} ${k>0?'+':'-'} ${Math.abs(k)} = ${fmtPoly(a, b, c, '').substring(4)} \\)`, explanation: `Simplify the final constants: ${a*absH*absH} ${k>0?'+':'-'} ${Math.abs(k)} = ${c}.` });
+                } else {
+                    p.steps.push({ title: "Step 2: Collect the constant terms", math: `\\( ${expandSq} ${k>0?'+':'-'} ${Math.abs(k)} \\)`, explanation: `Add the trailing constant ${k} to the expanded equation.` });
+                    p.steps.push({ title: "Step 3: Simplify to final form", math: `\\( ${fmtPoly(a, b, c, '').substring(4)} \\)`, explanation: `Combine the numbers: ${absH*absH} ${k>0?'+':'-'} ${Math.abs(k)} = ${c}.` });
+                }
+            }
+            else if (typeId === "m7") { // Completing the Square
+                p.title = "Completing the Square Algorithm Execution";
+                let a = randInt(-4, 4, [0]);
+                let h = randInt(-6, 6, [0]);
+                let k = randInt(-20, 20);
+                let fnName = Math.random() > 0.5 ? "f" : "g";
+
+                let b = -2 * a * h;
+                let c = a * h * h + k;
+                
+                let sForm = fmtPoly(a, b, c, fnName);
+                let correctStr = "\\( " + fmtVertex(a, h, k, fnName) + " \\)";
+                let dist1 = "\\( " + fmtVertex(a, -h, k, fnName) + " \\)";
+                let dist2 = "\\( " + fmtVertex(a, h, c + a*h*h, fnName) + " \\)";
+                let dist3 = "\\( " + fmtVertex(a, -h, c + a*h*h, fnName) + " \\)";
+                let dist4 = "\\( " + fmtVertex(a, h, k + randInt(2,10)*Math.sign(a||1), fnName) + " \\)";
+
+                p.fullStatement = `Execute the Completing the Square algorithm step framework to locate the vertex form layout definition for function: \\( ${sForm} \\)`;
+                p.prompt = "Select the correct transformed vertex form model statement:";
+                let mc = shuffleMC(correctStr, [dist1, dist2, dist3, dist4], []);
+                p.options = mc.options; p.ans = mc.ansLetter;
+                
+                let B = b / a; 
+                let halfB = B / 2;
+                let halfBSq = halfB * halfB;
+
+                if (a === 1) {
+                    p.hint = `Take half of the x coefficient (${b} ÷ 2 = ${halfB}), square it (${halfBSq}), then add and subtract ${halfBSq} inside the expression.`;
+                    p.steps = [
+                        { title: "Step 1: Calculate Balancing Perfect Value Identifier", math: `\\( (\\frac{${b}}{2})^2 = (${halfB})^2 = ${halfBSq} \\)`, explanation: "Find half of the linear x coefficient and square it." },
+                        { title: "Step 2: Insert Magic Value Setup", math: `\\( ${fnName}(x) = (x^2 ${b>0?'+':''} ${b}x + ${halfBSq}) - ${halfBSq} ${c>0?'+':''} ${c} \\)`, explanation: `Add and subtract ${halfBSq} immediately after the x term to preserve equivalence.` },
+                        { title: "Step 3: Factor and Collapse", math: `\\( ${correctStr.slice(3, -3)} \\)`, explanation: `Factor the trinomial into \\((x ${halfB>0?'+':''} ${halfB})^2\\) and calculate \\(-${halfBSq} ${c>0?'+':''} ${c} = ${k}\\).` }
+                    ];
+                } else {
+                    p.hint = `Factor out the leading coefficient ${a} from the first two terms first: \\(${a}(x^2 ${B>0?'+':''} ${B}x) ${c>0?'+':''} ${c}\\). Then apply square building algorithms inside.`;
+                    p.steps = [
+                        { title: "Step 1: Isolate and Factor Leading Stretched Variable Pairs", math: `\\( ${fnName}(x) = ${a}(x^2 ${B>0?'+':''} ${B}x) ${c>0?'+':''} ${c} \\)`, explanation: `Factor ${a} out from only the first two terms containing variable components.` },
+                        { title: "Step 2: Generate Internal Magic Value Elements", math: `\\( (\\frac{${B}}{2})^2 = ${halfBSq} \\rightarrow ${a}(x^2 ${B>0?'+':''} ${B}x + ${halfBSq} - ${halfBSq}) ${c>0?'+':''} ${c} \\)`, explanation: `Add and subtract ${halfBSq} inside the parentheses.` },
+                        { title: "Step 3: Extract Subtracted Constants Past Brackets", math: `\\( ${a} \\times (-${halfBSq}) = ${-a*halfBSq} \\rightarrow ${a}(x^2 ${B>0?'+':''} ${B}x + ${halfBSq}) ${-a*halfBSq} ${c>0?'+':''} ${c} \\)`, explanation: `Eject the negative constant element out past boundary brackets by multiplying it against leading scale coefficient ${a}.` },
+                        { title: "Step 4: Collapse Binomial Set Form and Clear Constants", math: `\\( ${correctStr.slice(3, -3)} \\)`, explanation: `Simplify the layout completely: \\(${-a*halfBSq} ${c>0?'+':''} ${c} = ${k}\\).` }
+                    ];
+                }
+            }
+            else if (typeId === "m8") { // Extrema Max/Min
+                p.title = "Extrema Amplitude Parameter Extraction";
+                let a = randInt(-4, 4, [0]);
+                let h = randInt(-6, 6, [0]);
+                let k = randInt(-30, 30);
+                let fnName = Math.random() > 0.5 ? "f" : "g";
+                let b = -2 * a * h; let c = a * h * h + k;
+                
+                let sForm = fmtPoly(a, b, c, fnName);
+                let isMin = (a > 0);
+                let extType = isMin ? "Minimum" : "Maximum";
+                let oppType = isMin ? "Maximum" : "Minimum";
+                
+                let correctStr = `${extType} value of ${k} at x = ${h}`;
+                let dist1 = `${oppType} value of ${k} at x = ${h}`;
+                let dist2 = `${extType} value of ${k} at x = ${-h}`;
+                let dist3 = `${extType} value of ${c} at x = 0`;
+                let dist4 = `${oppType} value of ${k+Math.abs(a)} at x = ${h}`;
+
+                p.fullStatement = `Execute vertex form conversion mappings to extract the absolute maximum or minimum amplitude properties for quadratic function: \\( ${sForm} \\)`;
+                p.prompt = "Select the accurate extrema classification dataset parameter description:";
+                let mc = shuffleMC(correctStr, [dist1, dist2, dist3, dist4], []);
+                p.options = mc.options; p.ans = mc.ansLetter;
+                
+                let B = b / a; let halfB = B / 2; let halfBSq = halfB * halfB;
+
+                p.hint = `Convert to vertex form first. If the leading coefficient 'a' is positive, the parabola opens upward (minimum). If negative, it opens downward (maximum).`;
+                p.steps = [
+                    { title: "Step 1: Apply Variable Square Conversions", math: `\\( ${a}(x^2 ${B>0?'+':''} ${B}x + ${halfBSq} - ${halfBSq}) ${c>0?'+':''} ${c} \\)`, explanation: `Factor out ${a} and execute the completing the square steps.` },
+                    { title: "Step 2: Finalize Full Vertex Form Equation Extraction", math: `\\( ${fmtVertex(a, h, k, fnName)} \\)`, explanation: `Extract the constant: \\(${a} \\times (-${halfBSq}) = ${-a*halfBSq}\\), yielding a vertex of \\((${h}, ${k})\\).` },
+                    { title: "Step 3: Characterize Directional opening", math: `\\( a = ${a} \\rightarrow \\text{Opens } ${isMin ? 'Upward' : 'Downward'} \\text{ (${extType} Value)} \\)`, explanation: `Since \\(a ${isMin ? '>' : '<'} 0\\), the vertex represents the ${isMin ? 'lowest' : 'highest'} point on the graph.` },
+                    { title: "Step 4: Output Isolated Optimal Core Metrics", math: `\\( \\text{${extType}} = ${k} \\text{ at } x = ${h} \\)`, explanation: `The optimal value is given by the k-coordinate from the vertex calculation.` }
+                ];
+            }
+            else if (typeId === "m9") { // Factored Form
+                p.title = "Factored Form Metric Set Characterization";
+                let a = Math.random() > 0.5 ? randInt(1, 2) : (Math.random() > 0.5 ? -1 : 0.5);
+                let r1 = randInt(-5, 1);
+                let dist = randInt(1, 4);
+                let r2 = r1 + 2 * dist; 
+                let h = r1 + dist;
+                let k = a * (h - r1) * (h - r2);
+                let yInt = a * (-r1) * (-r2);
+                
+                let eqStr = `f(x) = ${a===1?'':(a===-1?'-':a)}(x ${r1<=0?'+ '+Math.abs(r1):'- '+r1})(x ${r2<=0?'+ '+Math.abs(r2):'- '+r2})`;
+                
+                p.fullStatement = `Extract the comprehensive dataset tracking core properties and intercept parameters for the factored quadratic equation model: \\( ${eqStr} \\)`;
+                p.prompt = "Select the correct tracking structural dataset block:";
+                let correctStr = `x-intercepts: ${r1} and ${r2}; y-int: ${yInt}; axis: x = ${h}; vertex: (${h}, ${k})`;
+                let dist1 = `x-intercepts: ${-r1} and ${-r2}; y-int: ${yInt}; axis: x = ${-h}; vertex: (${-h}, ${k})`;
+                let dist2 = `x-intercepts: ${r1} and ${r2}; y-int: ${-yInt}; axis: x = ${h}; vertex: (${h}, ${-k})`;
+                let dist3 = `x-intercepts: ${r1+1} and ${r2+1}; y-int: ${yInt}; axis: x = ${h+1}; vertex: (${h+1}, ${k})`;
+                
+                let mc = shuffleMC(correctStr, [dist1, dist2, dist3], []);
+                p.options = mc.options; p.ans = mc.ansLetter;
+                
+                p.hint = "Extract horizontal roots directly by setting individual binomial factors to zero. Locate central axis symmetry by averaging root indicators together.";
+                p.steps = [
+                    { title: "Step 1: Isolate Roots (Horizontal Zeros Parameters)", math: `\\( x = ${r1} \\text{ and } x = ${r2} \\)`, explanation: "Setting brackets to 0 outputs direct roots. Ensure sign elements invert when pulling root locations directly out from binomial fields." },
+                    { title: "Step 2: Average Roots to Locate Axis of Symmetry line", math: `\\( x = \\frac{${r1} + ${r2}}{2} = ${h} \\)`, explanation: "The central folding line of balance sits exactly at mid-point marker tracking horizontal inputs." },
+                    { title: "Step 3: Extract Vertical Vertex Depth and Y-Intercept Parameters", math: `\\( f(${h}) = ${k} \\, | \\, f(0) = ${yInt} \\)`, explanation: `Substitute axis value ${h} back into equations to yield vertex depth value ${k}. Evaluate function with input value zero to resolve y-intercept parameter level at ${yInt}.` }
+                ];
+            }
+            else if (typeId === "m10") { // Word Problems
+                p.title = "Optimization Contextual Application Problems";
+                let scenario = randInt(1, 3);
+                
+                if (scenario === 1) { 
+                    let t_peak = randInt(2, 6); let c = randInt(1, 10);
+                    let b = 10 * t_peak; let k = 5 * t_peak * t_peak + c;
+                    p.fullStatement = `A toy rocket is propelled vertically from an elevated launch pad framework. Its dynamic trajectory altitude path profiles follow the specific equation: \\( h = -5t^2 + ${b}t + ${c} \\), where vertical height parameter \\( h \\) models altitude position in meters, and runtime factor \\( t \\) captures duration scaling in seconds. Determine the absolute maximum apex altitude achieved by the model.`;
+                    p.prompt = "Select the correct optimized peak apex altitude statement result:";
+                    let correctStr = `${k} meters`;
+                    let mc = shuffleMC(correctStr, [`${k-5} meters`, `${k+5} meters`, `${t_peak} meters`, `${c} meters`], []);
+                    p.options = mc.options; p.ans = mc.ansLetter;
+                    p.hint = "Calculate the exact timeline coordinate index where the peak vertex is reached using axis optimization equation formulas \\( t = -b / (2a) \\) before calculating actual height values.";
+                    p.steps = [
+                        { title: "Step 1: Isolate Apex Temporal Point Coordinate", math: `\\( t = -\\frac{${b}}{2(-5)} = ${t_peak} \\text{ seconds} \\)`, explanation: `Deploy the axis of symmetry optimization logic to determine the exact timestamp when rocket reaches maximum height.` },
+                        { title: "Step 2: Compute Maximum Altitude Output Parameter", math: `\\( h = -5(${t_peak})^2 + ${b}(${t_peak}) + ${c} = ${k}\\text{ m} \\)`, explanation: `Feed target runtime coordinate back into primary trajectory equation matrix to lock peak scale at ${k} meters.` }
+                    ];
+                }
+                else if (scenario === 2) { 
+                    let x_peak = randInt(5, 15); let c = randInt(50, 200, [100]); c = Math.floor(c/50)*50; 
+                    let b = 4 * x_peak; let k = 2 * x_peak * x_peak + c;
+                    p.fullStatement = `A business manager analyzes corporate returns using a specialized retail inventory revenue estimation model: \\( R = -2x^2 + ${b}x + ${c} \\), where profit variable \\( R \\) tracks gross net returns yields in dollars, and scaling multiplier parameter \\( x \\) specifies promotional volume lots dispatched. Calculate the maximum optimized revenue capacity threshold.`;
+                    p.prompt = "Select the maximized capital return performance metric threshold value:";
+                    let correctStr = `$${k}`;
+                    let mc = shuffleMC(correctStr, [`$${k-100}`, `$${k+100}`, `$${x_peak}`, `$${c}`], []);
+                    p.options = mc.options; p.ans = mc.ansLetter;
+                    p.hint = "Track optimized loading volumes through standard equation patterns: \\( x = -b / (2a) \\). Apply derived parameters to parse maximum output metrics.";
+                    p.steps = [
+                        { title: "Step 1: Find Volume Allocation Target for Maximum Return", math: `\\( x = -\\frac{${b}}{2(-2)} = ${x_peak} \\text{ lots} \\)`, explanation: `Locate peak index threshold indicating max volume scaling requirements.` },
+                        { title: "Step 2: Extract Maximized Revenue Output Statement Result", math: `\\( R = -2(${x_peak})^2 + ${b}(${x_peak}) + ${c} = ${k} \\)`, explanation: `Evaluate tracking constants: net local peak returns scale up to form unified asset values totaling exactly $${k}.` }
+                    ];
+                }
+                else { 
+                    let t_peak = randInt(20, 28, [21, 23, 25, 27]); let c = randInt(-30, -10);
+                    let b = 0.1 * t_peak; let k = 0.05 * t_peak * t_peak + c;
+                    p.fullStatement = `A student develops a quadratic model for plant growth mapping height parameter \\( h \\) against temperature \\( t \\): \\( h = -0.05t^2 + ${b.toFixed(1)}t ${c} \\). What is the maximum physical altitude achieved?`;
+                    p.prompt = "Select the accurate maximum physical growth threshold value:";
+                    let correctStr = `${k.toFixed(1)} cm`;
+                    let mc = shuffleMC(correctStr, [`${(k-2).toFixed(1)} cm`, `${(k+2).toFixed(1)} cm`, `${t_peak} cm`, `${Math.abs(c)} cm`], []);
+                    p.options = mc.options; p.ans = mc.ansLetter;
+                    p.hint = "Find the t-coordinate for the maximum using t = -b / (2a). Then substitute t back into the equation to find the height h.";
+                    p.steps = [
+                        { title: "Step 1: Calculate optimal growth temperature threshold", math: `\\( t = -\\frac{${b.toFixed(1)}}{2(-0.05)} = ${t_peak}^\\circ\\text{C} \\)`, explanation: "Use the axis of symmetry formula to find the optimal temperature." },
+                        { title: "Step 2: Evaluate maximum plant height performance", math: `\\( h = -0.05(${t_peak})^2 + ${b.toFixed(1)}(${t_peak}) ${c > 0 ? '+' : ''} ${c} = ${k.toFixed(1)}\\text{ cm} \\)`, explanation: "Substitute the optimal temperature back into the formula to find the height." }
+                    ];
+                }
+            }
+            else if (typeId === "m11") { // Key Chars from Graph
+                p.title = "Graphical Key Characteristics Analysis";
+                p.assetType = "graph";
+                let r1 = randInt(-4, 0); let dist = randInt(1, 3);
+                let r2 = r1 + 2 * dist; let h = r1 + dist;
+                let a = randInt(-2, 2, [0]); let k = -a * (dist * dist);
+                let yInt = a * (-r1) * (-r2);
+                p.graphSpec = { curves: [{ kind: "parab", a: a, h: h, k: k, arrowLeft: true, arrowRight: true }] };
+                
+                p.fullStatement = "Determine the key characteristics from the provided quadratic graph.";
+                p.prompt = "Select the accurate dataset of key characteristics:";
+                let posInt = a < 0 ? `${r1} < x < ${r2}` : `x < ${r1} \\text{ or } x > ${r2}`;
+                let negInt = a > 0 ? `${r1} < x < ${r2}` : `x < ${r1} \\text{ or } x > ${r2}`;
+                let incInt = a < 0 ? `x < ${h}` : `x > ${h}`;
+                let decInt = a > 0 ? `x < ${h}` : `x > ${h}`;
+                let correctStr = `x-ints: ${r1} & ${r2}; y-int: ${yInt}; vertex: (${h}, ${k}); ` + (a > 0 ? `negative: ${negInt}` : `positive: ${posInt}`) + `; increasing: ${incInt}`;
+                let dist1 = `x-ints: ${r1+1} & ${r2+1}; y-int: ${yInt}; vertex: (${h+1}, ${k}); ` + (a > 0 ? `negative: ${negInt}` : `positive: ${posInt}`) + `; increasing: ${incInt}`;
+                let dist2 = `x-ints: ${-r1} & ${-r2}; y-int: ${-yInt}; vertex: (${-h}, ${k}); ` + (a < 0 ? `negative: ${negInt}` : `positive: ${posInt}`) + `; increasing: ${decInt}`;
+                let dist3 = `x-ints: ${r1} & ${r2}; y-int: ${yInt}; vertex: (${h}, ${k}); ` + (a < 0 ? `negative: ${posInt}` : `positive: ${negInt}`) + `; increasing: ${decInt}`;
+                
+                let mc = shuffleMC(correctStr, [dist1, dist2, dist3], []);
+                p.options = mc.options; p.ans = mc.ansLetter;
+                p.hint = "Look for the vertex peak point. The interval of increase describes where the graph goes up from left to right.";
+                p.steps = [
+                    { title: "Step 1: Identify the Vertex and Axes Intercepts", math: `\\( \\text{Vertex} = (${h}, ${k}), y\\text{-int} = ${yInt} \\)`, explanation: `The peak/valley point is at (${h}, ${k}). The curve cuts the vertical axis at y = ${yInt}.` },
+                    { title: "Step 2: Read the Roots (x-intercepts)", math: `\\( x = ${r1} \\text{ and } x = ${r2} \\)`, explanation: `The parabola slices through the horizontal x-axis at exactly ${r1} and ${r2}.` },
+                    { title: "Step 3: Define Intervals", math: `\\( ` + (a > 0 ? `\\text{Negative: } ${negInt}` : `\\text{Positive: } ${posInt}`) + ` \\, | \\, \\text{Increasing: } ${incInt} \\)`, explanation: `The graph is ${a > 0 ? 'below' : 'above'} the x-axis for the stated interval, and climbs upwards when ${incInt}.` }
+                ];
+            }
+            else if (typeId === "m12") { // Graphing Protocols
+                p.title = "Step-by-Step Hand-Graphing Protocols";
+                let a = randInt(-3, 3, [0]); let h = randInt(-3, 3); let k = randInt(-5, 5);
+                let b = -2 * a * h; let c = a * h * h + k;
+                let sForm = fmtPoly(a, b, c, "y");
+                
+                p.fullStatement = `Determine the best instructions to accurately graph (by hand) the following quadratic: \\( ${sForm} \\)`;
+                p.prompt = "Select the correct structural step instructions sequence:";
+                let correctStr = `Step 1: Plot y-int (${c}). Step 2: Complete square for vertex (${h}, ${k}). Step 3: Use step pattern: go ${a>0?'up':'down'} ${Math.abs(a)}, then ${Math.abs(3*a)}, then ${Math.abs(5*a)} units per 1 unit horizontal shift.`;
+                let dist1 = `Step 1: Plot y-int (${c}). Step 2: Complete square for vertex (${-h}, ${k}). Step 3: Use step pattern: go ${a<0?'up':'down'} ${Math.abs(a)}, then ${Math.abs(3*a)} units per 1 unit horizontal shift.`;
+                let dist2 = `Step 1: Plot x-int (${c}). Step 2: Complete square for vertex (${h}, ${-k}). Step 3: Use step pattern: go ${a>0?'up':'down'} 1, then 3, then 5 units per 1 unit horizontal shift.`;
+                let dist3 = `Step 1: Plot y-int (${b}). Step 2: Complete square for vertex (${h}, ${k}). Step 3: Use step pattern: go ${a>0?'up':'down'} ${Math.abs(2*a)}, then ${Math.abs(4*a)} units per 1 unit horizontal shift.`;
+                
+                let mc = shuffleMC(correctStr, [dist1, dist2, dist3], []);
+                p.options = mc.options; p.ans = mc.ansLetter;
+                p.hint = `The standard step pattern 1, 3, 5 is multiplied by the 'a' coefficient (${a}). For a = ${a}, it becomes ${a>0?'up':'down'} ${Math.abs(a)}, ${Math.abs(3*a)}, ${Math.abs(5*a)}.`;
+                p.steps = [
+                    { title: "Step 1: Identify basic standard indicators", math: `\\( y\\text{-intercept} = (0, ${c}) \\)`, explanation: `Setting x = 0 leaves the constant term ${c}.` },
+                    { title: "Step 2: Vertex structural transformation", math: `\\( ${fmtVertex(a, h, k, "y")} \\)`, explanation: `Completing the square renders the precise local peak coordinate parameters: (${h}, ${k}).` },
+                    { title: "Step 3: Calculate scaled step patterns", math: `\\( 1a, 3a, 5a \\rightarrow ${Math.abs(a)}, ${Math.abs(3*a)}, ${Math.abs(5*a)} \\text{ (${a>0?'up':'down'})} \\)`, explanation: `From the vertex, each consecutive horizontal shift of 1 unit requires moving ${a>0?'up':'down'} ${Math.abs(a)}, ${Math.abs(3*a)}, then ${Math.abs(5*a)} units.` }
+                ];
+            }
+            else if (typeId === "m13") { // Equation to Graph Visual Match
+                p.title = "Equation-to-Graph Visual Matching";
+                p.optionType = "graph";
+                let a = randInt(-3, 3, [0]); let h = randInt(-3, 3, [0]); let k = randInt(-4, 4, [0]);
+                let b = -2 * a * h; let c = a * h * h + k;
+                
+                p.fullStatement = `Determine the graph that best represents the quadratic: \\( ${fmtPoly(a, b, c, "f")} \\)`;
+                p.prompt = "Tap the graph matching the quadratic equation parameters:";
+                
+                let specs = [
+                    { curves: [{ kind: "parab", a: a, h: h, k: k, arrowLeft: true, arrowRight: true }] },
+                    { curves: [{ kind: "parab", a: -a, h: h, k: k, arrowLeft: true, arrowRight: true }] },
+                    { curves: [{ kind: "parab", a: a, h: -h, k: k, arrowLeft: true, arrowRight: true }] },
+                    { curves: [{ kind: "parab", a: a, h: h, k: -k, arrowLeft: true, arrowRight: true }] }
+                ];
+                let indices = [0, 1, 2, 3].sort(() => 0.5 - Math.random());
+                let letters = ["A", "B", "C", "D"];
+                let finalSpecs = []; let ansLetter = "";
+                for(let i=0; i<4; i++){
+                    finalSpecs.push(specs[indices[i]]);
+                    if (indices[i] === 0) ansLetter = letters[i]; 
+                }
+                p.options = ["A)", "B)", "C)", "D)"]; p.optionSpecs = finalSpecs; p.ans = ansLetter;
+                
+                p.hint = `Complete the square to find the vertex at (${h}, ${k}). The sign of 'a' determines if it opens up or down.`;
+                p.steps = [
+                    { title: "Step 1: Solve equation metrics", math: `\\( ${fmtPoly(a, b, c, "f")} \\rightarrow f(x) = ${fmtVertexRight(a, h, k)} \\)`, explanation: `Vertex forms out at (${h}, ${k}) and it opens ${a>0?'upwards':'downwards'} since a = ${a}.` },
+                    { title: "Step 2: Filter matching interface element", math: `\\( \\text{Vertex } (${h}, ${k}), \\, y\\text{-int } ${c} \\)`, explanation: `Option ${ansLetter} mirrors these coordinate parameters exactly.` }
+                ];
+            }
+
+            return p;
+        }
+
+        // --- Core Application Logic ---
+        function triggerNewQuestion() {
+            const selectMenu = document.getElementById("question-select");
+            const typeId = selectMenu.value;
+
+            if (!typeId) {
+                document.getElementById("placeholder").style.display = "block";
+                document.getElementById("quiz-station").style.display = "none";
+                document.getElementById("asset-viewport-mount-point").style.display = "none";
+                document.getElementById("solution-reveal-layer").classList.add("hidden");
+                return;
+            }
+
+            currentProblemData = generateProblem(typeId);
+            currentState = { answered: false, selectedMcOption: "", isCorrect: false, currentStep: 0, solRevealed: false, attempts: 0 };
+            
+            displaySolution();
+        }
+
+        function renderMathElements() {
+            if (window.renderMathInElement) {
+                renderMathInElement(document.body, {
+                    delimiters: [
+                        {left: '$$', right: '$$', display: true},
+                        {left: '\\(', right: '\\)', display: false}
+                    ],
+                    throwOnError: false
+                });
+            }
+        }
+
+        window.onload = renderMathElements;
+
+        function displaySolution() {
+            document.getElementById("solution-reveal-layer").classList.add("hidden");
+            const hintBox = document.getElementById("hint-box");
+            if (hintBox) hintBox.classList.add("hidden");
+            
+            const placeholder = document.getElementById("placeholder");
+            const quizStation = document.getElementById("quiz-station");
+            const assetMount = document.getElementById("asset-viewport-mount-point");
+            const mountPoint = document.getElementById("dynamic-input-mount-point");
+            const promptLabel = document.getElementById("input-prompt-label");
+
+            placeholder.style.display = "none";
+            quizStation.style.display = "block";
+            
+            if (currentProblemData.assetType && currentProblemData.assetType === "graph") {
+                assetMount.style.display = "flex";
+                assetMount.innerHTML = buildGraph(currentProblemData.graphSpec);
+            } else {
+                assetMount.style.display = "none";
+            }
+
+            document.getElementById("question-statement-display").innerHTML = currentProblemData.fullStatement;
+            promptLabel.innerHTML = currentProblemData.prompt;
+            
+            mountPoint.innerHTML = buildOptionsHTML(currentProblemData, currentState.selectedMcOption, currentState.answered);
+
+            if (currentState.answered) {
+                lockQuizInterface(currentState.isCorrect);
+                if (currentState.solRevealed) revealSolutionWorkspace();
+            } else {
+                unlockQuizInterface();
+            }
+
+            setTimeout(renderMathElements, 10);
+        }
+
+        function selectMcOptionCard(letter) {
+            if (!currentProblemData || currentState.answered) return;
+            
+            currentState.selectedMcOption = letter;
+            document.getElementById("feedback-msg").classList.add("hidden");
+            
+            document.getElementById("dynamic-input-mount-point").innerHTML = buildOptionsHTML(currentProblemData, letter, false);
+            setTimeout(renderMathElements, 10);
+        }
+
+        function evaluateStudentAnswer() {
+            if (!currentProblemData || currentState.answered) return;
+
+            const firstNameInput = document.getElementById("first-name").value.trim();
+            const lastNameInput = document.getElementById("last-name").value.trim();
+
+            if (firstNameInput === "" || lastNameInput === "") {
+                alert("Identity mapping error: Complete first name and last name profile input fields to enable tracking verification.");
+                return;
+            }
+
+            if (!currentState.selectedMcOption) {
+                alert("Validation error: Pick an answer option to proceed with test check matrix execution.");
+                return;
+            }
+
+            let matchingCorrect = (currentState.selectedMcOption === currentProblemData.ans);
+            globalAttempts++;
+            currentState.attempts++;
+            
+            if (matchingCorrect && !currentState.isCorrect) globalScore++;
+            currentState.isCorrect = matchingCorrect;
+            
+            document.getElementById("hud-score").innerText = globalScore;
+            document.getElementById("hud-attempts").innerText = globalAttempts;
+
+            if (matchingCorrect) {
+                currentState.answered = true;
+                lockQuizInterface(true);
+            } else {
+                showTryAgain();
+            }
+
+            let payload = {
+                unitId: "Unit_2",
+                lessonId: "Cumulative_Practice_Test",
+                firstName: firstNameInput,
+                lastName: lastNameInput,
+                questionId: document.getElementById("question-select").value + "_Dynamic",
+                userAnswer: "Option " + currentState.selectedMcOption,
+                isCorrect: matchingCorrect,
+                attempts: currentState.attempts,
+                methodUsed: "Dynamic Generative MC",
+                totalScore: globalScore
+            };
+
+            fetch(TEACHER_SPREADSHEET_SCRIPT_URL, {
+                method: "POST",
+                mode: "no-cors",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            }).catch(err => console.error("Cloud tracking database connection lag detected:", err));
+        }
+
+        function toggleHint() {
+            if (!currentProblemData) return;
+            const box = document.getElementById("hint-box");
+            if (!box.classList.contains("hidden")) { box.classList.add("hidden"); return; }
+            box.innerHTML = "<strong>Hint Instruction:</strong> " + currentProblemData.hint;
+            box.classList.remove("hidden");
+            setTimeout(renderMathElements, 10);
+        }
+
+        function showTryAgain() {
+            document.getElementById("reveal-sol-btn").disabled = false;
+            const feedback = document.getElementById("feedback-msg");
+            feedback.className = "p-4 rounded-xl border font-bold text-sm mb-6 transition-all bg-rose-50 border-rose-400 text-rose-900";
+            feedback.innerHTML = "Response validation failed. Review choices and retry another selection option, or click 'Review Steps' for detailed solution workflows.";
+            feedback.classList.remove("hidden");
+        }
+
+        function lockQuizInterface(isCorrect) {
+            document.getElementById("check-ans-btn").disabled = true;
+            document.getElementById("reveal-sol-btn").disabled = false;
+
+            const feedback = document.getElementById("feedback-msg");
+            feedback.classList.remove("hidden");
+            if (isCorrect) {
+                feedback.className = "p-4 rounded-xl border font-bold text-sm mb-6 transition-all bg-emerald-50 border-emerald-500 text-emerald-900";
+                feedback.innerHTML = "Response verified successfully. Accurate solution locked. Generate a new module to continue.";
+            } else {
+                feedback.className = "p-4 rounded-xl border font-bold text-sm mb-6 transition-all bg-rose-50 border-rose-400 text-rose-900";
+                feedback.innerHTML = "Evaluation concluded with mismatch. Step breakdown activated below.";
+            }
+        }
+
+        function unlockQuizInterface() {
+            document.getElementById("check-ans-btn").disabled = false;
+            document.getElementById("reveal-sol-btn").disabled = true;
+            document.getElementById("feedback-msg").classList.add("hidden");
+        }
+
+        function unlockSolutionPanel() {
+            currentState.solRevealed = true;
+            revealSolutionWorkspace();
+        }
+
+        function revealSolutionWorkspace() {
+            const targetDiv = document.getElementById("solution-reveal-layer");
+            const workspace = document.getElementById("solution-workspace-injected");
+            
+            let html = `<h2 class="text-lg font-bold text-slate-900 mb-4 border-b pb-2">Analysis Blueprint: ${currentProblemData.title}</h2>`;
+            currentProblemData.steps.forEach((step, index) => {
+                html += `
+                <div class="step-block bg-slate-50 border border-slate-200 rounded-xl p-5 shadow-sm mb-4">
+                    <span class="block text-xs font-black text-purple-600 tracking-wider uppercase mb-2">${step.title}</span>
+                    <div class="bg-white border rounded-lg px-4 py-3 text-slate-900 mb-3 overflow-x-auto text-center">${step.math}</div>
+                    <span class="block text-sm text-slate-600 leading-relaxed">${step.explanation}</span>
+                </div>`;
+            });
+            html += `
+            <div class="final-answer-box bg-purple-50 border-l-4 border-purple-600 rounded-r-xl p-5 mt-6 shadow-sm">
+                <span class="block text-xs font-black text-purple-700 tracking-wider uppercase mb-1">Locked Target Answer Vector</span>
+                <span class="text-xl font-black text-purple-950">Correct Multiple Choice Index: Option ${currentProblemData.ans}</span>
+            </div>`;
+
+            workspace.innerHTML = html;
+            targetDiv.classList.remove("hidden");
+
+            const nb = document.getElementById("next-btn");
+            if (nb && nb.parentElement) nb.parentElement.style.display = "none";
+
+            setTimeout(renderMathElements, 10);
+        }
+
+        function renderMethodSteps() {
+            const activeContainer = document.getElementById("solution-workspace-injected");
+            visibleStepElements = Array.from(activeContainer.querySelectorAll('.step-block, .final-answer-box'));
+            
+            currentStepIndex = currentState.currentStep;
+            for (let i = 0; i <= currentStepIndex; i++) {
+                if (visibleStepElements[i]) visibleStepElements[i].classList.remove("hidden");
+            }
+
+            document.getElementById("restart-btn").disabled = (currentStepIndex === 0);
+        }
+
+        function restartSolution() {
+            currentState.currentStep = 0;
+            revealSolutionWorkspace();
+        }
+    </script>
+</body>
+</html>

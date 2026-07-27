@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MBF3C Unit 1 Lesson 1 &amp; 2 Practice Studio</title>
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+
+    <style>
+        :root {
+            --primary-color: #0f172a;
+            --secondary-color: #2563eb;
+            --disabled-color: #94a3b8;
+            --text-color: #334155;
+            --math-color: #000000;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --border-color: #cbd5e1;
+            --highlight-bg: #eff6ff;
+            --explanation-bg: #f1f5f9;
+            --rule-bg: #fef08a;
+            --rule-text: #713f12;
+            --success-color: #16a34a;
+            --error-color: #dc2626;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.8;
+            margin: 0;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: -0.025em;
+        }
+
+        .scoreboard {
+            background-color: #1e293b;
+            color: white;
+            display: inline-flex;
+            gap: 20px;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-weight: 700;
+            margin-top: 15px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.2);
+        }
+
+        .scoreboard span {
+            color: #60a5fa;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .profile-box, .selector-box {
+            background-color: var(--card-bg);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-color);
+            margin-bottom: 25px;
+        }
+
+        .profile-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .profile-grid input {
+            width: 100%;
+            padding: 12px;
+            font-size: 1rem;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        .profile-grid input:focus {
+            border-color: var(--secondary-color);
+        }
+
+        label {
+            display: block;
+            font-weight: 700;
+            color: var(--primary-color);
+            font-size: 1.1rem;
+            margin-bottom: 12px;
+        }
+
+        .control-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        select {
+            flex: 1;
+            padding: 16px;
+            font-size: 1.1rem;
+            font-family: inherit;
+            border-radius: 8px;
+            border: 2px solid var(--border-color);
+            background-color: white;
+            color: var(--primary-color);
+            outline: none;
+            cursor: pointer;
+        }
+
+        .btn-generate {
+            padding: 16px 24px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .btn-generate:hover {
+            background-color: #1e293b;
+        }
+
+        .solution-container {
+            background-color: var(--card-bg);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-color);
+            min-height: 200px;
+        }
+
+        .placeholder-text {
+            color: #64748b;
+            text-align: center;
+            font-style: italic;
+            padding: 60px 0;
+            font-size: 1.1rem;
+        }
+
+        .quiz-interface-box {
+            background-color: var(--explanation-bg);
+            border: 1px solid var(--border-color);
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+
+        .question-statement-card {
+            background: #ffffff;
+            border-left: 4px solid var(--secondary-color);
+            padding: 16px 20px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            border-radius: 0 6px 6px 0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .math-render-viewport {
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+        }
+
+        .math-tov {
+            border-collapse: collapse;
+            font-size: 1.1rem;
+            font-weight: 600;
+            min-width: 220px;
+            text-align: center;
+        }
+
+        .math-tov th, .math-tov td {
+            border: 2px solid var(--primary-color);
+            padding: 10px 20px;
+        }
+
+        .math-tov th {
+            background-color: #f1f5f9;
+            color: var(--primary-color);
+            font-weight: 800;
+        }
+
+        .mc-options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 10px;
+        }
+
+        .mc-option-card {
+            background: white;
+            border: 2px solid var(--border-color);
+            padding: 14px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1.05rem;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .mc-option-card:hover:not(.disabled) {
+            border-color: var(--secondary-color);
+            background-color: var(--highlight-bg);
+        }
+
+        .mc-option-card.selected {
+            border-color: var(--secondary-color);
+            background-color: #dbeafe;
+            color: #1e40af;
+        }
+
+        .mc-option-card.disabled {
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .mc-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background-color: #e2e8f0;
+            color: var(--primary-color);
+            font-weight: 800;
+            font-size: 0.9rem;
+        }
+
+        .mc-option-card.selected .mc-badge {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+
+        .feedback-msg-area {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            display: none;
+            padding: 10px 15px;
+            border-radius: 6px;
+        }
+
+        .feedback-success {
+            background-color: #dcfce7;
+            color: var(--success-color);
+            border-left: 5px solid var(--success-color);
+        }
+
+        .feedback-error {
+            background-color: #fee2e2;
+            color: var(--error-color);
+            border-left: 5px solid var(--error-color);
+        }
+
+        .quiz-action-bar {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .solution-reveal-window {
+            display: none;
+            border-top: 3px double var(--border-color);
+            margin-top: 30px;
+            padding-top: 30px;
+        }
+
+        .step-block {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e2e8f0;
+            display: none;
+        }
+
+        .step-title {
+            font-weight: 800;
+            color: var(--secondary-color);
+            display: block;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 8px;
+        }
+
+        .step-math {
+            font-size: 1.3rem;
+            font-weight: 700;
+            background-color: var(--explanation-bg);
+            padding: 14px 20px;
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin: 8px 0;
+            color: var(--math-color);
+            letter-spacing: 0.02em;
+            flex-wrap: wrap;
+        }
+
+        .step-explanation {
+            display: block;
+            font-size: 1.05rem;
+            color: #334155;
+            margin-top: 6px;
+        }
+
+        .final-answer-box {
+            background-color: var(--highlight-bg);
+            border-left: 6px solid var(--secondary-color);
+            padding: 20px 25px;
+            border-radius: 0 8px 8px 0;
+            margin-top: 30px;
+            display: none;
+        }
+
+        .final-answer-label {
+            font-weight: 800;
+            color: var(--secondary-color);
+            display: block;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .final-answer-math {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            margin-top: 6px;
+            display: inline-flex;
+            align-items: center;
+            letter-spacing: 0.02em;
+        }
+
+        .control-panel {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid var(--border-color);
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 14px 24px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            border-radius: 8px;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary { background-color: var(--secondary-color); color: white; }
+        .btn-primary:hover:not(:disabled) { background-color: #1d4ed8; }
+        .btn-success { background-color: var(--success-color); color: white; }
+        .btn-success:hover:not(:disabled) { background-color: #166534; }
+        .btn-secondary { background-color: var(--explanation-bg); color: var(--primary-color); border: 1px solid var(--border-color); }
+        .btn-secondary:hover:not(:disabled) { background-color: #e2e8f0; }
+
+        .btn:disabled {
+            background-color: var(--disabled-color);
+            color: #f1f5f9;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+        
+        .hint-box {
+            display: none;
+            background-color: #fef9c3;
+            border-left: 5px solid #eab308;
+            color: #713f12;
+            padding: 12px 16px;
+            border-radius: 0 6px 6px 0;
+            margin-bottom: 15px;
+            font-size: 1.05rem;
+            font-weight: 600;
+        }
+        
+        .btn-hint { background-color: #fde047; color: #713f12; }
+        .btn-hint:hover:not(:disabled) { background-color: #facc15; }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>MBF3C Unit 1 Lesson 1 &amp; 2</h1>
+        <p>Infinite Dynamic Practice Studio</p>
+        <div class="scoreboard">
+            <div>Score: <span id="hud-score">0</span></div>
+            <div>Tries: <span id="hud-attempts">0</span></div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="profile-box">
+            <label>Student Profile Setup:</label>
+            <div class="profile-grid">
+                <input type="text" id="first-name" placeholder="First name" autocomplete="off">
+                <input type="text" id="last-name" placeholder="Last name" autocomplete="off">
+            </div>
+        </div>
+
+        <div class="selector-box">
+            <label for="topic-select">Practice Topic:</label>
+            <div class="control-group">
+                <select id="topic-select">
+                    <option value="t1">Type 1: Greatest Common Factor (GCF) of Numbers</option>
+                    <option value="t2">Type 2: Fully Factoring Expressions using GCF</option>
+                    <option value="t3">Type 3: First and Second Differences</option>
+                    <option value="t4">Type 4: Vertical Line Test & Function Properties</option>
+                    <option value="t5">Type 5: Expanding Algebraic Expressions (Binomials)</option>
+                </select>
+                <button class="btn-generate" onclick="generateNewProblem()">Generate</button>
+            </div>
+        </div>
+
+        <div class="solution-container" id="display-window">
+            <div id="placeholder" class="placeholder-text">
+                Select a topic and click "Generate" to start practicing.
+            </div>
+
+            <div id="quiz-station" class="quiz-interface-box" style="display: none;">
+                <div id="asset-viewport-mount-point" class="math-render-viewport" style="display: none;"></div>
+
+                <div id="question-statement-display" class="question-statement-card"></div>
+
+                <label id="input-prompt-label" style="margin-bottom: 12px; font-weight: 700; display: block;"></label>
+                
+                <div id="dynamic-input-mount-point" style="margin-top: 10px;"></div>
+
+                <div id="hint-box" class="hint-box"></div>
+                <div id="feedback-msg" class="feedback-msg-area"></div>
+
+                <div class="quiz-action-bar">
+                    <button class="btn btn-success" id="check-ans-btn" onclick="evaluateStudentAnswer()">Check Answer</button>
+                    <button class="btn btn-hint" id="hint-btn" onclick="toggleHint()">Hint</button>
+                    <button class="btn btn-secondary" id="reveal-sol-btn" disabled onclick="unlockSolutionPanel()">Show Solution Steps</button>
+                </div>
+            </div>
+
+            <div class="solution-reveal-window" id="solution-reveal-layer">
+                <div id="solution-workspace-injected"></div>
+                
+                <div class="control-panel" id="controls-panel">
+                    <button class="btn btn-secondary" id="restart-btn" onclick="restartSolution()">Restart Steps</button>
+                    <button class="btn btn-primary" id="next-btn" onclick="showNextStep()">Next Step &rarr;</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const TEACHER_SPREADSHEET_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwygR6-l7XPRC1KL-Pqci33Yw_4pmCWa8mW7gNHJ_RsmN41ax15-d0sE-CrIxU0z22m/exec";
+
+        let globalScore = 0;
+        let globalAttempts = 0;
+        let currentProblemData = null;
+        let currentState = { answered: false, selectedMcOption: "", isCorrect: false, currentStep: 0, solRevealed: false, attempts: 0 };
+        let visibleStepElements = [];
+
+        window.onload = () => {
+            if (window.renderMathInElement) {
+                renderMathInElement(document.body, { delimiters: [{left: '$$', right: '$$', display: true}, {left: '\\(', right: '\\)', display: false}], throwOnError: false });
+            }
+        };
+
+        // --- Core Utility Functions ---
+        const randInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+        
+        function getFactors(n) {
+            let factors = [];
+            for (let i = 1; i <= n; i++) if (n % i === 0) factors.push(i);
+            return factors;
+        }
+
+        function shuffleMC(optionsArr, correctStr) {
+            let uniqueOpts = Array.from(new Set(optionsArr));
+            while (uniqueOpts.length < 4) {
+                uniqueOpts.push(correctStr + " (Alt " + randInt(1, 99) + ")"); 
+            }
+            let shuffled = uniqueOpts.slice(0, 4).sort(() => Math.random() - 0.5);
+            let finalOpts = [];
+            let ansLetter = "";
+            let letters = ["A) ", "B) ", "C) ", "D) "];
+            for (let i = 0; i < 4; i++) {
+                finalOpts.push(letters[i] + `\\(${shuffled[i]}\\)`);
+                if (shuffled[i] === correctStr) ansLetter = String.fromCharCode(65 + i);
+            }
+            return { options: finalOpts, ans: ansLetter };
+        }
+
+        function fmtSign(n, isFirst = false) {
+            if (n === 0) return "";
+            if (isFirst) return n < 0 ? "-" + Math.abs(n) : Math.abs(n);
+            return n < 0 ? "- " + Math.abs(n) : "+ " + Math.abs(n);
+        }
+
+        function fmtCoef(n, isFirst = false) {
+            if (n === 0) return "";
+            let abs = Math.abs(n);
+            let val = abs === 1 ? "" : abs;
+            if (isFirst) return n < 0 ? "-" + val : val;
+            return n < 0 ? "- " + val : "+ " + val;
+        }
+
+        // --- Infinite Mathematical Generators ---
+        function genType1() {
+            let n1 = randInt(2, 8) * randInt(2, 6);
+            let n2 = randInt(2, 8) * randInt(2, 6);
+            while(n1 === n2 || getFactors(n1).filter(v => getFactors(n2).includes(v)).pop() === 1) {
+                n2 = randInt(2, 8) * randInt(2, 6); 
+            }
+            
+            let f1 = getFactors(n1), f2 = getFactors(n2);
+            let shared = f1.filter(v => f2.includes(v));
+            let gcf = shared[shared.length - 1];
+
+            let dist = [gcf, gcf+1, Math.max(1, gcf-1), gcf*2, shared.length > 1 ? shared[0] : gcf+3];
+            let mc = shuffleMC(dist.map(String), String(gcf));
+
+            return {
+                title: "Type 1: GCF", type: "mc", assetType: "none",
+                fullStatement: `Find the Greatest Common Factor (GCF) of ${n1} and ${n2}.`,
+                prompt: "Pick the GCF:", options: mc.options, hint: "List the factors of each number, then find the biggest one they share.",
+                steps: [
+                    { title: `Step 1: List factors for ${n1}`, math: `${n1} \\Rightarrow ${f1.join(', ')}`, explanation: `Write down every whole number that divides into ${n1} perfectly.` },
+                    { title: `Step 2: List factors for ${n2}`, math: `${n2} \\Rightarrow ${f2.join(', ')}`, explanation: `Write down every whole number that divides into ${n2} perfectly.` },
+                    { title: "Step 3: Collect the shared matching numbers", math: `\\text{Shared factors} = \\{${shared.join(', ')}\\}`, explanation: "Collect all the numbers that appear on both sides." },
+                    { title: "Step 4: Pick the single largest factor", math: `\\text{GCF} = ${gcf}`, explanation: `Choose the highest number from the shared list. Our final GCF is ${gcf}!` }
+                ], ans: mc.ans
+            };
+        }
+
+        function genType2() {
+            let gcfNum = randInt(2, 6);
+            let c1 = gcfNum * randInt(2, 5);
+            let c2 = -1 * gcfNum * randInt(1, 4);
+            let c3 = gcfNum * randInt(1, 5);
+            
+            let varSets = [['x','y'], ['a','b'], ['m','n']];
+            let v = varSets[randInt(0, 2)];
+            let v1 = v[0], v2 = v[1];
+
+            let exp = `${c1}${v1}${v2} ${fmtCoef(c2)}${v1}^2${v2} ${fmtSign(c3)}${v1}`;
+            
+            let i1 = c1 / gcfNum;
+            let i2 = c2 / gcfNum;
+            let i3 = c3 / gcfNum;
+            let correctAns = `${gcfNum}${v1}(${i1}${v2} ${fmtCoef(i2)}${v1}${v2} ${fmtSign(i3)})`;
+            
+            let dist1 = `${gcfNum}(${i1}${v1}${v2} ${fmtCoef(i2)}${v1}^2${v2} ${fmtCoef(i3)}${v1})`;
+            let dist2 = `${gcfNum}${v1}${v2}(${i1} ${fmtCoef(i2)}${v1} ${fmtSign(i3)})`;
+            let dist3 = `${gcfNum + 1}${v1}(${i1}${v2} ${fmtCoef(i2)}${v1}${v2} ${fmtSign(i3)})`;
+
+            let mc = shuffleMC([correctAns, dist1, dist2, dist3], correctAns);
+
+            return {
+                title: "Type 2: Factoring", type: "mc", assetType: "none",
+                fullStatement: `Fully factor: \\(${exp}\\)`, prompt: "Pick the fully factored form:",
+                options: mc.options, hint: `Find the GCF of the numbers (${c1}, ${Math.abs(c2)}, ${c3}) and the variable that is in every term.`,
+                steps: [
+                    { title: "Step 1: Look at the big numbers", math: `\\text{GCF}(${c1}, ${Math.abs(c2)}, ${c3}) = ${gcfNum}`, explanation: `Find the largest whole number that divides all coefficients perfectly.` },
+                    { title: `Step 2: Check the letter '${v1}'`, math: `${v1}^1, ${v1}^2, ${v1}^1 \\Rightarrow \\text{Pick smallest} = ${v1}`, explanation: `Every piece contains '${v1}'. The lowest exponent is 1.` },
+                    { title: `Step 3: Check the letter '${v2}'`, math: `\\text{The last term has NO } ${v2} \\Rightarrow \\text{Cannot take out } ${v2}`, explanation: `Since the last part lacks '${v2}', we cannot include it.` },
+                    { title: "Step 4: Multiply into a total GCF", math: `\\text{Total GCF} = ${gcfNum}${v1}`, explanation: `Combine number and letter parts to get ${gcfNum}${v1}.` },
+                    { title: "Step 5: Divide each original piece", math: `\\frac{${c1}${v1}${v2}}{${gcfNum}${v1}}=${i1}${v2}, \\quad \\frac{${c2}${v1}^2${v2}}{${gcfNum}${v1}}=${fmtCoef(i2, true)}${v1}${v2}, \\quad \\frac{${c3}${v1}}{${gcfNum}${v1}}=${i3}`, explanation: `Divide every term by ${gcfNum}${v1} to find the leftovers.` },
+                    { title: "Step 6: Write out final layout", math: correctAns, explanation: `Put our GCF outside and leftovers inside the brackets.` }
+                ], ans: mc.ans
+            };
+        }
+
+        function genType3() {
+            let type = randInt(0, 2); 
+            let yVals = [], d1 = [], d2 = [];
+            let xVals = [-2, -1, 0, 1, 2];
+            
+            if (type === 0) { 
+                let m = randInt(2, 5) * (Math.random() < 0.5 ? 1 : -1);
+                let b = randInt(-3, 3);
+                xVals.forEach(x => yVals.push(m*x + b));
+            } else if (type === 1) { 
+                let a = randInt(1, 3);
+                let c = randInt(-2, 2);
+                xVals.forEach(x => yVals.push(a*x*x + c));
+            } else { 
+                let a = randInt(1, 3);
+                xVals.forEach(x => yVals.push(a * Math.pow(2, x + 2))); 
+            }
+
+            for(let i=0; i<4; i++) d1.push(yVals[i+1] - yVals[i]);
+            for(let i=0; i<3; i++) d2.push(d1[i+1] - d1[i]);
+
+            let isD1Const = d1.every(v => v === d1[0]);
+            let isD2Const = d2.every(v => v === d2[0]);
+            let ansStr = isD1Const ? "Linear" : (isD2Const ? "Quadratic" : "Neither");
+            
+            let mc = shuffleMC(["Linear", "Quadratic", "Neither", "Cubic"], ansStr);
+            mc.options.pop(); 
+            if (ansStr === "Linear") mc.ans = mc.options[0].includes("Linear") ? "A" : (mc.options[1].includes("Linear") ? "B" : "C");
+            if (ansStr === "Quadratic") mc.ans = mc.options[0].includes("Quadratic") ? "A" : (mc.options[1].includes("Quadratic") ? "B" : "C");
+            if (ansStr === "Neither") mc.ans = mc.options[0].includes("Neither") ? "A" : (mc.options[1].includes("Neither") ? "B" : "C");
+
+            let tableHtml = `<table class="math-tov"><tr><th>x</th><th>y</th></tr>` + 
+                xVals.map((x, i) => `<tr><td>${x}</td><td>${yVals[i]}</td></tr>`).join('') + `</table>`;
+
+            return {
+                title: "Type 3: Differences", type: "mc", assetType: "tov",
+                fullStatement: "Use first and second differences to decide if this table is linear, quadratic, or neither.",
+                assetHtml: tableHtml, prompt: "Pick the type:", options: mc.options, 
+                hint: "Subtract each y from the next one. If first diffs match, it's linear. If second match, quadratic.",
+                steps: [
+                    { title: "Step 1: Calculate First Differences", math: `${yVals[1]} - (${yVals[0]}) = ${d1[0]}, \\quad ${yVals[2]} - (${yVals[1]}) = ${d1[1]} \\dots`, explanation: "Subtract each y-value from the one directly beneath it." },
+                    { title: "Step 2: Check first layer status", math: `\\text{First Differences} = \\{${d1.join(', ')}\\}`, explanation: isD1Const ? "All values match! This means it is Linear." : "Values change, meaning it is not linear. Move to second layer." },
+                    { title: "Step 3: Calculate Second Differences", math: isD1Const ? `\\text{Skipped}` : `${d1[1]} - (${d1[0]}) = ${d2[0]}, \\quad ${d1[2]} - (${d1[1]}) = ${d2[1]} \\dots`, explanation: isD1Const ? "No need to check second layer." : "Subtract first layer answers to look for a quadratic pattern." },
+                    { title: "Step 4: Check second layer status", math: isD1Const ? `\\text{Skipped}` : `\\text{Second Differences} = \\{${d2.join(', ')}\\}`, explanation: isD1Const ? "" : (isD2Const ? "Second differences match!" : "These don't match either.") },
+                    { title: "Step 5: Conclude the final pattern", math: `\\text{Relation Type} = \\text{${ansStr}}`, explanation: `Based on the difference matching, the relation is ${ansStr}.` }
+                ], ans: mc.ans
+            };
+        }
+
+        function genType4() {
+            let isFunction = (Math.random() > 0.5);
+            let svgPath = "";
+            let explanationText = "";
+            let color = "#2563eb"; 
+
+            if (isFunction) {
+                let funcTypes = [
+                    `<path d="M 30 270 Q 150 -100 270 270" fill="none" stroke="${color}" stroke-width="4"/>`,
+                    `<path d="M 30 250 L 270 50" fill="none" stroke="${color}" stroke-width="4"/>`,
+                    `<path d="M 30 250 C 150 250 150 50 270 50" fill="none" stroke="${color}" stroke-width="4"/>`,
+                    `<path d="M 0 150 Q 75 50 150 150 T 300 150" fill="none" stroke="${color}" stroke-width="4"/>`
+                ];
+                svgPath = funcTypes[randInt(0, 3)];
+                explanationText = "If you slide a vertical line across this grid from left to right, it will never cross the blue curve at more than one point at a time.";
+            } else {
+                let nonFuncTypes = [
+                    `<circle cx="150" cy="150" r="90" fill="none" stroke="${color}" stroke-width="4"/>`,
+                    `<path d="M 250 30 Q -50 150 250 270" fill="none" stroke="${color}" stroke-width="4"/>`,
+                    `<ellipse cx="150" cy="150" rx="60" ry="110" fill="none" stroke="${color}" stroke-width="4"/>`,
+                    `<path d="M 200 50 C 50 50 50 250 200 250 C 350 250 350 150 150 150" fill="none" stroke="${color}" stroke-width="4"/>`
+                ];
+                svgPath = nonFuncTypes[randInt(0, 3)];
+                explanationText = "Notice that you can draw a straight vertical line that crosses this curve in two or more places simultaneously (for example, right down the middle).";
+            }
+
+            let gridLines = "";
+            for(let i=30; i<=270; i+=30) {
+                gridLines += `<line x1="${i}" y1="0" x2="${i}" y2="300" stroke="#e2e8f0" stroke-width="1"/>`;
+                gridLines += `<line x1="0" y1="${i}" x2="300" y2="${i}" stroke="#e2e8f0" stroke-width="1"/>`;
+            }
+            let axes = `
+                <line x1="150" y1="0" x2="150" y2="300" stroke="#64748b" stroke-width="2"/>
+                <line x1="0" y1="150" x2="300" y2="150" stroke="#64748b" stroke-width="2"/>
+            `;
+
+            let assetHtml = `<div style="background: white; border-radius: 8px; border: 1px solid #cbd5e1; width: 100%; max-width: 300px; margin: 0 auto; padding: 10px;"><svg viewBox="0 0 300 300" style="width: 100%; height: auto; display: block;">${gridLines}${axes}${svgPath}</svg></div>`;
+
+            let isOptionAYes = (Math.random() > 0.5);
+            let options = isOptionAYes ? 
+                ["A) Yes, it is a function", "B) No, it is not a function"] : 
+                ["A) No, it is not a function", "B) Yes, it is a function"];
+            
+            let ansLetter = isFunction ? (isOptionAYes ? "A" : "B") : (isOptionAYes ? "B" : "A");
+
+            return {
+                title: "Type 4: Vertical Line Test", type: "mc", assetType: "custom",
+                fullStatement: "Look at the graph plotted on the grid below. Does this graph represent a <strong>function</strong>?", 
+                assetHtml: assetHtml, prompt: "Pick the correct statement:", options: options, 
+                hint: "Imagine drawing straight vertical lines (up and down) anywhere on the grid. Do they ever hit the line more than once?",
+                steps: [
+                    { title: "Step 1: Understand the Vertical Line Test", math: "\\text{Rule: Max 1 intersection per vertical line}", explanation: "A relation is a function only if every vertical line drawn on the coordinate plane intersects the graph at most once." },
+                    { title: "Step 2: Scan the graph visually", math: "\\text{Visual Check}", explanation: explanationText },
+                    { title: "Step 3: State the Conclusion", math: `\\text{Result} = \\text{${isFunction ? 'Function' : 'Not a Function'}}`, explanation: `Based on the vertical line test, we determine that it is ${isFunction ? 'a function' : 'NOT a function'}.` }
+                ], ans: ansLetter
+            };
+        }
+
+        function genType5() {
+            let isDiffSquares = (randInt(1, 3) === 3); 
+            let a = randInt(2, 5), b = randInt(1, 6), c = randInt(2, 5), d = randInt(1, 6);
+            if (isDiffSquares) { c = a; d = -b; } else { if (Math.random() > 0.5) b = -b; if (Math.random() > 0.5) d = -d; }
+
+            let f = a * c, o = a * d, i = b * c, l = b * d;
+            let mid = o + i;
+            let expForm = isDiffSquares ? `${f}x^2 ${fmtSign(l)}` : `${f}x^2 ${fmtCoef(mid)}x ${fmtSign(l)}`;
+            
+            let dist1 = `${f}x^2 ${fmtSign(l)}`;
+            let dist2 = `${f}x^2 ${fmtCoef(-mid)}x ${fmtSign(l)}`;
+            let dist3 = `${f+c}x^2 ${fmtCoef(mid)}x ${fmtSign(l+1)}`;
+            if(isDiffSquares) { dist1 = `${f}x^2 ${fmtCoef(mid+1)}x ${fmtSign(l)}`; }
+
+            let mc = shuffleMC([expForm, dist1, dist2, dist3], expForm);
+
+            return {
+                title: "Type 5: Expanding Binomials", type: "mc", assetType: "none",
+                fullStatement: `Expand: \\((${fmtCoef(a, true)}x ${fmtSign(b)})(${fmtCoef(c, true)}x ${fmtSign(d)})\\)`,
+                prompt: "Pick the expanded form:", options: mc.options, hint: "Use FOIL (First, Outer, Inner, Last), then combine x-terms.",
+                steps: [
+                    { title: "Step 1: Multiply FIRST parts", math: `(${a}x) \\times (${c}x) = ${f}x^2`, explanation: "Multiply the front terms." },
+                    { title: "Step 2: Multiply OUTER parts", math: `(${a}x) \\times (${d}) = ${fmtCoef(o, true)}x`, explanation: "Multiply the outer edge terms." },
+                    { title: "Step 3: Multiply INNER parts", math: `(${b}) \\times (${c}x) = ${fmtCoef(i, true)}x`, explanation: "Multiply the inside middle terms." },
+                    { title: "Step 4: Multiply LAST parts", math: `(${b}) \\times (${d}) = ${l}`, explanation: "Multiply the last numbers in each bracket." },
+                    { title: "Step 5: Line up all elements", math: `${f}x^2 ${fmtCoef(o)}x ${fmtCoef(i)}x ${fmtSign(l)}`, explanation: "Assemble your four results." },
+                    { title: "Step 6: Combine matching terms", math: isDiffSquares ? `${fmtCoef(o, true)}x ${fmtCoef(i)}x = 0 \\Rightarrow ${expForm}` : `${fmtCoef(o, true)}x ${fmtCoef(i)}x = ${fmtCoef(mid, true)}x \\Rightarrow ${expForm}`, explanation: isDiffSquares ? "Middle terms cancel out." : "Add the middle x terms together." }
+                ], ans: mc.ans
+            };
+        }
+
+        // --- Core Execution ---
+        function generateNewProblem() {
+            const topic = document.getElementById("topic-select").value;
+            
+            // Generate Data based on Topic
+            if (topic === "t1") currentProblemData = genType1();
+            else if (topic === "t2") currentProblemData = genType2();
+            else if (topic === "t3") currentProblemData = genType3();
+            else if (topic === "t4") currentProblemData = genType4();
+            else if (topic === "t5") currentProblemData = genType5();
+
+            // Reset State
+            currentState = { answered: false, selectedMcOption: "", isCorrect: false, currentStep: 0, solRevealed: false, attempts: 0 };
+            
+            // Render UI
+            document.getElementById("placeholder").style.display = "none";
+            document.getElementById("quiz-station").style.display = "block";
+            document.getElementById("solution-reveal-layer").style.display = "none";
+            
+            var __hb = document.getElementById("hint-box"); if (__hb) __hb.style.display = "none";
+            var __fb = document.getElementById("feedback-msg"); if (__fb) __fb.style.display = "none";
+            
+            const assetMount = document.getElementById("asset-viewport-mount-point");
+            const mountPoint = document.getElementById("dynamic-input-mount-point");
+
+            if (currentProblemData.assetType && currentProblemData.assetType !== "none") {
+                assetMount.style.display = "flex";
+                assetMount.innerHTML = currentProblemData.assetHtml;
+            } else {
+                assetMount.style.display = "none";
+            }
+
+            document.getElementById("question-statement-display").innerHTML = currentProblemData.fullStatement;
+            document.getElementById("input-prompt-label").innerHTML = currentProblemData.prompt;
+            
+            let html = `<div class="mc-options-list">`;
+            currentProblemData.options.forEach(opt => {
+                const letter = opt.charAt(0);
+                html += `
+                    <div class="mc-option-card" onclick="selectMcOptionCard('${letter}')">
+                        <span class="mc-badge">${letter}</span>
+                        <span>${opt.substring(3)}</span>
+                    </div>`;
+            });
+            html += `</div>`;
+            mountPoint.innerHTML = html;
+
+            unlockQuizInterface();
+
+            if (window.renderMathInElement) {
+                renderMathInElement(document.body, { delimiters: [{left: '$$', right: '$$', display: true}, {left: '\\(', right: '\\)', display: false}], throwOnError: false });
+            }
+        }
+
+        function selectMcOptionCard(letter) {
+            if (!currentProblemData || currentState.answered) return;
+            
+            currentState.selectedMcOption = letter;
+            var __fb = document.getElementById("feedback-msg"); if (__fb) __fb.style.display = "none";
+            
+            const mountPoint = document.getElementById("dynamic-input-mount-point");
+            let html = `<div class="mc-options-list">`;
+            currentProblemData.options.forEach(opt => {
+                const currentLetter = opt.charAt(0);
+                const isSelected = currentLetter === letter ? "selected" : "";
+                html += `
+                    <div class="mc-option-card ${isSelected}" onclick="selectMcOptionCard('${currentLetter}')">
+                        <span class="mc-badge">${currentLetter}</span>
+                        <span>${opt.substring(3)}</span>
+                    </div>`;
+            });
+            html += `</div>`;
+            mountPoint.innerHTML = html;
+            
+            // Re-render KaTeX after updating DOM for option selection
+            if (window.renderMathInElement) {
+                renderMathInElement(document.body, { delimiters: [{left: '$$', right: '$$', display: true}, {left: '\\(', right: '\\)', display: false}], throwOnError: false });
+            }
+        }
+
+        function evaluateStudentAnswer() {
+            if (!currentProblemData || currentState.answered) return;
+
+            const firstNameInput = document.getElementById("first-name").value.trim();
+            const lastNameInput = document.getElementById("last-name").value.trim();
+
+            if (firstNameInput === "" || lastNameInput === "") {
+                alert("Please enter your first and last name first.");
+                return;
+            }
+
+            if (!currentState.selectedMcOption) {
+                alert("Please choose an answer first.");
+                return;
+            }
+
+            let matchingCorrect = (currentState.selectedMcOption === currentProblemData.ans);
+            let logString = "Option " + currentState.selectedMcOption;
+
+            globalAttempts++;
+            currentState.attempts++;
+            if (matchingCorrect && !currentState.isCorrect) globalScore++;
+            currentState.isCorrect = matchingCorrect;
+            
+            document.getElementById("hud-score").innerText = globalScore;
+            document.getElementById("hud-attempts").innerText = globalAttempts;
+
+            if (matchingCorrect) {
+                currentState.answered = true;
+                lockQuizInterface(true);
+            } else {
+                showTryAgain();
+            }
+
+            let payload = {
+                unitId: "Unit_1",
+                lessonId: "Lesson_1_2",
+                firstName: firstNameInput,
+                lastName: lastNameInput,
+                questionId: document.getElementById("topic-select").value,
+                userAnswer: logString,
+                isCorrect: matchingCorrect,
+                attempts: currentState.attempts,
+                methodUsed: "Dynamic On-The-Fly Gen MC",
+                totalScore: globalScore
+            };
+
+            fetch(TEACHER_SPREADSHEET_SCRIPT_URL, {
+                method: "POST", mode: "no-cors", headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            }).catch(err => console.error("Database cloud logging failure:", err));
+        }
+
+        function toggleHint() {
+            if (!currentProblemData) return;
+            var box = document.getElementById("hint-box");
+            if (!box) return;
+            if (box.style.display === "block") { box.style.display = "none"; return; }
+            box.innerHTML = "<strong>Hint:</strong> " + (currentProblemData.hint || "");
+            box.style.display = "block";
+            if (window.renderMathInElement) renderMathInElement(document.body, { delimiters: [{left: '$$', right: '$$', display: true}, {left: '\\(', right: '\\)', display: false}], throwOnError: false });
+        }
+
+        function showTryAgain() {
+            document.getElementById("reveal-sol-btn").disabled = false;
+            const feedback = document.getElementById("feedback-msg");
+            feedback.style.display = "block";
+            feedback.className = "feedback-msg-area feedback-error";
+            feedback.innerHTML = "Not quite yet - pick another answer, or tap Hint for a clue. (You can tap Show Solution Steps any time.)";
+        }
+
+        function lockQuizInterface(isCorrect) {
+            document.querySelectorAll(".mc-option-card").forEach(c => c.classList.add("disabled"));
+            document.getElementById("check-ans-btn").disabled = true;
+            document.getElementById("reveal-sol-btn").disabled = false;
+
+            const feedback = document.getElementById("feedback-msg");
+            feedback.style.display = "block";
+            if (isCorrect) {
+                feedback.className = "feedback-msg-area feedback-success";
+                feedback.innerHTML = "Correct! Nice work.";
+            } else {
+                feedback.className = "feedback-msg-area feedback-error";
+                feedback.innerHTML = "Not quite - review the steps below.";
+            }
+        }
+
+        function unlockQuizInterface() {
+            document.getElementById("check-ans-btn").disabled = false;
+            document.getElementById("reveal-sol-btn").disabled = true;
+            document.getElementById("feedback-msg").style.display = "none";
+        }
+
+        function unlockSolutionPanel() {
+            currentState.solRevealed = true;
+            
+            const targetDiv = document.getElementById("solution-reveal-layer");
+            const workspace = document.getElementById("solution-workspace-injected");
+            
+            let html = `<h2>Solution for ${currentProblemData.title}</h2>`;
+            currentProblemData.steps.forEach(step => {
+                html += `
+                <div class="step-block" style="display:none;">
+                    <span class="step-title">${step.title}</span>
+                    <div class="step-math">\\(${step.math}\\)</div>
+                    <span class="step-explanation">${step.explanation}</span>
+                </div>`;
+            });
+            html += `
+            <div class="final-answer-box" style="display:none;">
+                <span class="final-answer-label">Answer</span>
+                <span class="final-answer-math">Correct answer: ${currentProblemData.ans}</span>
+            </div>`;
+
+            workspace.innerHTML = html;
+            targetDiv.style.display = "block";
+            
+            renderMethodSteps();
+            if (window.renderMathInElement) renderMathInElement(document.body, { delimiters: [{left: '$$', right: '$$', display: true}, {left: '\\(', right: '\\)', display: false}], throwOnError: false });
+        }
+
+        function renderMethodSteps() {
+            const activeContainer = document.getElementById("solution-workspace-injected");
+            visibleStepElements = Array.from(activeContainer.querySelectorAll('.step-block, .final-answer-box'));
+            
+            for (let i = 0; i <= currentState.currentStep; i++) {
+                if (visibleStepElements[i]) visibleStepElements[i].style.display = "block";
+            }
+
+            document.getElementById("restart-btn").disabled = (currentState.currentStep === 0);
+            document.getElementById("next-btn").disabled = (currentState.currentStep === visibleStepElements.length - 1);
+        }
+
+        function showNextStep() {
+            if (currentState.currentStep < visibleStepElements.length - 1) {
+                currentState.currentStep++;
+                visibleStepElements[currentState.currentStep].style.display = "block";
+                visibleStepElements[currentState.currentStep].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                document.getElementById("restart-btn").disabled = false;
+            }
+            if (currentState.currentStep === visibleStepElements.length - 1) {
+                document.getElementById("next-btn").disabled = true;
+            }
+            if (window.renderMathInElement) renderMathInElement(document.body, { delimiters: [{left: '$$', right: '$$', display: true}, {left: '\\(', right: '\\)', display: false}], throwOnError: false });
+        }
+
+        function restartSolution() {
+            currentState.currentStep = 0;
+            unlockSolutionPanel();
+        }
+    </script>
+</body>
+</html>

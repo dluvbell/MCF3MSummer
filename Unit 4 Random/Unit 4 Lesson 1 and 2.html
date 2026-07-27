@@ -1,0 +1,1333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCF3M Trigonometry Practice Studio</title>
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+
+    <style>
+        :root {
+            --primary-color: #0f172a;
+            --secondary-color: #2563eb;
+            --disabled-color: #94a3b8;
+            --text-color: #334155;
+            --math-color: #000000;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --border-color: #cbd5e1;
+            --highlight-bg: #eff6ff;
+            --explanation-bg: #f1f5f9;
+            --rule-bg: #fef08a;
+            --rule-text: #713f12;
+            --success-color: #16a34a;
+            --error-color: #dc2626;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.8;
+            margin: 0;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: -0.025em;
+        }
+
+        header p {
+            margin: 8px 0 0 0;
+            color: #94a3b8;
+            font-size: 1.05rem;
+        }
+
+        .scoreboard {
+            background-color: #1e293b;
+            color: white;
+            display: inline-flex;
+            gap: 20px;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-weight: 700;
+            margin-top: 15px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.2);
+        }
+
+        .scoreboard span {
+            color: #60a5fa;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .profile-box, .selector-box {
+            background-color: var(--card-bg);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-color);
+            margin-bottom: 25px;
+        }
+
+        .profile-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .profile-grid input {
+            width: 100%;
+            padding: 12px;
+            font-size: 1rem;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        .profile-grid input:focus {
+            border-color: var(--secondary-color);
+        }
+
+        label {
+            display: block;
+            font-weight: 700;
+            color: var(--primary-color);
+            font-size: 1.1rem;
+            margin-bottom: 12px;
+        }
+
+        .selector-controls {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        select {
+            flex: 1;
+            padding: 16px;
+            font-size: 1.1rem;
+            font-family: inherit;
+            border-radius: 8px;
+            border: 2px solid var(--border-color);
+            background-color: white;
+            color: var(--primary-color);
+            outline: none;
+            cursor: pointer;
+        }
+
+        .solution-container {
+            background-color: var(--card-bg);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-color);
+            min-height: 200px;
+        }
+
+        .placeholder-text {
+            color: #64748b;
+            text-align: center;
+            font-style: italic;
+            padding: 60px 0;
+            font-size: 1.1rem;
+        }
+
+        .quiz-interface-box {
+            background-color: var(--explanation-bg);
+            border: 1px solid var(--border-color);
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+
+        .math-render-viewport {
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+        }
+
+        .mc-options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 10px;
+        }
+
+        .mc-option-card {
+            background: white;
+            border: 2px solid var(--border-color);
+            padding: 14px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1.05rem;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .mc-option-card:hover:not(.disabled) {
+            border-color: var(--secondary-color);
+            background-color: var(--highlight-bg);
+        }
+
+        .mc-option-card.selected {
+            border-color: var(--secondary-color);
+            background-color: #dbeafe;
+            color: #1e40af;
+        }
+
+        .mc-option-card.disabled {
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .mc-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background-color: #e2e8f0;
+            color: var(--primary-color);
+            font-weight: 800;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+
+        .mc-option-card.selected .mc-badge {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+
+        .feedback-msg-area {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            display: none;
+            padding: 10px 15px;
+            border-radius: 6px;
+        }
+
+        .feedback-success {
+            background-color: #dcfce7;
+            color: var(--success-color);
+            border-left: 5px solid var(--success-color);
+        }
+
+        .feedback-error {
+            background-color: #fee2e2;
+            color: var(--error-color);
+            border-left: 5px solid var(--error-color);
+        }
+
+        .quiz-action-bar {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .solution-reveal-window {
+            display: none;
+            border-top: 3px double var(--border-color);
+            margin-top: 30px;
+            padding-top: 30px;
+        }
+
+        .step-block {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e2e8f0;
+            display: none;
+        }
+
+        .step-title {
+            font-weight: 800;
+            color: var(--secondary-color);
+            display: block;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 8px;
+        }
+
+        .step-math {
+            font-size: 1.3rem;
+            font-weight: 700;
+            background-color: var(--explanation-bg);
+            padding: 14px 20px;
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin: 8px 0;
+            color: var(--math-color);
+            letter-spacing: 0.02em;
+            flex-wrap: wrap;
+        }
+
+        .step-explanation {
+            display: block;
+            font-size: 1.05rem;
+            color: #334155;
+            margin-top: 6px;
+        }
+
+        .final-answer-box {
+            background-color: var(--highlight-bg);
+            border-left: 6px solid var(--secondary-color);
+            padding: 20px 25px;
+            border-radius: 0 8px 8px 0;
+            margin-top: 30px;
+            display: none;
+        }
+
+        .final-answer-label {
+            font-weight: 800;
+            color: var(--secondary-color);
+            display: block;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .final-answer-math {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            margin-top: 6px;
+            display: inline-flex;
+            align-items: center;
+            letter-spacing: 0.02em;
+        }
+
+        .control-panel {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid var(--border-color);
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 14px 24px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            border-radius: 8px;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary { background-color: var(--secondary-color); color: white; }
+        .btn-primary:hover:not(:disabled) { background-color: #1d4ed8; }
+        .btn-success { background-color: var(--success-color); color: white; }
+        .btn-success:hover:not(:disabled) { background-color: #166534; }
+        .btn-secondary { background-color: var(--explanation-bg); color: var(--primary-color); border: 1px solid var(--border-color); }
+        .btn-secondary:hover:not(:disabled) { background-color: #e2e8f0; }
+        .btn-accent { background-color: var(--primary-color); color: white; }
+        .btn-accent:hover:not(:disabled) { background-color: #1e293b; }
+
+        .btn:disabled {
+            background-color: var(--disabled-color);
+            color: #f1f5f9;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        .question-statement-card {
+            background: #ffffff;
+            border-left: 4px solid var(--secondary-color);
+            padding: 16px 20px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            border-radius: 0 6px 6px 0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .hint-box {
+            display: none;
+            background-color: #fef9c3;
+            border-left: 5px solid #eab308;
+            color: #713f12;
+            padding: 12px 16px;
+            border-radius: 0 6px 6px 0;
+            margin-bottom: 15px;
+            font-size: 1.05rem;
+            font-weight: 600;
+        }
+
+        .btn-hint { background-color: #fde047; color: #713f12; }
+        .btn-hint:hover:not(:disabled) { background-color: #facc15; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>MCF3M Trigonometry Studio</h1>
+        <p>Infinite Practice: Grade 11 Mathematics - Trigonometry Applications</p>
+        <div class="scoreboard">
+            <div>Score: <span id="hud-score">0</span></div>
+            <div>Tries: <span id="hud-attempts">0</span></div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="profile-box">
+            <label>Student Profile Setup:</label>
+            <div class="profile-grid">
+                <input type="text" id="first-name" placeholder="First name" autocomplete="off">
+                <input type="text" id="last-name" placeholder="Last name" autocomplete="off">
+            </div>
+        </div>
+
+        <div class="selector-box">
+            <label for="question-select">Select Trigonometry Concept:</label>
+            <div class="selector-controls">
+                <select id="question-select" onchange="triggerNewQuestion()">
+                    <option value="">-- Choose a Topic to Begin --</option>
+                    <option value="t1">Type 1: Primary Trigonometric Ratios (SOH CAH TOA)</option>
+                    <option value="t2">Type 2: Solving Right-Angled Triangles</option>
+                    <option value="t3">Type 3: Compass Bearings & Right Triangles</option>
+                    <option value="t4">Type 4: Sine Law Inverse Expressions</option>
+                    <option value="t5">Type 5: Advanced Multi-Triangle Word Problems</option>
+                </select>
+                <button class="btn btn-accent" onclick="triggerNewQuestion()">Generate New</button>
+            </div>
+        </div>
+
+        <div class="solution-container" id="display-window">
+            <div id="placeholder" class="placeholder-text">
+                Choose a concept and click "Generate New" to create a dynamic practice problem.
+            </div>
+
+            <div id="quiz-station" class="quiz-interface-box" style="display: none;">
+                <div id="asset-viewport-mount-point" class="math-render-viewport" style="display: none;"></div>
+
+                <div id="question-statement-display" class="question-statement-card"></div>
+
+                <label id="input-prompt-label" style="margin-bottom: 12px; font-weight: 700; display: block;"></label>
+                
+                <div id="dynamic-input-mount-point" style="margin-top: 10px;"></div>
+
+                <div id="hint-box" class="hint-box"></div>
+                <div id="feedback-msg" class="feedback-msg-area"></div>
+
+                <div class="quiz-action-bar">
+                    <button class="btn btn-success" id="check-ans-btn" onclick="evaluateStudentAnswer()">Check Answer</button>
+                    <button class="btn btn-hint" id="hint-btn" onclick="toggleHint()">Hint</button>
+                    <button class="btn btn-secondary" id="reveal-sol-btn" disabled onclick="unlockSolutionPanel()">Show Solution Steps</button>
+                </div>
+            </div>
+
+            <div class="solution-reveal-window" id="solution-reveal-layer">
+                <div id="solution-workspace-injected"></div>
+                
+                <div class="control-panel" id="controls-panel">
+                    <button class="btn btn-secondary" id="restart-btn" onclick="restartSolution()">Restart Steps</button>
+                    <button class="btn btn-primary" id="next-btn" onclick="showNextStep()">Next Step &rarr;</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const TEACHER_SPREADSHEET_SCRIPT_URL = "";
+
+        let globalScore = 0;
+        let globalAttempts = 0;
+        let currentProblemData = null;
+        let currentState = { answered: false, selectedMcOption: "", isCorrect: false, currentStep: 0, solRevealed: false, attempts: 0 };
+        let visibleStepElements = [];
+        let currentStepIndex = 0;
+
+        // --- Math & Logic Utilities ---
+        function randInt(min, max, exclude = []) {
+            let val;
+            let safety = 0;
+            do {
+                val = Math.floor(Math.random() * (max - min + 1)) + min;
+                safety++;
+            } while (exclude.includes(val) && safety < 100);
+            return val;
+        }
+
+        function shuffleMC(correct, distArr) {
+            let opts = [{t: correct, c: true}];
+            distArr.forEach(d => opts.push({t: d, c: false}));
+            
+            for (let i = opts.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [opts[i], opts[j]] = [opts[j], opts[i]];
+            }
+            
+            let finalOpts = [];
+            let ansLetter = "";
+            let letters = ["A", "B", "C", "D"];
+            
+            opts.forEach((item, i) => {
+                finalOpts.push(letters[i] + ") " + item.t);
+                if (item.c) ansLetter = letters[i];
+            });
+            
+            return { options: finalOpts, ansLetter: ansLetter, rawAns: correct };
+        }
+
+        // --- Dynamic SVG Triangle Generator ---
+        function drawDynamicTriangle(pts, labels, sides, angleLabels) {
+            let cx = (pts[0][0] + pts[1][0] + pts[2][0]) / 3;
+            let cy = (pts[0][1] + pts[1][1] + pts[2][1]) / 3;
+            let svg = '<svg width="280" height="200" viewBox="0 0 280 200" xmlns="http://www.w3.org/2000/svg">';
+            svg += `<polygon points="${pts[0][0]},${pts[0][1]} ${pts[1][0]},${pts[1][1]} ${pts[2][0]},${pts[2][1]}" fill="#f8f9fa" stroke="#222222" stroke-width="2"/>`;
+            
+            for (let i = 0; i < 3; i++) {
+                if (angleLabels[i]) {
+                    let p = pts[i], pPrev = pts[(i+2)%3], pNext = pts[(i+1)%3];
+                    if (angleLabels[i] === "right") {
+                        let v1 = [pPrev[0]-p[0], pPrev[1]-p[1]], v2 = [pNext[0]-p[0], pNext[1]-p[1]];
+                        let l1 = Math.hypot(v1[0], v1[1]), l2 = Math.hypot(v2[0], v2[1]);
+                        let u1 = [v1[0]/l1 * 15, v1[1]/l1 * 15], u2 = [v2[0]/l2 * 15, v2[1]/l2 * 15];
+                        svg += `<polygon points="${p[0]},${p[1]} ${p[0]+u1[0]},${p[1]+u1[1]} ${p[0]+u1[0]+u2[0]},${p[1]+u1[1]+u2[1]} ${p[0]+u2[0]},${p[1]+u2[1]}" fill="none" stroke="#222222" stroke-width="1.5"/>`;
+                    } else {
+                        let dx = cx - p[0], dy = cy - p[1], len = Math.hypot(dx, dy);
+                        let tx = p[0] + (dx/len)*25, ty = p[1] + (dy/len)*25 + 4;
+                        svg += `<text x="${tx}" y="${ty}" font-family="Arial" font-size="12" text-anchor="middle">${angleLabels[i]}</text>`;
+                    }
+                }
+            }
+            for (let i = 0; i < 3; i++) {
+                if (labels[i]) {
+                    let p = pts[i], dx = p[0] - cx, dy = p[1] - cy, len = Math.hypot(dx, dy);
+                    let tx = p[0] + (dx/len)*18, ty = p[1] + (dy/len)*18 + 5;
+                    svg += `<text x="${tx}" y="${ty}" font-family="Arial" font-size="14" font-weight="bold" text-anchor="middle">${labels[i]}</text>`;
+                }
+            }
+            for (let i = 0; i < 3; i++) {
+                if (sides[i]) {
+                    let p1 = pts[i], p2 = pts[(i+1)%3];
+                    let mx = (p1[0] + p2[0]) / 2, my = (p1[1] + p2[1]) / 2;
+                    let dx = mx - cx, dy = my - cy, len = Math.hypot(dx, dy);
+                    let tx = mx + (dx/len)*15, ty = my + (dy/len)*15 + 4;
+                    svg += `<text x="${tx}" y="${ty}" font-family="Arial" font-size="13" text-anchor="middle">${sides[i]}</text>`;
+                }
+            }
+            svg += '</svg>';
+            return svg;
+        }
+
+        // --- Problem Generators ---
+        function generateProblem(typeId) {
+            if (!typeId) return null;
+            let p = {
+                title: "", type: "mc", assetType: "svg", optionType: "text",
+                fullStatement: "", prompt: "", options: [], optionSpecs: [],
+                hint: "", steps: [], ans: "", rawAns: "", assetHtml: ""
+            };
+
+            const scenario = randInt(1, 3);
+
+            if (typeId === "t1") {
+                p.title = "Primary Trigonometric Ratios";
+                const triples = [[3,4,5], [5,12,13], [8,15,17], [7,24,25], [9,40,41]];
+                const t = triples[randInt(0, 4)];
+                const funcs = ["\\sin", "\\cos", "\\tan"];
+                const func = funcs[randInt(0, 2)];
+                
+                const W = randInt(100, 160), H = randInt(90, 140), ox = 140, oy = 100;
+                const layouts = [
+                    [[ox-W/2, oy+H/2], [ox+W/2, oy+H/2], [ox-W/2, oy-H/2]],
+                    [[ox+W/2, oy+H/2], [ox-W/2, oy+H/2], [ox+W/2, oy-H/2]],
+                    [[ox-W/2, oy-H/2], [ox+W/2, oy-H/2], [ox-W/2, oy+H/2]],
+                    [[ox+W/2, oy-H/2], [ox-W/2, oy-H/2], [ox+W/2, oy+H/2]]
+                ];
+                let pts = layouts[randInt(0,3)];
+                let chars = ['A','B','C'].sort(()=>0.5-Math.random());
+                let askIdx = randInt(1, 2); 
+                let targetAng = chars[askIdx];
+                
+                let l_adj = t[0], l_opp = t[1];
+                if(Math.random() > 0.5) { l_adj = t[1]; l_opp = t[0]; }
+                let l_hyp = t[2];
+
+                let sides = ["", "", ""];
+                sides[0] = (askIdx === 1) ? l_adj : l_opp;
+                sides[1] = l_hyp;
+                sides[2] = (askIdx === 2) ? l_adj : l_opp;
+
+                let angleLabels = ["right", "", ""];
+                p.assetHtml = drawDynamicTriangle(pts, chars, sides, angleLabels);
+
+                let ans, dist1, dist2, dist3, exp, mathStr;
+                if (func === "\\sin") { 
+                    ans = `\\dfrac{${l_opp}}{${l_hyp}}`; dist1 = `\\dfrac{${l_adj}}{${l_hyp}}`; dist2 = `\\dfrac{${l_opp}}{${l_adj}}`; dist3 = `\\dfrac{${l_adj}}{${l_opp}}`; 
+                    exp = "Opposite / Hypotenuse"; mathStr = `\\(\\sin ${targetAng} = \\dfrac{\\text{Opposite}}{\\text{Hypotenuse}} = \\dfrac{${l_opp}}{${l_hyp}}\\)`; 
+                } else if (func === "\\cos") { 
+                    ans = `\\dfrac{${l_adj}}{${l_hyp}}`; dist1 = `\\dfrac{${l_opp}}{${l_hyp}}`; dist2 = `\\dfrac{${l_adj}}{${l_opp}}`; dist3 = `\\dfrac{${l_opp}}{${l_adj}}`; 
+                    exp = "Adjacent / Hypotenuse"; mathStr = `\\(\\cos ${targetAng} = \\dfrac{\\text{Adjacent}}{\\text{Hypotenuse}} = \\dfrac{${l_adj}}{${l_hyp}}\\)`; 
+                } else { 
+                    ans = `\\dfrac{${l_opp}}{${l_adj}}`; dist1 = `\\dfrac{${l_adj}}{${l_opp}}`; dist2 = `\\dfrac{${l_opp}}{${l_hyp}}`; dist3 = `\\dfrac{${l_adj}}{${l_hyp}}`; 
+                    exp = "Opposite / Adjacent"; mathStr = `\\(\\tan ${targetAng} = \\dfrac{\\text{Opposite}}{\\text{Adjacent}} = \\dfrac{${l_opp}}{${l_adj}}\\)`; 
+                }
+                
+                p.fullStatement = `Consider the dynamically generated right triangle shown below. Select the ratio that represents \\(${func} ${targetAng}\\).`;
+                p.prompt = "Select the correct trigonometric ratio:";
+                const mc = shuffleMC(`\\(${ans}\\)`, [`\\(${dist1}\\)`, `\\(${dist2}\\)`, `\\(${dist3}\\)`]);
+                p.options = mc.options; p.ans = mc.ansLetter;
+                p.hint = `SOH CAH TOA: The ratio for ${func} is ${exp}. Look at the sides relative to angle ${targetAng}.`;
+                p.steps = [
+                    { title: `Step 1: Identify Sides Relative to Angle ${targetAng}`, math: `\\(\\text{Opposite} = ${l_opp}, \\quad \\text{Adjacent} = ${l_adj}, \\quad \\text{Hypotenuse} = ${l_hyp}\\)`, explanation: "Identify the side lengths relative to the requested angle." },
+                    { title: "Step 2: Apply Trigonometric Definition", math: mathStr, explanation: "Substitute the side lengths into the correct trigonometric ratio formula." }
+                ];
+            }
+            else if (typeId === "t2") {
+                p.title = "Solving Right-Angled Triangles";
+                
+                const W = randInt(110, 170), H = randInt(90, 130), ox = 140, oy = 100;
+                const layouts = [
+                    [[ox-W/2, oy+H/2], [ox+W/2, oy+H/2], [ox-W/2, oy-H/2]],
+                    [[ox+W/2, oy+H/2], [ox-W/2, oy+H/2], [ox+W/2, oy-H/2]],
+                    [[ox-W/2, oy-H/2], [ox+W/2, oy-H/2], [ox-W/2, oy+H/2]],
+                    [[ox+W/2, oy-H/2], [ox-W/2, oy-H/2], [ox+W/2, oy+H/2]]
+                ];
+                let pts = layouts[randInt(0,3)];
+                let chars = ['X','Y','Z'].sort(()=>0.5-Math.random());
+                
+                if (scenario === 1 || scenario === 3) {
+                    const a = randInt(5, 15); const c = randInt(a+3, 25);
+                    const b = Math.sqrt(c*c - a*a);
+                    const angA = Math.asin(a/c) * (180/Math.PI);
+                    const angB = 90 - angA;
+                    
+                    let askIdx = randInt(1, 2); 
+                    let targetAng = chars[askIdx];
+                    let otherAng = chars[(askIdx===1)?2:1];
+                    let oppChar = chars[(askIdx===1)?2:1]; // The missing side is opposite the other angle
+                    
+                    let sides = ["", "", ""];
+                    sides[0] = (askIdx === 1) ? "x" : `${a}`;
+                    sides[1] = `${c}`;
+                    sides[2] = (askIdx === 2) ? "x" : `${a}`;
+
+                    let angleLabels = ["right", "", ""];
+                    p.assetHtml = drawDynamicTriangle(pts, chars, sides, angleLabels);
+                    
+                    const correctStr = `\\(x = ${b.toFixed(1)},\\quad \\angle ${targetAng} = ${angA.toFixed(1)}^\\circ,\\quad \\angle ${otherAng} = ${angB.toFixed(1)}^\\circ\\)`;
+                    const dist1 = `\\(x = ${b.toFixed(1)},\\quad \\angle ${targetAng} = ${angB.toFixed(1)}^\\circ,\\quad \\angle ${otherAng} = ${angA.toFixed(1)}^\\circ\\)`;
+                    const dist2 = `\\(x = ${(b+2).toFixed(1)},\\quad \\angle ${targetAng} = ${(angA-5).toFixed(1)}^\\circ,\\quad \\angle ${otherAng} = ${(angB+5).toFixed(1)}^\\circ\\)`;
+                    const dist3 = `\\(x = ${(c-a).toFixed(1)},\\quad \\angle ${targetAng} = ${angA.toFixed(1)}^\\circ,\\quad \\angle ${otherAng} = ${angB.toFixed(1)}^\\circ\\)`;
+                    
+                    const mc = shuffleMC(correctStr, [dist1, dist2, dist3]);
+                    p.options = mc.options; p.ans = mc.ansLetter;
+                    p.fullStatement = `Solve the dynamic right triangle to find missing side \\(x\\) and the two acute angles (rounded to 1 decimal place).`;
+                    p.prompt = "Select the correct set of solved values:";
+                    p.hint = `Use Pythagorean Theorem \\(a^2 + b^2 = c^2\\) to find \\(x\\), then use inverse sine or cosine to solve for the angles.`;
+                    p.steps = [
+                        { title: "Step 1: Find Side using Pythagorean Theorem", math: `\\(x = \\sqrt{${c}^2 - ${a}^2} = \\sqrt{${c*c} - ${a*a}} = \\sqrt{${c*c - a*a}} \\approx ${b.toFixed(1)}\\)`, explanation: "Subtract square of leg from square of hypotenuse." },
+                        { title: "Step 2: Find the First Angle", math: `\\(\\sin(${targetAng}) = \\dfrac{${a}}{${c}} \\implies \\angle ${targetAng} = \\sin^{-1}(${(a/c).toFixed(4)}) \\approx ${angA.toFixed(1)}^\\circ\\)`, explanation: "Use the appropriate primary trigonometric ratio." },
+                        { title: "Step 3: Find the Remaining Angle", math: `\\(\\angle ${otherAng} = 90^\\circ - ${angA.toFixed(1)}^\\circ = ${angB.toFixed(1)}^\\circ\\)`, explanation: "Complementary angles in a right triangle sum to 90°." }
+                    ];
+                }
+                else {
+                    const ang = randInt(25, 60);
+                    const b = randInt(10, 25);
+                    let askIdx = randInt(1, 2); 
+                    const x = b * Math.tan(ang * Math.PI / 180);
+                    const z = b / Math.cos(ang * Math.PI / 180);
+                    const angY = 90 - ang;
+                    
+                    let targetAng = chars[askIdx];
+                    let otherAng = chars[(askIdx===1)?2:1];
+                    
+                    let sides = ["", "", ""];
+                    sides[0] = (askIdx === 1) ? "x" : `${b}`;
+                    sides[1] = "z";
+                    sides[2] = (askIdx === 2) ? "x" : `${b}`;
+
+                    let angleLabels = ["right", "", ""];
+                    angleLabels[askIdx] = `${ang}°`;
+                    p.assetHtml = drawDynamicTriangle(pts, chars, sides, angleLabels);
+                    
+                    const correctStr = `\\(\\angle ${otherAng} = ${angY.toFixed(1)}^\\circ,\\quad x = ${x.toFixed(1)},\\quad z = ${z.toFixed(1)}\\)`;
+                    const dist1 = `\\(\\angle ${otherAng} = ${angY.toFixed(1)}^\\circ,\\quad x = ${z.toFixed(1)},\\quad z = ${x.toFixed(1)}\\)`;
+                    const dist2 = `\\(\\angle ${otherAng} = ${(angY-10).toFixed(1)}^\\circ,\\quad x = ${(x-2).toFixed(1)},\\quad z = ${(z-2).toFixed(1)}\\)`;
+                    const dist3 = `\\(\\angle ${otherAng} = ${angY.toFixed(1)}^\\circ,\\quad x = ${(x+3).toFixed(1)},\\quad z = ${(z+3).toFixed(1)}\\)`;
+                    
+                    const mc = shuffleMC(correctStr, [dist1, dist2, dist3]);
+                    p.options = mc.options; p.ans = mc.ansLetter;
+                    p.fullStatement = "Solve the right triangle to find the missing angle and sides \\(x, z\\) (rounded to 1 decimal place).";
+                    p.prompt = "Select the correct set of solved values:";
+                    p.hint = `Find the missing angle via \\(90^\\circ - ${ang}^\\circ\\). Use \\(\\tan(${ang}^\\circ)\\) and \\(\\cos(${ang}^\\circ)\\) to find the sides.`;
+                    p.steps = [
+                        { title: "Step 1: Find the Missing Angle", math: `\\(\\angle ${otherAng} = 90^\\circ - ${ang}^\\circ = ${angY.toFixed(1)}^\\circ\\)`, explanation: "Angles in right triangle add up to 90°." },
+                        { title: "Step 2: Find Opposite Leg (x)", math: `\\(x = ${b} \\cdot \\tan(${ang}^\\circ) = ${b} \\cdot ${Math.tan(ang*Math.PI/180).toFixed(4)} \\approx ${x.toFixed(1)}\\)`, explanation: `Use tangent ratio for ${ang}° angle.` },
+                        { title: "Step 3: Find Hypotenuse (z)", math: `\\(z = \\dfrac{${b}}{\\cos(${ang}^\\circ)} = \\dfrac{${b}}{${Math.cos(ang*Math.PI/180).toFixed(4)}} \\approx ${z.toFixed(1)}\\)`, explanation: "Use cosine ratio to find hypotenuse." }
+                    ];
+                }
+            }
+            else if (typeId === "t3") {
+                p.title = "Compass Bearings & Right Triangles";
+                const v1 = randInt(3, 12); const v2 = randInt(4, 15);
+                let a_deg = Math.atan(v2/v1) * (180/Math.PI);
+                let obj = ["boat", "hiker", "drone", "vehicle"][randInt(0,3)];
+                
+                const dirs = [
+                    { d1: "north", d2: "east", N: "N", S: "S", W: "W", E: "E", px: 120, py: 175, dx: 100, dy: -120, arcSign: 1, c: `\\text{N } ${a_deg.toFixed(1)}^\\circ \\text{ E}` },
+                    { d1: "north", d2: "west", N: "N", S: "S", W: "W", E: "E", px: 160, py: 175, dx: -100, dy: -120, arcSign: -1, c: `\\text{N } ${a_deg.toFixed(1)}^\\circ \\text{ W}` },
+                    { d1: "south", d2: "east", N: "N", S: "S", W: "W", E: "E", px: 120, py: 45, dx: 100, dy: 115, arcSign: -1, c: `\\text{S } ${a_deg.toFixed(1)}^\\circ \\text{ E}` },
+                    { d1: "south", d2: "west", N: "N", S: "S", W: "W", E: "E", px: 160, py: 45, dx: -100, dy: 115, arcSign: 1, c: `\\text{S } ${a_deg.toFixed(1)}^\\circ \\text{ W}` }
+                ];
+                let dir = dirs[randInt(0, 3)];
+                
+                p.assetHtml = `<svg width="280" height="220" viewBox="0 0 280 220" xmlns="http://www.w3.org/2000/svg">
+                    <line x1="${dir.px === 120 ? 60 : 220}" y1="${dir.py === 175 ? 150 : 20}" x2="${dir.px === 120 ? 60 : 220}" y2="${dir.py === 175 ? 200 : 70}" stroke="#555" stroke-width="1.5"/>
+                    <line x1="${dir.px === 120 ? 35 : 195}" y1="${dir.py === 175 ? 175 : 45}" x2="${dir.px === 120 ? 85 : 245}" y2="${dir.py === 175 ? 175 : 45}" stroke="#555" stroke-width="1.5"/>
+                    <text x="${dir.px === 120 ? 56 : 216}" y="${dir.py === 175 ? 145 : 15}" font-family="Arial" font-size="12" font-weight="bold">N</text>
+                    <text x="${dir.px === 120 ? 56 : 216}" y="${dir.py === 175 ? 212 : 82}" font-family="Arial" font-size="12" font-weight="bold">S</text>
+                    <text x="${dir.px === 120 ? 22 : 182}" y="${dir.py === 175 ? 179 : 49}" font-family="Arial" font-size="12" font-weight="bold">W</text>
+                    <text x="${dir.px === 120 ? 90 : 250}" y="${dir.py === 175 ? 179 : 49}" font-family="Arial" font-size="12" font-weight="bold">E</text>
+                    <line x1="${dir.px}" y1="${dir.py}" x2="${dir.px}" y2="${dir.py + dir.dy}" stroke="#000000" stroke-width="2"/>
+                    <line x1="${dir.px}" y1="${dir.py + dir.dy}" x2="${dir.px + dir.dx}" y2="${dir.py + dir.dy}" stroke="#000000" stroke-width="2"/>
+                    <line x1="${dir.px}" y1="${dir.py}" x2="${dir.px + dir.dx}" y2="${dir.py + dir.dy}" stroke="#000000" stroke-width="1.5" stroke-dasharray="4,4"/>
+                    <text x="${dir.px + (dir.dx > 0 ? 10 : -30)}" y="${dir.py + (dir.dy > 0 ? 50 : -40)}" font-family="Arial" font-size="13">a°</text>
+                    <text x="${dir.px + (dir.dx > 0 ? -45 : 10)}" y="${dir.py + dir.dy/2}" font-family="Arial" font-size="13">${v1} km</text>
+                    <text x="${dir.px + dir.dx/2 - 15}" y="${dir.py + dir.dy + (dir.dy > 0 ? 20 : -10)}" font-family="Arial" font-size="13">${v2} km</text>
+                </svg>`;
+
+                p.fullStatement = `A ${obj} travelled due ${dir.d1} for \\(${v1}\\text{ km}\\), and then due ${dir.d2} for \\(${v2}\\text{ km}\\). Determine \\(a^\\circ\\) and write it as a compass bearing of the ${obj} from its starting point.`;
+                p.prompt = "Select the correct angle and compass bearing:";
+                
+                const correctStr = `\\(a^\\circ = ${a_deg.toFixed(1)}^\\circ\\), Compass bearing: \\(${dir.c}\\)`;
+                const wrongAngle = 90 - a_deg;
+                
+                let dist1 = `\\(a^\\circ = ${wrongAngle.toFixed(1)}^\\circ\\), Compass bearing: \\(\\text{S } ${wrongAngle.toFixed(1)}^\\circ \\text{ E}\\)`;
+                let dist2 = `\\(a^\\circ = ${a_deg.toFixed(1)}^\\circ\\), Compass bearing: \\(\\text{N } ${a_deg.toFixed(1)}^\\circ \\text{ W}\\)`;
+                let dist3 = `\\(a^\\circ = ${wrongAngle.toFixed(1)}^\\circ\\), Compass bearing: \\(\\text{N } ${wrongAngle.toFixed(1)}^\\circ \\text{ E}\\)`;
+
+                const mc = shuffleMC(correctStr, [dist1, dist2, dist3]);
+                p.options = mc.options; p.ans = mc.ansLetter;
+                p.hint = `In the right triangle formed, \\(\\tan a^\\circ = \\dfrac{\\text{Opposite}}{\\text{Adjacent}} = \\dfrac{${v2}}{${v1}}\\).`;
+                p.steps = [
+                    { title: "Step 1: Set up Tangent Ratio", math: `\\(\\tan a^\\circ = \\dfrac{${v2}\\text{ km}}{${v1}\\text{ km}} = ${(v2/v1).toFixed(4)}\\)`, explanation: `Opposite side is ${v2} km, Adjacent side is ${v1} km.` },
+                    { title: "Step 2: Solve for Angle a", math: `\\(a^\\circ = \\tan^{-1}(${(v2/v1).toFixed(4)}) \\approx ${a_deg.toFixed(1)}^\\circ\\)`, explanation: "Calculate inverse tangent." },
+                    { title: "Step 3: Express as Compass Bearing", math: `\\(\\text{Compass Bearing: } ${dir.c}\\)`, explanation: `The angle \\(a^\\circ\\) points from ${dir.d1} towards ${dir.d2}.` }
+                ];
+            }
+            else if (typeId === "t4") {
+                p.title = "Sine Law Inverse Expressions";
+                const ang = randInt(35, 65);
+                const s1 = randInt(10, 20); const s2 = randInt(s1+2, s1+8);
+                const shapeType = randInt(0, 2);
+                const flipY = Math.random() > 0.5;
+                const W = randInt(120, 180), H = randInt(80, 110);
+                const baseY = flipY ? 100 - H/2 : 100 + H/2;
+                const topY = flipY ? 100 + H/2 : 100 - H/2;
+                const p0 = [140 - W/2, baseY], p1 = [140 + W/2, baseY];
+                let topX;
+                if (shapeType === 0) topX = randInt(140 - W/2 + 20, 140 + W/2 - 20);
+                else if (shapeType === 1) topX = randInt(140 - W/2 - 50, 140 - W/2 - 10);
+                else topX = randInt(140 + W/2 + 10, 140 + W/2 + 50);
+                
+                let pts = [p0, p1, [topX, topY]].sort(()=>0.5-Math.random());
+                let chars = ['P','Q','R','A','B','C','X','Y','Z'].sort(()=>0.5-Math.random()).slice(0,3);
+                
+                let angleLabels = [`${ang}°`, "", ""];
+                let sides = ["", `${s1}`, `${s2}`]; 
+                p.assetHtml = drawDynamicTriangle(pts, chars, sides, angleLabels);
+
+                let targetChar = chars[1];
+                let angChar = chars[0];
+
+                const correctStr = `\\(\\sin^{-1}\\left(\\dfrac{${s2}\\sin ${ang}^\\circ}{${s1}}\\right)\\)`;
+                const dist1 = `\\(\\sin^{-1}\\left(\\dfrac{${s1}\\sin ${ang}^\\circ}{${s2}}\\right)\\)`;
+                const dist2 = `\\(\\sin^{-1}\\left(\\dfrac{${s2}}{${s1}\\sin ${ang}^\\circ}\\right)\\)`;
+                const dist3 = `\\(\\cos^{-1}\\left(\\dfrac{${s2}\\sin ${ang}^\\circ}{${s1}}\\right)\\)`;
+                const mc = shuffleMC(correctStr, [dist1, dist2, dist3]);
+                p.options = mc.options; p.ans = mc.ansLetter;
+                p.fullStatement = `What calculation can be used to determine the measure of angle ${targetChar} in the dynamically generated triangle shown below?`;
+                p.prompt = `Select the correct inverse sine expression:`;
+                p.hint = `Apply Sine Law: \\(\\dfrac{\\sin ${targetChar}}{\\text{opposite side}} = \\dfrac{\\sin ${angChar}}{\\text{opposite side}}\\).`;
+                p.steps = [
+                    { title: "Step 1: Set up Sine Law Ratio", math: `\\(\\dfrac{\\sin ${targetChar}}{${s2}} = \\dfrac{\\sin ${ang}^\\circ}{${s1}}\\)`, explanation: `Pair opposite sides and angles: side ${s2} is opposite angle ${targetChar}, and side ${s1} is opposite angle ${ang}°.` },
+                    { title: `Step 2: Isolate sin ${targetChar}`, math: `\\(\\sin ${targetChar} = \\dfrac{${s2}\\sin ${ang}^\\circ}{${s1}}\\)`, explanation: `Multiply both sides by ${s2}.` },
+                    { title: "Step 3: Apply Inverse Sine", math: `\\(${targetChar} = \\sin^{-1}\\left(\\dfrac{${s2}\\sin ${ang}^\\circ}{${s1}}\\right)\\)`, explanation: "Take inverse sine of both sides." }
+                ];
+            }
+            else if (typeId === "t5") {
+                p.title = "Advanced Multi-Triangle Word Problems";
+                const scenario = randInt(1, 6);
+
+                // ----------------------------------------------------
+                // Scenario 1: Balloon Between Two Observation Stations
+                // ----------------------------------------------------
+                if (scenario === 1) {
+                    const d = randInt(200, 800);
+                    const a1 = randInt(15, 35); const a2 = randInt(30, 50);
+                    const flip = Math.random() > 0.5;
+                    const x = (val) => flip ? 320 - val : val;
+                    const topAng = 180 - a1 - a2;
+                    const side = d * Math.sin(a1 * Math.PI / 180) / Math.sin(topAng * Math.PI / 180);
+                    const h = side * Math.sin(a2 * Math.PI / 180);
+                    
+                    p.assetHtml = `<svg width="320" height="200" viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg">
+                        <line x1="${x(20)}" y1="160" x2="${x(300)}" y2="160" stroke="#000000" stroke-width="2"/>
+                        <line x1="${x(30)}" y1="160" x2="${x(140)}" y2="40" stroke="#000000" stroke-width="1.5"/>
+                        <line x1="${x(270)}" y1="160" x2="${x(140)}" y2="40" stroke="#000000" stroke-width="1.5"/>
+                        <line x1="${x(140)}" y1="40" x2="${x(140)}" y2="160" stroke="#2563eb" stroke-width="1.5" stroke-dasharray="4,4"/>
+                        <circle cx="${x(140)}" cy="40" r="12" fill="#ef4444" stroke="#991b1b" stroke-width="1.5"/>
+                        <text x="${x(20)}" y="178" font-family="Arial" font-size="13" font-weight="bold" text-anchor="middle">A</text>
+                        <text x="${x(275)}" y="178" font-family="Arial" font-size="13" font-weight="bold" text-anchor="middle">B</text>
+                        <text x="${x(135)}" y="22" font-family="Arial" font-size="13" font-weight="bold" text-anchor="middle">S</text>
+                        <text x="${x(65)}" y="152" font-family="Arial" font-size="11" text-anchor="middle">${a1}°</text>
+                        <text x="${x(230)}" y="152" font-family="Arial" font-size="11" text-anchor="middle">${a2}°</text>
+                        <text x="${x(150)}" y="180" font-family="Arial" font-size="12" text-anchor="middle">${d} km</text>
+                        <text x="${x(148)}" y="105" font-family="Arial" font-size="13" font-weight="bold" fill="#2563eb" text-anchor="middle">h</text>
+                    </svg>`;
+                    
+                    const correctStr = `\\(${h.toFixed(1)}\\text{ km}\\)`;
+                    const dist1 = `\\(${(h + 16.7).toFixed(1)}\\text{ km}\\)`;
+                    const dist2 = `\\(${(h - 12.1).toFixed(1)}\\text{ km}\\)`;
+                    const dist3 = `\\(${(side).toFixed(1)}\\text{ km}\\)`;
+                    const mc = shuffleMC(correctStr, [dist1, dist2, dist3]);
+                    p.options = mc.options; p.ans = mc.ansLetter;
+                    p.fullStatement = `Two meteorological stations, A and B, are located \\(${d}\\text{ km}\\) apart. Both stations detect a weather balloon S floating between them. Station A measures an angle of elevation of \\(${a1}^\\circ\\), while Station B measures \\(${a2}^\\circ\\). Calculate the height (h) of the weather balloon above the ground to the nearest tenth of a kilometre.`;
+                    p.prompt = "Select the calculated height of the balloon:";
+                    p.hint = `1. Find angle \\(\\angle ASB = 180^\\circ - (${a1}^\\circ + ${a2}^\\circ) = ${topAng}^\\circ\\). 2. Use Sine Law to find side BS. 3. \\(h = BS \\cdot \\sin(${a2}^\\circ)\\).`;
+                    p.steps = [
+                        { title: "Step 1: Calculate Interior Angle at Balloon S", math: `\\(\\angle ASB = 180^\\circ - (${a1}^\\circ + ${a2}^\\circ) = ${topAng}^\\circ\\)`, explanation: "The interior angles of triangle ABS sum to 180°." },
+                        { title: "Step 2: Apply Sine Law to Find Line-of-Sight Distance BS", math: `\\(\\dfrac{BS}{\\sin ${a1}^\\circ} = \\dfrac{${d}}{\\sin ${topAng}^\\circ} \\implies BS = \\dfrac{${d} \\cdot \\sin ${a1}^\\circ}{\\sin ${topAng}^\\circ} \\approx ${side.toFixed(2)}\\text{ km}\\)`, explanation: "Solve for distance from Station B to Balloon S." },
+                        { title: "Step 3: Calculate Vertical Height h", math: `\\(h = BS \\cdot \\sin ${a2}^\\circ = ${side.toFixed(2)} \\cdot ${Math.sin(a2*Math.PI/180).toFixed(4)} \\approx ${h.toFixed(1)}\\text{ km}\\)`, explanation: "Use primary sine ratio in the right-angled triangle formed by height h." }
+                    ];
+                }
+                // ----------------------------------------------------
+                // Scenario 2: Walking Closer to Building
+                // ----------------------------------------------------
+                else if (scenario === 2) {
+                    const d = randInt(20, 100);
+                    const a1 = randInt(15, 35); const a2 = randInt(40, 60);
+                    const flip = Math.random() > 0.5;
+                    const x = (val) => flip ? 320 - val : val;
+                    const topAng = a2 - a1;
+                    const side = d * Math.sin(a1 * Math.PI / 180) / Math.sin(topAng * Math.PI / 180);
+                    const h = side * Math.sin(a2 * Math.PI / 180);
+                    
+                    p.assetHtml = `<svg width="320" height="180" viewBox="0 0 320 180" xmlns="http://www.w3.org/2000/svg">
+                        <line x1="${x(20)}" y1="150" x2="${x(280)}" y2="150" stroke="#000000" stroke-width="2"/>
+                        <rect x="${flip ? x(245)-22 : 245}" y="35" width="22" height="115" fill="#d1e8e2" stroke="#222222" stroke-width="1.5"/>
+                        <line x1="${x(30)}" y1="150" x2="${x(245)}" y2="35" stroke="#000000" stroke-width="1.5"/>
+                        <line x1="${x(160)}" y1="150" x2="${x(245)}" y2="35" stroke="#000000" stroke-width="1.5"/>
+                        <text x="${x(20)}" y="165" font-family="Arial" font-size="13" font-weight="bold" text-anchor="middle">A</text>
+                        <text x="${x(155)}" y="165" font-family="Arial" font-size="13" font-weight="bold" text-anchor="middle">B</text>
+                        <text x="${x(245)}" y="165" font-family="Arial" font-size="13" font-weight="bold" text-anchor="middle">C</text>
+                        <text x="${x(245)}" y="25" font-family="Arial" font-size="13" font-weight="bold" text-anchor="middle">D</text>
+                        <text x="${x(65)}" y="145" font-family="Arial" font-size="11" text-anchor="middle">${a1}°</text>
+                        <text x="${x(180)}" y="140" font-family="Arial" font-size="11" text-anchor="middle">${a2}°</text>
+                        <text x="${x(88)}" y="165" font-family="Arial" font-size="12" text-anchor="middle">${d} m</text>
+                        <text x="${x(273)}" y="95" font-family="Arial" font-size="13" font-weight="bold" text-anchor="middle">h</text>
+                    </svg>`;
+                    
+                    const correctStr = `\\(${h.toFixed(1)}\\text{ m}\\)`;
+                    const dist1 = `\\(${(h - 3.6).toFixed(1)}\\text{ m}\\)`;
+                    const dist2 = `\\(${(h + 4.8).toFixed(1)}\\text{ m}\\)`;
+                    const dist3 = `\\(${(side).toFixed(1)}\\text{ m}\\)`;
+                    const mc = shuffleMC(correctStr, [dist1, dist2, dist3]);
+                    p.options = mc.options; p.ans = mc.ansLetter;
+                    p.fullStatement = `Alex observes the top of a building at an angle of elevation of \\(${a1}^\\circ\\). Walking \\(${d}\\text{ m}\\) closer, the angle increases to \\(${a2}^\\circ\\). Find the height (h) of the building to the nearest tenth of a metre.`;
+                    p.prompt = "Select the calculated height of the building:";
+                    p.hint = `1. Top angle \\(\\angle ADB = ${a2}^\\circ - ${a1}^\\circ = ${topAng}^\\circ\\). 2. Use Sine Law to find segment BD. 3. \\(h = BD \\cdot \\sin(${a2}^\\circ)\\).`;
+                    p.steps = [
+                        { title: "Step 1: Find interior angles of non-right triangle ABD", math: `\\(\\angle ABD = 180^\\circ - ${a2}^\\circ = ${180-a2}^\\circ, \\quad \\angle ADB = 180^\\circ - ${a1}^\\circ - ${180-a2}^\\circ = ${topAng}^\\circ\\)`, explanation: "Determine angles in triangle ABD." },
+                        { title: "Step 2: Apply Sine Law in △ABD to find segment BD", math: `\\(BD = \\dfrac{${d} \\cdot \\sin ${a1}^\\circ}{\\sin ${topAng}^\\circ} \\approx ${side.toFixed(2)}\\text{ m}\\)`, explanation: "Solve for hypotenuse of right triangle BCD." },
+                        { title: "Step 3: Calculate Height h", math: `\\(h = ${side.toFixed(2)} \\cdot \\sin ${a2}^\\circ = ${side.toFixed(2)} \\cdot ${Math.sin(a2*Math.PI/180).toFixed(4)} \\approx ${h.toFixed(1)}\\text{ m}\\)`, explanation: "Apply sine ratio to right triangle BCD." }
+                    ];
+                }
+                // ----------------------------------------------------
+                // Scenario 3: Tilting Structure & Support Wire
+                // ----------------------------------------------------
+                else if (scenario === 3) {
+                    const d = randInt(20, 50);
+                    const elev = randInt(15, 30);
+                    const dep = randInt(30, 45);
+                    const baseAng = randInt(35, 50);
+                    const wireAng = randInt(45, 65);
+                    const oppAng = randInt(20, 35);
+                    const flip = Math.random() > 0.5;
+                    const x = (val) => flip ? 340 - val : val;
+                    
+                    const topE = elev + dep;
+                    const AB = d * Math.sin(topE * Math.PI / 180) / Math.sin(baseAng * Math.PI / 180);
+                    const wire = AB * Math.sin(oppAng * Math.PI / 180) / Math.sin(wireAng * Math.PI / 180);
+                    
+                    p.assetHtml = `<svg width="340" height="220" viewBox="0 0 340 220" xmlns="http://www.w3.org/2000/svg">
+                        <line x1="${x(20)}" y1="180" x2="${x(320)}" y2="180" stroke="#000000" stroke-width="2"/>
+                        <rect x="${flip ? x(20)-30 : 20}" y="80" width="30" height="100" fill="#e2e8f0" stroke="#334155" stroke-width="1.5"/>
+                        <circle cx="${x(35)}" cy="90" r="4" fill="#eab308"/>
+                        <line x1="${x(35)}" y1="90" x2="${x(200)}" y2="90" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3,3"/>
+                        <line x1="${x(140)}" y1="180" x2="${x(180)}" y2="30" stroke="#0f172a" stroke-width="3"/>
+                        <line x1="${x(35)}" y1="90" x2="${x(180)}" y2="30" stroke="#16a34a" stroke-width="2"/>
+                        <line x1="${x(35)}" y1="90" x2="${x(140)}" y2="180" stroke="#000000" stroke-width="1.5"/>
+                        <line x1="${x(180)}" y1="30" x2="${x(290)}" y2="180" stroke="#2563eb" stroke-width="2"/>
+                        
+                        <text x="${x(15)}" y="95" font-family="Arial" font-size="12" font-weight="bold" text-anchor="middle">E</text>
+                        <text x="${x(180)}" y="22" font-family="Arial" font-size="13" font-weight="bold" text-anchor="middle">A</text>
+                        <text x="${x(130)}" y="195" font-family="Arial" font-size="13" font-weight="bold" text-anchor="middle">B</text>
+                        <text x="${x(295)}" y="195" font-family="Arial" font-size="13" font-weight="bold" text-anchor="middle">C</text>
+                        
+                        <text x="${x(90)}" y="52" font-family="Arial" font-size="12" fill="#16a34a" font-weight="bold" text-anchor="middle">${d} m</text>
+                        <text x="${x(245)}" y="105" font-family="Arial" font-size="12" fill="#2563eb" font-weight="bold" text-anchor="middle">wire = ?</text>
+                        <text x="${x(50)}" y="82" font-family="Arial" font-size="10" text-anchor="middle">${elev}°</text>
+                        <text x="${x(50)}" y="105" font-family="Arial" font-size="10" text-anchor="middle">${dep}°</text>
+                        <text x="${x(110)}" y="165" font-family="Arial" font-size="10" text-anchor="middle">${baseAng}°</text>
+                        <text x="${x(155)}" y="175" font-family="Arial" font-size="10" text-anchor="middle">${oppAng}°</text>
+                        <text x="${x(260)}" y="175" font-family="Arial" font-size="10" text-anchor="middle">${wireAng}°</text>
+                    </svg>`;
+                    
+                    const correctStr = `\\(${wire.toFixed(1)}\\text{ m}\\)`;
+                    const dist1 = `\\(${(wire + 7.3).toFixed(1)}\\text{ m}\\)`;
+                    const dist2 = `\\(${(wire - 4.6).toFixed(1)}\\text{ m}\\)`;
+                    const dist3 = `\\(${(AB).toFixed(1)}\\text{ m}\\)`;
+                    const mc = shuffleMC(correctStr, [dist1, dist2, dist3]);
+                    p.options = mc.options; p.ans = mc.ansLetter;
+                    p.fullStatement = `An engineer at observation platform E watches a tilted structure AB. The line-of-sight distance from E to the top A is \\(${d}\\text{ m}\\). The angle of elevation to top A is \\(${elev}^\\circ\\), and the angle of depression to base B is \\(${dep}^\\circ\\). Inside \\(\\triangle EAB\\), the angle at base B is \\(${baseAng}^\\circ\\). On the opposite side, a support wire connects top A to ground anchor C. The structure forms a \\(${oppAng}^\\circ\\) angle with the ground inside \\(\\triangle ABC\\), and the support wire makes a \\(${wireAng}^\\circ\\) angle at anchor C. Calculate the length of the support wire (AC) using the Sine Law.`;
+                    p.prompt = "Select the calculated wire length:";
+                    p.hint = `1. In \\(\\triangle EAB\\), angle at E is ${elev}^\\circ + ${dep}^\\circ = ${topE}^\\circ$. Use Sine Law to find length AB. 2. In \\(\\triangle ABC\\), use Sine Law to find support wire AC.`;
+                    p.steps = [
+                        { title: "Step 1: Find Angles and Structure Length AB in △EAB", math: `\\(\\angle E = ${elev}^\\circ + ${dep}^\\circ = ${topE}^\\circ, \\quad \\dfrac{AB}{\\sin ${topE}^\\circ} = \\dfrac{${d}}{\\sin ${baseAng}^\\circ} \\implies AB = \\dfrac{${d} \\cdot \\sin ${topE}^\\circ}{\\sin ${baseAng}^\\circ} \\approx ${AB.toFixed(2)}\\text{ m}\\)`, explanation: "Apply Sine Law in non-right triangle EAB to find the height AB." },
+                        { title: "Step 2: Set up Sine Law in Triangle ABC for Support Wire AC", math: `\\(\\dfrac{AC}{\\sin ${oppAng}^\\circ} = \\dfrac{AB}{\\sin ${wireAng}^\\circ}\\)`, explanation: `In \\(\\triangle ABC\\), pair side AC with opposite angle ${oppAng}°, and side AB (${AB.toFixed(2)}m) with opposite angle ${wireAng}°.` },
+                        { title: "Step 3: Solve for Support Wire Length AC", math: `\\(AC = \\dfrac{${AB.toFixed(2)} \\cdot \\sin ${oppAng}^\\circ}{\\sin ${wireAng}^\\circ} = \\dfrac{${AB.toFixed(2)} \\cdot ${Math.sin(oppAng*Math.PI/180).toFixed(4)}}{${Math.sin(wireAng*Math.PI/180).toFixed(4)}} \\approx ${wire.toFixed(1)}\\text{ m}\\)`, explanation: "Calculate wire length rounded to 1 decimal place." }
+                    ];
+                }
+                // ----------------------------------------------------
+                // Scenario 4: Two Towers Problem
+                // ----------------------------------------------------
+                else if (scenario === 4) {
+                    const h1 = randInt(25, 55);
+                    const elev = randInt(18, 35);
+                    const dep = randInt(25, 42);
+                    
+                    const dist = h1 / Math.tan(dep * Math.PI / 180);
+                    const h_add = dist * Math.tan(elev * Math.PI / 180);
+                    const h2 = h1 + h_add;
+                    
+                    p.assetHtml = `<svg width="320" height="200" viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg">
+                        <line x1="20" y1="170" x2="300" y2="170" stroke="#000000" stroke-width="2"/>
+                        <rect x="40" y="80" width="35" height="90" fill="#cbd5e1" stroke="#334155" stroke-width="1.5"/>
+                        <rect x="230" y="30" width="40" height="140" fill="#94a3b8" stroke="#1e293b" stroke-width="1.5"/>
+                        <circle cx="75" cy="80" r="3" fill="#ef4444"/>
+                        <line x1="75" y1="80" x2="230" y2="80" stroke="#64748b" stroke-width="1" stroke-dasharray="3,3"/>
+                        <line x1="75" y1="80" x2="230" y2="30" stroke="#2563eb" stroke-width="1.5"/>
+                        <line x1="75" y1="80" x2="230" y2="170" stroke="#16a34a" stroke-width="1.5"/>
+                        
+                        <text x="57" y="130" font-family="Arial" font-size="12" font-weight="bold">${h1} m</text>
+                        <text x="250" y="105" font-family="Arial" font-size="13" font-weight="bold" fill="#2563eb">H = ?</text>
+                        <text x="100" y="72" font-family="Arial" font-size="10" fill="#2563eb">${elev}°</text>
+                        <text x="100" y="95" font-family="Arial" font-size="10" fill="#16a34a">${dep}°</text>
+                        <text x="57" y="70" font-family="Arial" font-size="12" font-weight="bold">A</text>
+                        <text x="235" y="22" font-family="Arial" font-size="12" font-weight="bold">B</text>
+                    </svg>`;
+
+                    const correctStr = `\\(${h2.toFixed(1)}\\text{ m}\\)`;
+                    const dist1 = `\\(${(h2 + 8.4).toFixed(1)}\\text{ m}\\)`;
+                    const dist2 = `\\(${(h2 - 6.2).toFixed(1)}\\text{ m}\\)`;
+                    const dist3 = `\\(${(h_add).toFixed(1)}\\text{ m}\\)`;
+                    const mc = shuffleMC(correctStr, [dist1, dist2, dist3]);
+                    p.options = mc.options; p.ans = mc.ansLetter;
+                    p.fullStatement = `An observer standing at the top of Tower A (height \\(${h1}\\text{ m}\\)) looks across at Tower B. The angle of elevation to the top of Tower B is \\(${elev}^\\circ\\), and the angle of depression to the base of Tower B is \\(${dep}^\\circ\\). Calculate the total height (H) of Tower B to the nearest tenth of a metre.`;
+                    p.prompt = "Select the calculated height of Tower B:";
+                    p.hint = `1. Use \\(\\tan(${dep}^\\circ) = \\dfrac{${h1}}{d}\\) to find distance between towers. 2. Use \\(\\tan(${elev}^\\circ) = \\dfrac{x}{d}\\) to find extra height. 3. \\(H = ${h1} + x\\).`;
+                    p.steps = [
+                        { title: "Step 1: Calculate Distance (d) Between Towers", math: `\\(d = \\dfrac{${h1}}{\\tan ${dep}^\\circ} = \\dfrac{${h1}}{${Math.tan(dep*Math.PI/180).toFixed(4)}} \\approx ${dist.toFixed(2)}\\text{ m}\\)`, explanation: "Use the angle of depression in the lower right triangle." },
+                        { title: "Step 2: Calculate Height Portion Above Tower A (x)", math: `\\(x = d \\cdot \\tan ${elev}^\\circ = ${dist.toFixed(2)} \\cdot ${Math.tan(elev*Math.PI/180).toFixed(4)} \\approx ${h_add.toFixed(2)}\\text{ m}\\)`, explanation: "Use the angle of elevation in the upper right triangle." },
+                        { title: "Step 3: Calculate Total Height of Tower B (H)", math: `\\(H = ${h1} + x = ${h1} + ${h_add.toFixed(2)} \\approx ${h2.toFixed(1)}\\text{ m}\\)`, explanation: "Add the height of Tower A to the extra height segment x." }
+                    ];
+                }
+                // ----------------------------------------------------
+                // Scenario 5: Distance Across Lake (Cosine Law)
+                // ----------------------------------------------------
+                else if (scenario === 5) {
+                    const b = randInt(150, 350);
+                    const a = randInt(200, 450);
+                    const C_ang = randInt(40, 75);
+                    
+                    const c_sq = a*a + b*b - 2*a*b*Math.cos(C_ang * Math.PI / 180);
+                    const c = Math.sqrt(c_sq);
+                    
+                    p.assetHtml = `<svg width="320" height="200" viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg">
+                        <ellipse cx="160" cy="110" rx="90" ry="45" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.5" stroke-dasharray="4,4"/>
+                        <polygon points="50,150 270,140 160,40" fill="none" stroke="#000000" stroke-width="2"/>
+                        <circle cx="50" cy="150" r="4" fill="#0f172a"/>
+                        <circle cx="270" cy="140" r="4" fill="#0f172a"/>
+                        <circle cx="160" cy="40" r="4" fill="#0f172a"/>
+                        
+                        <text x="35" y="165" font-family="Arial" font-size="13" font-weight="bold">A</text>
+                        <text x="280" y="155" font-family="Arial" font-size="13" font-weight="bold">B</text>
+                        <text x="160" y="25" font-family="Arial" font-size="13" font-weight="bold">C</text>
+                        
+                        <text x="90" y="85" font-family="Arial" font-size="12">${b} m</text>
+                        <text x="225" y="85" font-family="Arial" font-size="12">${a} m</text>
+                        <text x="160" y="165" font-family="Arial" font-size="13" font-weight="bold" fill="#dc2626">d = ?</text>
+                        <text x="160" y="62" font-family="Arial" font-size="11" text-anchor="middle">${C_ang}°</text>
+                    </svg>`;
+
+                    const correctStr = `\\(${c.toFixed(1)}\\text{ m}\\)`;
+                    const dist1 = `\\(${(c + 15.3).toFixed(1)}\\text{ m}\\)`;
+                    const dist2 = `\\(${(c - 11.8).toFixed(1)}\\text{ m}\\)`;
+                    const dist3 = `\\(${(Math.sqrt(a*a + b*b)).toFixed(1)}\\text{ m}\\)`;
+                    const mc = shuffleMC(correctStr, [dist1, dist2, dist3]);
+                    p.options = mc.options; p.ans = mc.ansLetter;
+                    p.fullStatement = `A surveyor wants to find the distance (d) between two landmarks A and B on opposite sides of a lake. From point C, the distance to A is \\(${b}\\text{ m}\\), the distance to B is \\(${a}\\text{ m}\\), and the angle \\(\\angle ACB\\) measures \\(${C_ang}^\\circ\\). Calculate the distance across the lake (AB) using the Cosine Law.`;
+                    p.prompt = "Select the calculated distance across the lake:";
+                    p.hint = `Apply Cosine Law: \\(c^2 = a^2 + b^2 - 2ab \\cos(C)\\).`;
+                    p.steps = [
+                        { title: "Step 1: Write Cosine Law Formula", math: `\\(c^2 = ${a}^2 + ${b}^2 - 2(${a})(${b})\\cos(${C_ang}^\\circ)\\)`, explanation: "Substitute given side lengths and angle into the Cosine Law." },
+                        { title: "Step 2: Evaluate Terms", math: `\\(c^2 = ${a*a} + ${b*b} - 2(${a})(${b})(${Math.cos(C_ang*Math.PI/180).toFixed(4)}) \\approx ${c_sq.toFixed(1)}\\)`, explanation: "Calculate squares and cosine product." },
+                        { title: "Step 3: Solve for Distance c", math: `\\(c = \\sqrt{${c_sq.toFixed(1)}} \\approx ${c.toFixed(1)}\\text{ m}\\)`, explanation: "Take the square root to get distance AB." }
+                    ];
+                }
+                // ----------------------------------------------------
+                // Scenario 6: Two Equal Towers & Car Between Them
+                // ----------------------------------------------------
+                else {
+                    const h = randInt(35, 85);
+                    const dep1 = randInt(22, 42);
+                    const dep2 = randInt(32, 52);
+
+                    const d1 = h / Math.tan(dep1 * Math.PI / 180);
+                    const d2 = h / Math.tan(dep2 * Math.PI / 180);
+                    const totalDist = d1 + d2;
+
+                    p.assetHtml = `<svg width="340" height="200" viewBox="0 0 340 200" xmlns="http://www.w3.org/2000/svg">
+                        <line x1="10" y1="170" x2="330" y2="170" stroke="#000000" stroke-width="2"/>
+                        <rect x="30" y="60" width="30" height="110" fill="#cbd5e1" stroke="#334155" stroke-width="1.5"/>
+                        <rect x="280" y="60" width="30" height="110" fill="#cbd5e1" stroke="#334155" stroke-width="1.5"/>
+                        <rect x="155" y="158" width="30" height="12" rx="3" fill="#ef4444" stroke="#991b1b" stroke-width="1"/>
+                        <circle cx="162" cy="170" r="3" fill="#000000"/>
+                        <circle cx="178" cy="170" r="3" fill="#000000"/>
+                        <line x1="45" y1="60" x2="110" y2="60" stroke="#64748b" stroke-width="1" stroke-dasharray="3,3"/>
+                        <line x1="295" y1="60" x2="230" y2="60" stroke="#64748b" stroke-width="1" stroke-dasharray="3,3"/>
+                        <line x1="45" y1="60" x2="170" y2="164" stroke="#2563eb" stroke-width="1.5"/>
+                        <line x1="295" y1="60" x2="170" y2="164" stroke="#16a34a" stroke-width="1.5"/>
+
+                        <text x="45" y="120" font-family="Arial" font-size="12" font-weight="bold" text-anchor="middle">${h} m</text>
+                        <text x="295" y="120" font-family="Arial" font-size="12" font-weight="bold" text-anchor="middle">${h} m</text>
+                        <text x="75" y="55" font-family="Arial" font-size="10" fill="#2563eb">${dep1}°</text>
+                        <text x="260" y="55" font-family="Arial" font-size="10" fill="#16a34a">${dep2}°</text>
+                        <text x="170" y="190" font-family="Arial" font-size="12" font-weight="bold" fill="#dc2626" text-anchor="middle">D = ?</text>
+                    </svg>`;
+
+                    const correctStr = `\\(${totalDist.toFixed(1)}\\text{ m}\\)`;
+                    const dist1 = `\\(${(totalDist + 12.4).toFixed(1)}\\text{ m}\\)`;
+                    const dist2 = `\\(${(totalDist - 9.6).toFixed(1)}\\text{ m}\\)`;
+                    const dist3 = `\\(${(d1).toFixed(1)}\\text{ m}\\)`;
+                    const mc = shuffleMC(correctStr, [dist1, dist2, dist3]);
+                    p.options = mc.options; p.ans = mc.ansLetter;
+                    p.fullStatement = `Two identical towers, each \\(${h}\\text{ m}\\) tall, stand on flat ground. A car is parked on the ground directly between the two towers. From the top of the first tower, the angle of depression to the car is \\(${dep1}^\\circ\\). From the top of the second tower, the angle of depression to the car is \\(${dep2}^\\circ\\). Calculate the total distance (D) between the two towers to the nearest tenth of a metre.`;
+                    p.prompt = "Select the calculated distance between the two towers:";
+                    p.hint = `1. Use alternate interior angles: angle of elevation from car to Tower 1 is \\(${dep1}^\\circ\\), and to Tower 2 is \\(${dep2}^\\circ\\). 2. Calculate distance from each tower to car: \\(d_1 = \\dfrac{${h}}{\\tan ${dep1}^\\circ}\\), \\(d_2 = \\dfrac{${h}}{\\tan ${dep2}^\\circ}\\). 3. Total distance \\(D = d_1 + d_2\\).`;
+                    p.steps = [
+                        { title: "Step 1: Calculate Distance from Tower 1 to Car (d1)", math: `\\(d_1 = \\dfrac{${h}}{\\tan ${dep1}^\\circ} = \\dfrac{${h}}{${Math.tan(dep1*Math.PI/180).toFixed(4)}} \\approx ${d1.toFixed(2)}\\text{ m}\\)`, explanation: "Apply tangent ratio in the right-angled triangle formed by Tower 1." },
+                        { title: "Step 2: Calculate Distance from Tower 2 to Car (d2)", math: `\\(d_2 = \\dfrac{${h}}{\\tan ${dep2}^\\circ} = \\dfrac{${h}}{${Math.tan(dep2*Math.PI/180).toFixed(4)}} \\approx ${d2.toFixed(2)}\\text{ m}\\)`, explanation: "Apply tangent ratio in the right-angled triangle formed by Tower 2." },
+                        { title: "Step 3: Calculate Total Distance Between Towers (D)", math: `\\(D = d_1 + d_2 = ${d1.toFixed(2)} + ${d2.toFixed(2)} \\approx ${totalDist.toFixed(1)}\\text{ m}\\)`, explanation: "Sum the two horizontal distances." }
+                    ];
+                }
+            }
+
+            return p;
+        }
+
+        // --- Core Application Logic ---
+        function triggerNewQuestion() {
+            const selectMenu = document.getElementById("question-select");
+            const typeId = selectMenu.value;
+
+            if (!typeId) {
+                document.getElementById("placeholder").style.display = "block";
+                document.getElementById("quiz-station").style.display = "none";
+                document.getElementById("asset-viewport-mount-point").style.display = "none";
+                document.getElementById("solution-reveal-layer").style.display = "none";
+                return;
+            }
+
+            currentProblemData = generateProblem(typeId);
+            currentState = { answered: false, selectedMcOption: "", isCorrect: false, currentStep: 0, solRevealed: false, attempts: 0 };
+            
+            displaySolution();
+        }
+
+        function renderMathElements() {
+            if (window.renderMathInElement) {
+                renderMathInElement(document.body, {
+                    delimiters: [
+                        {left: '$$', right: '$$', display: true},
+                        {left: '\\(', right: '\\)', display: false}
+                    ],
+                    throwOnError: false
+                });
+            }
+        }
+
+        window.onload = renderMathElements;
+
+        function displaySolution() {
+            document.getElementById("solution-reveal-layer").style.display = "none";
+            var __hb = document.getElementById("hint-box"); if (__hb) __hb.style.display = "none";
+            const placeholder = document.getElementById("placeholder");
+            const quizStation = document.getElementById("quiz-station");
+            const assetMount = document.getElementById("asset-viewport-mount-point");
+            const mountPoint = document.getElementById("dynamic-input-mount-point");
+            const promptLabel = document.getElementById("input-prompt-label");
+
+            placeholder.style.display = "none";
+            quizStation.style.display = "block";
+            
+            if (currentProblemData.assetType && currentProblemData.assetType !== "none") {
+                assetMount.style.display = "flex";
+                assetMount.innerHTML = currentProblemData.assetHtml;
+            } else {
+                assetMount.style.display = "none";
+            }
+
+            document.getElementById("question-statement-display").innerHTML = currentProblemData.fullStatement;
+            promptLabel.innerHTML = currentProblemData.prompt;
+            
+            let html = '<div class="mc-options-list">';
+            for (let i = 0; i < currentProblemData.options.length; i++) {
+                const opt = currentProblemData.options[i];
+                const letter = opt.charAt(0);
+                const sel = currentState.selectedMcOption === letter ? "selected" : "";
+                const dis = currentState.answered ? "disabled" : "";
+                html += '<div class="mc-option-card ' + sel + ' ' + dis + '" onclick="selectMcOptionCard(\'' + letter + '\')"><span class="mc-badge">' + letter + '</span><span>' + opt.substring(3) + '</span></div>';
+            }
+            html += '</div>';
+            mountPoint.innerHTML = html;
+
+            if (currentState.answered) {
+                lockQuizInterface(currentState.isCorrect);
+                if (currentState.solRevealed) revealSolutionWorkspace();
+            } else {
+                unlockQuizInterface();
+            }
+
+            setTimeout(renderMathElements, 10);
+        }
+
+        function selectMcOptionCard(letter) {
+            if (currentState.answered) return;
+            
+            currentState.selectedMcOption = letter;
+            var __fb = document.getElementById("feedback-msg"); if (__fb) __fb.style.display = "none";
+            
+            const mountPoint = document.getElementById("dynamic-input-mount-point");
+            let html = '<div class="mc-options-list">';
+            for (let i = 0; i < currentProblemData.options.length; i++) {
+                const opt = currentProblemData.options[i];
+                const optLetter = opt.charAt(0);
+                const sel = letter === optLetter ? "selected" : "";
+                html += '<div class="mc-option-card ' + sel + '" onclick="selectMcOptionCard(\'' + optLetter + '\')"><span class="mc-badge">' + optLetter + '</span><span>' + opt.substring(3) + '</span></div>';
+            }
+            html += '</div>';
+            mountPoint.innerHTML = html;
+            
+            setTimeout(renderMathElements, 10);
+        }
+
+        function evaluateStudentAnswer() {
+            if (currentState.answered) return;
+
+            const firstNameInput = document.getElementById("first-name").value.trim();
+            const lastNameInput = document.getElementById("last-name").value.trim();
+
+            if (firstNameInput === "" || lastNameInput === "") {
+                alert("Please enter your first and last name first.");
+                return;
+            }
+
+            if (!currentState.selectedMcOption) {
+                alert("Please choose an answer first.");
+                return;
+            }
+
+            let matchingCorrect = (currentState.selectedMcOption === currentProblemData.ans);
+            let logString = "Option " + currentState.selectedMcOption;
+
+            globalAttempts++;
+            currentState.attempts++;
+            if (matchingCorrect && !currentState.isCorrect) globalScore++;
+            currentState.isCorrect = matchingCorrect;
+            updateHudScoreboard();
+
+            if (matchingCorrect) {
+                currentState.answered = true;
+                lockQuizInterface(true);
+            } else {
+                showTryAgain();
+            }
+
+            let payload = {
+                unitId: "MCF3M_Trigonometry",
+                firstName: firstNameInput,
+                lastName: lastNameInput,
+                questionId: document.getElementById("question-select").value + "_Dynamic",
+                userAnswer: logString,
+                isCorrect: matchingCorrect,
+                attempts: currentState.attempts,
+                methodUsed: "Dynamic Generative MC",
+                totalScore: globalScore
+            };
+
+            if (TEACHER_SPREADSHEET_SCRIPT_URL) {
+                transmitDataToTeacherSpreadsheet(payload);
+            }
+        }
+
+        function toggleHint() {
+            if (!currentProblemData) return;
+            var box = document.getElementById("hint-box");
+            if (!box) return;
+            if (box.style.display === "block") { box.style.display = "none"; return; }
+            box.innerHTML = "<strong>Hint:</strong> " + (currentProblemData.hint || "");
+            box.style.display = "block";
+            setTimeout(renderMathElements, 10);
+        }
+
+        function transmitDataToTeacherSpreadsheet(payload) {
+            fetch(TEACHER_SPREADSHEET_SCRIPT_URL, {
+                method: "POST",
+                mode: "no-cors",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            }).catch(err => console.error("Database cloud logging failure:", err));
+        }
+
+        function showTryAgain() {
+            document.getElementById("reveal-sol-btn").disabled = false;
+            const feedback = document.getElementById("feedback-msg");
+            feedback.style.display = "block";
+            feedback.className = "feedback-msg-area feedback-error";
+            feedback.innerHTML = "Not quite yet - pick another answer, or tap Hint for a clue. (You can tap Show Solution Steps any time.)";
+        }
+
+        function lockQuizInterface(isCorrect) {
+            document.querySelectorAll(".mc-option-card").forEach(c => c.classList.add("disabled"));
+            document.getElementById("check-ans-btn").disabled = true;
+            document.getElementById("reveal-sol-btn").disabled = false;
+
+            const feedback = document.getElementById("feedback-msg");
+            feedback.style.display = "block";
+            if (isCorrect) {
+                feedback.className = "feedback-msg-area feedback-success";
+                feedback.innerHTML = "Correct! Nice work. Click 'Generate New' for another challenge.";
+            } else {
+                feedback.className = "feedback-msg-area feedback-error";
+                feedback.innerHTML = "Not quite - review the steps below, or generate a new problem.";
+            }
+        }
+
+        function unlockQuizInterface() {
+            document.getElementById("check-ans-btn").disabled = false;
+            document.getElementById("reveal-sol-btn").disabled = true;
+            document.getElementById("feedback-msg").style.display = "none";
+        }
+
+        function unlockSolutionPanel() {
+            currentState.solRevealed = true;
+            revealSolutionWorkspace();
+        }
+
+        function revealSolutionWorkspace() {
+            const targetDiv = document.getElementById("solution-reveal-layer");
+            const workspace = document.getElementById("solution-workspace-injected");
+            
+            let html = `<h2>Solution for ${currentProblemData.title}</h2>`;
+            currentProblemData.steps.forEach(step => {
+                html += `
+                <div class="step-block" style="display:none;">
+                    <span class="step-title">${step.title}</span>
+                    <div class="step-math">${step.math}</div>
+                    <span class="step-explanation">${step.explanation}</span>
+                </div>`;
+            });
+            html += `
+            <div class="final-answer-box" style="display:none;">
+                <span class="final-answer-label">Answer</span>
+                <span class="final-answer-math">Correct answer: Option ${currentProblemData.ans}</span>
+            </div>`;
+
+            workspace.innerHTML = html;
+            targetDiv.style.display = "block";
+            renderMethodSteps();
+            setTimeout(renderMathElements, 10);
+        }
+
+        function renderMethodSteps() {
+            const activeContainer = document.getElementById("solution-workspace-injected");
+            visibleStepElements = Array.from(activeContainer.querySelectorAll('.step-block, .final-answer-box'));
+            
+            currentStepIndex = currentState.currentStep;
+            for (let i = 0; i <= currentStepIndex; i++) {
+                if (visibleStepElements[i]) visibleStepElements[i].style.display = "block";
+            }
+
+            document.getElementById("restart-btn").disabled = (currentStepIndex === 0);
+            document.getElementById("next-btn").disabled = (currentStepIndex === visibleStepElements.length - 1);
+        }
+
+        function showNextStep() {
+            if (currentStepIndex < visibleStepElements.length - 1) {
+                currentStepIndex++;
+                currentState.currentStep = currentStepIndex;
+                visibleStepElements[currentStepIndex].style.display = "block";
+                visibleStepElements[currentStepIndex].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                document.getElementById("restart-btn").disabled = false;
+            }
+            if (currentStepIndex === visibleStepElements.length - 1) {
+                document.getElementById("next-btn").disabled = true;
+            }
+            setTimeout(renderMathElements, 10);
+        }
+
+        function restartSolution() {
+            currentState.currentStep = 0;
+            revealSolutionWorkspace();
+        }
+
+        function updateHudScoreboard() {
+            document.getElementById("hud-score").innerText = globalScore;
+            document.getElementById("hud-attempts").innerText = globalAttempts;
+        }
+    </script>
+</body>
+</html>

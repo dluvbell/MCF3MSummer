@@ -1,0 +1,1181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MBF3C Unit 3 Lesson 1 and 2 Practice Studio</title>
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+
+    <style>
+        :root {
+            --primary-color: #0f172a;
+            --secondary-color: #2563eb;
+            --disabled-color: #94a3b8;
+            --text-color: #334155;
+            --math-color: #000000;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --border-color: #cbd5e1;
+            --highlight-bg: #eff6ff;
+            --explanation-bg: #f1f5f9;
+            --rule-bg: #fef08a;
+            --rule-text: #713f12;
+            --success-color: #16a34a;
+            --error-color: #dc2626;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.8;
+            margin: 0;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: -0.025em;
+        }
+
+        header p {
+            margin: 8px 0 0 0;
+            color: #94a3b8;
+            font-size: 1.05rem;
+        }
+
+        .scoreboard {
+            background-color: #1e293b;
+            color: white;
+            display: inline-flex;
+            gap: 20px;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-weight: 700;
+            margin-top: 15px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.2);
+        }
+
+        .scoreboard span {
+            color: #60a5fa;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .profile-box, .selector-box {
+            background-color: var(--card-bg);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-color);
+            margin-bottom: 25px;
+        }
+
+        .profile-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .profile-grid input {
+            width: 100%;
+            padding: 12px;
+            font-size: 1rem;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        .profile-grid input:focus {
+            border-color: var(--secondary-color);
+        }
+
+        label {
+            display: block;
+            font-weight: 700;
+            color: var(--primary-color);
+            font-size: 1.1rem;
+            margin-bottom: 12px;
+        }
+
+        .selector-controls {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        select {
+            flex: 1;
+            padding: 16px;
+            font-size: 1.1rem;
+            font-family: inherit;
+            border-radius: 8px;
+            border: 2px solid var(--border-color);
+            background-color: white;
+            color: var(--primary-color);
+            outline: none;
+            cursor: pointer;
+        }
+
+        .solution-container {
+            background-color: var(--card-bg);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-color);
+            min-height: 200px;
+        }
+
+        .placeholder-text {
+            color: #64748b;
+            text-align: center;
+            font-style: italic;
+            padding: 60px 0;
+            font-size: 1.1rem;
+        }
+
+        .quiz-interface-box {
+            background-color: var(--explanation-bg);
+            border: 1px solid var(--border-color);
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+
+        .math-render-viewport {
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+        }
+
+        .vertical-tov {
+            border-collapse: collapse;
+            margin: 10px auto;
+            font-size: 1.1rem;
+            min-width: 180px;
+            text-align: center;
+            background: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .vertical-tov th, .vertical-tov td {
+            border: 1px solid var(--border-color);
+            padding: 10px 24px;
+        }
+
+        .vertical-tov th {
+            background-color: var(--primary-color);
+            color: white;
+            font-weight: 800;
+        }
+
+        .mc-options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 10px;
+        }
+
+        .mc-option-card {
+            background: white;
+            border: 2px solid var(--border-color);
+            padding: 14px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1.05rem;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .mc-option-card:hover:not(.disabled) {
+            border-color: var(--secondary-color);
+            background-color: var(--highlight-bg);
+        }
+
+        .mc-option-card.selected {
+            border-color: var(--secondary-color);
+            background-color: #dbeafe;
+            color: #1e40af;
+        }
+
+        .mc-option-card.disabled {
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .mc-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background-color: #e2e8f0;
+            color: var(--primary-color);
+            font-weight: 800;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+
+        .mc-option-card.selected .mc-badge {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+
+        .feedback-msg-area {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            display: none;
+            padding: 10px 15px;
+            border-radius: 6px;
+        }
+
+        .feedback-success {
+            background-color: #dcfce7;
+            color: var(--success-color);
+            border-left: 5px solid var(--success-color);
+        }
+
+        .feedback-error {
+            background-color: #fee2e2;
+            color: var(--error-color);
+            border-left: 5px solid var(--error-color);
+        }
+
+        .quiz-action-bar {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .solution-reveal-window {
+            display: none;
+            border-top: 3px double var(--border-color);
+            margin-top: 30px;
+            padding-top: 30px;
+        }
+
+        .step-block {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e2e8f0;
+            display: none;
+        }
+
+        .step-title {
+            font-weight: 800;
+            color: var(--secondary-color);
+            display: block;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 8px;
+        }
+
+        .step-math {
+            font-size: 1.3rem;
+            font-weight: 700;
+            background-color: var(--explanation-bg);
+            padding: 14px 20px;
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin: 8px 0;
+            color: var(--math-color);
+            letter-spacing: 0.02em;
+            flex-wrap: wrap;
+        }
+
+        .step-explanation {
+            display: block;
+            font-size: 1.05rem;
+            color: #334155;
+            margin-top: 6px;
+        }
+
+        .final-answer-box {
+            background-color: var(--highlight-bg);
+            border-left: 6px solid var(--secondary-color);
+            padding: 20px 25px;
+            border-radius: 0 8px 8px 0;
+            margin-top: 30px;
+            display: none;
+        }
+
+        .final-answer-label {
+            font-weight: 800;
+            color: var(--secondary-color);
+            display: block;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .final-answer-math {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            margin-top: 6px;
+            display: inline-flex;
+            align-items: center;
+            letter-spacing: 0.02em;
+        }
+
+        .control-panel {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid var(--border-color);
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 14px 24px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            border-radius: 8px;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary { background-color: var(--secondary-color); color: white; }
+        .btn-primary:hover:not(:disabled) { background-color: #1d4ed8; }
+        .btn-success { background-color: var(--success-color); color: white; }
+        .btn-success:hover:not(:disabled) { background-color: #166534; }
+        .btn-secondary { background-color: var(--explanation-bg); color: var(--primary-color); border: 1px solid var(--border-color); }
+        .btn-secondary:hover:not(:disabled) { background-color: #e2e8f0; }
+        .btn-accent { background-color: var(--primary-color); color: white; }
+        .btn-accent:hover:not(:disabled) { background-color: #1e293b; }
+
+        .btn:disabled {
+            background-color: var(--disabled-color);
+            color: #f1f5f9;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        .question-statement-card {
+            background: #ffffff;
+            border-left: 4px solid var(--secondary-color);
+            padding: 16px 20px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            border-radius: 0 6px 6px 0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .hint-box {
+            display: none;
+            background-color: #fef9c3;
+            border-left: 5px solid #eab308;
+            color: #713f12;
+            padding: 12px 16px;
+            border-radius: 0 6px 6px 0;
+            margin-bottom: 15px;
+            font-size: 1.05rem;
+            font-weight: 600;
+        }
+
+        .btn-hint { background-color: #fde047; color: #713f12; }
+        .btn-hint:hover:not(:disabled) { background-color: #facc15; }
+
+        .coord-svg {
+            width: 100%;
+            height: auto;
+            display: block;
+            background: #ffffff;
+            border-radius: 6px;
+        }
+        
+        .math-render-viewport .coord-svg { width: 330px; max-width: 100%; }
+
+        .mc-options-list.graph-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+
+        .mc-option-card.graph-card {
+            flex-direction: column;
+            align-items: stretch;
+            padding: 10px;
+        }
+
+        .mc-option-card.graph-card .mc-badge { align-self: flex-start; margin-bottom: 6px; }
+        .option-graph { width: 100%; border: 1px solid var(--border-color); border-radius: 6px; overflow: hidden; }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>MBF3C Unit 3 Lesson 1 &amp; 2</h1>
+        <p>Infinite Practice: Exponential Functions Studio</p>
+        <div class="scoreboard">
+            <div>Score: <span id="hud-score">0</span></div>
+            <div>Tries: <span id="hud-attempts">0</span></div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="profile-box">
+            <label>Student Profile Setup:</label>
+            <div class="profile-grid">
+                <input type="text" id="first-name" placeholder="First name" autocomplete="off">
+                <input type="text" id="last-name" placeholder="Last name" autocomplete="off">
+            </div>
+        </div>
+
+        <div class="selector-box">
+            <label for="question-select">Select Practice Concept:</label>
+            <div class="selector-controls">
+                <select id="question-select" onchange="triggerNewQuestion()">
+                    <option value="">-- Choose a Topic to Begin --</option>
+                    <option value="t1">Type 1: Exponent Laws & Rational Exponents</option>
+                    <option value="t2">Type 2: Identifying Functions from Vertical Tables</option>
+                    <option value="t3">Type 3: Properties of Exponential Functions</option>
+                    <option value="t4">Type 4: Graphing Exponential Functions</option>
+                </select>
+                <button class="btn btn-accent" onclick="triggerNewQuestion()">Generate New</button>
+            </div>
+        </div>
+
+        <div class="solution-container" id="display-window">
+            <div id="placeholder" class="placeholder-text">
+                Choose a concept and click "Generate New" to create a dynamic practice problem.
+            </div>
+
+            <div id="quiz-station" class="quiz-interface-box" style="display: none;">
+                <div id="asset-viewport-mount-point" class="math-render-viewport" style="display: none;"></div>
+
+                <div id="question-statement-display" class="question-statement-card"></div>
+
+                <label id="input-prompt-label" style="margin-bottom: 12px; font-weight: 700; display: block;"></label>
+                
+                <div id="dynamic-input-mount-point" style="margin-top: 10px;"></div>
+
+                <div id="hint-box" class="hint-box"></div>
+                <div id="feedback-msg" class="feedback-msg-area"></div>
+
+                <div class="quiz-action-bar">
+                    <button class="btn btn-success" id="check-ans-btn" onclick="evaluateStudentAnswer()">Check Answer</button>
+                    <button class="btn btn-hint" id="hint-btn" onclick="toggleHint()">Hint</button>
+                    <button class="btn btn-secondary" id="reveal-sol-btn" disabled onclick="unlockSolutionPanel()">Show Solution Steps</button>
+                </div>
+            </div>
+
+            <div class="solution-reveal-window" id="solution-reveal-layer">
+                <div id="solution-workspace-injected"></div>
+                
+                <div class="control-panel" id="controls-panel">
+                    <button class="btn btn-secondary" id="restart-btn" onclick="restartSolution()">Restart Steps</button>
+                    <button class="btn btn-primary" id="next-btn" onclick="showNextStep()">Next Step &rarr;</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const TEACHER_SPREADSHEET_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwygR6-l7XPRC1KL-Pqci33Yw_4pmCWa8mW7gNHJ_RsmN41ax15-d0sE-CrIxU0z22m/exec";
+
+        let globalScore = 0;
+        let globalAttempts = 0;
+        let currentProblemData = null;
+        let currentState = { answered: false, selectedMcOption: "", isCorrect: false, currentStep: 0, solRevealed: false, attempts: 0 };
+        let visibleStepElements = [];
+        let currentStepIndex = 0;
+
+        // --- Math & Logic Utilities ---
+        function randInt(min, max, exclude = []) {
+            let val;
+            let safety = 0;
+            do {
+                val = Math.floor(Math.random() * (max - min + 1)) + min;
+                safety++;
+            } while (exclude.includes(val) && safety < 100);
+            return val;
+        }
+
+        function shuffleMC(correct, distArr) {
+            let opts = [{t: correct, c: true}];
+            distArr.forEach(d => opts.push({t: d, c: false}));
+            
+            for (let i = opts.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [opts[i], opts[j]] = [opts[j], opts[i]];
+            }
+            
+            let finalOpts = [];
+            let ansLetter = "";
+            let letters = ["A", "B", "C", "D"];
+            
+            opts.forEach((item, i) => {
+                finalOpts.push(letters[i] + ") " + item.t);
+                if (item.c) ansLetter = letters[i];
+            });
+            
+            return { options: finalOpts, ansLetter: ansLetter, rawAns: correct };
+        }
+
+        function shuffleGraphMC(correctSpec, distSpecs) {
+            let opts = [{s: correctSpec, c: true}];
+            distSpecs.forEach(d => opts.push({s: d, c: false}));
+            
+            for (let i = opts.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [opts[i], opts[j]] = [opts[j], opts[i]];
+            }
+            
+            let finalOpts = [];
+            let finalSpecs = [];
+            let ansLetter = "";
+            let letters = ["A", "B", "C", "D"];
+            
+            opts.forEach((item, i) => {
+                finalOpts.push(letters[i] + ")");
+                finalSpecs.push(item.s);
+                if (item.c) ansLetter = letters[i];
+            });
+            
+            return { options: finalOpts, optionSpecs: finalSpecs, ansLetter: ansLetter };
+        }
+
+        function gdef(v, d) { return (v === undefined || v === null) ? d : v; }
+
+        // --- SVG Graphing Engine ---
+        function buildGraph(spec) {
+            const xmin = gdef(spec.xmin, -5), xmax = gdef(spec.xmax, 5);
+            const ymin = gdef(spec.ymin, -2), ymax = gdef(spec.ymax, 6);
+            const W = 300, H = 300, pad = 15;
+            const X = function (x) { return pad + (x - xmin) / (xmax - xmin) * (W - 2 * pad); };
+            const Y = function (y) { return pad + (ymax - y) / (ymax - ymin) * (H - 2 * pad); };
+            const uid = "g" + Math.random().toString(36).slice(2, 8);
+            
+            let s = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" class="coord-svg">`;
+            s += '<defs>';
+            s += `<clipPath id="clip-${uid}"><rect x="${pad}" y="${pad}" width="${W - 2 * pad}" height="${H - 2 * pad}"/></clipPath>`;
+            s += `<marker id="ax-${uid}" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#0f172a"/></marker>`;
+            s += `<marker id="cv-${uid}" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#2563eb"/></marker>`;
+            s += '</defs>';
+
+            for (let gx = Math.ceil(xmin); gx <= xmax; gx++) s += `<line x1="${X(gx)}" y1="${Y(ymax)}" x2="${X(gx)}" y2="${Y(ymin)}" stroke="#e8edf3" stroke-width="1"/>`;
+            for (let gy = Math.ceil(ymin); gy <= ymax; gy++) s += `<line x1="${X(xmin)}" y1="${Y(gy)}" x2="${X(xmax)}" y2="${Y(gy)}" stroke="#e8edf3" stroke-width="1"/>`;
+
+            s += `<line x1="${X(xmin)}" y1="${Y(0)}" x2="${X(xmax)}" y2="${Y(0)}" stroke="#0f172a" stroke-width="1.5" marker-start="url(#ax-${uid})" marker-end="url(#ax-${uid})"/>`;
+            s += `<line x1="${X(0)}" y1="${Y(ymin)}" x2="${X(0)}" y2="${Y(ymax)}" stroke="#0f172a" stroke-width="1.5" marker-start="url(#ax-${uid})" marker-end="url(#ax-${uid})"/>`;
+
+            for (let gx = Math.ceil(xmin); gx <= xmax; gx++) { if (gx !== 0 && gx % 2 === 0) s += `<text x="${X(gx)}" y="${Y(0) + 12}" font-size="9" fill="#64748b" text-anchor="middle">${gx}</text>`; }
+            for (let gy = Math.ceil(ymin); gy <= ymax; gy++) { if (gy !== 0 && gy % 2 === 0) s += `<text x="${X(0) - 5}" y="${Y(gy) + 3}" font-size="9" fill="#64748b" text-anchor="end">${gy}</text>`; }
+            s += `<text x="${X(0) - 5}" y="${Y(0) + 12}" font-size="9" fill="#64748b" text-anchor="end">0</text>`;
+
+            const curves = spec.curves || [];
+            for (let i = 0; i < curves.length; i++) s += `<g clip-path="url(#clip-${uid})">${drawCurve(curves[i], X, Y, xmin, xmax, ymin, ymax, uid)}</g>`;
+
+            const dots = spec.dots || [];
+            for (let i = 0; i < dots.length; i++) {
+                const dd = dots[i];
+                s += `<circle cx="${X(dd.x)}" cy="${Y(dd.y)}" r="4.5" fill="${dd.open ? '#ffffff' : '#2563eb'}" stroke="#2563eb" stroke-width="2"/>`;
+            }
+            s += '</svg>';
+            return s;
+        }
+
+        function drawCurve(c, X, Y, xmin, xmax, ymin, ymax, uid) {
+            function path(pts, aStart, aEnd) {
+                if (pts.length < 2) return "";
+                let d = "";
+                for (let i = 0; i < pts.length; i++) d += (i === 0 ? "M" : "L") + X(pts[i][0]).toFixed(1) + "," + Y(pts[i][1]).toFixed(1) + " ";
+                let attr = 'stroke="#2563eb" stroke-width="2.5" fill="none" stroke-linejoin="round" stroke-linecap="round"';
+                if (aEnd) attr += ` marker-end="url(#cv-${uid})"`;
+                if (aStart) attr += ` marker-start="url(#cv-${uid})"`;
+                return `<path d="${d.trim()}" ${attr}/>`;
+            }
+
+            const lo = c.dom ? c.dom[0] : xmin, hi = c.dom ? c.dom[1] : xmax;
+
+            if (c.kind === "line") {
+                return path([[lo, c.m * lo + c.b], [hi, c.m * hi + c.b]], c.arrowLeft, c.arrowRight);
+            }
+            if (c.kind === "parab") {
+                let pts = [];
+                for (let i = 0; i <= 80; i++) {
+                    const x = lo + (hi - lo) * i / 80;
+                    const y = c.a * (x - c.h) * (x - c.h) + c.k;
+                    pts.push([x, y]);
+                }
+                return path(pts, c.arrowLeft, c.arrowRight);
+            }
+            if (c.kind === "exp") {
+                let pts = [];
+                const a = gdef(c.a, 1);
+                const k = gdef(c.k, 0);
+                const step = (hi - lo) / 100;
+                for (let i = 0; i <= 100; i++) {
+                    const x = lo + i * step;
+                    const y = a * Math.pow(c.b, x) + k;
+                    if (y >= ymin - 1 && y <= ymax + 1) {
+                        pts.push([x, y]);
+                    }
+                }
+                return path(pts, c.arrowLeft, c.arrowRight);
+            }
+            return "";
+        }
+
+        function buildOptionsHTML(problem, selectedLetter, disabled) {
+            const isGraph = problem.optionType === "graph";
+            let html = `<div class="mc-options-list ${isGraph ? 'graph-grid' : ''}">`;
+            for (let i = 0; i < problem.options.length; i++) {
+                const opt = problem.options[i];
+                const letter = opt.charAt(0);
+                const sel = selectedLetter === letter ? "selected" : "";
+                const dis = disabled ? "disabled" : "";
+                const body = isGraph ? (`<div class="option-graph">${buildGraph(problem.optionSpecs[i])}</div>`) : (`<span>${opt.substring(3)}</span>`);
+                html += `<div class="mc-option-card ${sel} ${dis} ${isGraph ? 'graph-card' : ''}" onclick="selectMcOptionCard('${letter}')"><span class="mc-badge">${letter}</span>${body}</div>`;
+            }
+            html += '</div>';
+            return html;
+        }
+
+        // --- Problem Generators ---
+        function generateProblem(typeId) {
+            if (!typeId) return null;
+            let p = {
+                title: "", type: "mc", assetType: "none", optionType: "text",
+                fullStatement: "", prompt: "", options: [], optionSpecs: [],
+                hint: "", steps: [], ans: "", rawAns: "", graphSpec: null, assetHtml: ""
+            };
+
+            const scenario = randInt(1, 3);
+
+            if (typeId === "t1") {
+                p.title = "Exponent Laws & Rational Exponents";
+                
+                if (scenario === 1) {
+                    const a = randInt(4, 9); const b = randInt(3, 7); const c = randInt(2, a+b-2);
+                    const ansExp = a + b - c;
+                    const correctAns = `\\(x^{${ansExp}}\\)`;
+                    const mc = shuffleMC(correctAns, [`\\(x^{${a * b - c}}\\)`, `\\(x^{${ansExp + randInt(2, 4)}}\\)`, `\\(x^{${Math.max(1, ansExp - randInt(2, 3))}}\\)`]);
+
+                    p.fullStatement = `Simplify the algebraic expression \\(\\dfrac{x^{${a}} \\cdot x^{${b}}}{x^{${c}}}\\) using exponent laws.`;
+                    p.prompt = "Select the simplified expression:";
+                    p.options = mc.options; p.ans = mc.ansLetter;
+                    p.hint = "Combine the variables in the numerator using the product rule first, then simplify with the denominator using the quotient rule.";
+                    p.steps = [
+                        { title: "Step 1: Apply Product Rule", math: `\\(x^{${a}} \\cdot x^{${b}} = x^{${a}+${b}} = x^{${a+b}}\\)`, explanation: "When multiplying powers with the same base, add their exponents." },
+                        { title: "Step 2: Apply Quotient Rule", math: `\\(\\dfrac{x^{${a+b}}}{x^{${c}}} = x^{${a+b}-${c}}\\)`, explanation: "When dividing powers with the same base, subtract the bottom exponent from the top exponent." },
+                        { title: "Step 3: Simplify Exponent", math: correctAns, explanation: `The expression fully simplifies to ${correctAns}.` }
+                    ];
+                } 
+                else if (scenario === 2) {
+                    const b = randInt(2, 4); const k = randInt(2, 3); const c = b * k;
+                    const a = randInt(2, 5); const d = randInt(2, 6);
+                    let finalX = -a * c - (-d); 
+                    if (finalX >= 0) finalX = -randInt(1, 4);
+                    const absX = Math.abs(finalX);
+                    const e = randInt(1, 3);
+                    let finalY = (c / b) - e;
+                    if (finalY <= 0) finalY = randInt(1, 3);
+                    const strY = finalY === 1 ? 'y' : `y^{${finalY}}`;
+                    const strX = absX === 1 ? 'x' : `x^{${absX}}`;
+                    const correctAns = `\\(\\dfrac{${strY}}{${strX}}\\)`;
+                    
+                    const mc = shuffleMC(correctAns, [`\\(\\dfrac{${strX}}{${strY}}\\)`, `\\(\\dfrac{1}{${strX}${strY}}\\)`, `\\(${strX}${strY}\\)`]);
+
+                    p.fullStatement = `Simplify the expression \\(\\dfrac{(x^{-${a}} \\cdot y^{\\frac{1}{${b}}})^{${c}}}{x^{-${d}} \\cdot y^{${e === 1 ? '' : e}}}\\) using exponent laws.`;
+                    p.prompt = "Select the simplified expression with positive exponents:";
+                    p.options = mc.options; p.ans = mc.ansLetter;
+                    p.hint = "Distribute the outer exponent to each term in the numerator using the power of a power rule before dividing by the denominator.";
+                    p.steps = [
+                        { title: "Step 1: Simplify Numerator Brackets", math: `\\((x^{-${a}})^{${c}} \\cdot (y^{\\frac{1}{${b}}})^{${c}} = x^{-${a*c}} \\cdot y^{${c/b}}\\)`, explanation: `Multiply each exponent inside the bracket by the outer power ${c}.` },
+                        { title: "Step 2: Subtract Exponents", math: `\\(x^{-${a*c} - (-${d})} \\cdot y^{${c/b} - ${e}} = x^{${finalX}} \\cdot ${strY}\\)`, explanation: "Subtract denominator exponents from numerator exponents for both x and y." },
+                        { title: "Step 3: Convert Negative Exponents", math: `\\(x^{-${absX}} ${strY} = \\dfrac{${strY}}{${strX}}\\)`, explanation: `Move \\(x^{-${absX}}\\) to the denominator as \\(${strX}\\) to express with positive exponents.` }
+                    ];
+                }
+                else {
+                    const q_val = randInt(1, 3); const r_val = randInt(2, 3);
+                    const t_val = q_val * r_val + randInt(1, 3);
+                    const p_val = randInt(2, 4);
+                    const s_val = p_val * r_val - randInt(1, 3);
+                    const finalA = p_val * r_val - s_val;
+                    const finalB = t_val - q_val * r_val;
+                    const strA = finalA === 1 ? 'a' : `a^{${finalA}}`;
+                    const strB = finalB === 1 ? 'b' : `b^{${finalB}}`;
+                    const correctAns = `\\(${strA} ${strB}\\)`;
+                    
+                    const mc = shuffleMC(correctAns, [`\\(\\dfrac{${strA}}{${strB}}\\)`, `\\(\\dfrac{${strB}}{${strA}}\\)`, `\\(a^{${finalA+2}} b^{${finalB+1}}\\)`.replace('^{1}', '')]);
+
+                    p.fullStatement = `Simplify \\(\\dfrac{(a^{${p_val}} b^{-${q_val}})^{${r_val}}}{a^{${s_val}} b^{-${t_val}}}\\) completely.`;
+                    p.prompt = "Select the fully simplified expression:";
+                    p.options = mc.options; p.ans = mc.ansLetter;
+                    p.hint = "Apply exponent laws step by step to clear brackets and combine like bases.";
+                    p.steps = [
+                        { title: "Step 1: Power of a Power Rule", math: `\\((a^{${p_val}} b^{-${q_val}})^{${r_val}} = a^{${p_val*r_val}} b^{-${q_val*r_val}}\\)`, explanation: `Multiply powers inside by ${r_val}.` },
+                        { title: "Step 2: Quotient Rule for Base a", math: `\\(\\dfrac{a^{${p_val*r_val}}}{a^{${s_val}}} = a^{${p_val*r_val}-${s_val}} = ${strA}\\)`, explanation: "Subtract exponents for base a." },
+                        { title: "Step 3: Quotient Rule for Base b", math: `\\(\\dfrac{b^{-${q_val*r_val}}}{b^{-${t_val}}} = b^{-${q_val*r_val} - (-${t_val})} = ${strB}\\)`, explanation: `Subtract exponents: \\(-${q_val*r_val} + ${t_val} = ${finalB}\\).` },
+                        { title: "Step 4: Combine Results", math: correctAns, explanation: `The simplified expression is ${correctAns}.` }
+                    ];
+                }
+            }
+            else if (typeId === "t2") {
+                p.title = "Identifying Functions from Vertical Tables";
+                p.assetType = "table";
+                
+                if (scenario === 1) {
+                    const r = randInt(2, 4); const a = randInt(2, 5);
+                    const v = [a, a*r, a*r*r, a*r*r*r];
+                    p.assetHtml = `<table class="vertical-tov"><thead><tr><th>x</th><th>y</th></tr></thead><tbody><tr><td>0</td><td>${v[0]}</td></tr><tr><td>1</td><td>${v[1]}</td></tr><tr><td>2</td><td>${v[2]}</td></tr><tr><td>3</td><td>${v[3]}</td></tr></tbody></table>`;
+                    
+                    const mc = shuffleMC("Exponential Function, because consecutive y-values share a constant multiplier.", [
+                        "Linear Function, because first differences are constant.",
+                        "Quadratic Function, because second differences are constant.",
+                        "Exponential Function, because first differences increase by constant amounts."
+                    ]);
+
+                    p.fullStatement = "Identify the type of function represented by the vertical table below and its key defining characteristic.";
+                    p.prompt = "Select the correct classification:";
+                    p.options = mc.options; p.ans = mc.ansLetter;
+                    p.hint = "Check if the change in y-values is created by adding a constant amount or multiplying by a constant factor.";
+                    p.steps = [
+                        { title: "Step 1: Check First Differences (\\(\\Delta y\\))", math: `\\(${v[1]}-${v[0]}=${v[1]-v[0]}, \\quad ${v[2]}-${v[1]}=${v[2]-v[1]}\\)`, explanation: "First differences are NOT constant, so the model is not Linear." },
+                        { title: "Step 2: Calculate Common Ratio", math: `\\(\\dfrac{${v[1]}}{${v[0]}} = ${r}, \\quad \\dfrac{${v[2]}}{${v[1]}} = ${r}\\)`, explanation: `Consecutive y-values share a constant multiplier (common ratio) of ${r}. Thus, it is Exponential.` }
+                    ];
+                }
+                else if (scenario === 2) {
+                    const denoms = [2, 3, 4, 5]; const denom = denoms[randInt(0, 3)];
+                    const mult = randInt(1, 3); const a = mult * Math.pow(denom, 3);
+                    const v = [a, a/denom, a/Math.pow(denom,2), a/Math.pow(denom,3)];
+                    p.assetHtml = `<table class="vertical-tov"><thead><tr><th>x</th><th>y</th></tr></thead><tbody><tr><td>0</td><td>${v[0]}</td></tr><tr><td>1</td><td>${v[1]}</td></tr><tr><td>2</td><td>${v[2]}</td></tr><tr><td>3</td><td>${v[3]}</td></tr></tbody></table>`;
+                    
+                    const mc = shuffleMC(`\\(b = \\dfrac{1}{${denom}}\\)`, [`\\(b = ${denom}\\)`, `\\(b = -${denom}\\)`, `\\(b = \\dfrac{1}{${denom*denom}}\\)`]);
+
+                    p.fullStatement = "Determine the base (\\(b\\)) for the exponential equation \\(y = b^x\\) represented in the vertical table below.";
+                    p.prompt = "Select the value of base b:";
+                    p.options = mc.options; p.ans = mc.ansLetter;
+                    p.hint = "Observe how the y-value changes as x increases by 1 unit.";
+                    p.steps = [
+                        { title: "Step 1: Check First Differences (\\(\\Delta y\\))", math: `\\(${v[1]}-${v[0]} = ${v[1]-v[0]}\\)`, explanation: "First differences are not constant, so it is not Linear." },
+                        { title: "Step 2: Compute Multiplicative Ratio", math: `\\(\\dfrac{${v[1]}}{${v[0]}} = \\dfrac{1}{${denom}}, \\quad \\dfrac{${v[2]}}{${v[1]}} = \\dfrac{1}{${denom}}\\)`, explanation: `Dividing consecutive y-values yields a constant common ratio of \\(\\dfrac{1}{${denom}}\\), which is the base b.` }
+                    ];
+                }
+                else {
+                    const a = randInt(2, 10); const d = randInt(2, 6);
+                    const v = [a, a+d, a+d*2, a+d*3];
+                    p.assetHtml = `<table class="vertical-tov"><thead><tr><th>x</th><th>y</th></tr></thead><tbody><tr><td>1</td><td>${v[0]}</td></tr><tr><td>2</td><td>${v[1]}</td></tr><tr><td>3</td><td>${v[2]}</td></tr><tr><td>4</td><td>${v[3]}</td></tr></tbody></table>`;
+                    
+                    const mc = shuffleMC("Linear Function, because first differences are constant.", [
+                        "Exponential Function, because y-values are increasing.",
+                        "Quadratic Function, because second differences equal zero.",
+                        "Exponential Function, because the ratio between terms is constant."
+                    ]);
+
+                    p.fullStatement = "Classify the mathematical relationship shown in the vertical table below.";
+                    p.prompt = "Select the correct function type:";
+                    p.options = mc.options; p.ans = mc.ansLetter;
+                    p.hint = "Compare the step-by-step changes between consecutive y-values to see if they increase by adding or multiplying.";
+                    p.steps = [
+                        { title: "Step 1: Check First Differences (\\(\\Delta y\\))", math: `\\(${v[1]}-${v[0]} = ${d}, \\quad ${v[2]}-${v[1]} = ${d}\\)`, explanation: `First differences are constantly +${d} across all steps.` },
+                        { title: "Step 2: Conclusion", math: `\\(\\Delta y = +${d} \\implies \\text{Linear Function}\\)`, explanation: "Since first differences are constant, this table represents a Linear Function." }
+                    ];
+                }
+            }
+            else if (typeId === "t3") {
+                p.title = "Properties of Exponential Functions";
+                
+                if (scenario === 1) {
+                    const decN = randInt(2, 4); const decD = decN + randInt(1, 3);
+                    const gr1 = randInt(3, 6); const gr2N = randInt(5, 8); const gr2D = randInt(2, 4);
+                    const gr3 = (randInt(11, 19)/10).toFixed(1);
+                    
+                    const mc = shuffleMC(`\\(y = \\left(\\dfrac{${decN}}{${decD}}\\right)^x\\)`, [
+                        `\\(y = \\left(\\dfrac{${gr2N}}{${gr2D}}\\right)^x\\)`, `\\(y = ${gr1}^x\\)`, `\\(y = (${gr3})^x\\)`
+                    ]);
+
+                    p.fullStatement = "Which of the following exponential functions represents **decay (decreasing)**?";
+                    p.prompt = "Select the decay (decreasing) function:";
+                    p.options = mc.options; p.ans = mc.ansLetter;
+                    p.hint = "Compare the base b to 1. A base between 0 and 1 results in decay (decreasing), while a base greater than 1 results in growth (increasing).";
+                    p.steps = [
+                        { title: "Step 1: Identify Base b of Correct Option", math: `b = \\dfrac{${decN}}{${decD}} \\approx ${(decN/decD).toFixed(2)}`, explanation: "Convert fractional base to decimal." },
+                        { title: "Step 2: Evaluate Decay Condition", math: `\\(0 < ${(decN/decD).toFixed(2)} < 1\\)`, explanation: "When base b satisfies \\(0 < b < 1\\), the function represents decay (decreasing)." }
+                    ];
+                }
+                else if (scenario === 2) {
+                    const b = randInt(3, 9);
+                    const mc = shuffleMC("Horizontal Asymptote: \\(y = 0\\), \\(y\\)-intercept: \\((0, 1)\\)", [
+                        `Horizontal Asymptote: \\(x = 0\\), \\(y\\)-intercept: \\((0, ${b})\\)`,
+                        `Horizontal Asymptote: \\(y = ${b}\\), \\(y\\)-intercept: \\((0, 1)\\)`,
+                        "Horizontal Asymptote: \\(y = 0\\), \\(y\\)-intercept: \\((0, 0)\\)"
+                    ]);
+
+                    p.fullStatement = `What are the horizontal asymptote and \\(y\\)-intercept for the function \\(y = ${b}^x\\)?`;
+                    p.prompt = "Select the asymptote and y-intercept:";
+                    p.options = mc.options; p.ans = mc.ansLetter;
+                    p.hint = "Evaluate the function at x = 0 for the intercept, and consider the boundary value y approaches as x becomes very small.";
+                    p.steps = [
+                        { title: "Step 1: Find y-intercept", math: `\\(y = ${b}^0 = 1 \\implies (0, 1)\\)`, explanation: "Substitute \\(x = 0\\). Any non-zero base to power 0 equals 1." },
+                        { title: "Step 2: Determine Horizontal Asymptote", math: `\\(\\text{As } x \\to -\\infty, \\quad ${b}^x \\to 0 \\implies y = 0\\)`, explanation: "The curve approaches the x-axis (line \\(y = 0\\)) as a lower boundary." }
+                    ];
+                }
+                else {
+                    const b = (randInt(2, 9)/10).toFixed(1);
+                    const mc = shuffleMC("Domain: \\(\\{x \\in \\mathbb{R}\\}\\), Range: \\(\\{y \\in \\mathbb{R} \\mid y > 0\\}\\)", [
+                        "Domain: \\(\\{x \\in \\mathbb{R} \\mid x > 0\\}\\), Range: \\(\\{y \\in \\mathbb{R}\\}\\)",
+                        "Domain: \\(\\{x \\in \\mathbb{R}\\}\\), Range: \\(\\{y \\in \\mathbb{R} \\mid y \\ge 0\\}\\)",
+                        "Domain: \\(\\{x \\in \\mathbb{R} \\mid x \\ne 0\\}\\), Range: \\(\\{y \\in \\mathbb{R} \\mid y > 0\\}\\)"
+                    ]);
+
+                    p.fullStatement = `State the Domain and Range for the exponential function \\(y = (${b})^x\\).`;
+                    p.prompt = "Select the correct Domain and Range:";
+                    p.options = mc.options; p.ans = mc.ansLetter;
+                    p.hint = "Consider all allowed input values for x and the strictly positive outputs generated by positive bases.";
+                    p.steps = [
+                        { title: "Step 1: Identify Domain", math: "\\text{Domain: } \\{x \\in \\mathbb{R}\\}", explanation: "Any real number x can be an exponent for a positive base." },
+                        { title: "Step 2: Identify Range", math: "\\text{Range: } \\{y \\in \\mathbb{R} \\mid y > 0\\}", explanation: "A positive base raised to any power is strictly greater than 0, never touching or going below 0." }
+                    ];
+                }
+            }
+            else if (typeId === "t4") {
+                p.title = "Graphing Exponential Functions";
+                p.optionType = "graph";
+                
+                if (scenario === 1) {
+                    const b = randInt(2, 4);
+                    const gC = { xmin: -4, xmax: 4, ymin: -2, ymax: 6, curves: [{ kind: "exp", b: b, a: 1, k: 0, arrowLeft: true, arrowRight: true }], dots: [{ x: 0, y: 1 }, { x: 1, y: b }] };
+                    const gD1 = { xmin: -4, xmax: 4, ymin: -2, ymax: 6, curves: [{ kind: "exp", b: b+2, a: 1, k: 0, arrowLeft: true, arrowRight: true }], dots: [{ x: 0, y: 1 }, { x: 1, y: b+2 }] };
+                    const gD2 = { xmin: -4, xmax: 4, ymin: -2, ymax: 6, curves: [{ kind: "exp", b: 1/b, a: 1, k: 0, arrowLeft: true, arrowRight: true }], dots: [{ x: 0, y: 1 }, { x: -1, y: b }] };
+                    const gD3 = { xmin: -4, xmax: 4, ymin: -2, ymax: 6, curves: [{ kind: "line", m: b, b: 0, arrowLeft: true, arrowRight: true }], dots: [{ x: 0, y: 0 }, { x: 1, y: b }] };
+                    
+                    const mc = shuffleGraphMC(gC, [gD1, gD2, gD3]);
+
+                    p.fullStatement = `Which of the following graphs correctly represents the exponential function \\(y = ${b}^x\\)?`;
+                    p.prompt = `Tap the graph that represents \\(y = ${b}^x\\):`;
+                    p.options = mc.options; p.optionSpecs = mc.optionSpecs; p.ans = mc.ansLetter;
+                    p.hint = `Check the y-value on each graph when x = 1. For \\(y = ${b}^x\\), y must equal ${b} at x = 1.`;
+                    p.steps = [
+                        { title: "Step 1: Calculate Key Points", math: `\\(y(0) = ${b}^0 = 1, \\quad y(1) = ${b}^1 = ${b}\\)`, explanation: `The graph must pass through \\((0,1)\\) and \\((1,${b})\\).` },
+                        { title: "Step 2: Match with Options", math: `\\text{The correct option passes through } (0,1) \\text{ and } (1,${b})\\)`, explanation: `It displays an exponential growth curve with horizontal asymptote \\(y=0\\).` }
+                    ];
+                }
+                else if (scenario === 2) {
+                    const b = randInt(2, 4);
+                    const gC = { xmin: -4, xmax: 4, ymin: -2, ymax: 6, curves: [{ kind: "exp", b: 1/b, a: 1, k: 0, arrowLeft: true, arrowRight: true }], dots: [{ x: 0, y: 1 }, { x: -1, y: b }] };
+                    const gD1 = { xmin: -4, xmax: 4, ymin: -2, ymax: 6, curves: [{ kind: "exp", b: b, a: 1, k: 0, arrowLeft: true, arrowRight: true }], dots: [{ x: 0, y: 1 }, { x: 1, y: b }] };
+                    const gD2 = { xmin: -4, xmax: 4, ymin: -2, ymax: 6, curves: [{ kind: "exp", b: 1/(b+1), a: 1, k: 0, arrowLeft: true, arrowRight: true }], dots: [{ x: 0, y: 1 }, { x: -1, y: b+1 }] };
+                    const gD3 = { xmin: -4, xmax: 4, ymin: -2, ymax: 6, curves: [{ kind: "parab", a: 1, h: 0, k: 0, arrowLeft: true, arrowRight: true }], dots: [{ x: 0, y: 0 }, { x: 1, y: 1 }] };
+                    
+                    const mc = shuffleGraphMC(gC, [gD1, gD2, gD3]);
+
+                    p.fullStatement = `Select the graph that correctly displays the exponential decay (decreasing) function \\(y = \\left(\\dfrac{1}{${b}}\\right)^x\\).`;
+                    p.prompt = `Tap the graph that represents \\(y = (1/${b})^x\\):`;
+                    p.options = mc.options; p.optionSpecs = mc.optionSpecs; p.ans = mc.ansLetter;
+                    p.hint = `Look for a curve that decreases from left to right and passes through (-1, ${b}) and (0, 1).`;
+                    p.steps = [
+                        { title: "Step 1: Calculate Key Points", math: `\\(y(0) = 1, \\quad y(-1) = \\left(\\dfrac{1}{${b}}\\right)^{-1} = ${b}\\)`, explanation: `The graph must pass through \\((0,1)\\) and \\((-1,${b})\\).` },
+                        { title: "Step 2: Match Decay Curve", math: `\\text{The correct option decreases left-to-right through } (-1,${b})\\)`, explanation: `It is a decay curve with base \\(b=\\dfrac{1}{${b}}\\) approaching asymptote \\(y=0\\).` }
+                    ];
+                }
+                else {
+                    const b = randInt(4, 6);
+                    const gC = { xmin: -4, xmax: 4, ymin: -2, ymax: 8, curves: [{ kind: "exp", b: b, a: 1, k: 0, arrowLeft: true, arrowRight: true }], dots: [{ x: 0, y: 1 }, { x: 1, y: b }] };
+                    const gD1 = { xmin: -4, xmax: 4, ymin: -2, ymax: 8, curves: [{ kind: "exp", b: b-2, a: 1, k: 0, arrowLeft: true, arrowRight: true }], dots: [{ x: 0, y: 1 }, { x: 1, y: b-2 }] };
+                    const gD2 = { xmin: -4, xmax: 4, ymin: -2, ymax: 8, curves: [{ kind: "exp", b: 1/b, a: 1, k: 0, arrowLeft: true, arrowRight: true }], dots: [{ x: 0, y: 1 }, { x: -1, y: b }] };
+                    const gD3 = { xmin: -4, xmax: 4, ymin: -2, ymax: 8, curves: [{ kind: "exp", b: 1/(b-2), a: 1, k: 0, arrowLeft: true, arrowRight: true }], dots: [{ x: 0, y: 1 }, { x: -1, y: b-2 }] };
+                    
+                    const mc = shuffleGraphMC(gC, [gD1, gD2, gD3]);
+
+                    p.fullStatement = `Identify the graph corresponding to the exponential function \\(y = ${b}^x\\).`;
+                    p.prompt = `Tap the graph that represents \\(y = ${b}^x\\):`;
+                    p.options = mc.options; p.optionSpecs = mc.optionSpecs; p.ans = mc.ansLetter;
+                    p.hint = `Find the graph that rises steeply and passes through (1, ${b}) on the grid.`;
+                    p.steps = [
+                        { title: "Step 1: Calculate Key Points", math: `\\(y(0) = ${b}^0 = 1, \\quad y(1) = ${b}^1 = ${b}\\)`, explanation: `The graph must pass through \\((0,1)\\) and \\((1,${b})\\).` },
+                        { title: "Step 2: Match Steep Growth Curve", math: `\\text{The correct option reaches } y=${b} \\text{ at } x=1\\)`, explanation: `It is a steep growth curve passing through \\((1,${b})\\).` }
+                    ];
+                }
+            }
+
+            return p;
+        }
+
+        // --- Core Application Logic ---
+        function triggerNewQuestion() {
+            const selectMenu = document.getElementById("question-select");
+            const typeId = selectMenu.value;
+
+            if (!typeId) {
+                document.getElementById("placeholder").style.display = "block";
+                document.getElementById("quiz-station").style.display = "none";
+                document.getElementById("asset-viewport-mount-point").style.display = "none";
+                document.getElementById("solution-reveal-layer").style.display = "none";
+                return;
+            }
+
+            currentProblemData = generateProblem(typeId);
+            currentState = { answered: false, selectedMcOption: "", isCorrect: false, currentStep: 0, solRevealed: false, attempts: 0 };
+            
+            displaySolution();
+        }
+
+        function renderMathElements() {
+            if (window.renderMathInElement) {
+                renderMathInElement(document.body, {
+                    delimiters: [
+                        {left: '$$', right: '$$', display: true},
+                        {left: '\\(', right: '\\)', display: false}
+                    ],
+                    throwOnError: false
+                });
+            }
+        }
+
+        window.onload = renderMathElements;
+
+        function displaySolution() {
+            document.getElementById("solution-reveal-layer").style.display = "none";
+            var __hb = document.getElementById("hint-box"); if (__hb) __hb.style.display = "none";
+            const placeholder = document.getElementById("placeholder");
+            const quizStation = document.getElementById("quiz-station");
+            const assetMount = document.getElementById("asset-viewport-mount-point");
+            const mountPoint = document.getElementById("dynamic-input-mount-point");
+            const promptLabel = document.getElementById("input-prompt-label");
+
+            placeholder.style.display = "none";
+            quizStation.style.display = "block";
+            
+            if (currentProblemData.assetType && currentProblemData.assetType !== "none") {
+                assetMount.style.display = "flex";
+                assetMount.innerHTML = currentProblemData.assetType === "graph" ? buildGraph(currentProblemData.graphSpec) : currentProblemData.assetHtml;
+            } else {
+                assetMount.style.display = "none";
+            }
+
+            document.getElementById("question-statement-display").innerHTML = currentProblemData.fullStatement;
+            promptLabel.innerHTML = currentProblemData.prompt;
+            
+            mountPoint.innerHTML = buildOptionsHTML(currentProblemData, currentState.selectedMcOption, currentState.answered);
+
+            if (currentState.answered) {
+                lockQuizInterface(currentState.isCorrect);
+                if (currentState.solRevealed) revealSolutionWorkspace();
+            } else {
+                unlockQuizInterface();
+            }
+
+            setTimeout(renderMathElements, 10);
+        }
+
+        function selectMcOptionCard(letter) {
+            if (currentState.answered) return;
+            
+            currentState.selectedMcOption = letter;
+            var __fb = document.getElementById("feedback-msg"); if (__fb) __fb.style.display = "none";
+            
+            const mountPoint = document.getElementById("dynamic-input-mount-point");
+            mountPoint.innerHTML = buildOptionsHTML(currentProblemData, letter, false);
+            
+            setTimeout(renderMathElements, 10);
+        }
+
+        function evaluateStudentAnswer() {
+            if (currentState.answered) return;
+
+            const firstNameInput = document.getElementById("first-name").value.trim();
+            const lastNameInput = document.getElementById("last-name").value.trim();
+
+            if (firstNameInput === "" || lastNameInput === "") {
+                alert("Please enter your first and last name first.");
+                return;
+            }
+
+            if (!currentState.selectedMcOption) {
+                alert("Please choose an answer first.");
+                return;
+            }
+
+            let matchingCorrect = (currentState.selectedMcOption === currentProblemData.ans);
+            let logString = "Option " + currentState.selectedMcOption;
+
+            globalAttempts++;
+            currentState.attempts++;
+            if (matchingCorrect && !currentState.isCorrect) globalScore++;
+            currentState.isCorrect = matchingCorrect;
+            updateHudScoreboard();
+
+            if (matchingCorrect) {
+                currentState.answered = true;
+                lockQuizInterface(true);
+            } else {
+                showTryAgain();
+            }
+
+            let payload = {
+                unitId: "Unit_3",
+                lessonId: "U3_Lesson_1_and_2",
+                firstName: firstNameInput,
+                lastName: lastNameInput,
+                questionId: document.getElementById("question-select").value + "_Dynamic",
+                userAnswer: logString,
+                isCorrect: matchingCorrect,
+                attempts: currentState.attempts,
+                methodUsed: "Dynamic Generative MC",
+                totalScore: globalScore
+            };
+
+            transmitDataToTeacherSpreadsheet(payload);
+        }
+
+        function toggleHint() {
+            if (!currentProblemData) return;
+            var box = document.getElementById("hint-box");
+            if (!box) return;
+            if (box.style.display === "block") { box.style.display = "none"; return; }
+            box.innerHTML = "<strong>Hint:</strong> " + (currentProblemData.hint || "");
+            box.style.display = "block";
+            setTimeout(renderMathElements, 10);
+        }
+
+        function transmitDataToTeacherSpreadsheet(payload) {
+            fetch(TEACHER_SPREADSHEET_SCRIPT_URL, {
+                method: "POST",
+                mode: "no-cors",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            }).catch(err => console.error("Database cloud logging failure:", err));
+        }
+
+        function showTryAgain() {
+            document.getElementById("reveal-sol-btn").disabled = false;
+            const feedback = document.getElementById("feedback-msg");
+            feedback.style.display = "block";
+            feedback.className = "feedback-msg-area feedback-error";
+            feedback.innerHTML = "Not quite yet - pick another answer, or tap Hint for a clue. (You can tap Show Solution Steps any time.)";
+        }
+
+        function lockQuizInterface(isCorrect) {
+            document.querySelectorAll(".mc-option-card").forEach(c => c.classList.add("disabled"));
+            document.getElementById("check-ans-btn").disabled = true;
+            document.getElementById("reveal-sol-btn").disabled = false;
+
+            const feedback = document.getElementById("feedback-msg");
+            feedback.style.display = "block";
+            if (isCorrect) {
+                feedback.className = "feedback-msg-area feedback-success";
+                feedback.innerHTML = "Correct! Nice work. Click 'Generate New' for another challenge.";
+            } else {
+                feedback.className = "feedback-msg-area feedback-error";
+                feedback.innerHTML = "Not quite - review the steps below, or generate a new problem.";
+            }
+        }
+
+        function unlockQuizInterface() {
+            document.getElementById("check-ans-btn").disabled = false;
+            document.getElementById("reveal-sol-btn").disabled = true;
+            document.getElementById("feedback-msg").style.display = "none";
+        }
+
+        function unlockSolutionPanel() {
+            currentState.solRevealed = true;
+            revealSolutionWorkspace();
+        }
+
+        function revealSolutionWorkspace() {
+            const targetDiv = document.getElementById("solution-reveal-layer");
+            const workspace = document.getElementById("solution-workspace-injected");
+            
+            let html = `<h2>Solution for ${currentProblemData.title}</h2>`;
+            currentProblemData.steps.forEach(step => {
+                html += `
+                <div class="step-block" style="display:none;">
+                    <span class="step-title">${step.title}</span>
+                    <div class="step-math">${step.math}</div>
+                    <span class="step-explanation">${step.explanation}</span>
+                </div>`;
+            });
+            html += `
+            <div class="final-answer-box" style="display:none;">
+                <span class="final-answer-label">Answer</span>
+                <span class="final-answer-math">Correct answer: Option ${currentProblemData.ans}</span>
+            </div>`;
+
+            workspace.innerHTML = html;
+            targetDiv.style.display = "block";
+            renderMethodSteps();
+            setTimeout(renderMathElements, 10);
+        }
+
+        function renderMethodSteps() {
+            const activeContainer = document.getElementById("solution-workspace-injected");
+            visibleStepElements = Array.from(activeContainer.querySelectorAll('.step-block, .final-answer-box'));
+            
+            currentStepIndex = currentState.currentStep;
+            for (let i = 0; i <= currentStepIndex; i++) {
+                if (visibleStepElements[i]) visibleStepElements[i].style.display = "block";
+            }
+
+            document.getElementById("restart-btn").disabled = (currentStepIndex === 0);
+            document.getElementById("next-btn").disabled = (currentStepIndex === visibleStepElements.length - 1);
+        }
+
+        function showNextStep() {
+            if (currentStepIndex < visibleStepElements.length - 1) {
+                currentStepIndex++;
+                currentState.currentStep = currentStepIndex;
+                visibleStepElements[currentStepIndex].style.display = "block";
+                visibleStepElements[currentStepIndex].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                document.getElementById("restart-btn").disabled = false;
+            }
+            if (currentStepIndex === visibleStepElements.length - 1) {
+                document.getElementById("next-btn").disabled = true;
+            }
+            setTimeout(renderMathElements, 10);
+        }
+
+        function restartSolution() {
+            currentState.currentStep = 0;
+            revealSolutionWorkspace();
+        }
+
+        function updateHudScoreboard() {
+            document.getElementById("hud-score").innerText = globalScore;
+            document.getElementById("hud-attempts").innerText = globalAttempts;
+        }
+    </script>
+</body>
+</html>

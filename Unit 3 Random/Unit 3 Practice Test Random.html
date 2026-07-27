@@ -1,0 +1,1221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MBF3C Unit 3 Comprehensive Practice Test Studio</title>
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+
+    <style>
+        :root {
+            --primary-color: #0f172a;
+            --secondary-color: #2563eb;
+            --disabled-color: #94a3b8;
+            --text-color: #334155;
+            --math-color: #000000;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --border-color: #cbd5e1;
+            --highlight-bg: #eff6ff;
+            --explanation-bg: #f1f5f9;
+            --rule-bg: #fef08a;
+            --rule-text: #713f12;
+            --success-color: #16a34a;
+            --error-color: #dc2626;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.8;
+            margin: 0;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: -0.025em;
+        }
+
+        header p {
+            margin: 8px 0 0 0;
+            color: #94a3b8;
+            font-size: 1.05rem;
+        }
+
+        .scoreboard {
+            background-color: #1e293b;
+            color: white;
+            display: inline-flex;
+            gap: 20px;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-weight: 700;
+            margin-top: 15px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.2);
+        }
+
+        .scoreboard span {
+            color: #60a5fa;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .profile-box, .selector-box {
+            background-color: var(--card-bg);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-color);
+            margin-bottom: 25px;
+        }
+
+        .profile-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .profile-grid input {
+            width: 100%;
+            padding: 12px;
+            font-size: 1rem;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        .profile-grid input:focus {
+            border-color: var(--secondary-color);
+        }
+
+        label {
+            display: block;
+            font-weight: 700;
+            color: var(--primary-color);
+            font-size: 1.1rem;
+            margin-bottom: 12px;
+        }
+
+        .selector-controls {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        select {
+            flex: 1;
+            padding: 16px;
+            font-size: 1.1rem;
+            font-family: inherit;
+            border-radius: 8px;
+            border: 2px solid var(--border-color);
+            background-color: white;
+            color: var(--primary-color);
+            outline: none;
+            cursor: pointer;
+        }
+
+        .solution-container {
+            background-color: var(--card-bg);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-color);
+            min-height: 200px;
+        }
+
+        .placeholder-text {
+            color: #64748b;
+            text-align: center;
+            font-style: italic;
+            padding: 60px 0;
+            font-size: 1.1rem;
+        }
+
+        .quiz-interface-box {
+            background-color: var(--explanation-bg);
+            border: 1px solid var(--border-color);
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+
+        .math-render-viewport {
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+        }
+
+        .mc-options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 10px;
+        }
+
+        .mc-option-card {
+            background: white;
+            border: 2px solid var(--border-color);
+            padding: 14px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1.05rem;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .mc-option-card:hover:not(.disabled) {
+            border-color: var(--secondary-color);
+            background-color: var(--highlight-bg);
+        }
+
+        .mc-option-card.selected {
+            border-color: var(--secondary-color);
+            background-color: #dbeafe;
+            color: #1e40af;
+        }
+
+        .mc-option-card.disabled {
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .mc-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background-color: #e2e8f0;
+            color: var(--primary-color);
+            font-weight: 800;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+
+        .mc-option-card.selected .mc-badge {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+
+        .feedback-msg-area {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            display: none;
+            padding: 10px 15px;
+            border-radius: 6px;
+        }
+
+        .feedback-success {
+            background-color: #dcfce7;
+            color: var(--success-color);
+            border-left: 5px solid var(--success-color);
+        }
+
+        .feedback-error {
+            background-color: #fee2e2;
+            color: var(--error-color);
+            border-left: 5px solid var(--error-color);
+        }
+
+        .quiz-action-bar {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .solution-reveal-window {
+            display: none;
+            border-top: 3px double var(--border-color);
+            margin-top: 30px;
+            padding-top: 30px;
+        }
+
+        .step-block {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e2e8f0;
+            display: none;
+        }
+
+        .step-title {
+            font-weight: 800;
+            color: var(--secondary-color);
+            display: block;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 8px;
+        }
+
+        .step-math {
+            font-size: 1.3rem;
+            font-weight: 700;
+            background-color: var(--explanation-bg);
+            padding: 14px 20px;
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin: 8px 0;
+            color: var(--math-color);
+            letter-spacing: 0.02em;
+            flex-wrap: wrap;
+        }
+
+        .step-explanation {
+            display: block;
+            font-size: 1.05rem;
+            color: #334155;
+            margin-top: 6px;
+        }
+
+        .final-answer-box {
+            background-color: var(--highlight-bg);
+            border-left: 6px solid var(--secondary-color);
+            padding: 20px 25px;
+            border-radius: 0 8px 8px 0;
+            margin-top: 30px;
+            display: none;
+        }
+
+        .final-answer-label {
+            font-weight: 800;
+            color: var(--secondary-color);
+            display: block;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .final-answer-math {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            margin-top: 6px;
+            display: inline-flex;
+            align-items: center;
+            letter-spacing: 0.02em;
+        }
+
+        .control-panel {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid var(--border-color);
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 14px 24px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            border-radius: 8px;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary { background-color: var(--secondary-color); color: white; }
+        .btn-primary:hover:not(:disabled) { background-color: #1d4ed8; }
+        .btn-success { background-color: var(--success-color); color: white; }
+        .btn-success:hover:not(:disabled) { background-color: #166534; }
+        .btn-secondary { background-color: var(--explanation-bg); color: var(--primary-color); border: 1px solid var(--border-color); }
+        .btn-secondary:hover:not(:disabled) { background-color: #e2e8f0; }
+        .btn-accent { background-color: var(--primary-color); color: white; }
+        .btn-accent:hover:not(:disabled) { background-color: #1e293b; }
+
+        .btn:disabled {
+            background-color: var(--disabled-color);
+            color: #f1f5f9;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        .question-statement-card {
+            background: #ffffff;
+            border-left: 4px solid var(--secondary-color);
+            padding: 16px 20px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            border-radius: 0 6px 6px 0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .hint-box {
+            display: none;
+            background-color: #fef9c3;
+            border-left: 5px solid #eab308;
+            color: #713f12;
+            padding: 12px 16px;
+            border-radius: 0 6px 6px 0;
+            margin-bottom: 15px;
+            font-size: 1.05rem;
+            font-weight: 600;
+        }
+
+        .btn-hint { background-color: #fde047; color: #713f12; }
+        .btn-hint:hover:not(:disabled) { background-color: #facc15; }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>MBF3C Unit 3 Practice Test</h1>
+        <p>Infinite Practice: Comprehensive Review Studio</p>
+        <div class="scoreboard">
+            <div>Score: <span id="hud-score">0</span></div>
+            <div>Tries: <span id="hud-attempts">0</span></div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="profile-box">
+            <label>Student Profile Setup:</label>
+            <div class="profile-grid">
+                <input type="text" id="first-name" placeholder="First name" autocomplete="off">
+                <input type="text" id="last-name" placeholder="Last name" autocomplete="off">
+            </div>
+        </div>
+
+        <div class="selector-box">
+            <label for="question-select">Select Practice Test Concept Area:</label>
+            <div class="selector-controls">
+                <select id="question-select" onchange="triggerNewQuestion()">
+                    <option value="">-- Choose a Concept (18 Core Types) --</option>
+                    <option value="q1">Q1: Anatomy of Powers & Exponents</option>
+                    <option value="q2">Q2: Exponential Range Constraints</option>
+                    <option value="q3">Q3: Exponential Domain Constraints</option>
+                    <option value="q4">Q4: Exponential vs. Linear Modeling Selection</option>
+                    <option value="q5">Q5: Radical to Fractional Notation Conversion</option>
+                    <option value="q6">Q6: Rational Exponent Evaluation</option>
+                    <option value="q7">Q7: Coordinate to Base Identification</option>
+                    <option value="q8">Q8: Variable Exponent Consolidation</option>
+                    <option value="q9">Q9: Periodic Doubling/Decay Intervals</option>
+                    <option value="q10">Q10: Present Value Lump Sums (Discounting)</option>
+                    <option value="q11">Q11: Annuity Future Values Accumulation</option>
+                    <option value="q12">Q12: Simple vs Compound Interest Matrix</option>
+                    <option value="q13">Q13: Exponential Asymptotes Reasoning</option>
+                    <option value="q14">Q14: Exponent Common Misconceptions</option>
+                    <option value="q15">Q15: Interest Strategy Selection Theory</option>
+                    <option value="q16">Q16: Initial Loan Principal Reverse Engineering</option>
+                    <option value="q17">Q17: Accumulated Net Interest in Annuities</option>
+                    <option value="q18">Q18: Half-Life Calculation Mechanics</option>
+                </select>
+                <button class="btn btn-accent" onclick="triggerNewQuestion()">Generate New</button>
+            </div>
+        </div>
+
+        <div class="solution-container" id="display-window">
+            <div id="placeholder" class="placeholder-text">
+                Choose a concept from the menu and click "Generate New" to begin your comprehensive test.
+            </div>
+
+            <div id="quiz-station" class="quiz-interface-box" style="display: none;">
+                <div id="asset-viewport-mount-point" class="math-render-viewport" style="display: none;"></div>
+
+                <div id="question-statement-display" class="question-statement-card"></div>
+
+                <label id="input-prompt-label" style="margin-bottom: 12px; font-weight: 700; display: block;"></label>
+                
+                <div id="dynamic-input-mount-point" style="margin-top: 10px;"></div>
+
+                <div id="hint-box" class="hint-box"></div>
+                <div id="feedback-msg" class="feedback-msg-area"></div>
+
+                <div class="quiz-action-bar">
+                    <button class="btn btn-success" id="check-ans-btn" onclick="evaluateStudentAnswer()">Check Answer</button>
+                    <button class="btn btn-hint" id="hint-btn" onclick="toggleHint()">Hint</button>
+                    <button class="btn btn-secondary" id="reveal-sol-btn" disabled onclick="unlockSolutionPanel()">Show Solution Steps</button>
+                </div>
+            </div>
+
+            <div class="solution-reveal-window" id="solution-reveal-layer">
+                <div id="solution-workspace-injected"></div>
+                
+                <div class="control-panel" id="controls-panel">
+                    <button class="btn btn-secondary" id="restart-btn" onclick="restartSolution()">Restart Steps</button>
+                    <button class="btn btn-primary" id="next-btn" onclick="showNextStep()">Next Step &rarr;</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const TEACHER_SPREADSHEET_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwygR6-l7XPRC1KL-Pqci33Yw_4pmCWa8mW7gNHJ_RsmN41ax15-d0sE-CrIxU0z22m/exec";
+
+        let globalScore = 0;
+        let globalAttempts = 0;
+        let currentProblemData = null;
+        let currentState = { answered: false, selectedMcOption: "", isCorrect: false, currentStep: 0, solRevealed: false, attempts: 0 };
+        let visibleStepElements = [];
+        let currentStepIndex = 0;
+
+        // --- Math & Logic Utilities ---
+        function randInt(min, max, exclude = []) {
+            let val;
+            let safety = 0;
+            do {
+                val = Math.floor(Math.random() * (max - min + 1)) + min;
+                safety++;
+            } while (exclude.includes(val) && safety < 100);
+            return val;
+        }
+
+        function shuffleMC(correct, distArr) {
+            let opts = [{t: correct, c: true}];
+            distArr.forEach(d => opts.push({t: d, c: false}));
+            
+            for (let i = opts.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [opts[i], opts[j]] = [opts[j], opts[i]];
+            }
+            
+            let finalOpts = [];
+            let ansLetter = "";
+            let letters = ["A", "B", "C", "D"];
+            
+            opts.forEach((item, i) => {
+                finalOpts.push(letters[i] + ") " + item.t);
+                if (item.c) ansLetter = letters[i];
+            });
+            
+            return { options: finalOpts, ansLetter: ansLetter, rawAns: correct };
+        }
+
+        function formatMoney(amount) {
+            let parts = parseFloat(amount).toFixed(2).split(".");
+            parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, "\\,");
+            return "\\(\\$" + parts.join(".") + "\\)";
+        }
+
+        function formatNumber(num) {
+            let parts = parseFloat(num).toString().split(".");
+            parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, "\\,");
+            return parts.join(".");
+        }
+
+        // --- Infinite Problem Generator Factory ---
+        function generateProblem(typeId) {
+            if (!typeId) return null;
+            let p = {
+                title: "", type: "mc", assetType: "none", optionType: "text",
+                fullStatement: "", prompt: "", options: [], hint: "", steps: [], ans: "", rawAns: ""
+            };
+
+            const scenario = randInt(1, 2);
+
+            switch (typeId) {
+                case "q1": {
+                    const b = randInt(2, 9); const x = randInt(3, 6); const y = Math.pow(b, x);
+                    p.title = "Anatomy of Powers & Exponents";
+                    p.fullStatement = `In the exponential expression \\(${b}^{${x}} = ${y}\\), which part of the mathematical structure defines the **"power"**?`;
+                    p.prompt = "Select the correct component identification definition:";
+                    const correctStr = `The entire expression \\(${b}^{${x}}\\) or its evaluated value ${y}`;
+                    const dist1 = `The base element ${b}`; const dist2 = `The exponent index ${x}`; const dist3 = `The intermediate product ${b * x}`;
+                    const mc = shuffleMC(correctStr, [dist1, dist2, dist3]);
+                    p.options = mc.options; p.ans = mc.ansLetter;
+                    p.hint = "Review core definitions: base is multiplied, exponent dictates cycles, and power represents the full evaluated whole.";
+                    p.steps = [
+                        { title: "Step 1: Identify Base Component", math: `\\(\\text{Base} = ${b}\\)`, explanation: "The base number is the factor subjected to repeated self-multiplication." },
+                        { title: "Step 2: Identify Exponent Component", math: `\\(\\text{Exponent} = ${x}\\)`, explanation: "The exponent indicates how many times the base factor is multiplied." },
+                        { title: "Step 3: Define the Complete Power Value", math: `\\(\\text{Power} = ${b}^{${x}} = ${y}\\)`, explanation: "The power is the entire exponential entity comprising both base and exponent elements." }
+                    ];
+                    break;
+                }
+                case "q2": {
+                    const b = randInt(2, 9);
+                    p.title = "Exponential Range Constraints";
+                    p.fullStatement = `What is the **range** of the basic exponential growth function: \\(f(x) = ${b}^x\\)?`;
+                    p.prompt = "Select the correct range inequality statement:";
+                    const correctStr = "\\(\\{y \\in \\mathbb{R} \\mid y > 0\\}\\)";
+                    const dist1 = "\\(\\{y \\in \\mathbb{R} \\mid y \\ge 0\\}\\)"; const dist2 = "\\(\\{y \\in \\mathbb{R}\\}\\)"; const dist3 = "\\(\\{y \\in \\mathbb{R} \\mid y < 0\\}\\)";
+                    const mc = shuffleMC(correctStr, [dist1, dist2, dist3]);
+                    p.options = mc.options; p.ans = mc.ansLetter;
+                    p.hint = "A positive base raised to any real power is strictly positive, meaning it can never reach zero or become negative.";
+                    p.steps = [
+                        { title: "Step 1: Examine Output Constraints", math: `\\(${b}^x > 0 \\quad \\text{for all real } x\\)`, explanation: "Any real number input for x returns a strictly positive output value." },
+                        { title: "Step 2: Verify Asymptote Limit", math: `\\(\\text{As } x \\to -\\infty, \\quad ${b}^x \\to 0\\)`, explanation: "The curve decreases toward zero but never touches the x-axis line." },
+                        { title: "Step 3: State Range Set Rules", math: correctStr, explanation: "The vertical range spans all numbers strictly greater than zero." }
+                    ];
+                    break;
+                }
+                case "q3": {
+                    const b = randInt(2, 9);
+                    p.title = "Exponential Domain Constraints";
+                    p.fullStatement = `Identify the complete **domain** of allowed inputs for the function: \\(f(x) = \\left(\\dfrac{1}{${b}}\\right)^x\\).`;
+                    p.prompt = "Select the correct domain parameter set:";
+                    const correctStr = "\\(\\{x \\in \\mathbb{R}\\}\\)";
+                    const dist1 = "\\(\\{x \\in \\mathbb{R} \\mid x > 0\\}\\)"; const dist2 = "\\(\\{x \\in \\mathbb{R} \\mid x \\ne 0\\}\\)"; const dist3 = "\\(\\{x \\in \\mathbb{R} \\mid x \\ge 0\\}\\)";
+                    const mc = shuffleMC(correctStr, [dist1, dist2, dist3]);
+                    p.options = mc.options; p.ans = mc.ansLetter;
+                    p.hint = "Domain defines allowed horizontal inputs. Consider whether any positive, negative, or zero inputs break the function.";
+                    p.steps = [
+                        { title: "Step 1: Analyze Input Options", math: `\\(x = 0 \\implies y = 1, \\quad x = -1 \\implies y = ${b}\\)`, explanation: "Fractional, zero, and negative inputs all yield valid mathematical outputs." },
+                        { title: "Step 2: Check for Domain Restrictions", math: "\\(\\text{No vertical asymptotes or undefined breaks}\\)", explanation: "The curve runs continuously from left to right without any gaps or breaks." },
+                        { title: "Step 3: Define Domain Set Notation", math: correctStr, explanation: "The function accepts all real numbers along the horizontal axis." }
+                    ];
+                    break;
+                }
+                case "q4": {
+                    p.title = "Exponential vs. Linear Modeling Selection";
+                    const linearOpts = ["A taxi charging a flat base fare plus \\(\\$2.50\\) per kilometer traveled", "A drone climbing at a constant speed of 5 meters per second", "A worker earning a flat hourly wage of \\(\\$20\\) per hour"];
+                    const expOpts = ["Population size doubling every decade", "Asset value depreciating by 15% annually", "A bacteria culture tripling every hour", "Radioactive substance decaying by half every 10 days"];
+                    
+                    const isAskingForLinear = (scenario === 1);
+                    p.fullStatement = isAskingForLinear ? "Which of the following physical scenarios should **NOT** be modelled by an exponential function?" : "Identify the scenario that represents an **exponential relationship** rather than a linear one.";
+                    p.prompt = isAskingForLinear ? "Select the non-exponential (linear) scenario choice:" : "Select the exponential relationship choice:";
+                    
+                    let correctStr, dist1, dist2, dist3;
+                    if (isAskingForLinear) {
+                        correctStr = linearOpts[randInt(0, 2)];
+                        let e_shuffled = expOpts.sort(() => 0.5 - Math.random());
+                        dist1 = e_shuffled[0]; dist2 = e_shuffled[1]; dist3 = e_shuffled[2];
+                    } else {
+                        correctStr = expOpts[randInt(0, 3)];
+                        let l_shuffled = linearOpts.sort(() => 0.5 - Math.random());
+                        dist1 = l_shuffled[0]; dist2 = l_shuffled[1]; dist3 = l_shuffled[2];
+                    }
+                    
+                    const mc = shuffleMC(correctStr, [dist1, dist2, dist3]);
+                    p.options = mc.options; p.ans = mc.ansLetter;
+                    p.hint = "Exponential patterns require percentage-based geometric changes, whereas linear structures change by adding a constant amount.";
+                    p.steps = [
+                        { title: "Step 1: Identify Exponential Scenarios", math: "\\(\\text{Exponential involves multiplying by a factor (e.g., %, doubling)}\\)", explanation: "Accounts, isotopes, and bacteria grow or decay by a constant multiplier." },
+                        { title: "Step 2: Identify Linear Patterns", math: "\\(\\text{Linear involves adding a constant rate (e.g., flat speed, flat fee)}\\)", explanation: "Additive patterns form straight lines, not exponential curves." },
+                        { title: "Step 3: Conclude Model Classification", math: "\\(\\text{Match the scenario to its mathematical behavior}\\)", explanation: `The correct choice perfectly matches the requested ${isAskingForLinear ? 'linear' : 'exponential'} criteria.` }
+                    ];
+                    break;
+                }
+                case "q5": {
+                    p.title = "Radical to Fractional Notation Conversion";
+                    let n = randInt(3, 7); let m = randInt(2, 9);
+                    if (n === m) m++;
+                    p.fullStatement = `The radical expression \\(\\sqrt[${n}]{x^{${m}}}\\) is equivalent to which of the following fractional exponent forms?`;
+                    p.prompt = "Select the equivalent fractional exponent form:";
+                    const correctStr = `\\(x^{\\frac{${m}}{${n}}}\\)`;
+                    const dist1 = `\\(x^{\\frac{${n}}{${m}}}\\)`; const dist2 = `\\(x^{${m * n}}\\)`; const dist3 = `\\(x^{-${m * n}}\\)`;
+                    const mc = shuffleMC(correctStr, [dist1, dist2, dist3]);
+                    p.options = mc.options; p.ans = mc.ansLetter;
+                    p.hint = "Remember the rational exponent rule: the power inside goes on top (numerator), and the root index goes on the bottom (denominator).";
+                    p.steps = [
+                        { title: "Step 1: Identify Power and Root Elements", math: `\\(\\text{Power inside} = ${m}, \\quad \\text{Root index} = ${n}\\)`, explanation: "Identify the exponent inside the radical and the index of the root." },
+                        { title: "Step 2: Apply Rational Exponent Rule", math: "\\(\\sqrt[y]{x^z} = x^{\\frac{z}{y}}\\)", explanation: "Use the rule where the root index becomes the denominator of the fractional exponent." },
+                        { title: "Step 3: Write Equivalent Form", math: correctStr, explanation: `The expression is equivalent to ${correctStr}.` }
+                    ];
+                    break;
+                }
+                case "q6": {
+                    p.title = "Rational Exponent Evaluation";
+                    const setups = [{B:8,n:3},{B:27,n:3},{B:64,n:3},{B:125,n:3},{B:16,n:2},{B:25,n:2},{B:36,n:2},{B:16,n:4},{B:81,n:4}];
+                    const pick = setups[randInt(0, setups.length - 1)];
+                    const B = pick.B; const n = pick.n;
+                    let m = randInt(2, 3);
+                    const rootVal = Math.round(Math.pow(B, 1/n));
+                    const finalVal = Math.pow(rootVal, m);
+                    
+                    p.fullStatement = `Evaluate the following rational exponent expression completely: \\(${B}^{-\\frac{${m}}{${n}}}\\)`;
+                    p.prompt = "Select the exact evaluated fractional answer:";
+                    const correctStr = `\\(\\dfrac{1}{${finalVal}}\\)`;
+                    const dist1 = `\\(-\\dfrac{1}{${finalVal}}\\)`; const dist2 = `\\(${finalVal}\\)`; const dist3 = `\\(-${finalVal}\\)`;
+                    const mc = shuffleMC(correctStr, [dist1, dist2, dist3]);
+                    p.options = mc.options; p.ans = mc.ansLetter;
+                    p.hint = "First change the negative sign by inverting into a fraction, evaluate the root of the base, then apply the power.";
+                    p.steps = [
+                        { title: "Step 1: Apply Negative Exponent Rule", math: `\\(${B}^{-\\frac{${m}}{${n}}} = \\dfrac{1}{${B}^{\\frac{${m}}{${n}}}}\\)`, explanation: "Move the base to the denominator to make the exponent positive." },
+                        { title: "Step 2: Evaluate Root Base", math: `\\(\\sqrt[${n}]{${B}} = ${rootVal} \\implies \\dfrac{1}{(${rootVal})^{${m}}}\\)`, explanation: `Find the ${n}-th root of the base number ${B}.` },
+                        { title: "Step 3: Compute Final Power Value", math: `\\(${rootVal}^{${m}} = ${finalVal} \\implies \\dfrac{1}{${finalVal}}\\)`, explanation: "Raise the number in the denominator to the numerator power to find the final value." }
+                    ];
+                    break;
+                }
+                case "q7": {
+                    p.title = "Coordinate to Base Identification";
+                    const b = randInt(2, 9);
+                    p.fullStatement = `A graph of a basic exponential function passes through the coordinates \\((0, 1)\\) and \\((1, ${b})\\), approaching the horizontal axis line as x decreases. Identify the correct matching equation.`;
+                    p.prompt = "Select the correct exponential function equation:";
+                    const correctStr = `\\(y = ${b}^x\\)`;
+                    const dist1 = `\\(y = \\left(\\dfrac{1}{${b}}\\right)^x\\)`; const dist2 = `\\(y = x^{${b}}\\)`; const dist3 = `\\(y = ${b}x\\)`;
+                    const mc = shuffleMC(correctStr, [dist1, dist2, dist3]);
+                    p.options = mc.options; p.ans = mc.ansLetter;
+                    p.hint = "For any basic exponential function \\(y = b^x\\), when \\(x = 1\\), the output \\(y\\) is equal to the base \\(b\\).";
+                    p.steps = [
+                        { title: "Step 1: Match Coordinates to Exponential Form", math: "\\(y = b^x\\)", explanation: "The graph exhibits basic growth, starting at the y-intercept (0,1)." },
+                        { title: "Step 2: Substitute Point to Find Base", math: `\\(${b} = b^1 \\implies b = ${b}\\)`, explanation: `Substitute the point (1, ${b}) into the equation to find that the base b equals ${b}.` },
+                        { title: "Step 3: Finalize Equation Structure", math: correctStr, explanation: `The final equation matching the graph is ${correctStr}.` }
+                    ];
+                    break;
+                }
+                case "q8": {
+                    p.title = "Variable Exponent Consolidation";
+                    const vList = ['x', 'm', 'y', 'p']; const v = vList[randInt(0, 3)];
+                    const a = randInt(5, 9); const b = randInt(2, 5); const c = randInt(2, a+b-2);
+                    const ansExp = a + b - c;
+                    p.fullStatement = `Simplify the expression and write the answer as a single power: \\(\\dfrac{${v}^{${a}} \\times ${v}^{${b}}}{${v}^{${c}}}\\)`;
+                    p.prompt = "Select the fully simplified single power expression:";
+                    const correctStr = `\\(${v}^{${ansExp}}\\)`;
+                    const dist1 = `\\(${v}^{${a * b - c}}\\)`; const dist2 = `\\(${v}^{${ansExp + randInt(2, 4)}}\\)`; const dist3 = `\\(${v}^{${Math.max(1, ansExp - randInt(2, 3))}}\\)`;
+                    const mc = shuffleMC(correctStr, [dist1, dist2, dist3]);
+                    p.options = mc.options; p.ans = mc.ansLetter;
+                    p.hint = "Add numerator exponents before subtracting the denominator exponent power index.";
+                    p.steps = [
+                        { title: "Step 1: Execute Product Law in Numerator", math: `\\(${v}^{${a}} \\times ${v}^{${b}} = ${v}^{${a} + ${b}} = ${v}^{${a+b}}\\)`, explanation: "Add the exponents when multiplying powers with the same base." },
+                        { title: "Step 2: Apply Quotient Law to Fraction", math: `\\(\\dfrac{${v}^{${a+b}}}{${v}^{${c}}} = ${v}^{${a+b} - ${c}}\\)`, explanation: "Subtract the bottom exponent from the top exponent." },
+                        { title: "Step 3: Simplify to Final Form", math: correctStr, explanation: `The expression fully simplifies to ${correctStr}.` }
+                    ];
+                    break;
+                }
+                case "q9": {
+                    p.title = "Periodic Doubling/Decay Intervals";
+                    const initial = randInt(2, 8) * 100;
+                    const cycleDays = randInt(2, 5);
+                    const cycles = randInt(3, 6);
+                    const totalDays = cycleDays * cycles;
+                    const ansVal = initial * Math.pow(2, cycles);
+                    
+                    p.fullStatement = `A specific biological population doubles in size every **${cycleDays} days**. If there are **${formatNumber(initial)}** entities initially, how many will exist after **${totalDays} days**?`;
+                    p.prompt = "Select the total calculated future population size:";
+                    const correctStr = `${formatNumber(ansVal)} entities`;
+                    const dist1 = `${formatNumber(initial * Math.pow(2, cycles - 1))} entities`;
+                    const dist2 = `${formatNumber(initial * totalDays * 2)} entities`;
+                    const dist3 = `${formatNumber(initial * Math.pow(2, cycles + 1))} entities`;
+                    const mc = shuffleMC(correctStr, [dist1, dist2, dist3]);
+                    p.options = mc.options; p.ans = mc.ansLetter;
+                    p.hint = "Divide total days by the cycle period to find the exponent value.";
+                    p.steps = [
+                        { title: "Step 1: Determine Exponent Cycle Count", math: `\\(n = \\dfrac{${totalDays}}{${cycleDays}} = ${cycles} \\text{ cycles}\\)`, explanation: "Divide total days by the cycle period to find the number of iterations." },
+                        { title: "Step 2: Evaluate Growth Power Component", math: `\\(2^{${cycles}} = ${Math.pow(2, cycles)}\\)`, explanation: "Calculate the base doubling growth factor value." },
+                        { title: "Step 3: Multiply by Initial Scale", math: `\\(P = ${initial} \\times ${Math.pow(2, cycles)} = ${ansVal}\\)`, explanation: `Multiply by the initial count to find the final population size of ${formatNumber(ansVal)}.` }
+                    ];
+                    break;
+                }
+                case "q10": {
+                    p.title = "Present Value Lump Sums (Discounting)";
+                    const A = randInt(10, 50) * 1000;
+                    const t = randInt(3, 8);
+                    const r_pct = randInt(30, 80) / 10;
+                    const i = r_pct / 100 / 12;
+                    const n = t * 12;
+                    const PV = A / Math.pow(1 + i, n);
+                    
+                    p.fullStatement = `A person wants to reach a financial target of **$${formatNumber(A)}** in **${t} years**. How much must they invest today at **${r_pct.toFixed(1)}%** annual interest compounded monthly to meet this goal?`;
+                    p.prompt = "Select the required initial Present Value deposit:";
+                    const correctStr = formatMoney(PV);
+                    const dist1 = formatMoney(A / (1 + (r_pct/100) * t)); // simple
+                    const dist2 = formatMoney(A / Math.pow(1 + r_pct/100, t)); // annual
+                    const dist3 = formatMoney(PV + 550);
+                    const mc = shuffleMC(correctStr, [dist1, dist2, dist3]);
+                    p.options = mc.options; p.ans = mc.ansLetter;
+                    p.hint = "Use Present Value formula: \\(PV = A(1 + i)^{-n}\\). Adjust interest rate and term values for monthly compounding.";
+                    p.steps = [
+                        { title: "Step 1: Compute Adjusted Periodic Modifiers", math: `\\(i = \\dfrac{${r_pct/100}}{12} \\approx ${i.toFixed(6)}, \\quad n = ${t} \\times 12 = ${n}\\)`, explanation: "Divide annual rate by 12 months and find total compounding periods." },
+                        { title: "Step 2: Set Up Present Value Discount Fraction", math: `\\(PV = \\dfrac{${A}}{(1 + ${i.toFixed(6)})^{${n}}}\\)`, explanation: "Set up the equation to divide future value target by total compound growth factor." },
+                        { title: "Step 3: Execute Final Quotient Calculations", math: `\\((1 + ${i.toFixed(6)})^{${n}} \\approx ${Math.pow(1+i, n).toFixed(6)} \\implies \\dfrac{${A}}{${Math.pow(1+i, n).toFixed(6)}} = ${PV.toFixed(2)}\\)`, explanation: "Evaluate the exponent value first, then complete division to find required deposit." }
+                    ];
+                    break;
+                }
+                case "q11": {
+                    p.title = "Annuity Future Values Accumulation";
+                    const R = randInt(2, 8) * 50;
+                    const t = randInt(5, 18);
+                    const r_pct = randInt(30, 75) / 10;
+                    const i = r_pct / 100 / 12;
+                    const n = t * 12;
+                    const FV = R * (Math.pow(1 + i, n) - 1) / i;
+                    
+                    p.fullStatement = `An investor opens an accumulation account and contributes **$${R}** at the end of every month. The account earns **${r_pct.toFixed(1)}%** annual interest compounded monthly. How much will the account be worth after **${t} years**?`;
+                    p.prompt = "Select the accumulated future annuity value:";
+                    const correctStr = formatMoney(FV);
+                    const dist1 = formatMoney(R * (Math.pow(1 + r_pct/100, t) - 1) / (r_pct/100)); // annual error
+                    const dist2 = formatMoney(FV - R*12);
+                    const dist3 = formatMoney(R * n); // simple sum
+                    const mc = shuffleMC(correctStr, [dist1, dist2, dist3]);
+                    p.options = mc.options; p.ans = mc.ansLetter;
+                    p.hint = "Use Future Value of an Annuity formula: \\(FV = R \\times \\dfrac{(1 + i)^n - 1}{i}\\). Find periodic rate i and total periods n first.";
+                    p.steps = [
+                        { title: "Step 1: Isolate Monthly Periodic Parameters", math: `\\(R = ${R}, \\quad i = \\dfrac{${r_pct/100}}{12} \\approx ${i.toFixed(6)}, \\quad n = ${t} \\times 12 = ${n}\\)`, explanation: "Calculate monthly interest rate and total regular payment periods." },
+                        { title: "Step 2: Substitute Parameters Into Annuity Formula", math: `\\(FV = ${R} \\times \\dfrac{(1 + ${i.toFixed(6)})^{${n}} - 1}{${i.toFixed(6)}}\\)`, explanation: "Inject calculated values into the future value simple annuity template." },
+                        { title: "Step 3: Evaluate Exponent Multiplier String", math: `\\((1 + ${i.toFixed(6)})^{${n}} \\approx ${Math.pow(1+i, n).toFixed(6)} \\implies ${R} \\times \\dfrac{${(Math.pow(1+i,n)-1).toFixed(6)}}{${i.toFixed(6)}} = ${FV.toFixed(2)}\\)`, explanation: "Compute the exponent value, subtract 1, divide by periodic rate, and multiply by deposit size." }
+                    ];
+                    break;
+                }
+                case "q12": {
+                    p.title = "Simple vs Compound Interest Matrix";
+                    const P = randInt(5, 20) * 100;
+                    const r_pct = randInt(4, 12);
+                    const r = r_pct / 100;
+                    const I1 = P * r;
+                    const I2_compound = (P + I1) * r;
+                    const delta = I2_compound - I1;
+                    
+                    p.fullStatement = `Imagine you invest **$${formatNumber(P)}** at a **${r_pct}%** annual interest rate. Under simple interest, you earn **$${formatNumber(I1)}** in the first year and **$${formatNumber(I1)}** in the second year. Under compound interest (compounded annually), you also earn **$${formatNumber(I1)}** in the first year. How much interest will the compound account earn specifically in the **second year**?`;
+                    p.prompt = "Select the isolated interest earned during year two:";
+                    const correctStr = formatMoney(I2_compound);
+                    const dist1 = formatMoney(I1);
+                    const dist2 = formatMoney(I2_compound + I1);
+                    const dist3 = formatMoney(I2_compound + delta);
+                    const mc = shuffleMC(correctStr, [dist1, dist2, dist3]);
+                    p.options = mc.options; p.ans = mc.ansLetter;
+                    p.hint = "Compound interest calculates year two returns based on the new total balance (original principal plus year one interest).";
+                    p.steps = [
+                        { title: "Step 1: Determine Year One Ending Balance", math: `\\(A_1 = ${P} + ${I1} = ${P + I1}\\)`, explanation: "Add year one interest to the initial deposit to find the updated principal balance." },
+                        { title: "Step 2: Calculate Year Two Compound Interest", math: `\\(I_2 = ${P + I1} \\times ${r} = ${I2_compound.toFixed(2)}\\)`, explanation: `Multiply the new balance by the ${r_pct}% interest rate to calculate year two earnings.` },
+                        { title: "Step 3: Observe Simple vs Compound Difference", math: `\\(\\Delta = ${I2_compound.toFixed(2)} - ${I1} = ${delta.toFixed(2)}\\)`, explanation: `Compound interest earns an extra $${delta.toFixed(2)} because interest is calculated on the first year's earnings.` }
+                    ];
+                    break;
+                }
+                case "q13": {
+                    p.title = "Exponential Asymptotes Reasoning";
+                    const b = randInt(3, 8);
+                    p.fullStatement = `Consider the exponential function \\(y = ${b}^x\\). Which statement correctly explains why the curve never crosses the x-axis and defines the boundary terminology?`;
+                    p.prompt = "Select the most mathematically accurate explanation statement:";
+                    const correctStr = "Positive base values raised to any real power remain strictly positive; the x-axis is a horizontal asymptote.";
+                    const dist1 = "Exponents cannot be negative numbers; the x-axis is a vertical intercept boundary.";
+                    const dist2 = "Output values flip signs at zero points; the x-axis represents a vertex line floor.";
+                    const dist3 = `Base ${b} multiplication forces linear step progression; the x-axis represents a local minimum limit.`;
+                    const mc = shuffleMC(correctStr, [dist1, dist2, dist3]);
+                    p.options = mc.options; p.ans = mc.ansLetter;
+                    p.hint = "Think about the behavior of positive numbers raised to negative powers, and recall the definition of a horizontal asymptote.";
+                    p.steps = [
+                        { title: "Step 1: Evaluate Large Negative Exponent Values", math: `\\(${b}^{-10} = \\dfrac{1}{${b}^{10}} \\approx 0.0000001\\)`, explanation: "Negative exponents create very small positive decimal values, never dropping below zero." },
+                        { title: "Step 2: Analyze the Limiting Boundary Behavior", math: "\\(\\text{As } x \\to -\\infty, \\quad y \\to 0 \\text{ but } y > 0\\)", explanation: "The curve approaches zero as a lower limit but never intersects the line." },
+                        { title: "Step 3: Match with Technical Terminology", math: "\\(\\text{Line } y = 0 \\implies \\text{Horizontal Asymptote}\\)", explanation: "A line that a curve approaches infinitely without touching is called a horizontal asymptote." }
+                    ];
+                    break;
+                }
+                case "q14": {
+                    p.title = "Exponent Common Misconceptions";
+                    const a = randInt(3, 5); const b = randInt(4, 7);
+                    if (scenario === 1) { // Product Law Mistake
+                        p.fullStatement = `A student simplifies the expression \\(x^{${a}} \\times x^{${b}}\\) and claims the answer is \\(x^{${a * b}}\\). Explain the mistake made and state the correct rule and answer.`;
+                        p.prompt = "Select the correct error diagnosis statement:";
+                        const correctStr = `Mistake: Multiplied exponents instead of adding them. Correct Rule: Product Law; Answer: \\(x^{${a+b}}\\)`
+                        const dist1 = `Mistake: Added exponents instead of multiplying them. Correct Rule: Power of a Power; Answer: \\(x^{${a+b}}\\)`
+                        const dist2 = `Mistake: Multiplied base variables. Correct Rule: Quotient Law; Answer: \\(x^{${Math.abs(a-b)}}\\)`
+                        const dist3 = `Mistake: Failed to multiply coefficients. Correct Rule: Base Identity Law; Answer: \\(2x^{${a+b}}\\)`
+                        const mc = shuffleMC(correctStr, [dist1, dist2, dist3]);
+                        p.options = mc.options; p.ans = mc.ansLetter;
+                        p.hint = "When multiplying terms with identical bases, you must add the exponents together instead of multiplying them.";
+                        p.steps = [
+                            { title: "Step 1: Identify the Operational Error", math: `\\(${a} \\times ${b} = ${a*b} \\quad (\\text{Incorrect exponent operation})\\)`, explanation: "The student multiplied the exponents instead of applying the proper additive law." },
+                            { title: "Step 2: Apply the Correct Product Law", math: `\\(x^m \\times x^n = x^{m + n} \\implies x^{${a}} \\times x^{${b}} = x^{${a} + ${b}}\\)`, explanation: "The product law states that exponents must be added when multiplying terms with like bases." },
+                            { title: "Step 3: State the Correct Result", math: `\\(x^{${a+b}}\\)`, explanation: `The expression correctly simplifies to \\(x^{${a+b}}\\).` }
+                        ];
+                    } else { // Power of Power Mistake
+                        p.fullStatement = `Identify the strategic error and correct result for the following incorrect simplification step: \\((x^{${a}})^{${b}} = x^{${a+b}}\\).`;
+                        p.prompt = "Select the accurate error analysis dataset block:";
+                        const correctStr = `Mistake: Added exponents instead of multiplying. Rule: Power of a Power; Answer: \\(x^{${a*b}}\\)`
+                        const dist1 = `Mistake: Multiplied exponents instead of adding. Rule: Product Law; Answer: \\(x^{${a*b}}\\)`
+                        const dist2 = `Mistake: Squared the base variables. Rule: Quotient Law; Answer: \\(x^{${Math.abs(a-b)}}\\)`
+                        const dist3 = `Mistake: Factored constants incorrectly. Rule: Base Law; Answer: \\(x^{${a}}\\)`;
+                        const mc = shuffleMC(correctStr, [dist1, dist2, dist3]);
+                        p.options = mc.options; p.ans = mc.ansLetter;
+                        p.hint = "A power raised to another power requires multiplying the exponents together.";
+                        p.steps = [
+                            { title: "Step 1: Analyze the Exponent Operation", math: `\\(${a} + ${b} = ${a+b} \\quad (\\text{Incorrect additive mapping})\\)`, explanation: "The student added the exponents instead of multiplying them." },
+                            { title: "Step 2: Apply Power of a Power Law Rules", math: `\\((x^m)^n = x^{m \\times n} \\implies x^{${a} \\times ${b}}\\)`, explanation: "The power of a power law states that exponents must be multiplied." },
+                            { title: "Step 3: State Correct Result", math: `\\(x^{${a*b}}\\)`, explanation: `The expression correctly simplifies to \\(x^{${a*b}}\\).` }
+                        ];
+                    }
+                    break;
+                }
+                case "q15": {
+                    p.title = "Interest Strategy Selection Theory";
+                    const t = randInt(10, 25);
+                    p.fullStatement = `If you are investing capital in a long-term savings account for a duration of **${t} years**, would you prefer **simple interest** or **compound interest**? Choose the statement that provides the correct justification.`;
+                    p.prompt = "Select the most advantageous investment justification statement:";
+                    const correctStr = "Compound interest, because it earns interest on accumulated interest, creating exponential growth over time.";
+                    const dist1 = "Simple interest, because it maintains stable linear growth distributions.";
+                    const dist2 = "Simple interest, because interest rate factors are not divided into periodic monthly cycles.";
+                    const dist3 = "Compound interest, because initial principal requirements are lower for linear investment paths.";
+                    const mc = shuffleMC(correctStr, [dist1, dist2, dist3]);
+                    p.options = mc.options; p.ans = mc.ansLetter;
+                    p.hint = "Think about which interest type creates a larger final balance by calculating returns on previous earnings.";
+                    p.steps = [
+                        { title: "Step 1: Define Growth Patterns", math: "\\(\\text{Simple} = \\text{Linear Growth}, \\quad \\text{Compound} = \\text{Exponential Growth}\\)", explanation: "Simple interest grows at a constant additive rate, while compound interest grows exponentially." },
+                        { title: "Step 2: Compare Accumulation Models", math: "\\(\\text{Compound builds interest on interest earnings}\\)", explanation: "Compound interest calculates returns using the updated balance, which includes previous earnings." },
+                        { title: "Step 3: Conclude Long-term Advantage", math: "\\(\\text{Exponential Acceleration surpasses Linear Lines over time}\\)", explanation: `Over a ${t}-year period, exponential growth will accumulate a significantly larger final balance than linear simple interest.` }
+                    ];
+                    break;
+                }
+                case "q16": {
+                    p.title = "Initial Loan Principal Reverse Engineering";
+                    const PV_target = randInt(15, 60) * 1000;
+                    const t = randInt(3, 8);
+                    const r_pct = randInt(45, 95) / 10;
+                    const i = r_pct / 100 / 12;
+                    const n = t * 12;
+                    const A = PV_target * Math.pow(1 + i, n);
+                    
+                    p.fullStatement = `A commercial startup loan is to be repaid in a single lump-sum payment at the end of **${t} years**. At an interest rate of **${r_pct.toFixed(1)}%** per annum compounded monthly, the total amount required to pay off the loan will be **$${formatNumber(A.toFixed(2))}**. What was the original amount of funding (Present Value) issued?`;
+                    p.prompt = "Select the original loan principal amount (rounded to the nearest dollar):";
+                    const correctStr = formatMoney(PV_target);
+                    const dist1 = formatMoney(PV_target - 1500);
+                    const dist2 = formatMoney(A / (1 + (r_pct/100) * t));
+                    const dist3 = formatMoney(PV_target + 2000);
+                    const mc = shuffleMC(correctStr, [dist1, dist2, dist3]);
+                    p.options = mc.options; p.ans = mc.ansLetter;
+                    p.hint = "Apply Present Value formula for lump sums: \\(PV = A(1 + i)^{-n}\\) using monthly parameter adjustments.";
+                    p.steps = [
+                        { title: "Step 1: Compute Periodic Adjusted Metrics", math: `\\(i = \\dfrac{${r_pct/100}}{12} \\approx ${i.toFixed(6)}, \\quad n = ${t} \\times 12 = ${n}\\)`, explanation: "Find the monthly periodic interest rate and the total number of compounding periods." },
+                        { title: "Step 2: Setup Present Value Formula Expression", math: `\\(PV = ${A.toFixed(2)} \\times (1 + ${i.toFixed(6)})^{-${n}}\\)`, explanation: "Set up the equation to discount the final lump-sum payment back to present value." },
+                        { title: "Step 3: Execute Exponential Discount Division", math: `\\((1 + ${i.toFixed(6)})^{-${n}} \\approx ${Math.pow(1+i, -n).toFixed(6)} \\implies ${A.toFixed(2)} \\times ${Math.pow(1+i, -n).toFixed(6)} = ${PV_target.toFixed(0)}\\)`, explanation: `Multiply the final payment by the discount factor to find the original loan amount of $${formatNumber(PV_target)}.` }
+                    ];
+                    break;
+                }
+                case "q17": {
+                    p.title = "Accumulated Net Interest in Annuities";
+                    const R = randInt(1, 5) * 100;
+                    const t = randInt(4, 12);
+                    const r_pct = randInt(35, 85) / 10;
+                    const i = r_pct / 100 / 12;
+                    const n = t * 12;
+                    const FV = R * (Math.pow(1 + i, n) - 1) / i;
+                    const totalDeposits = R * n;
+                    const interest = FV - totalDeposits;
+                    
+                    p.fullStatement = `Alex deposits **$${R}** every month into a retirement savings account with an annual interest rate of **${r_pct.toFixed(1)}%** compounded monthly. What is the **total standalone net interest earned** after **${t} years**?`;
+                    p.prompt = "Select the isolated total net interest component value:";
+                    const correctStr = formatMoney(interest);
+                    const dist1 = formatMoney(FV);
+                    const dist2 = formatMoney(totalDeposits);
+                    const dist3 = formatMoney(interest + 450);
+                    const mc = shuffleMC(correctStr, [dist1, dist2, dist3]);
+                    p.options = mc.options; p.ans = mc.ansLetter;
+                    p.hint = "Calculate the total future value of the annuity first, then subtract the sum of all monthly principal deposits.";
+                    p.steps = [
+                        { title: "Step 1: Compute Future Value of the Annuity Portfolio", math: `\\(i = \\dfrac{${r_pct/100}}{12} \\approx ${i.toFixed(6)}, \\quad n = ${n} \\implies FV = ${R} \\times \\dfrac{(1+${i.toFixed(6)})^{${n}} - 1}{${i.toFixed(6)}}\\)`, explanation: "Determine periodic rate, compounding periods, and evaluate future value amount." },
+                        { title: "Step 2: Calculate Future Value Summation", math: `\\((1+${i.toFixed(6)})^{${n}} \\approx ${Math.pow(1+i, n).toFixed(6)} \\implies FV = ${FV.toFixed(2)}\\)`, explanation: `Evaluate the compound growth expression to find the total account balance of $${formatNumber(FV.toFixed(2))}.` },
+                        { title: "Step 3: Subtract Total Principal Deposits", math: `\\(\\text{Deposits} = ${R} \\times ${n} = ${totalDeposits} \\implies I = ${FV.toFixed(2)} - ${totalDeposits} = ${interest.toFixed(2)}\\)`, explanation: "Subtract the total out-of-pocket deposits from the final balance to find the net interest earned." }
+                    ];
+                    break;
+                }
+                case "q18": {
+                    p.title = "Half-Life Calculation Mechanics";
+                    const initial = randInt(8, 25) * 10;
+                    const halfLife = randInt(3, 14);
+                    const cycles = 2; // Fixed for 2 steps
+                    const midTime = halfLife;
+                    const finalTime = halfLife * 2;
+                    const midMass = initial / 2;
+                    const finalMass = initial / 4;
+                    
+                    p.fullStatement = `A radioactive isotope sample decays exponentially over time. Tracking logs demonstrate that an initial element mass of **${initial} g** decreases to exactly **${midMass} g** after **${midTime} hours**, and subsequently drops to **${finalMass} g** at the **${finalTime}-hour** mark. Determine the **half-life** of the substance.`;
+                    p.prompt = "Select the accurate half-life time interval parameter:";
+                    const correctStr = `${halfLife} hours`;
+                    const dist1 = `${halfLife / 2} hours`;
+                    const dist2 = `${finalTime} hours`;
+                    const dist3 = `${halfLife + 2} hours`;
+                    const mc = shuffleMC(correctStr, [dist1, dist2, dist3]);
+                    p.options = mc.options; p.ans = mc.ansLetter;
+                    p.hint = "Half-life is defined as the time duration required for a decaying substance mass to decrease to exactly half of its initial value.";
+                    p.steps = [
+                        { title: "Step 1: Observe Initial to Secondary State Step Decay Change", math: `\\(\\text{Initial Mass} = ${initial}\\text{ g} \\implies \\text{Target Half-Mass} = ${midMass}\\text{ g}\\)`, explanation: "Determine the mass value that represents exactly half of the initial sample size." },
+                        { title: "Step 2: Match With Logged Timeline Metrics", math: `\\(\\text{Mass drops from } ${initial}\\text{ g} \\text{ to } ${midMass}\\text{ g} \\text{ at timestamp } t = ${midTime} \\text{ hours}\\)`, explanation: "Find the elapsed time required to reach the target half-mass value." },
+                        { title: "Step 3: Confirm Consistent Decay Cycle Ratios", math: `\\(${midMass}\\text{ g} \\to ${finalMass}\\text{ g} \\quad (\\text{Another half reduction}) \\implies \\text{Takes another } ${halfLife} \\text{ hours } (${finalTime} - ${midTime} = ${halfLife})\\)`, explanation: "Verify the interval is consistent by checking the next reduction cycle." }
+                    ];
+                    break;
+                }
+            }
+            return p;
+        }
+
+        // --- Core Application Logic ---
+        function triggerNewQuestion() {
+            const selectMenu = document.getElementById("question-select");
+            const typeId = selectMenu.value;
+
+            if (!typeId) {
+                document.getElementById("placeholder").style.display = "block";
+                document.getElementById("quiz-station").style.display = "none";
+                document.getElementById("asset-viewport-mount-point").style.display = "none";
+                document.getElementById("solution-reveal-layer").style.display = "none";
+                return;
+            }
+
+            currentProblemData = generateProblem(typeId);
+            currentState = { answered: false, selectedMcOption: "", isCorrect: false, currentStep: 0, solRevealed: false, attempts: 0 };
+            
+            displaySolution();
+        }
+
+        function renderMathElements() {
+            if (window.renderMathInElement) {
+                renderMathInElement(document.body, {
+                    delimiters: [
+                        {left: '$$', right: '$$', display: true},
+                        {left: '\\(', right: '\\)', display: false}
+                    ],
+                    throwOnError: false
+                });
+            }
+        }
+
+        window.onload = renderMathElements;
+
+        function displaySolution() {
+            document.getElementById("solution-reveal-layer").style.display = "none";
+            var __hb = document.getElementById("hint-box"); if (__hb) __hb.style.display = "none";
+            const placeholder = document.getElementById("placeholder");
+            const quizStation = document.getElementById("quiz-station");
+            const assetMount = document.getElementById("asset-viewport-mount-point");
+            const mountPoint = document.getElementById("dynamic-input-mount-point");
+            const promptLabel = document.getElementById("input-prompt-label");
+
+            placeholder.style.display = "none";
+            quizStation.style.display = "block";
+            
+            if (currentProblemData.assetType && currentProblemData.assetType !== "none") {
+                assetMount.style.display = "flex";
+                assetMount.innerHTML = currentProblemData.assetHtml;
+            } else {
+                assetMount.style.display = "none";
+            }
+
+            document.getElementById("question-statement-display").innerHTML = currentProblemData.fullStatement;
+            promptLabel.innerHTML = currentProblemData.prompt;
+            
+            let html = '<div class="mc-options-list">';
+            for (let i = 0; i < currentProblemData.options.length; i++) {
+                const opt = currentProblemData.options[i];
+                const letter = opt.charAt(0);
+                const sel = currentState.selectedMcOption === letter ? "selected" : "";
+                const dis = currentState.answered ? "disabled" : "";
+                html += '<div class="mc-option-card ' + sel + ' ' + dis + '" onclick="selectMcOptionCard(\'' + letter + '\')"><span class="mc-badge">' + letter + '</span><span>' + opt.substring(3) + '</span></div>';
+            }
+            html += '</div>';
+            mountPoint.innerHTML = html;
+
+            if (currentState.answered) {
+                lockQuizInterface(currentState.isCorrect);
+                if (currentState.solRevealed) revealSolutionWorkspace();
+            } else {
+                unlockQuizInterface();
+            }
+
+            setTimeout(renderMathElements, 10);
+        }
+
+        function selectMcOptionCard(letter) {
+            if (currentState.answered) return;
+            
+            currentState.selectedMcOption = letter;
+            var __fb = document.getElementById("feedback-msg"); if (__fb) __fb.style.display = "none";
+            
+            const mountPoint = document.getElementById("dynamic-input-mount-point");
+            let html = '<div class="mc-options-list">';
+            for (let i = 0; i < currentProblemData.options.length; i++) {
+                const opt = currentProblemData.options[i];
+                const optLetter = opt.charAt(0);
+                const sel = letter === optLetter ? "selected" : "";
+                html += '<div class="mc-option-card ' + sel + '" onclick="selectMcOptionCard(\'' + optLetter + '\')"><span class="mc-badge">' + optLetter + '</span><span>' + opt.substring(3) + '</span></div>';
+            }
+            html += '</div>';
+            mountPoint.innerHTML = html;
+            
+            setTimeout(renderMathElements, 10);
+        }
+
+        function evaluateStudentAnswer() {
+            if (currentState.answered) return;
+
+            const firstNameInput = document.getElementById("first-name").value.trim();
+            const lastNameInput = document.getElementById("last-name").value.trim();
+
+            if (firstNameInput === "" || lastNameInput === "") {
+                alert("Please enter your first and last name first.");
+                return;
+            }
+
+            if (!currentState.selectedMcOption) {
+                alert("Please choose an answer first.");
+                return;
+            }
+
+            let matchingCorrect = (currentState.selectedMcOption === currentProblemData.ans);
+            let logString = "Option " + currentState.selectedMcOption;
+
+            globalAttempts++;
+            currentState.attempts++;
+            if (matchingCorrect && !currentState.isCorrect) globalScore++;
+            currentState.isCorrect = matchingCorrect;
+            updateHudScoreboard();
+
+            if (matchingCorrect) {
+                currentState.answered = true;
+                lockQuizInterface(true);
+            } else {
+                showTryAgain();
+            }
+
+            let payload = {
+                unitId: "Unit_3",
+                lessonId: "Cumulative_Practice_Test_36Q",
+                firstName: firstNameInput,
+                lastName: lastNameInput,
+                questionId: document.getElementById("question-select").value + "_Dynamic",
+                userAnswer: logString,
+                isCorrect: matchingCorrect,
+                attempts: currentState.attempts,
+                methodUsed: "Dynamic Generative MC",
+                totalScore: globalScore
+            };
+
+            transmitDataToTeacherSpreadsheet(payload);
+        }
+
+        function toggleHint() {
+            if (!currentProblemData) return;
+            var box = document.getElementById("hint-box");
+            if (!box) return;
+            if (box.style.display === "block") { box.style.display = "none"; return; }
+            box.innerHTML = "<strong>Hint:</strong> " + (currentProblemData.hint || "");
+            box.style.display = "block";
+            setTimeout(renderMathElements, 10);
+        }
+
+        function transmitDataToTeacherSpreadsheet(payload) {
+            fetch(TEACHER_SPREADSHEET_SCRIPT_URL, {
+                method: "POST",
+                mode: "no-cors",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            }).catch(err => console.error("Database cloud logging failure:", err));
+        }
+
+        function showTryAgain() {
+            document.getElementById("reveal-sol-btn").disabled = false;
+            const feedback = document.getElementById("feedback-msg");
+            feedback.style.display = "block";
+            feedback.className = "feedback-msg-area feedback-error";
+            feedback.innerHTML = "Not quite yet - pick another answer, or tap Hint for a clue. (You can tap Show Solution Steps any time.)";
+        }
+
+        function lockQuizInterface(isCorrect) {
+            document.querySelectorAll(".mc-option-card").forEach(c => c.classList.add("disabled"));
+            document.getElementById("check-ans-btn").disabled = true;
+            document.getElementById("reveal-sol-btn").disabled = false;
+
+            const feedback = document.getElementById("feedback-msg");
+            feedback.style.display = "block";
+            if (isCorrect) {
+                feedback.className = "feedback-msg-area feedback-success";
+                feedback.innerHTML = "Correct! Nice work. Click 'Generate New' for another challenge.";
+            } else {
+                feedback.className = "feedback-msg-area feedback-error";
+                feedback.innerHTML = "Not quite - review the steps below, or generate a new problem.";
+            }
+        }
+
+        function unlockQuizInterface() {
+            document.getElementById("check-ans-btn").disabled = false;
+            document.getElementById("reveal-sol-btn").disabled = true;
+            document.getElementById("feedback-msg").style.display = "none";
+        }
+
+        function unlockSolutionPanel() {
+            currentState.solRevealed = true;
+            revealSolutionWorkspace();
+        }
+
+        function revealSolutionWorkspace() {
+            const targetDiv = document.getElementById("solution-reveal-layer");
+            const workspace = document.getElementById("solution-workspace-injected");
+            
+            let html = `<h2>Solution for ${currentProblemData.title}</h2>`;
+            currentProblemData.steps.forEach(step => {
+                html += `
+                <div class="step-block" style="display:none;">
+                    <span class="step-title">${step.title}</span>
+                    <div class="step-math">${step.math}</div>
+                    <span class="step-explanation">${step.explanation}</span>
+                </div>`;
+            });
+            html += `
+            <div class="final-answer-box" style="display:none;">
+                <span class="final-answer-label">Answer</span>
+                <span class="final-answer-math">Correct answer: Option ${currentProblemData.ans}</span>
+            </div>`;
+
+            workspace.innerHTML = html;
+            targetDiv.style.display = "block";
+            renderMethodSteps();
+            setTimeout(renderMathElements, 10);
+        }
+
+        function renderMethodSteps() {
+            const activeContainer = document.getElementById("solution-workspace-injected");
+            visibleStepElements = Array.from(activeContainer.querySelectorAll('.step-block, .final-answer-box'));
+            
+            currentStepIndex = currentState.currentStep;
+            for (let i = 0; i <= currentStepIndex; i++) {
+                if (visibleStepElements[i]) visibleStepElements[i].style.display = "block";
+            }
+
+            document.getElementById("restart-btn").disabled = (currentStepIndex === 0);
+            document.getElementById("next-btn").disabled = (currentStepIndex === visibleStepElements.length - 1);
+        }
+
+        function showNextStep() {
+            if (currentStepIndex < visibleStepElements.length - 1) {
+                currentStepIndex++;
+                currentState.currentStep = currentStepIndex;
+                visibleStepElements[currentStepIndex].style.display = "block";
+                visibleStepElements[currentStepIndex].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                document.getElementById("restart-btn").disabled = false;
+            }
+            if (currentStepIndex === visibleStepElements.length - 1) {
+                document.getElementById("next-btn").disabled = true;
+            }
+            setTimeout(renderMathElements, 10);
+        }
+
+        function restartSolution() {
+            currentState.currentStep = 0;
+            revealSolutionWorkspace();
+        }
+
+        function updateHudScoreboard() {
+            document.getElementById("hud-score").innerText = globalScore;
+            document.getElementById("hud-attempts").innerText = globalAttempts;
+        }
+    </script>
+</body>
+</html>
