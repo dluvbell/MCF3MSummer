@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unit 2 Practice Studio: Quadratic Forms & Completing the Square</title>
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+
+    <!-- mcf-core.js 가 그리는 요소들의 기본 스타일. 아래 <style> 보다 먼저 와야
+         파일 고유 스타일이 이기고, 빠진 클래스만 여기서 메워진다.
+         폴더 위치를 몰라도 되게 두 경로를 다 건다(없는 쪽은 404 로 무시). -->
+    <link rel="stylesheet" href="../mcf-core.css">
+    <link rel="stylesheet" href="mcf-core.css">
+    <style>
+        :root {
+            --primary-color: #0f172a;
+            --secondary-color: #2563eb;
+            --disabled-color: #94a3b8;
+            --text-color: #334155;
+            --math-color: #000000;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --border-color: #cbd5e1;
+            --highlight-bg: #eff6ff;
+            --explanation-bg: #f1f5f9;
+            --rule-bg: #fef08a;
+            --rule-text: #713f12;
+            --success-color: #16a34a;
+            --error-color: #dc2626;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.8;
+            margin: 0;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: -0.025em;
+        }
+
+        .scoreboard {
+            background-color: #1e293b;
+            color: white;
+            display: inline-flex;
+            gap: 20px;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-weight: 700;
+            margin-top: 15px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.2);
+        }
+
+        .scoreboard span {
+            color: #60a5fa;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .profile-box, .selector-box {
+            background-color: var(--card-bg);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-color);
+            margin-bottom: 25px;
+        }
+
+        .profile-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .profile-grid input {
+            width: 100%;
+            padding: 12px;
+            font-size: 1rem;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        .profile-grid input:focus {
+            border-color: var(--secondary-color);
+        }
+
+        label {
+            display: block;
+            font-weight: 700;
+            color: var(--primary-color);
+            font-size: 1.1rem;
+            margin-bottom: 12px;
+        }
+
+        .selector-controls {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        select {
+            flex: 1;
+            padding: 16px;
+            font-size: 1.1rem;
+            font-family: inherit;
+            border-radius: 8px;
+            border: 2px solid var(--border-color);
+            background-color: white;
+            color: var(--primary-color);
+            outline: none;
+            cursor: pointer;
+        }
+
+        .solution-container {
+            background-color: var(--card-bg);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-color);
+            min-height: 200px;
+        }
+
+        .placeholder-text {
+            color: #64748b;
+            text-align: center;
+            font-style: italic;
+            padding: 60px 0;
+            font-size: 1.1rem;
+        }
+
+        .quiz-interface-box {
+            background-color: var(--explanation-bg);
+            border: 1px solid var(--border-color);
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+
+        .math-render-viewport {
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+        }
+
+        .mc-options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 10px;
+        }
+
+        .mc-option-card {
+            background: white;
+            border: 2px solid var(--border-color);
+            padding: 14px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1.05rem;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .mc-option-card:hover:not(.disabled) {
+            border-color: var(--secondary-color);
+            background-color: var(--highlight-bg);
+        }
+
+        .mc-option-card.selected {
+            border-color: var(--secondary-color);
+            background-color: #dbeafe;
+            color: #1e40af;
+        }
+
+        .mc-option-card.disabled {
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .mc-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background-color: #e2e8f0;
+            color: var(--primary-color);
+            font-weight: 800;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+
+        .mc-option-card.selected .mc-badge {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+
+        .feedback-msg-area {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            display: none;
+            padding: 10px 15px;
+            border-radius: 6px;
+        }
+
+        .feedback-success {
+            background-color: #dcfce7;
+            color: var(--success-color);
+            border-left: 5px solid var(--success-color);
+        }
+
+        .feedback-error {
+            background-color: #fee2e2;
+            color: var(--error-color);
+            border-left: 5px solid var(--error-color);
+        }
+
+        .quiz-action-bar {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .solution-reveal-window {
+            display: none;
+            border-top: 3px double var(--border-color);
+            margin-top: 30px;
+            padding-top: 30px;
+        }
+
+        .step-block {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e2e8f0;
+            display: none;
+        }
+
+        .step-title {
+            font-weight: 800;
+            color: var(--secondary-color);
+            display: block;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 8px;
+        }
+
+        .step-math {
+            font-size: 1.3rem;
+            font-weight: 700;
+            background-color: var(--explanation-bg);
+            padding: 14px 20px;
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin: 8px 0;
+            color: var(--math-color);
+            letter-spacing: 0.02em;
+            flex-wrap: wrap;
+        }
+
+        .step-explanation {
+            display: block;
+            font-size: 1.05rem;
+            color: #334155;
+            margin-top: 6px;
+        }
+
+        .final-answer-box {
+            background-color: var(--highlight-bg);
+            border-left: 6px solid var(--secondary-color);
+            padding: 20px 25px;
+            border-radius: 0 8px 8px 0;
+            margin-top: 30px;
+            display: none;
+        }
+
+        .final-answer-label {
+            font-weight: 800;
+            color: var(--secondary-color);
+            display: block;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .final-answer-math {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            margin-top: 6px;
+            display: inline-flex;
+            align-items: center;
+            letter-spacing: 0.02em;
+        }
+
+        .control-panel {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid var(--border-color);
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 14px 24px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            border-radius: 8px;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary { background-color: var(--secondary-color); color: white; }
+        .btn-primary:hover:not(:disabled) { background-color: #1d4ed8; }
+        .btn-success { background-color: var(--success-color); color: white; }
+        .btn-success:hover:not(:disabled) { background-color: #166534; }
+        .btn-secondary { background-color: var(--explanation-bg); color: var(--primary-color); border: 1px solid var(--border-color); }
+        .btn-secondary:hover:not(:disabled) { background-color: #e2e8f0; }
+        .btn-accent { background-color: var(--primary-color); color: white; }
+        .btn-accent:hover:not(:disabled) { background-color: #1e293b; }
+
+        .btn:disabled {
+            background-color: var(--disabled-color);
+            color: #f1f5f9;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+        
+        .question-statement-card {
+            background: #ffffff;
+            border-left: 4px solid var(--secondary-color);
+            padding: 16px 20px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            border-radius: 0 6px 6px 0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .hint-box {
+            display: none;
+            background-color: #fef9c3;
+            border-left: 5px solid #eab308;
+            color: #713f12;
+            padding: 12px 16px;
+            border-radius: 0 6px 6px 0;
+            margin-bottom: 15px;
+            font-size: 1.05rem;
+            font-weight: 600;
+        }
+        .btn-hint { background-color: #fde047; color: #713f12; }
+        .btn-hint:hover:not(:disabled) { background-color: #facc15; }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Unit 2 Quadratic Functions Studio</h1>
+        <p>Infinite Practice: Vertex Form, Standard Form, Completing the Square & Max/Min Values</p>
+        <div class="scoreboard">
+            <div>Score: <span id="hud-score">0</span></div>
+            <div>Tries: <span id="hud-attempts">0</span></div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="profile-box">
+            <label>Student Profile Setup:</label>
+            <div class="profile-grid">
+                <input type="text" id="first-name" placeholder="First name" autocomplete="off">
+                <input type="text" id="last-name" placeholder="Last name" autocomplete="off">
+            </div>
+        </div>
+
+        <div class="selector-box">
+            <label for="question-select">Select a Quadratic Concept:</label>
+            <div class="selector-controls">
+                <select id="question-select" onchange="triggerNewQuestion()">
+                    <option value="">-- Choose a Topic to Begin --</option>
+                    <option value="t1">Type 1: Converting Vertex Form to Standard Form (a = ±1)</option>
+                    <option value="t2">Type 2: Converting Vertex Form to Standard Form (a ≠ ±1)</option>
+                    <option value="t3">Type 3: Completing the Square (Simple: a = 1)</option>
+                    <option value="t4">Type 4: Completing the Square (Complex: a ≠ 1)</option>
+                    <option value="t5">Type 5: Determining Maximum/Minimum Values</option>
+                    <option value="t6">Type 6: Word Problems Using Completing the Square</option>
+                </select>
+                <button class="btn btn-accent" onclick="triggerNewQuestion()">Generate New</button>
+            </div>
+        </div>
+
+        <div class="solution-container" id="display-window">
+            <div id="placeholder" class="placeholder-text">
+                Choose a concept and click "Generate New" to create a dynamic practice problem.
+            </div>
+
+            <div id="quiz-station" class="quiz-interface-box" style="display: none;">
+                <div id="asset-viewport-mount-point" class="math-render-viewport" style="display: none;"></div>
+
+                <div id="question-statement-display" class="question-statement-card"></div>
+
+                <label id="input-prompt-label" style="margin-bottom: 12px; font-weight: 700; display: block;"></label>
+                
+                <div id="dynamic-input-mount-point" style="margin-top: 10px;"></div>
+
+                <div id="hint-box" class="hint-box"></div>
+                <div id="feedback-msg" class="feedback-msg-area"></div>
+
+                <div class="quiz-action-bar">
+                    <button class="btn btn-success" id="check-ans-btn" onclick="evaluateStudentAnswer()">Check Answer</button>
+                    <button class="btn btn-hint" id="hint-btn" onclick="toggleHint()">Hint</button>
+                    <button class="btn btn-secondary" id="reveal-sol-btn" disabled onclick="unlockSolutionPanel()">Show Solution Steps</button>
+                </div>
+            </div>
+
+            <div class="solution-reveal-window" id="solution-reveal-layer">
+                <div id="solution-workspace-injected"></div>
+                
+                <div class="control-panel" id="controls-panel">
+                    <button class="btn btn-secondary" id="restart-btn" onclick="restartSolution()">Restart Steps</button>
+                    <button class="btn btn-primary" id="next-btn" onclick="showNextStep()">Next Step &rarr;</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- mcf-core.js 는 보통 상위 폴더(index.html·progress.js 옆)에 둔다.
+         같은 폴더에 두는 경우도 있어 두 경로를 다 건다. 없는 쪽은 404 로 무시되고,
+         둘 다 있으면 두 번째는 core 내부 가드가 막는다. -->
+    <script src="../mcf-core.js"></script>
+    <script src="mcf-core.js"></script>
+    <script>
+    /* core 를 못 찾으면 Generate 가 조용히 무반응이 된다. 원인이 안 보이므로 안내를 띄운다. */
+    if (typeof MCF === "undefined") {
+      document.addEventListener("DOMContentLoaded", function () {
+        var box = document.getElementById("placeholder");
+        if (box) {
+          box.innerHTML =
+            '<strong style="color:#b91c1c">mcf-core.js \uB97C \uCC3E\uC744 \uC218 \uC5C6\uC2B5\uB2C8\uB2E4.</strong><br><br>' +
+            'This lesson needs <code>mcf-core.js</code>.<br>' +
+            'Put it next to <code>progress.js</code> and <code>index.html</code> ' +
+            '(the folder above this one), or in this same folder.';
+          box.style.display = "block";
+        }
+        var b = document.querySelector(".btn-generate");
+        if (b) b.disabled = true;
+      });
+    }
+    </script>
+    <script>
+
+        /* ── mcf-core.js 로 옮겨간 이름들의 지역 별칭 ── */
+        const randInt = MCF.randInt;
+        const gcd = MCF.gcd;
+        const gcd3 = MCF.gcd3;
+        const mcfPick = MCF.pick;
+        const mcfRich = MCF.rich;
+        const mcfShuffle = MCF.shuffle;
+        const mcfKey = MCF.key;
+        const mcfDedupe = MCF.dedupe;
+        const mcfFactorKey = MCF.factorKey;
+        const mcfUniqueByValue = MCF.uniqueByValue;
+        const mcfSpareOption = MCF.spareOption;
+        const shuffleMC = MCF.shuffleMC;
+        const M = MCF.M;
+        const Mu = MCF.Mu;
+        const fmtTerm = MCF.fmtTerm;
+        /* --- audit fix: 같은 보기가 두 번 나오면 하나로 합친다.
+           정답과 글자가 똑같은 보기를 골랐는데 오답 처리되는 것을 막는다. --- */
+        /* Nudge one number inside an existing option to build a replacement
+           distractor. Skips digit groups that follow a thousands separator, so
+           "\\$11\\,045.96" is altered at the 11 and never left malformed.
+           Uniqueness is checked by the caller, so this can never reproduce the
+           correct answer. */
+        /* Two options can differ only in whitespace -- an empty middle term leaves
+           "4x^2  + 16" beside "4x^2 + 16" -- and MathJax renders them identically, so
+           the student sees the same card twice and only one of them scores. Compare
+           options on this normalised key, not on the raw string. */
+
+
+
+        const TEACHER_SPREADSHEET_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwygR6-l7XPRC1KL-Pqci33Yw_4pmCWa8mW7gNHJ_RsmN41ax15-d0sE-CrIxU0z22m/exec";
+
+        let globalScore = 0;
+        let globalAttempts = 0;
+        let currentProblemData = null;
+        let currentState = { answered: false, selectedMcOption: "", isCorrect: false, currentStep: 0, solRevealed: false, attempts: 0 };
+        let visibleStepElements = [];
+        let currentStepIndex = 0;
+
+        // --- Math & Logic Utilities ---
+
+        function fmtPoly(a, b, c, fnName = "f") {
+            let res = "";
+            if (a !== 0) res += (a === 1 ? "x^2" : (a === -1 ? "-x^2" : a + "x^2"));
+            if (b !== 0) res += (b > 0 ? (res ? " + " : "") + (b === 1 ? "x" : b + "x") : (res ? " - " : "-") + (b === -1 ? "x" : Math.abs(b) + "x"));
+            if (c !== 0) res += (c > 0 ? (res ? " + " : "") + c : (res ? " - " : "-") + Math.abs(c));
+            if (res === "") res = "0";
+            return `${fnName}(x) = ` + res;
+        }
+
+        function fmtVertex(a, h, k, fnName = "f") {
+            let aStr = a === 1 ? "" : (a === -1 ? "-" : a.toString());
+            let hStr = h === 0 ? "x^2" : "(x " + (h > 0 ? "- " + h : "+ " + Math.abs(h)) + ")^2";
+            let kStr = k === 0 ? "" : (k > 0 ? " + " + k : " - " + Math.abs(k));
+            return `${fnName}(x) = ` + aStr + hStr + kStr;
+        }
+
+        /* 문장제 예비 오답: 정답 주변 값을 단위까지 붙여서 만든다. */
+        function mcfNearbyUnits(v, unit, prefix) {
+            const out = [];
+            for (let d = 2; d <= 8; d += 2) { out.push(v - d, v + d); }
+            return out.filter(n => n !== v && n > 0).map(n => prefix ? unit + n : n + " " + unit);
+        }
+
+        /* Last-resort spare options.
+
+           Some types pass an empty fallback list, so when two of their planned
+           distractors happened to land on the same value the question dropped to three
+           options. This nudges the number inside the correct answer instead, keeping the
+           surrounding text and the number of decimal places exactly as they were, so the
+           spare reads like every other option. Returns null when the answer holds no
+           number, in which case the old three-option behaviour still applies. */
+
+        /* Picks one of several wordings for the same question, so a student cannot
+           recognise a type by its sentence alone. */
+
+
+        function buildOptionsHTML(problem, selectedLetter, disabled) {
+            let html = '<div class="mc-options-list">';
+            for (let i = 0; i < problem.options.length; i++) {
+                const opt = problem.options[i];
+                const letter = opt.charAt(0);
+                const sel = selectedLetter === letter ? "selected" : "";
+                const dis = disabled ? "disabled" : "";
+                // Embed the math natively without \\( ... \\) for normal options, unless the option contains it.
+                // In our generator, options will include the math delimiters if needed.
+                html += `<div class="mc-option-card ${sel} ${dis}" onclick="selectMcOptionCard('${letter}')"><span class="mc-badge">${letter}</span><span>${opt.substring(3)}</span></div>`;
+            }
+            html += '</div>';
+            return html;
+        }
+
+        // --- Problem Generators ---
+        function generateProblem(typeId) {
+            if (!typeId) return null;
+            let p = {
+                title: "", type: "mc", assetType: "none", optionType: "text",
+                fullStatement: "", prompt: "", options: [], hint: "", steps: [], ans: "", rawAns: ""
+            };
+
+            if (typeId === "t1" || typeId === "t2") {
+                let isType1 = (typeId === "t1");
+                p.title = isType1 ? "Converting Vertex Form to Standard Form (a = ±1)" : "Converting Vertex Form to Standard Form (a ≠ ±1)";
+                
+                let a = isType1 ? (Math.random() > 0.5 ? 1 : -1) : randInt(-5, 5, [-1, 0, 1]);
+                let h = randInt(-8, 8, [0]);
+                let k = randInt(-20, 20, [0]);
+                let fnName = Math.random() > 0.5 ? "f" : "g";
+
+                let vForm = fmtVertex(a, h, k, fnName);
+                let b = -2 * a * h;
+                let c = a * h * h + k;
+                
+                let correctStr = "\\(" + fmtPoly(a, b, c, fnName) + "\\)";
+                let dist1 = "\\(" + fmtPoly(a, -b, c, fnName) + "\\)";
+                let dist2 = "\\(" + fmtPoly(a, b, c + randInt(2,10)*Math.sign(a), fnName) + "\\)";
+                let dist3 = "\\(" + fmtPoly(a, b, a * h * h - k, fnName) + "\\)";
+                let dist4 = "\\(" + fmtPoly(-a, b, c, fnName) + "\\)";
+
+                p.fullStatement = `Determine the standard form of the following quadratic function: \\(${vForm}\\)`;
+                p.prompt = mcfPick(["Select the correct standard form:", "Which line is this function in standard form?", "Pick the expanded form:"]);
+                
+                let mc = shuffleMC(correctStr, [dist1, dist2, dist3, dist4], []);
+                p.options = mc.options;
+                p.ans = mc.ansLetter;
+                
+                let signH = h > 0 ? "-" : "+";
+                let absH = Math.abs(h);
+                let expandSq = `x^2 ${h>0?'-':'+'} ${2*absH}x + ${absH*absH}`;
+
+                p.hint = `Expand \\((x ${signH} ${absH})^2\\) first, then multiply by ${a}, and finally add ${k}.`;
+                
+                p.steps = [
+                    { title: `Step 1: Decide What Order to Expand In`, math: `\\((x ${signH} ${absH})^2 = ${expandSq}\\)`, explanation: ( "Use the perfect square rule: \\((x \\pm y)^2 = x^2 \\pm 2xy + y^2\\).") + ` Do the bracket on its own first, before touching the number in front. Trap: multiplying the front number in too early, which loses a term.`}
+                ];
+
+                if (a !== 1) {
+                    let distInner = `${a === -1 ? '-' : a}(${expandSq})`;
+                    let distOut = `${a===1?'':(a===-1?'-':a)}x^2 ${b>0?'+':'-'} ${Math.abs(b)}x ${a*absH*absH>0?'+':'-'} ${Math.abs(a*absH*absH)}`;
+                    p.steps.push({ title: `Step 2: Multiply everything by ${a}`, math: `\\(${distInner} = ${distOut}\\)`, explanation: ( `Multiply each term inside the brackets by ${a}.`) + ` Every single term inside the bracket gets multiplied, not just the first one. Trap: leaving the last term untouched.`});
+                    p.steps.push({ title: "Step 3: Add the last number", math: `\\(${distOut} ${k>0?'+':'-'} ${Math.abs(k)} = ${fmtPoly(a, b, c, '').substring(6)}\\)`, explanation: ( `Simplify the final constants: ${a*absH*absH} ${k>0?'+':'-'} ${Math.abs(k)} = ${c}.`) + ` Only plain numbers can be joined together here. The \\(x^2\\) term and the \\(x\\) term cannot be combined with them.`});
+                } else {
+                    p.steps.push({ title: "Step 2: Collect the constant terms", math: `\\(${expandSq} ${k>0?'+':'-'} ${Math.abs(k)}\\)`, explanation: ( `Add the trailing constant ${k} to the expanded equation.`) + ` Only plain numbers can be joined together. The \\(x^2\\) and \\(x\\) terms stay exactly as they are.`});
+                    p.steps.push({ title: "Step 3: Simplify to final form", math: `\\(${fmtPoly(a, b, c, '').substring(6)}\\)`, explanation: ( `Combine the numbers: ${absH*absH} ${k>0?'+':'-'} ${Math.abs(k)} = ${c}.`) + ` Standard form is \\(y = ax^2 + bx + c\\), so write the terms in that order, highest power first.`});
+                }
+            }
+            else if (typeId === "t3" || typeId === "t4") {
+                let isSimple = (typeId === "t3");
+                p.title = isSimple ? "Completing the Square (Simple: a = 1)" : "Completing the Square (Complex: a ≠ 1)";
+                
+                let a = isSimple ? 1 : randInt(-4, 4, [-1, 0, 1]);
+                let h = randInt(-6, 6, [0]);
+                let k = randInt(-20, 20);
+                let fnName = Math.random() > 0.5 ? "f" : "g";
+
+                let b = -2 * a * h;
+                let c = a * h * h + k;
+                
+                let sForm = fmtPoly(a, b, c, fnName);
+                let correctStr = "\\(" + fmtVertex(a, h, k, fnName) + "\\)";
+                
+                let dist1 = "\\(" + fmtVertex(a, -h, k, fnName) + "\\)";
+                let dist2 = "\\(" + fmtVertex(a, h, c + a*h*h, fnName) + "\\)";
+                let dist3 = "\\(" + fmtVertex(a, -h, c + a*h*h, fnName) + "\\)";
+                let dist4 = "\\(" + fmtVertex(a, h, k + randInt(2,10)*Math.sign(a||1), fnName) + "\\)";
+
+                p.fullStatement = `Complete the square to determine the vertex form of the following quadratic: \\(${sForm}\\)`;
+                p.prompt = mcfPick(["Select the correct vertex form:", "Which line is this function in vertex form?", "Pick the completed-square form:"]);
+                
+                let mc = shuffleMC(correctStr, [dist1, dist2, dist3, dist4], []);
+                p.options = mc.options;
+                p.ans = mc.ansLetter;
+                
+                let B = b / a; 
+                let halfB = B / 2;
+                let halfBSq = halfB * halfB;
+
+                if (isSimple) {
+                    p.hint = `Take half of the x coefficient (${b} ÷ 2 = ${halfB}), square it (${halfB}² = ${halfBSq}), then add and subtract ${halfBSq} inside the expression.`;
+                    p.steps = [
+                        { title: `Step 1: Work Out What Number Makes a Perfect Square`, math: `\\((\\frac{${b}}{2})^2 = (${halfB})^2 = ${halfBSq}\\)`, explanation: ( "Halve the number in front of x, then square it.") + ` Completing the square means forcing a perfect square to appear. Half the middle number, then square it, and that is the number you need.`},
+                        { title: "Step 2: Build the perfect square", math: `\\(${fnName}(x) = (x^2 ${MCF.signed(b)}x + ${halfBSq}) - ${halfBSq} ${MCF.signed(c)}\\)`, explanation: ( ( ( `Add ${halfBSq} and take it away again. Adding and subtracting the same number keeps the value the same.`) + ` Adding and subtracting the same number changes nothing, which is why this move is allowed. Trap: adding it without subtracting it back.`) + ` Adding and subtracting the same number changes nothing, which is why this move is allowed. Trap: adding it without subtracting it back.`) + ` Adding and subtracting the same number changes nothing, which is why this move is allowed. Trap: adding it without subtracting it back.`},
+                        { title: "Step 3: Factor the bracket and add the numbers", math: `\\(${correctStr.slice(2, -2)}\\)`, explanation: ( ( `Factor the trinomial into \\((x ${MCF.signed(halfB)})^2\\) and calculate \\(-${halfBSq} ${MCF.signed(c)} = ${k}\\).`) + ` The bracket is now a perfect square, so it factors into one bracket squared. Everything left over gets added up into \\(k\\).`) + ` The bracket is now a perfect square, so it factors into one bracket squared. Everything left over gets added up into \\(k\\).`}
+                    ];
+                } else {
+                    p.hint = `Factor out the leading coefficient ${a} from the first two terms first: \\(${a}(x^2 ${MCF.signed(B)}x) ${MCF.signed(c)}\\). Then complete the square inside.`;
+                    p.steps = [
+                        { title: `Step 1: Work Out Why ${a} Has to Come Out First`, math: `\\(${fnName}(x) = ${a}(x^2 ${MCF.signed(B)}x) ${MCF.signed(c)}\\)`, explanation: ( `Pull ${a} out of the first two terms only. Leave ${c} outside the bracket.`) + ` The front number has to come out before you can complete the square, because the method only works when \\(x^2\\) stands alone.`},
+                        { title: "Step 2: Complete the square inside the brackets", math: `\\((\\frac{${B}}{2})^2 = ${halfBSq} \\rightarrow ${a}(x^2 ${MCF.signed(B)}x + ${halfBSq} - ${halfBSq}) ${MCF.signed(c)}\\)`, explanation: ( `Add and subtract ${halfBSq} inside the parentheses.`) + ` Work only with the numbers now inside the bracket, not the original ones. Trap: halving the middle number from before you factored.`},
+                        { title: "Step 3: Move the subtracted number out", math: `\\(${a} \\times (-${halfBSq}) = ${-a*halfBSq} \\rightarrow ${a}(x^2 ${MCF.signed(B)}x + ${halfBSq}) ${MCF.signed(-a*halfBSq)} ${MCF.signed(c)}\\)`, explanation: ( `Multiply the number you took out by the number in front of the brackets.`) + ` The number you subtracted is trapped inside the bracket, so it must be multiplied by the front number on its way out. Trap: moving it out unchanged.`},
+                        { title: "Step 4: Factor the bracket and add the numbers", math: `\\(${correctStr.slice(2, -2)}\\)`, explanation: ( `Simplify the layout completely: \\(${-a*halfBSq} ${MCF.signed(c)} = ${k}\\).`) + ` The bracket is a perfect square now, so it collapses into one bracket squared. Add every loose number together to get \\(k\\).`}
+                    ];
+                }
+            }
+            else if (typeId === "t5") {
+                p.title = "Determining Maximum/Minimum Values";
+                
+                let a = randInt(-4, 4, [0]);
+                let h = randInt(-6, 6, [0]);
+                let k = randInt(-30, 30);
+                let fnName = Math.random() > 0.5 ? "f" : "g";
+
+                let b = -2 * a * h;
+                let c = a * h * h + k;
+                
+                let sForm = fmtPoly(a, b, c, fnName);
+                
+                let isMin = (a > 0);
+                let extType = isMin ? "Minimum" : "Maximum";
+                let oppType = isMin ? "Maximum" : "Minimum";
+                
+                let correctStr = `${extType} value of ${k} at x = ${h}`;
+                let dist1 = `${oppType} value of ${k} at x = ${h}`;
+                let dist2 = `${extType} value of ${k} at x = ${-h}`;
+                let dist3 = `${extType} value of ${c} at x = 0`;
+                let dist4 = `${oppType} value of ${k+Math.abs(a)} at x = ${h}`;
+
+                p.fullStatement = `Complete the square to determine the maximum or minimum value of the quadratic function: \\(${sForm}\\)`;
+                p.prompt = mcfPick(["Select the correct maximum or minimum value:", "Which choice gives the turning point correctly?", "Pick the largest or smallest value this function reaches:"]);
+                
+                let mc = shuffleMC(correctStr, [dist1, dist2, dist3, dist4], []);
+                p.options = mc.options;
+                p.ans = mc.ansLetter;
+                
+                let B = b / a; 
+                let halfB = B / 2;
+                let halfBSq = halfB * halfB;
+
+                p.hint = `Convert to vertex form first. If the leading coefficient 'a' is positive, the parabola opens upward (minimum). If negative, it opens downward (maximum).`;
+                
+                p.steps = [
+                    { title: `Step 1: Decide Why You Need Vertex Form Here`, math: `\\(${a}(x^2 ${MCF.signed(B)}x + ${halfBSq} - ${halfBSq}) ${MCF.signed(c)}\\)`, explanation: ( `Take ${a} out of the first two terms, then add and subtract ${halfBSq} inside the bracket.`) + ` A maximum or minimum always sits at the vertex, and vertex form shows the vertex directly. So convert first, then read.`},
+                    { title: "Step 2: Write the vertex form", math: `\\(${fmtVertex(a, h, k, fnName)}\\)`, explanation: ( `Moving \\(-${halfBSq}\\) out gives \\(${a} \\times (-${halfBSq}) = ${-a*halfBSq}\\). The vertex is \\((${h}, ${k})\\).`) + ` Once it is in the form \\(y = a(x - h)^2 + k\\), the vertex is \\((h, k)\\). No further work is needed.`},
+                    { title: "Step 3: Check which way it opens", math: `\\(a = ${a} \\rightarrow \\text{Opens ${isMin ? 'Upward' : 'Downward'} (${extType} Value)}\\)`, explanation: ( `Since \\(a ${isMin ? '>' : '<'} 0\\), the vertex represents the ${isMin ? 'lowest' : 'highest'} point on the graph.`) + ` A positive \\(a\\) opens upward and gives a minimum. A negative \\(a\\) opens downward and gives a maximum. Trap: naming the wrong one.`},
+                    { title: "Step 4: Read the answer off the vertex", math: `\\(\\text{${extType}} = ${k} \\text{ at } x = ${h}\\)`, explanation: ( `The vertex is \\((${h}, ${k})\\), so the ${extType.toLowerCase()} value is ${k} and it happens at x = ${h}.`) + ` The \\(k\\) value is the maximum or minimum itself, and \\(h\\) is where it happens. Trap: swapping those two round.`}
+                ];
+            }
+            else if (typeId === "t6") {
+                /* audit fix: 이 파일은 6개 유형이 전부 순수 대수였다.
+                   완전제곱식을 실제 상황에 쓰는 문장제를 하나 넣는다. */
+                p.title = "Word Problems Using Completing the Square";
+
+                let scenario = randInt(1, 3);
+                let h = randInt(2, 8);
+                let k = randInt(5, 40);
+
+                if (scenario === 1) {
+                    let b = 2 * h, c = k - h * h;
+                    p.fullStatement = `A ball is thrown. Its height is \\(h(t) = -t^2 + ${b}t ${c >= 0 ? '+ ' + c : '- ' + Math.abs(c)}\\), where \\(h\\) is the height in metres and \\(t\\) is the time in seconds. Complete the square to find the greatest height the ball reaches.`;
+                    p.prompt = mcfPick(["Select the greatest height:", "How high does it get?", "Pick the highest point reached:"]);
+                    let correctStr = `${k} metres`;
+                    let mc = shuffleMC(correctStr, [`${h} metres`, c > 0 ? `${c} metres` : `${k + 2 * h} metres`, `${k + h} metres`, k - h > 0 ? `${k - h} metres` : `${k + 3 * h} metres`], mcfNearbyUnits(k, "metres"));
+                    p.options = mc.options; p.ans = mc.ansLetter;
+                    p.hint = `Write it as \\(-(t - ${h})^2 + ${k}\\). The number on the end is the greatest height.`;
+                    p.steps = [
+                        { title: `Step 1: Work Out What the Question Is Really Asking`, math: `\\(h(t) = -(t^2 - ${b}t) ${c >= 0 ? '+ ' + c : '- ' + Math.abs(c)}\\)`, explanation: ( `Pull -1 out of the first two terms. Every sign inside the bracket flips.`) + ` The squared term is negative here, so the curve opens downward and has a highest point. Pull the minus out before completing the square.`},
+                        { title: "Step 2: Complete the square inside", math: `\\(h(t) = -(t - ${h})^2 + ${k}\\)`, explanation: ( `Half of ${b} is ${h}, and ${h} squared is ${h * h}. Add it and take it away again.`) + ` Adding and subtracting the same number keeps the value unchanged. That is what makes this step legal.`},
+                        { title: "Step 3: Read the vertex", math: `\\(\\text{Vertex} = (${h}, ${k})\\)`, explanation: ( `The ball is highest at ${h} seconds, and that height is ${k} metres.`) + ` In \\(y = a(x - h)^2 + k\\) the vertex is \\((h, k)\\). The \\(h\\) tells you where it happens and \\(k\\) tells you the value.`},
+                        { title: "Step 4: Check the answer makes sense", math: `\\(${k} > 0\\)`, explanation: ( `A height has to be positive, so ${k} metres is a sensible answer.`) + ` Always check a word problem answer against real life. A negative height, time or profit would mean you slipped somewhere.`}
+                    ];
+                }
+                else if (scenario === 2) {
+                    let b = 2 * h, c = k - h * h;
+                    p.fullStatement = `A shop's daily profit is \\(P(x) = -x^2 + ${b}x ${c >= 0 ? '+ ' + c : '- ' + Math.abs(c)}\\), where \\(P\\) is the profit in dollars and \\(x\\) is the price increase in dollars. Complete the square to find the greatest profit.`;
+                    p.prompt = mcfPick(["Select the greatest profit:", "What is the most profit possible?", "Pick the largest profit:"]);
+                    let correctStr = `$${k}`;
+                    let mc = shuffleMC(correctStr, [`$${h}`, c > 0 ? `$${c}` : `$${k + 2 * h}`, `$${k + h}`, k - h > 0 ? `$${k - h}` : `$${k + 3 * h}`], mcfNearbyUnits(k, "$", true));
+                    p.options = mc.options; p.ans = mc.ansLetter;
+                    p.hint = `Write it as \\(-(x - ${h})^2 + ${k}\\). The number on the end is the greatest profit.`;
+                    p.steps = [
+                        { title: `Step 1: Work Out What the Question Is Really Asking`, math: `\\(P(x) = -(x^2 - ${b}x) ${c >= 0 ? '+ ' + c : '- ' + Math.abs(c)}\\)`, explanation: ( `Pull -1 out of the first two terms. Every sign inside the bracket flips.`) + ` The squared term is negative here, so the curve opens downward and has a highest point. Pull the minus out before completing the square.`},
+                        { title: "Step 2: Complete the square inside", math: `\\(P(x) = -(x - ${h})^2 + ${k}\\)`, explanation: ( `Half of ${b} is ${h}, and ${h} squared is ${h * h}. Add it and take it away again.`) + ` Adding and subtracting the same number keeps the value unchanged. That is what makes this step legal.`},
+                        { title: "Step 3: Read the vertex", math: `\\(\\text{Vertex} = (${h}, ${k})\\)`, explanation: ( `A price increase of $${h} gives the greatest profit, which is $${k}.`) + ` In \\(y = a(x - h)^2 + k\\) the vertex is \\((h, k)\\). The \\(h\\) tells you where it happens and \\(k\\) tells you the value.`},
+                        { title: "Step 4: Check the answer makes sense", math: `\\(${k} > 0\\)`, explanation: ( `A profit of $${k} is positive, so this answer is sensible.`) + ` Always check a word problem answer against real life. A negative height, time or profit would mean you slipped somewhere.`}
+                    ];
+                }
+                else {
+                    let b = -2 * h, c = k + h * h;
+                    p.fullStatement = `A company's cost is \\(C(n) = n^2 ${b >= 0 ? '+ ' + b : '- ' + Math.abs(b)}n + ${c}\\), where \\(C\\) is the cost in dollars and \\(n\\) is the number of machines used. Complete the square to find the lowest cost.`;
+                    p.prompt = mcfPick(["Select the lowest cost:", "What is the smallest the cost gets?", "Pick the cheapest the cost can be:"]);
+                    let correctStr = `$${k}`;
+                    let mc = shuffleMC(correctStr, [`$${h}`, c > 0 ? `$${c}` : `$${k + 2 * h}`, `$${k + h}`, k - h > 0 ? `$${k - h}` : `$${k + 3 * h}`], mcfNearbyUnits(k, "$", true));
+                    p.options = mc.options; p.ans = mc.ansLetter;
+                    p.hint = `Write it as \\((n - ${h})^2 + ${k}\\). The number on the end is the lowest cost.`;
+                    p.steps = [
+                        { title: `Step 1: Work Out What Number Makes a Perfect Square`, math: `\\((\\frac{${b}}{2})^2 = ${h * h}\\)`, explanation: ( `Halve ${b} to get ${-h}, then square it to get ${h * h}.`) + ` Completing the square means forcing a perfect square to appear. Half the middle number, then square it, and that is the number you need.`},
+                        { title: "Step 2: Complete the square", math: `\\(C(n) = (n - ${h})^2 + ${k}\\)`, explanation: `Add ${h * h} and take it away again, then factor the bracket.` },
+                        { title: "Step 3: Read the vertex", math: `\\(\\text{Vertex} = (${h}, ${k})\\)`, explanation: ( `Using ${h} machines gives the lowest cost, which is $${k}.`) + ` In \\(y = a(x - h)^2 + k\\) the vertex is \\((h, k)\\). The \\(h\\) tells you where it happens and \\(k\\) tells you the value.`},
+                        { title: "Step 4: Check the answer makes sense", math: `\\(${h} > 0\\)`, explanation: ( `You cannot use a negative number of machines, so ${h} machines is sensible.`) + ` Always check a word problem answer against real life. A negative height, time or profit would mean you slipped somewhere.`}
+                    ];
+                }
+            }
+
+            return p;
+        }
+
+        // --- Core Application Logic ---
+
+        function renderMathElements() {
+            if (window.renderMathInElement) {
+                renderMathInElement(document.body, {
+                    delimiters: [
+                        {left: '$$', right: '$$', display: true},
+                        {left: '\\(', right: '\\)', display: false}
+                    ],
+                    throwOnError: false
+                });
+            }
+        }
+
+        window.onload = renderMathElements;
+
+        function displaySolution() {
+            document.getElementById("solution-reveal-layer").style.display = "none";
+            var __hb = document.getElementById("hint-box"); if (__hb) __hb.style.display = "none";
+            const placeholder = document.getElementById("placeholder");
+            const quizStation = document.getElementById("quiz-station");
+            const assetMount = document.getElementById("asset-viewport-mount-point");
+            const mountPoint = document.getElementById("dynamic-input-mount-point");
+            const promptLabel = document.getElementById("input-prompt-label");
+
+            placeholder.style.display = "none";
+            quizStation.style.display = "block";
+            
+            if (currentProblemData.assetType && currentProblemData.assetType !== "none") {
+                assetMount.style.display = "flex";
+                assetMount.innerHTML = currentProblemData.assetType === "graph" ? buildGraph(currentProblemData.graphSpec) : currentProblemData.assetHtml;
+            } else {
+                assetMount.style.display = "none";
+            }
+
+            document.getElementById("question-statement-display").innerHTML = currentProblemData.fullStatement;
+            promptLabel.innerHTML = currentProblemData.prompt;
+            
+            mountPoint.innerHTML = buildOptionsHTML(currentProblemData, currentState.selectedMcOption, currentState.answered);
+
+            if (currentState.answered) {
+                lockQuizInterface(currentState.isCorrect);
+                if (currentState.solRevealed) revealSolutionWorkspace();
+            } else {
+                unlockQuizInterface();
+            }
+
+            // Ensure LaTeX renders *after* the DOM is fully constructed
+            setTimeout(renderMathElements, 10);
+        }
+
+
+
+
+        function transmitDataToTeacherSpreadsheet(payload) {
+            fetch(TEACHER_SPREADSHEET_SCRIPT_URL, {
+                method: "POST",
+                mode: "no-cors",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            }).catch(err => console.error("Database cloud logging failure:", err));
+        }
+
+
+
+
+
+
+
+
+
+        function updateHudScoreboard() {
+            document.getElementById("hud-score").innerText = globalScore;
+            document.getElementById("hud-attempts").innerText = globalAttempts;
+        }
+    
+
+        MCF.init({ generate: generateProblem,
+                   /* 이 유닛은 그래프를 buildGraph(spec) 으로 그린다 (자산과 보기 둘 다) */
+                   renderAsset: function (p) { return p.graphSpec ? buildGraph(p.graphSpec) : (p.assetHtml || ""); },
+                   renderOption: function (p, i) {
+                     return (p.optionSpecs && p.optionSpecs[i]) ? buildGraph(p.optionSpecs[i]) : "";
+                   },
+                   logUrl: (typeof TEACHER_SPREADSHEET_SCRIPT_URL !== "undefined" ? TEACHER_SPREADSHEET_SCRIPT_URL : null),
+                   unitId: "Unit_2", lessonId: "Lesson_5" });
+</script>
+    <script src="../progress.js"></script>
+</body>
+</html>

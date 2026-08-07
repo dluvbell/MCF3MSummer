@@ -1,0 +1,1086 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCF3M Unit 1 Lesson 6 &amp; 7 Practice Studio</title>
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+
+    <!-- mcf-core.js 가 그리는 요소들의 기본 스타일. 아래 <style> 보다 먼저 와야
+         파일 고유 스타일이 이기고, 빠진 클래스만 여기서 메워진다.
+         폴더 위치를 몰라도 되게 두 경로를 다 건다(없는 쪽은 404 로 무시). -->
+    <link rel="stylesheet" href="../mcf-core.css">
+    <link rel="stylesheet" href="mcf-core.css">
+    <style>
+        :root {
+            --primary-color: #0f172a;
+            --secondary-color: #2563eb;
+            --disabled-color: #94a3b8;
+            --text-color: #334155;
+            --math-color: #000000;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --border-color: #cbd5e1;
+            --matrix-bg: #f8fafc;
+            --highlight-bg: #eff6ff;
+            --explanation-bg: #f1f5f9;
+            --rule-bg: #fef08a;
+            --rule-text: #713f12;
+            --success-color: #16a34a;
+            --error-color: #dc2626;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.8;
+            margin: 0;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: -0.025em;
+        }
+
+        .scoreboard {
+            background-color: #1e293b;
+            color: white;
+            display: inline-flex;
+            gap: 20px;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-weight: 700;
+            margin-top: 15px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.2);
+        }
+
+        .scoreboard span {
+            color: #60a5fa;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .profile-box, .selector-box {
+            background-color: var(--card-bg);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-color);
+            margin-bottom: 25px;
+        }
+
+        .profile-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .profile-grid input {
+            width: 100%;
+            padding: 12px;
+            font-size: 1rem;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        .profile-grid input:focus {
+            border-color: var(--secondary-color);
+        }
+
+        label {
+            display: block;
+            font-weight: 700;
+            color: var(--primary-color);
+            font-size: 1.1rem;
+            margin-bottom: 12px;
+        }
+
+        .control-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        select {
+            flex: 1;
+            padding: 16px;
+            font-size: 1.1rem;
+            font-family: inherit;
+            border-radius: 8px;
+            border: 2px solid var(--border-color);
+            background-color: white;
+            color: var(--primary-color);
+            outline: none;
+            cursor: pointer;
+        }
+
+        .btn-generate {
+            padding: 16px 24px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .btn-generate:hover {
+            background-color: #1e293b;
+        }
+
+        .solution-container {
+            background-color: var(--card-bg);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-color);
+            min-height: 200px;
+        }
+
+        .placeholder-text {
+            color: #64748b;
+            text-align: center;
+            font-style: italic;
+            padding: 60px 0;
+            font-size: 1.1rem;
+            line-height: 1.5;
+        }
+
+        .quiz-interface-box {
+            background-color: var(--explanation-bg);
+            border: 1px solid var(--border-color);
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+
+        .question-statement-card {
+            background: #ffffff;
+            border-left: 4px solid var(--secondary-color);
+            padding: 16px 20px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            border-radius: 0 6px 6px 0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .math-render-viewport {
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+        }
+
+        .mc-options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 10px;
+        }
+
+        .mc-option-card {
+            background: white;
+            border: 2px solid var(--border-color);
+            padding: 14px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1.05rem;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .mc-option-card:hover:not(.disabled) {
+            border-color: var(--secondary-color);
+            background-color: var(--highlight-bg);
+        }
+
+        .mc-option-card.selected {
+            border-color: var(--secondary-color);
+            background-color: #dbeafe;
+            color: #1e40af;
+        }
+
+        .mc-option-card.disabled {
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .mc-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background-color: #e2e8f0;
+            color: var(--primary-color);
+            font-weight: 800;
+            font-size: 0.9rem;
+        }
+
+        .mc-option-card.selected .mc-badge {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+
+        .feedback-msg-area {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            display: none;
+            padding: 10px 15px;
+            border-radius: 6px;
+        }
+
+        .feedback-success {
+            background-color: #dcfce7;
+            color: var(--success-color);
+            border-left: 5px solid var(--success-color);
+        }
+
+        .feedback-error {
+            background-color: #fee2e2;
+            color: var(--error-color);
+            border-left: 5px solid var(--error-color);
+        }
+
+        .quiz-action-bar {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .solution-reveal-window {
+            display: none;
+            border-top: 3px double var(--border-color);
+            margin-top: 30px;
+            padding-top: 30px;
+        }
+
+        .step-block {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e2e8f0;
+            display: none;
+        }
+
+        .step-title {
+            font-weight: 800;
+            color: var(--secondary-color);
+            display: block;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 8px;
+        }
+
+        .step-math {
+            font-size: 1.3rem;
+            font-weight: 700;
+            background-color: var(--explanation-bg);
+            padding: 14px 20px;
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin: 8px 0;
+            color: var(--math-color);
+            letter-spacing: 0.02em;
+            flex-wrap: wrap;
+        }
+
+        .step-explanation {
+            display: block;
+            font-size: 1.05rem;
+            color: #334155;
+            margin-top: 6px;
+        }
+
+        .final-answer-box {
+            background-color: var(--highlight-bg);
+            border-left: 6px solid var(--secondary-color);
+            padding: 20px 25px;
+            border-radius: 0 8px 8px 0;
+            margin-top: 30px;
+            display: none;
+        }
+
+        .final-answer-label {
+            font-weight: 800;
+            color: var(--secondary-color);
+            display: block;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .final-answer-math {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            margin-top: 6px;
+            display: inline-flex;
+            align-items: center;
+            letter-spacing: 0.02em;
+        }
+
+        .control-panel {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid var(--border-color);
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 14px 24px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            border-radius: 8px;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary { background-color: var(--secondary-color); color: white; }
+        .btn-primary:hover:not(:disabled) { background-color: #1d4ed8; }
+        .btn-success { background-color: var(--success-color); color: white; }
+        .btn-success:hover:not(:disabled) { background-color: #166534; }
+        .btn-secondary { background-color: var(--explanation-bg); color: var(--primary-color); border: 1px solid var(--border-color); }
+        .btn-secondary:hover:not(:disabled) { background-color: #e2e8f0; }
+
+        .btn:disabled {
+            background-color: var(--disabled-color);
+            color: #f1f5f9;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        .hint-box {
+            display: none;
+            background-color: #fef9c3;
+            border-left: 5px solid #eab308;
+            color: #713f12;
+            padding: 12px 16px;
+            border-radius: 0 6px 6px 0;
+            margin-bottom: 15px;
+            font-size: 1.05rem;
+            font-weight: 600;
+        }
+
+        .btn-hint { background-color: #fde047; color: #713f12; }
+        .btn-hint:hover:not(:disabled) { background-color: #facc15; }
+    
+        .method-toggle-container {
+            display: none;
+            background-color: #e2e8f0;
+            padding: 6px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            gap: 8px;
+        }
+
+        .method-btn {
+            flex: 1;
+            padding: 12px;
+            font-size: 1rem;
+            font-weight: 700;
+            border: none;
+            background: transparent;
+            color: var(--text-color);
+            cursor: pointer;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .method-btn.active {
+            background-color: var(--secondary-color);
+            color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+    
+        .criss-cross-box {
+            display: block;
+            background-color: var(--matrix-bg);
+            border: 2px dashed var(--border-color);
+            border-radius: 10px;
+            padding: 24px;
+            margin: 12px 0;
+            max-width: 500px;
+        }
+
+        .matrix-grid {
+            display: grid;
+            grid-template-columns: 1fr 80px 1fr 40px 1.2fr;
+            align-items: center;
+            text-align: center;
+            font-weight: 700;
+            font-size: 1.3rem;
+            row-gap: 10px;
+        }
+
+        .svg-intersection-container {
+            grid-row: span 2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 80px;
+            width: 80px;
+            user-select: none;
+        }
+
+        .grid-arrow-label {
+            font-size: 1.3rem;
+            color: var(--disabled-color);
+        }
+
+        .matrix-total-line {
+            grid-column: 1 / -1;
+            border-top: 2px solid var(--border-color);
+            margin-top: 12px;
+            padding-top: 12px;
+            text-align: left;
+            font-size: 1.15rem;
+            color: var(--primary-color);
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>MCF3M Unit 1 Lesson 6 &amp; 7</h1>
+        <p>Infinite Solving Quadratics &mdash; Factoring &amp; Quadratic Formula Studio</p>
+        <div class="scoreboard">
+            <div>Score: <span id="hud-score">0</span></div>
+            <div>Tries: <span id="hud-attempts">0</span></div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="profile-box">
+            <label>Student Profile Setup:</label>
+            <div class="profile-grid">
+                <input type="text" id="first-name" placeholder="First name" autocomplete="off">
+                <input type="text" id="last-name" placeholder="Last name" autocomplete="off">
+            </div>
+        </div>
+
+        <div class="selector-box">
+            <label for="question-select">Practice Target Menu:</label>
+            <div class="control-group">
+                <select id="question-select">
+                    <option value="t1">Type 1: Number of Zeros (Discriminant)</option>
+                    <option value="t2">Type 2: Zeros via Quadratic Formula</option>
+                    <option value="t3">Type 3: Zeros via Factoring</option>
+                    <option value="t4">Type 4: Rearranging and Solving Relations</option>
+                    <option value="t5">Type 5: Reading Zeros off a Graph</option>
+                    <option value="t6">Type 6: Word Problems with Quadratics</option>
+                </select>
+                <button class="btn-generate" onclick="generateNewProblem()">Generate</button>
+            </div>
+        </div>
+
+        <div class="solution-container" id="display-window">
+            <div id="placeholder" class="placeholder-text">
+                Select a topic and click "Generate" to start your interactive practice session.
+            </div>
+
+            <div id="quiz-station" class="quiz-interface-box" style="display: none;">
+                <div id="asset-viewport-mount-point" class="math-render-viewport" style="display: none;"></div>
+
+                <div id="question-statement-display" class="question-statement-card"></div>
+
+                <label id="input-prompt-label" style="margin-bottom: 12px; font-weight: 700; display: block;"></label>
+                
+                <div id="dynamic-input-mount-point" style="margin-top: 10px;"></div>
+
+                <div id="hint-box" class="hint-box"></div>
+                <div id="feedback-msg" class="feedback-msg-area"></div>
+
+                <div class="quiz-action-bar">
+                    <button class="btn btn-success" id="check-ans-btn" onclick="evaluateStudentAnswer()">Check Answer</button>
+                    <button class="btn btn-hint" id="hint-btn" onclick="toggleHint()">Hint</button>
+                    <button class="btn btn-secondary" id="reveal-sol-btn" disabled onclick="unlockSolutionPanel()">Show Solution Steps</button>
+                </div>
+            </div>
+
+            <div class="method-toggle-container" id="method-toggle-bar"></div>
+
+
+            <div class="solution-reveal-window" id="solution-reveal-layer">
+                <div id="solution-workspace-injected"></div>
+                
+                <div class="control-panel" id="controls-panel">
+                    <button class="btn btn-secondary" id="restart-btn" onclick="restartSolution()">Restart Steps</button>
+                    <button class="btn btn-primary" id="next-btn" onclick="showNextStep()">Next Step &rarr;</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- mcf-core.js 는 보통 상위 폴더(index.html·progress.js 옆)에 둔다.
+         같은 폴더에 두는 경우도 있어 두 경로를 다 건다. 없는 쪽은 404 로 무시되고,
+         둘 다 있으면 두 번째는 core 내부 가드가 막는다. -->
+    <script src="../mcf-core.js"></script>
+    <script src="mcf-core.js"></script>
+    <script>
+    /* core 를 못 찾으면 Generate 가 조용히 무반응이 된다. 원인이 안 보이므로 안내를 띄운다. */
+    if (typeof MCF === "undefined") {
+      document.addEventListener("DOMContentLoaded", function () {
+        var box = document.getElementById("placeholder");
+        if (box) {
+          box.innerHTML =
+            '<strong style="color:#b91c1c">mcf-core.js \uB97C \uCC3E\uC744 \uC218 \uC5C6\uC2B5\uB2C8\uB2E4.</strong><br><br>' +
+            'This lesson needs <code>mcf-core.js</code>.<br>' +
+            'Put it next to <code>progress.js</code> and <code>index.html</code> ' +
+            '(the folder above this one), or in this same folder.';
+          box.style.display = "block";
+        }
+        var b = document.querySelector(".btn-generate");
+        if (b) b.disabled = true;
+      });
+    }
+    </script>
+    <script>
+
+        /* ── mcf-core.js 로 옮겨간 이름들의 지역 별칭 ── */
+        const randInt = MCF.randInt;
+        const gcd = MCF.gcd;
+        const gcd3 = MCF.gcd3;
+        const mcfPick = MCF.pick;
+        const mcfRich = MCF.rich;
+        const mcfShuffle = MCF.shuffle;
+        const mcfKey = MCF.key;
+        const mcfDedupe = MCF.dedupe;
+        const mcfFactorKey = MCF.factorKey;
+        const mcfUniqueByValue = MCF.uniqueByValue;
+        const mcfSpareOption = MCF.spareOption;
+        const shuffleMC = MCF.shuffleMC;
+        const M = MCF.M;
+        const Mu = MCF.Mu;
+        /* --- audit fix: uniform in-place shuffle (Fisher-Yates) --- */
+
+        /* 근의공식 유형용: 인수분해가 되면 두 방법 단계를, 안 되면 안내 단계를 돌려준다.
+           탭 개수는 문제마다 바뀌지 않는다. 안 되는 이유를 탭 안에서 알려주는 쪽이
+           학생에게 덜 헷갈린다. */
+        function factorTabs(a, b, c) {
+          const sp = MCF.splitPair(a, b, c);
+          if (!sp) return [MCF.noFactorStep("ps", a, b, c), MCF.noFactorStep("cc", a, b, c)];
+          const { m, n, a1, a2, c1, c2 } = sp;
+          const br = `(${fmtTerm(a1, "x", true)} ${fmtTerm(c1, "")})(${fmtTerm(a2, "x", true)} ${fmtTerm(c2, "")})`;
+          return [
+            { title: "Product & Sum: Find the target product and sum", mode: "ps",
+              math: `\\text{Product} = ${a} \\times (${c}) = ${a * c}, \\quad \\text{Sum} = ${b}`,
+              explanation: `Multiply the front number by the last number to get ${MCF.M(a * c)}. That is your product target, and the middle number ${MCF.M(b)} is your sum target. The pair that does both is ${MCF.M(m)} and ${MCF.M(n)}.` },
+            { title: "Product & Sum: Split and factor in pairs", mode: "ps",
+              math: `${fmtTerm(a, "x^2", true)} ${fmtTerm(m, "x")} ${fmtTerm(n, "x")} ${fmtTerm(c, "")} = ${br}`,
+              explanation: `Break the middle term into ${MCF.M(fmtTerm(m, "x", true))} and ${MCF.M(fmtTerm(n, "x", true))}, then group the four terms into two pairs. Pull the biggest common factor out of each pair and the same bracket is left behind both times.` },
+            { title: "Criss-Cross: Fill in the box", mode: "cc", isMatrix: true,
+              matrixData: { lt: fmtTerm(a1, "x", true), lb: fmtTerm(a2, "x", true),
+                            rt: fmtTerm(c1, "", true), rb: fmtTerm(c2, "", true),
+                            pt: fmtTerm(a1 * c2, "x", true), pb: fmtTerm(a2 * c1, "x", true),
+                            sum: fmtTerm(b, "x", true) },
+              explanation: `Put factors of the front term, ${MCF.M(fmtTerm(a1, "x", true))} and ${MCF.M(fmtTerm(a2, "x", true))}, down the left side. Put factors of the last number, ${MCF.M(fmtTerm(c1, "", true))} and ${MCF.M(fmtTerm(c2, "", true))}, down the right side.` },
+            { title: "Criss-Cross: Check the diagonals and read the rows", mode: "cc",
+              math: `(${fmtTerm(a1 * c2, "x", true)}) + (${fmtTerm(a2 * c1, "x", true)}) = ${fmtTerm(b, "x", true)} \\quad\\Rightarrow\\quad ${br}`,
+              explanation: `Multiply along each arrow and add the two answers. You get ${MCF.M(fmtTerm(b, "x", true))}, which matches the middle term. Now read across the rows to get your two brackets. Trap: if the diagonals do not match, swap the numbers on the right.` }
+          ];
+        }
+
+
+        /* --- audit fix: 같은 보기가 두 번 나오면 하나로 합친다.
+           정답과 글자가 똑같은 보기를 골랐는데 오답 처리되는 것을 막는다. --- */
+        /* Nudge one number inside an existing option to build a replacement
+           distractor. Skips digit groups that follow a thousands separator, so
+           "\\$11\\,045.96" is altered at the 11 and never left malformed.
+           Uniqueness is checked by the caller, so this can never reproduce the
+           correct answer. */
+        /* Two options can differ only in whitespace -- an empty middle term leaves
+           "4x^2  + 16" beside "4x^2 + 16" -- and MathJax renders them identically, so
+           the student sees the same card twice and only one of them scores. Compare
+           options on this normalised key, not on the raw string. */
+
+
+
+        const TEACHER_SPREADSHEET_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwygR6-l7XPRC1KL-Pqci33Yw_4pmCWa8mW7gNHJ_RsmN41ax15-d0sE-CrIxU0z22m/exec";
+
+        let globalScore = 0;
+        let globalAttempts = 0;
+        let currentProblemData = null;
+        let currentState = { answered: false, selectedMcOption: "", isCorrect: false, currentStep: 0, solRevealed: false, attempts: 0 };
+        let visibleStepElements = [];
+
+        window.onload = () => {
+            if (window.renderMathInElement) {
+                renderMathInElement(document.body, { delimiters: [{left: '$$', right: '$$', display: true}, {left: '\\(', right: '\\)', display: false}], throwOnError: false });
+            }
+        };
+
+        // --- Core Utility Functions ---
+        
+
+        function fmtTerm(c, v, isFirst = false) {
+            if (c === 0) return "";
+            let abs = Math.abs(c);
+            let numStr = (abs === 1 && v !== "") ? "" : abs;
+            if (isFirst) {
+                return c < 0 ? `-${numStr}${v}` : `${numStr}${v}`;
+            } else {
+                return c < 0 ? `- ${numStr}${v}` : `+ ${numStr}${v}`;
+            }
+        }
+
+        // --- Infinite Mathematical Generators ---
+        function genType1() {
+            let type = randInt(0, 2); // 0: 0 zeros, 1: 1 zero, 2: 2 zeros
+            let a, b, c, D;
+            if (type === 1) { 
+                a = randInt(1, 3) * (Math.random() > 0.5 ? 1 : -1);
+                let k = randInt(1, 4) * (Math.random() > 0.5 ? 1 : -1);
+                b = 2 * a * k;
+                c = a * k * k;
+                D = 0;
+            } else if (type === 0) { 
+                a = randInt(1, 4);
+                c = randInt(1, 4);
+                let maxB = Math.floor(Math.sqrt(4 * a * c));
+                if (maxB === Math.sqrt(4 * a * c)) maxB--;
+                b = randInt(-maxB, maxB);
+                if (Math.random() > 0.5) { a = -a; c = -c; }
+                D = b*b - 4*a*c;
+            } else { 
+                a = randInt(1, 4) * (Math.random() > 0.5 ? 1 : -1);
+                b = randInt(-5, 5);
+                c = randInt(1, 4) * (a > 0 ? -1 : 1);
+                D = b*b - 4*a*c;
+            }
+
+            let exp = `${fmtTerm(a, 'x^2', true)} ${fmtTerm(b, 'x')} ${fmtTerm(c, '')}`;
+            let ansStr = type === 0 ? "0 zeros" : (type === 1 ? "1 zero" : "2 zeros");
+            let ansLetter = type === 0 ? "A" : (type === 1 ? "B" : "C");
+
+            let signD = D === 0 ? "0" : (D < 0 ? `${D} \\quad (< 0)` : `${D} \\quad (> 0)`);
+            let hintMsg = D === 0 ? "Work out \\(b^2 - 4ac\\). If it comes out as exactly 0, the parabola only touches the x-axis, so there is 1 zero." : (D < 0 ? "Work out \\(b^2 - 4ac\\). If it comes out negative, the parabola never reaches the x-axis, so there are no zeros." : "Work out b² - 4ac. If it comes out bigger than 0, the parabola cuts through the x-axis twice.");
+
+            let step4_math = `D = ${b*b} ${fmtTerm(-4*a*c, '', false)}`;
+            if (-4*a*c > 0) step4_math = `D = ${b*b} - (${4*a*c}) = ${b*b} + ${-4*a*c}`; // matching source formatting perfectly
+
+            return {
+                title: "Type 1 Question",
+                fullStatement: mcfPick(["How many zeros (solutions) does the following quadratic relation have?", "How many times does the parabola below cross the x-axis?", "Without solving it, how many real zeros does this relation have?"]) + `<br>$$\\small y = ${exp}$$`,
+                prompt: "Select the total number of zeros:",
+                options: ["A) 0 zeros", "B) 1 zero", "C) 2 zeros"], // Fixed 3 options specifically for Type 1
+                hint: hintMsg,
+                steps: [
+                    { title: "Step 1: Decide Why You Do Not Need to Solve Anything",
+                      math: `D = b^2 - 4ac`,
+                      explanation: `The question asks how many zeros there are, not what they are. So you never have to finish the quadratic formula. Only the part under the square root matters, and that part is called the discriminant.` },
+                    { title: "Step 2: Read off a, b and c",
+                      math: `a = ${a},\\quad b = ${b},\\quad c = ${c}`,
+                      explanation: `Line the equation up with ${MCF.M("ax^2 + bx + c")}. That gives ${MCF.M("a = " + a)}, ${MCF.M("b = " + b)} and ${MCF.M("c = " + c)}. Trap: leaving a minus sign behind when you copy a number across.` },
+                    { title: "Step 3: Put your numbers in", math: `D = (${b})^2 - 4(${a})(${c})`, explanation: "Swap each letter for its number. Put every number in brackets so you do not lose a minus sign." },
+                    { title: "Step 4: Work it out", math: step4_math, explanation: `First square ${b}, which gives ${MCF.M(b*b)}. Then work out ${MCF.M("-4 \\times " + a + " \\times " + c)}, which comes to ${MCF.M(-4*a*c)}. ${(-4*a*c) > 0 ? "That second piece is positive, so you add it on." : "That second piece is negative, so it takes away from the first."} Trap: squaring a negative b and writing a negative answer.` },
+                    { title: "Step 5: Read off the answer", math: `D = ${signD} \\quad\\Rightarrow\\quad ${ansStr.replace('zero', '\\text{real zero}')}`, explanation: `D = ${D}. ${D > 0 ? "That is bigger than 0, so the parabola cuts the x-axis in two places. That means 2 zeros." : (D === 0 ? "That is exactly 0, so the parabola just touches the x-axis once. That means 1 zero." : "That is negative, and you cannot square root a negative number. The parabola never reaches the x-axis, so there are no zeros.")}` }
+                ], ans: ansLetter
+            };
+        }
+
+        function genType2() {
+            let a = randInt(1, 4) * (Math.random() > 0.5 ? 1 : -1);
+            let b = randInt(-7, 7);
+            let c = randInt(1, 5) * (a > 0 ? -1 : 1);
+            let D = b*b - 4*a*c;
+
+            let sqrtD = Math.sqrt(D);
+            let sqrtD_str = sqrtD.toFixed(4);
+            let x1 = ((-b + sqrtD) / (2*a)).toFixed(2);
+            let x2 = ((-b - sqrtD) / (2*a)).toFixed(2);
+            
+            let correctAns = `x = ${x1} and x = ${x2}`;
+            let w1 = `x = ${((b + sqrtD) / (2*a)).toFixed(2)} and x = ${((b - sqrtD) / (2*a)).toFixed(2)}`; 
+            let w3 = `No real solutions`;
+            /* audit fix 2026-07-30 (round A): {-x1, -x2} 는 w1 과 순서만 다른 같은 짝이라
+               항상 보기 두 개가 겹쳤다(100%). 2a 대신 a 로 나눈 오해로 바꾼다. */
+            let w2 = `x = ${((-b + sqrtD) / a).toFixed(2)} and x = ${((-b - sqrtD) / a).toFixed(2)}`;
+            let optArr = [correctAns, w1, w2, w3];
+            let mc = shuffleMC(optArr, correctAns);
+
+            let exp = `${fmtTerm(a, 'x^2', true)} ${fmtTerm(b, 'x')} ${fmtTerm(c, '')}`;
+            
+            let step4_math = `x = \\frac{${-b} \\pm \\sqrt{${b*b} ${fmtTerm(-4*a*c, '', false)}}}{${2*a}} \\quad\\Rightarrow\\quad x = \\frac{${-b} \\pm \\sqrt{${D}}}{${2*a}}`;
+            
+            return {
+                title: "Type 2 Question", hasMethods: true, methods: MCF.METHODS_SOLVING,
+                fullStatement: mcfPick(["Determine the zeros (solutions) to the following quadratic relation", "Find where the relation below crosses the x-axis", "Work out the zeros of this quadratic relation"]) + `:<br>$$\\small y = ${exp}$$`,
+                prompt: "Select the correct solutions rounded to two decimal places:",
+                options: mc.options,
+                hint: "Use the quadratic formula: \\(x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}\\). It works on every quadratic, even the ones that will not factor.",
+                steps: [
+                    { mode: "qf", title: "Step 1: Decide Why the Formula Is the Right Tool Here",
+                      math: `x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}`,
+                      explanation: `Try factoring first. When no pair of whole numbers works, factoring is a dead end and the quadratic formula is the way through. The formula always works, even when the answers are not whole numbers.` },
+                    { mode: "qf", title: "Step 2: Read off a, b and c",
+                      math: `a = ${a},\\quad b = ${b},\\quad c = ${c}`,
+                      explanation: `Line the equation up with ${MCF.M("ax^2 + bx + c")}. That gives ${MCF.M("a = " + a)} and ${MCF.M("b = " + b)}. The last one is ${MCF.M("c = " + c)}. Each minus sign belongs to the number in front of it.` },
+                    { mode: "qf", title: "Step 3: Put your numbers in", math: `x = \\frac{-(${b}) \\pm \\sqrt{(${b})^2 - 4(${a})(${c})}}{2(${a})}`, explanation: "Swap each letter for its number and keep every number in brackets. The brackets are what stop you losing a minus sign." },
+                    { mode: "qf", title: "Step 4: Work out the part under the square root", math: step4_math, explanation: `Square ${b} to get ${b*b}. Then work out -4 times ${a} times ${c}. The bottom of the fraction is 2 times ${a}, which is ${2*a}.` },
+                    { mode: "qf", title: "Step 5: Take the square root", math: `x = \\frac{${-b} \\pm ${sqrtD_str}}{${2*a}}`, explanation: `The square root of ${D} is about ${sqrtD_str}. If it is not a perfect square, use your calculator and keep 4 decimal places until the last step.` },
+                    { mode: "qf", title: "Step 6: Do it twice, once with + and once with -", math: `x_1 = \\frac{${-b} + ${sqrtD_str}}{${2*a}} \\approx ${x1}, \\quad x_2 = \\frac{${-b} - ${sqrtD_str}}{${2*a}} \\approx ${x2}`, explanation: `The plus-or-minus sign means there are two answers. Do the top with a plus, then again with a minus. Divide by ${2*a} each time. These two numbers are where the parabola crosses the x-axis.` }
+                ,
+                    ...factorTabs(a, b, c)
+                ], ans: mc.ans
+            };
+        }
+
+        function genType3() {
+            let a1, a2, c1, c2, a, b, c;
+            let isNegative = Math.random() > 0.5; 
+            
+            do {
+                a1 = randInt(1, 3); a2 = randInt(1, 3);
+                c1 = randInt(1, 5) * (Math.random() > 0.5 ? 1 : -1);
+                c2 = randInt(1, 5) * (Math.random() > 0.5 ? 1 : -1);
+                a = a1 * a2; b = a1 * c2 + a2 * c1; c = c1 * c2;
+                if (isNegative) { a = -a; b = -b; c = -c; }
+            } while (Math.abs(a) === 1 || b === 0 || a1*c2 === a2*c1);
+
+            let exp = `${fmtTerm(a, 'x^2', true)} ${fmtTerm(b, 'x')} ${fmtTerm(c, '')}`;
+            
+            let r1 = -c1 / a1;
+            let r2 = -c2 / a2;
+            let r1_str = Number.isInteger(r1) ? r1.toString() : r1.toFixed(2).replace(/\.?0+$/, ''); 
+            let r2_str = Number.isInteger(r2) ? r2.toString() : r2.toFixed(2).replace(/\.?0+$/, '');
+            let correctAns = `x = ${r1_str} and x = ${r2_str}`;
+            let w1 = `x = ${(-r1).toFixed(2).replace(/\.?0+$/, '')} and x = ${(-r2).toFixed(2).replace(/\.?0+$/, '')}`;
+            let w2 = `x = ${r1_str} and x = ${(-r2).toFixed(2).replace(/\.?0+$/, '')}`;
+            let optArr = [correctAns, w1, w2, `x = ${(-r1).toFixed(2).replace(/\.?0+$/, '')} and x = ${r2_str}`];
+            let mc = shuffleMC(optArr, correctAns);
+
+            let absA = Math.abs(a); let absB = isNegative ? -b : b; let absC = isNegative ? -c : c;
+            
+            let step1_math, step1_exp, step3_math, step4_math;
+            let prod = absA * absC;
+            let f1 = Math.abs(a1*c2) * Math.sign(a1*c2);
+            let f2 = Math.abs(a2*c1) * Math.sign(a2*c1);
+
+            if (isNegative) {
+                step1_math = `${fmtTerm(a, 'x^2', true)} ${fmtTerm(b, 'x')} ${fmtTerm(c, '')} = 0 \\quad\\Rightarrow\\quad -(${fmtTerm(absA, 'x^2', true)} ${fmtTerm(absB, 'x')} ${fmtTerm(absC, '')}) = 0`;
+                step1_exp = "Zeros are the x-values where y = 0, so set the whole expression equal to 0. Then take out -1 so the x² term becomes positive.";
+            } else {
+                step1_math = `${fmtTerm(a, 'x^2', true)} ${fmtTerm(b, 'x')} ${fmtTerm(c, '')} = 0`;
+                step1_exp = "Zeros are the x-values where y = 0. So start by setting the whole expression equal to 0.";
+            }
+
+            let step2_math = `\\text{Product } (a \\times c) = ${absA} \\times (${absC}) = ${prod}, \\quad \\text{Sum } (b) = ${absB}`;
+            let step2_exp = `Multiply the number in front of x² by the last number: ${absA} times ${absC} gives ${prod}. Now find two numbers that multiply to ${prod} and add to ${absB}.`;
+
+            let decomp_in = `${fmtTerm(absA, 'x^2', true)} ${fmtTerm(f1, 'x')} ${fmtTerm(f2, 'x')} ${fmtTerm(absC, '')}`;
+            step3_math = isNegative ? `-(${decomp_in}) = 0` : `${decomp_in} = 0`;
+            let step3_exp = `Rewrite the middle term as ${fmtTerm(f1, 'x', true)} and ${fmtTerm(f2, 'x', true)}. The expression is worth exactly the same, it just has four terms now instead of three.`;
+
+            let group1 = `${fmtTerm(a1, 'x', true)}(${fmtTerm(a2, 'x', true)} ${fmtTerm(c2, '')})`;
+            let group2 = `${fmtTerm(c1, '', false)}(${fmtTerm(a2, 'x', true)} ${fmtTerm(c2, '')})`;
+            let binom = `(${fmtTerm(a1, 'x', true)} ${fmtTerm(c1, '')})(${fmtTerm(a2, 'x', true)} ${fmtTerm(c2, '')})`;
+            step4_math = isNegative ? `-[${group1} ${group2}] = 0 \\quad\\Rightarrow\\quad -${binom} = 0` : `${group1} ${group2} = 0 \\quad\\Rightarrow\\quad ${binom} = 0`;
+
+            return {
+                title: "Type 3 Question", hasMethods: true, methods: MCF.METHODS_FACTORING,
+                fullStatement: mcfPick(["Determine the zeros (solutions) to the following quadratic relation by factoring", "Factor the relation below, then find its zeros", "Use factoring to find where this relation equals zero"]) + `:<br>$$\\small y = ${exp}$$`,
+                prompt: "Select the correct solution set values:",
+                options: mc.options,
+                hint: isNegative ? "The x² term is negative, so take \\(-1\\) out of the whole thing first. Factoring is much easier once x² is positive." : `Find two numbers that multiply to ${prod} and add to ${absB}. Use them to split the middle term into two parts.`,
+                steps: [
+                    { title: "Step 1: Decide why factoring works here", mode: "common",
+                      math: `${exp} = 0`,
+                      explanation: `Two things multiplied together only give zero if one of them is zero. So if you can break this into two brackets, each bracket hands you an answer. That is the whole reason for setting it to zero first.` },
+                    { title: "Step 2: Set the expression equal to zero", mode: "common", math: step1_math, explanation: step1_exp },
+                    { title: "Step 3 (Product & Sum): Find the target product and sum", mode: "ps", math: step2_math, explanation: step2_exp },
+                    { title: "Step 4 (Product & Sum): Split the middle term", mode: "ps", math: step3_math, explanation: step3_exp },
+                    { title: "Step 5 (Product & Sum): Factor in pairs", mode: "ps", math: step4_math,
+                      explanation: `Split the four terms into two pairs and take the biggest common factor out of each pair. The bracket left behind is ${MCF.M("(" + fmtTerm(a2, 'x', true) + " " + fmtTerm(c2, '') + ")")} both times, and that repeated bracket is one of your factors.` },
+                    { title: "Step 3 (Criss-Cross): Fill in the box", mode: "cc", isMatrix: true,
+                      matrixData: { lt: fmtTerm(a1, 'x', true), lb: fmtTerm(a2, 'x', true),
+                                    rt: fmtTerm(c1, '', true), rb: fmtTerm(c2, '', true),
+                                    pt: fmtTerm(a1*c2, 'x', true), pb: fmtTerm(a2*c1, 'x', true),
+                                    sum: fmtTerm(absB, 'x', true) },
+                      explanation: `Put factors of the front term, ${MCF.M(fmtTerm(a1, 'x', true))} and ${MCF.M(fmtTerm(a2, 'x', true))}, down the left side of the box. Put factors of the last number, ${MCF.M(fmtTerm(c1, '', true))} and ${MCF.M(fmtTerm(c2, '', true))}, down the right side.` },
+                    { title: "Step 4 (Criss-Cross): Check the diagonals", mode: "cc",
+                      math: `(${fmtTerm(a1*c2, 'x', true)}) + (${fmtTerm(a2*c1, 'x', true)}) = ${fmtTerm(absB, 'x', true)}`,
+                      explanation: `Multiply along each arrow, then add the two answers together. You get ${MCF.M(fmtTerm(absB, 'x', true))}, which matches the middle term. Trap: if it does not match, swap the two numbers on the right side and try again.` },
+                    { title: "Step 5 (Criss-Cross): Read the brackets off the rows", mode: "cc",
+                      math: `${binom} = 0`,
+                      explanation: `Read straight across the top row to get one bracket, then across the bottom row for the other. Both methods land on exactly the same pair of brackets.` },
+                    { title: `Step 6: Set the first bracket to zero`, mode: "common",
+                      math: `${fmtTerm(a1, 'x', true)} ${fmtTerm(c1, '')} = 0 \\quad\\Rightarrow\\quad ${a1}x = ${-c1} \\quad\\Rightarrow\\quad x = ${r1_str}`,
+                      explanation: `If two things multiply together to give zero, at least one of them has to be zero. So set the first bracket equal to zero and solve it for x on its own.` },
+                    { title: `Step 7: Set the second bracket to zero`, mode: "common",
+                      math: `${fmtTerm(a2, 'x', true)} ${fmtTerm(c2, '')} = 0 \\quad\\Rightarrow\\quad x = ${r2_str}`,
+                      explanation: `Do exactly the same thing with the second bracket. These two x-values are the zeros, the places where the graph crosses the x-axis.` }
+                ], ans: mc.ans
+            };
+        }
+
+        function genType4() {
+            let a = randInt(1, 4);
+            let b = randInt(-5, 5);
+            let c = randInt(-5, -1); 
+            
+            let A = randInt(1, 3); let D = A - a; 
+            let B = randInt(-3, 3); let E = B - b;
+            let C = randInt(-4, 4); let F = C - c;
+
+            /* audit fix 2026-07-30 (round A): 세 계수가 모두 0이면 결과가 빈 문자열이
+               아니라 공백뿐인 문자열이라 !RHS 검사를 통과해 버려서, 화면에
+               "2x^2 - 3x - 4 =" 처럼 우변이 없는 식이 나왔다. trim 후에 검사한다. */
+            let LHS = `${fmtTerm(A, 'x^2', true)} ${fmtTerm(B, 'x')} ${fmtTerm(C, '')}`.replace(/^\s*\+\s*/, '').trim();
+            if (!LHS) LHS = "0";
+            let RHS = `${fmtTerm(D, 'x^2', true)} ${fmtTerm(E, 'x')} ${fmtTerm(F, '')}`.replace(/^\s*\+\s*/, '').trim();
+            if (!RHS) RHS = "0";
+
+            let exp = `${LHS} = ${RHS}`;
+
+            let D_disc = b*b - 4*a*c;
+            let sqrtD = Math.sqrt(D_disc);
+            let sqrtD_str = sqrtD.toFixed(4);
+            let x1 = ((-b + sqrtD) / (2*a)).toFixed(2);
+            let x2 = ((-b - sqrtD) / (2*a)).toFixed(2);
+            
+            let correctAns = `x = ${x1} and x = ${x2}`;
+            let w1 = `x = ${((b + sqrtD) / (2*a)).toFixed(2)} and x = ${((b - sqrtD) / (2*a)).toFixed(2)}`; 
+            let w3 = `No real solutions`;
+            /* audit fix 2026-07-30 (round A): {-x1, -x2} 는 w1 과 순서만 다른 같은 짝이라
+               항상 보기 두 개가 겹쳤다(100%). 2a 대신 a 로 나눈 오해로 바꾼다. */
+            let w2 = `x = ${((-b + sqrtD) / a).toFixed(2)} and x = ${((-b - sqrtD) / a).toFixed(2)}`;
+            let optArr = [correctAns, w1, w2, w3];
+            let mc = shuffleMC(optArr, correctAns);
+
+            let terms = [];
+            if(A!==0) terms.push(`${A}x^2`);
+            if(D!==0) terms.push(`${-D > 0 ? '+' : ''}${-D}x^2`);
+            if(B!==0) terms.push(`${B > 0 && terms.length>0 ? '+' : ''}${B}x`);
+            if(E!==0) terms.push(`${-E > 0 && terms.length>0 ? '+' : ''}${-E}x`);
+            if(C!==0) terms.push(`${C > 0 && terms.length>0 ? '+' : ''}${C}`);
+            if(F!==0) terms.push(`${-F > 0 && terms.length>0 ? '+' : ''}${-F}`);
+            let step1_math = (terms.join(' ') + " = 0").replace(/^\+\s*/, '');
+
+            return {
+                title: "Type 4 Question", hasMethods: true, methods: MCF.METHODS_SOLVING,
+                fullStatement: mcfPick(["Determine the zeros (solutions) to the following quadratic relation", "Solve for x in the relation below", "Find the x-values that make this relation equal zero"]) + `:<br>$$\\small ${exp}$$`,
+                prompt: "Select the correct solutions rounded to two decimal places:",
+                options: mc.options,
+                hint: "Both sides have x terms, so you cannot solve it yet. Move everything to the left so the right side becomes 0, then use the quadratic formula.",
+                steps: [
+                    { mode: "qf", title: "Step 1: Move everything to one side", math: step1_math, explanation: "The formula only works when one side is zero, so everything has to move across first. Take every term on the right away from both sides. When a term crosses the equals sign its sign flips. Trap: moving a term but forgetting to change its sign." },
+                    { mode: "qf", title: "Step 2: Tidy it into standard form", math: `${fmtTerm(a, 'x^2', true)} ${fmtTerm(b, 'x')} ${fmtTerm(c, '')} = 0`, explanation: "Collect the x squared terms together first, then the x terms, then the plain numbers. Now it sits in the shape \\(ax^2 + bx + c = 0\\) that the formula expects. Writing it in this order makes the next step much safer." },
+                    { mode: "qf", title: "Step 3: Write down a, b and c", math: `a = ${a},\\quad b = ${b},\\quad c = ${c}`, explanation: `Read them straight off the tidied equation: a = ${a}, b = ${b} and c = ${c}. Keep each minus sign with its number.` },
+                    { mode: "qf", title: "Step 4: Put your numbers into the quadratic formula", math: `x = \\frac{-(${b}) \\pm \\sqrt{(${b})^2 - 4(${a})(${c})}}{2(${a})}`, explanation: "Swap each letter for its number and keep every number inside brackets. The brackets are what stop a minus sign from getting lost. This is the single most common place marks disappear on this question." },
+                    { mode: "qf", title: "Step 5: Work out the part under the square root", math: `x = \\frac{${-b} \\pm \\sqrt{${b*b} ${fmtTerm(-4*a*c, '', false)}}}{${2*a}} \\quad\\Rightarrow\\quad x = \\frac{${-b} \\pm \\sqrt{${D_disc}}}{${2*a}}`, explanation: `Square ${b} to get ${b*b}, then work out -4 times ${a} times ${c}. The bottom of the fraction is 2 times ${a}, which is ${2*a}.` },
+                    { mode: "qf", title: "Step 6: Do it twice, once with + and once with -", math: `x = \\frac{${-b} \\pm ${sqrtD_str}}{${2*a}} \\quad\\Rightarrow\\quad x_1 \\approx ${x1},\\quad x_2 \\approx ${x2}`, explanation: `Take the square root first. Then work out the top with a plus, and again with a minus. Divide by ${2*a} each time, and round to 2 decimal places only at the very end.` }
+                ,
+                    ...factorTabs(a, b, c)
+                ], ans: mc.ans
+            };
+        }
+
+        /* --- round C 2026-07-31: 그래프 자산 + 문장제 유형 추가 --- */
+        function mcfParabolaSvg(a, r1, r2) {
+            /* 격자 -6..6, 화면 300x300. 꼭짓점이 화면을 벗어나지 않게 세로 배율을 맞춘다. */
+            const S = 25, CX = 150, CY = 150;
+            const X = x => CX + x * S, Y = y => CY - y * S;
+            const vx = (r1 + r2) / 2, vy = a * (vx - r1) * (vx - r2);
+            const k = Math.min(1, 5 / Math.max(1, Math.abs(vy)));
+            let g = "";
+            for (let i = -6; i <= 6; i++) {
+                g += `<line x1="${X(i)}" y1="0" x2="${X(i)}" y2="300" stroke="#e2e8f0" stroke-width="1"/>`;
+                g += `<line x1="0" y1="${Y(i)}" x2="300" y2="${Y(i)}" stroke="#e2e8f0" stroke-width="1"/>`;
+            }
+            g += `<line x1="${CX}" y1="0" x2="${CX}" y2="300" stroke="#334155" stroke-width="2"/><line x1="0" y1="${CY}" x2="300" y2="${CY}" stroke="#334155" stroke-width="2"/>`;
+            for (let i = -6; i <= 6; i += 2) if (i !== 0) g += `<text x="${X(i)}" y="${CY + 14}" font-size="11" fill="#64748b" text-anchor="middle">${i}</text>`;
+            let d = "";
+            for (let t = 0; t <= 120; t++) {
+                const x = -6 + 12 * t / 120, y = k * a * (x - r1) * (x - r2);
+                if (y < -6.2 || y > 6.2) { d += ""; continue; }
+                d += (d === "" ? "M" : "L") + X(x).toFixed(1) + "," + Y(y).toFixed(1) + " ";
+            }
+            g += `<path d="${d.trim()}" fill="none" stroke="#2563eb" stroke-width="4" stroke-linecap="round"/>`;
+            g += `<circle cx="${X(r1)}" cy="${CY}" r="5" fill="#dc2626"/><circle cx="${X(r2)}" cy="${CY}" r="5" fill="#dc2626"/>`;
+            return `<div style="background:#fff;border:1px solid #cbd5e1;border-radius:8px;padding:10px;max-width:320px;margin:0 auto;"><svg viewBox="0 0 300 300" style="width:100%;height:auto;display:block;">${g}</svg></div>`;
+        }
+
+        function genType5() {
+            /* 식이 아니라 그래프에서 x절편을 읽는 유형 */
+            let r1 = randInt(-5, 4), r2 = randInt(r1 + 1, 5);
+            const a = Math.random() > 0.5 ? 1 : -1;
+            const key = p => p.slice().sort((m, n) => m - n).join(",");
+            const cands = [[-r1, -r2], [r1 + 1, r2], [r1, r2 + 1], [r1 - 1, r2], [r1, r2 - 1]];
+            const seen = [key([r1, r2])];
+            let opts = [`x = ${r1} \\text{ and } x = ${r2}`];
+            for (let i = 0; i < cands.length && opts.length < 4; i++) {
+                const kk = key(cands[i]);
+                if (seen.indexOf(kk) !== -1) continue;
+                seen.push(kk);
+                opts.push(`x = ${cands[i][0]} \\text{ and } x = ${cands[i][1]}`);
+            }
+            opts = opts.map(o => `\\(${o}\\)`);
+            const correct = opts[0];
+            const mc = shuffleMC(opts, correct);
+            return {
+                title: "Type 5: Reading Zeros off a Graph", type: "mc", assetType: "custom",
+                fullStatement: mcfPick(["The parabola below is drawn on a grid. What are its zeros?",
+                    "Read the zeros of the parabola straight off the graph below.",
+                    "Where does the parabola below cross the x-axis?"]),
+                assetHtml: mcfParabolaSvg(a, r1, r2),
+                prompt: "Pick the zeros shown on the graph:",
+                options: mc.options,
+                hint: "The zeros are the x-values where the curve crosses the x-axis. Look at the two red dots and read straight down to the numbers.",
+                steps: [
+                    { title: "Step 1: Find where the curve meets the x-axis", math: "\\text{Zeros = x-intercepts}", explanation: "The zeros of a relation are the x-values that make y come out as 0. On a graph that happens exactly where the curve cuts the horizontal axis. So this question is really asking you to read two numbers off the picture." },
+                    { title: "Step 2: Read each crossing point", math: `x = ${r1} \\quad\\text{and}\\quad x = ${r2}`, explanation: `The curve crosses at ${MCF.M(r1)} and again at ${MCF.M(r2)}. Read straight down from each red dot to the number line below it. Trap: reading off the y-axis by mistake, or reading the vertex instead of a crossing.` },
+                    { title: "Step 3: Give your answer", math: `\\text{Zeros: } x = ${r1},\\; x = ${r2}`, explanation: `So the zeros are ${MCF.M(r1)} and ${MCF.M(r2)}. To check, put each one back into the equation and confirm that y comes out as 0. The order you write them in does not matter.` }
+                ], ans: mc.ans
+            };
+        }
+
+        function genType6() {
+            /* 문장제: 상황을 식으로 옮긴 다음 인수분해로 푸는 유형 */
+            const kind = randInt(1, 3);
+            let stmt, eqn, r1, r2, ansStr, ctx, unit, reject;
+            let letter = "x", qB = 0, qC = 0, isTrinomial = true;
+            let unitWord = "";
+            if (kind === 1) {
+                const n = randInt(3, 12);
+                r1 = n; r2 = -(n + 1);
+                stmt = `The product of two consecutive positive integers is ${n * (n + 1)}. Find the smaller integer.`;
+                eqn = `x(x + 1) = ${n * (n + 1)} \\quad\\Rightarrow\\quad x^2 + x - ${n * (n + 1)} = 0`;
+                ansStr = `${n}`; ctx = "integer"; unit = "";
+                letter = "x"; qB = 1; qC = -(n * (n + 1));
+                reject = `x = ${-(n + 1)} is thrown away because the question asks for positive integers.`;
+            } else if (kind === 2) {
+                const w = randInt(3, 11), extra = randInt(2, 6);
+                r1 = w; r2 = -(w + extra);
+                stmt = `A rectangular garden is ${extra} m longer than it is wide. Its area is ${w * (w + extra)} m&sup2;. How wide is it?`;
+                eqn = `w(w + ${extra}) = ${w * (w + extra)} \\quad\\Rightarrow\\quad w^2 + ${extra}w - ${w * (w + extra)} = 0`;
+                ansStr = `${w}`; ctx = "width"; unit = " \\text{ m}"; unitWord = "m";
+                letter = "w"; qB = extra; qC = -(w * (w + extra));
+                reject = `w = ${-(w + extra)} is thrown away because a width cannot be negative.`;
+            } else {
+                const t = randInt(2, 6), v = 5 * t;
+                r1 = t; r2 = 0;
+                stmt = `A ball is thrown straight up. Its height in metres after t seconds is \\(h = -5t^2 + ${v}t\\). When does it land back on the ground?`;
+                eqn = `-5t^2 + ${v}t = 0 \\quad\\Rightarrow\\quad -5t(t - ${t}) = 0`;
+                ansStr = `${t}`; ctx = "time"; unit = " \\text{ seconds}"; unitWord = "seconds";
+                letter = "t"; isTrinomial = false;
+                reject = `t = 0 is the moment it was thrown, so the landing time is the other answer.`;
+            }
+            const correct = `\\(${ansStr}${unit}\\)`;
+            const cands = [`\\(${Number(ansStr) + 1}${unit}\\)`, `\\(${Number(ansStr) - 1}${unit}\\)`, `\\(${Math.abs(r2)}${unit}\\)`, `\\(${Number(ansStr) + 2}${unit}\\)`];
+            let opts = [correct];
+            for (let i = 0; i < cands.length && opts.length < 4; i++) if (opts.indexOf(cands[i]) === -1) opts.push(cands[i]);
+            const mc = shuffleMC(opts, correct);
+            return {
+                title: "Type 6: Word Problems with Quadratics", type: "mc", assetType: "none",
+                hasMethods: isTrinomial, methods: isTrinomial ? MCF.METHODS_FACTORING : [],
+                fullStatement: stmt,
+                prompt: "Pick the answer that fits the situation:",
+                options: mc.options,
+                hint: "Turn the sentence into an equation first. Then move everything to one side so it equals zero, and factor.",
+                steps: [
+                    { title: "Step 1: Decide what the unknown actually is", mode: "common",
+                      math: eqn,
+                      explanation: `Read the sentence and pick out the one thing you are being asked for. Give it a letter, then write down what the sentence says about it. Move everything to one side so the equation equals zero.` },
+                    ...(isTrinomial ? [
+                    { title: "Step 2 (Product & Sum): Find the target product and sum", mode: "ps",
+                      math: `\\text{Product} = ${qC}, \\quad \\text{Sum} = ${qB}`,
+                      explanation: `The front number is 1, so you need two numbers that multiply to ${MCF.M(qC)} and add to ${MCF.M(qB)}. The product is negative, which means one number is positive and the other is negative.` },
+                    { title: "Step 3 (Product & Sum): Find the pair that does both jobs", mode: "ps",
+                      math: `(${-r1}) \\times (${-r2}) = ${qC} \\quad\\text{and}\\quad (${-r1}) + (${-r2}) = ${qB}`,
+                      explanation: `The pair is ${MCF.M(-r1)} and ${MCF.M(-r2)}. They multiply to ${MCF.M(qC)} and add to ${MCF.M(qB)}, so both jobs are done. Those two numbers go straight into the brackets. Trap: using the answers themselves here instead of the pair that builds the brackets.` },
+                    { title: "Step 2 (Criss-Cross): Fill in the box", mode: "cc", isMatrix: true,
+                      matrixData: { lt: letter, lb: letter,
+                                    rt: fmtTerm(-r1, '', true), rb: fmtTerm(-r2, '', true),
+                                    pt: fmtTerm(-r2, letter, true), pb: fmtTerm(-r1, letter, true),
+                                    sum: fmtTerm(qB, letter, true) },
+                      explanation: `Put ${MCF.M(letter)} and ${MCF.M(letter)} down the left side, because ${MCF.M(letter + " \\times " + letter)} gives the squared term. Then put ${MCF.M(fmtTerm(-r1, '', true))} and ${MCF.M(fmtTerm(-r2, '', true))} down the right side.` },
+                    { title: "Step 3 (Criss-Cross): Check the diagonals", mode: "cc",
+                      math: `(${fmtTerm(-r2, letter, true)}) + (${fmtTerm(-r1, letter, true)}) = ${fmtTerm(qB, letter, true)}`,
+                      explanation: `Multiply along each arrow, then add the two answers together. You get ${MCF.M(fmtTerm(qB, letter, true))}, which matches the middle term. Trap: if it does not match, swap the two numbers on the right side.` }
+                    ] : [
+                    { title: "Step 2: Take out the common factor", mode: "common",
+                      math: eqn,
+                      explanation: `Both terms share a factor here, so there is no middle term to split. Pull the common factor out front and you are left with two brackets straight away. No splitting method is needed for this one.` }
+                    ]),
+                    { title: "Step 4: Set each bracket to zero", mode: "common",
+                      math: `\\text{Set each bracket to } 0`,
+                      explanation: `If two things multiply together to give zero, at least one of them has to be zero. Set each bracket equal to zero and solve. A quadratic hands you two answers here, not one.` },
+                    { title: "Step 5: Throw away the answer that makes no sense", mode: "common",
+                      math: `\\text{Answer} = ${ansStr}${unit}`,
+                      explanation: `${reject} So the ${ctx} is ${unitWord ? MCF.Mu(ansStr, unitWord) : MCF.M(ansStr)}. Trap: giving both answers when only one of them can happen in real life.` }
+                ], ans: mc.ans
+            };
+        }
+
+        // --- Core Execution ---
+
+
+
+
+
+
+
+
+
+
+    
+
+        /* 진입점. DOM 을 건드리지 않는 순수 함수라 그대로 테스트할 수 있다. */
+        const GENERATORS = { t1: genType1, t2: genType2, t3: genType3, t4: genType4, t5: genType5, t6: genType6 };
+        function generateProblem(typeId) {
+          const f = GENERATORS[typeId];
+          return f ? f() : null;
+        }
+
+        MCF.init({ generate: generateProblem,
+                   logUrl: (typeof TEACHER_SPREADSHEET_SCRIPT_URL !== "undefined" ? TEACHER_SPREADSHEET_SCRIPT_URL : null),
+                   unitId: "Unit_1", lessonId: "Lesson_6_and_7" });
+</script>
+    <script src="../progress.js"></script>
+</body>
+</html>

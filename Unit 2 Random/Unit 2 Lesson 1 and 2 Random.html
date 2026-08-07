@@ -1,0 +1,1109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCF3M Unit 2 Lesson 1 and 2 Practice Studio</title>
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+
+    <!-- mcf-core.js 가 그리는 요소들의 기본 스타일. 아래 <style> 보다 먼저 와야
+         파일 고유 스타일이 이기고, 빠진 클래스만 여기서 메워진다.
+         폴더 위치를 몰라도 되게 두 경로를 다 건다(없는 쪽은 404 로 무시). -->
+    <link rel="stylesheet" href="../mcf-core.css">
+    <link rel="stylesheet" href="mcf-core.css">
+    <style>
+        :root {
+            --primary-color: #0f172a;
+            --secondary-color: #2563eb;
+            --disabled-color: #94a3b8;
+            --text-color: #334155;
+            --math-color: #000000;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --border-color: #cbd5e1;
+            --highlight-bg: #eff6ff;
+            --explanation-bg: #f1f5f9;
+            --rule-bg: #fef08a;
+            --rule-text: #713f12;
+            --success-color: #16a34a;
+            --error-color: #dc2626;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.8;
+            margin: 0;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: -0.025em;
+        }
+
+        .scoreboard {
+            background-color: #1e293b;
+            color: white;
+            display: inline-flex;
+            gap: 20px;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-weight: 700;
+            margin-top: 15px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.2);
+        }
+
+        .scoreboard span {
+            color: #60a5fa;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .profile-box, .selector-box {
+            background-color: var(--card-bg);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-color);
+            margin-bottom: 25px;
+        }
+
+        .profile-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .profile-grid input {
+            width: 100%;
+            padding: 12px;
+            font-size: 1rem;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        .profile-grid input:focus {
+            border-color: var(--secondary-color);
+        }
+
+        label {
+            display: block;
+            font-weight: 700;
+            color: var(--primary-color);
+            font-size: 1.1rem;
+            margin-bottom: 12px;
+        }
+
+        .selector-controls {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        select {
+            flex: 1;
+            padding: 16px;
+            font-size: 1.1rem;
+            font-family: inherit;
+            border-radius: 8px;
+            border: 2px solid var(--border-color);
+            background-color: white;
+            color: var(--primary-color);
+            outline: none;
+            cursor: pointer;
+        }
+
+        .solution-container {
+            background-color: var(--card-bg);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-color);
+            min-height: 200px;
+        }
+
+        .placeholder-text {
+            color: #64748b;
+            text-align: center;
+            font-style: italic;
+            padding: 60px 0;
+            font-size: 1.1rem;
+        }
+
+        .quiz-interface-box {
+            background-color: var(--explanation-bg);
+            border: 1px solid var(--border-color);
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+
+        .math-render-viewport {
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+        }
+
+        .mc-options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 10px;
+        }
+
+        .mc-option-card {
+            background: white;
+            border: 2px solid var(--border-color);
+            padding: 14px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1.05rem;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .mc-option-card:hover:not(.disabled) {
+            border-color: var(--secondary-color);
+            background-color: var(--highlight-bg);
+        }
+
+        .mc-option-card.selected {
+            border-color: var(--secondary-color);
+            background-color: #dbeafe;
+            color: #1e40af;
+        }
+
+        .mc-option-card.disabled {
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .mc-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background-color: #e2e8f0;
+            color: var(--primary-color);
+            font-weight: 800;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+
+        .mc-option-card.selected .mc-badge {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+
+        .feedback-msg-area {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            display: none;
+            padding: 10px 15px;
+            border-radius: 6px;
+        }
+
+        .feedback-success {
+            background-color: #dcfce7;
+            color: var(--success-color);
+            border-left: 5px solid var(--success-color);
+        }
+
+        .feedback-error {
+            background-color: #fee2e2;
+            color: var(--error-color);
+            border-left: 5px solid var(--error-color);
+        }
+
+        .quiz-action-bar {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .solution-reveal-window {
+            display: none;
+            border-top: 3px double var(--border-color);
+            margin-top: 30px;
+            padding-top: 30px;
+        }
+
+        .step-block {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e2e8f0;
+            display: none;
+        }
+
+        .step-title {
+            font-weight: 800;
+            color: var(--secondary-color);
+            display: block;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 8px;
+        }
+
+        .step-math {
+            font-size: 1.3rem;
+            font-weight: 700;
+            background-color: var(--explanation-bg);
+            padding: 14px 20px;
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin: 8px 0;
+            color: var(--math-color);
+            letter-spacing: 0.02em;
+            flex-wrap: wrap;
+        }
+
+        .step-explanation {
+            display: block;
+            font-size: 1.05rem;
+            color: #334155;
+            margin-top: 6px;
+        }
+
+        .final-answer-box {
+            background-color: var(--highlight-bg);
+            border-left: 6px solid var(--secondary-color);
+            padding: 20px 25px;
+            border-radius: 0 8px 8px 0;
+            margin-top: 30px;
+            display: none;
+        }
+
+        .final-answer-label {
+            font-weight: 800;
+            color: var(--secondary-color);
+            display: block;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .final-answer-math {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            margin-top: 6px;
+            display: inline-flex;
+            align-items: center;
+            letter-spacing: 0.02em;
+        }
+
+        .control-panel {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid var(--border-color);
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 14px 24px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            border-radius: 8px;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary { background-color: var(--secondary-color); color: white; }
+        .btn-primary:hover:not(:disabled) { background-color: #1d4ed8; }
+        .btn-success { background-color: var(--success-color); color: white; }
+        .btn-success:hover:not(:disabled) { background-color: #166534; }
+        .btn-secondary { background-color: var(--explanation-bg); color: var(--primary-color); border: 1px solid var(--border-color); }
+        .btn-secondary:hover:not(:disabled) { background-color: #e2e8f0; }
+        .btn-accent { background-color: var(--primary-color); color: white; }
+        .btn-accent:hover:not(:disabled) { background-color: #1e293b; }
+
+        .btn:disabled {
+            background-color: var(--disabled-color);
+            color: #f1f5f9;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+        
+        .question-statement-card {
+            background: #ffffff;
+            border-left: 4px solid var(--secondary-color);
+            padding: 16px 20px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            border-radius: 0 6px 6px 0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .hint-box {
+            display: none;
+            background-color: #fef9c3;
+            border-left: 5px solid #eab308;
+            color: #713f12;
+            padding: 12px 16px;
+            border-radius: 0 6px 6px 0;
+            margin-bottom: 15px;
+            font-size: 1.05rem;
+            font-weight: 600;
+        }
+        .btn-hint { background-color: #fde047; color: #713f12; }
+        .btn-hint:hover:not(:disabled) { background-color: #facc15; }
+
+        .coord-svg {
+            width: 100%;
+            height: auto;
+            display: block;
+            background: #ffffff;
+            border-radius: 6px;
+        }
+        .math-render-viewport .coord-svg { width: 330px; max-width: 100%; }
+
+        .mc-options-list.graph-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+        .mc-option-card.graph-card {
+            flex-direction: column;
+            align-items: stretch;
+            padding: 10px;
+        }
+        .mc-option-card.graph-card .mc-badge { align-self: flex-start; margin-bottom: 6px; }
+        .option-graph { width: 100%; border: 1px solid var(--border-color); border-radius: 6px; overflow: hidden; }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>MCF3M Unit 2 Lesson 1 & 2</h1>
+        <p>Infinite Practice: Functions, Domain, Range & Notation</p>
+        <div class="scoreboard">
+            <div>Score: <span id="hud-score">0</span></div>
+            <div>Tries: <span id="hud-attempts">0</span></div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="profile-box">
+            <label>Student Profile Setup:</label>
+            <div class="profile-grid">
+                <input type="text" id="first-name" placeholder="First name" autocomplete="off">
+                <input type="text" id="last-name" placeholder="Last name" autocomplete="off">
+            </div>
+        </div>
+
+        <div class="selector-box">
+            <label for="question-select">Select Practice Concept:</label>
+            <div class="selector-controls">
+                <select id="question-select" onchange="triggerNewQuestion()">
+                    <option value="">-- Choose a Topic to Begin --</option>
+                    <option value="t1">Type 1: Vertical Line Test (Function or Not)</option>
+                    <option value="t2">Type 2: Evaluating Function Notation (e.g., f(a))</option>
+                    <option value="t3">Type 3: Reading a Function Value from a Graph</option>
+                    <option value="t4">Type 4: Determining Domain from a Graph</option>
+                    <option value="t5">Type 5: Determining Range from a Graph</option>
+                </select>
+                <button class="btn btn-accent" onclick="triggerNewQuestion()">Generate New</button>
+            </div>
+        </div>
+
+        <div class="solution-container" id="display-window">
+            <div id="placeholder" class="placeholder-text">
+                Choose a concept and click "Generate New" to create a dynamic practice problem.
+            </div>
+
+            <div id="quiz-station" class="quiz-interface-box" style="display: none;">
+                <div id="asset-viewport-mount-point" class="math-render-viewport" style="display: none;"></div>
+
+                <div id="question-statement-display" class="question-statement-card"></div>
+
+                <label id="input-prompt-label" style="margin-bottom: 12px; font-weight: 700; display: block;"></label>
+                
+                <div id="dynamic-input-mount-point" style="margin-top: 10px;"></div>
+
+                <div id="hint-box" class="hint-box"></div>
+                <div id="feedback-msg" class="feedback-msg-area"></div>
+
+                <div class="quiz-action-bar">
+                    <button class="btn btn-success" id="check-ans-btn" onclick="evaluateStudentAnswer()">Check Answer</button>
+                    <button class="btn btn-hint" id="hint-btn" onclick="toggleHint()">Hint</button>
+                    <button class="btn btn-secondary" id="reveal-sol-btn" disabled onclick="unlockSolutionPanel()">Show Solution Steps</button>
+                </div>
+            </div>
+
+            <div class="solution-reveal-window" id="solution-reveal-layer">
+                <div id="solution-workspace-injected"></div>
+                
+                <div class="control-panel" id="controls-panel">
+                    <button class="btn btn-secondary" id="restart-btn" onclick="restartSolution()">Restart Steps</button>
+                    <button class="btn btn-primary" id="next-btn" onclick="showNextStep()">Next Step &rarr;</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- mcf-core.js 는 보통 상위 폴더(index.html·progress.js 옆)에 둔다.
+         같은 폴더에 두는 경우도 있어 두 경로를 다 건다. 없는 쪽은 404 로 무시되고,
+         둘 다 있으면 두 번째는 core 내부 가드가 막는다. -->
+    <script src="../mcf-core.js"></script>
+    <script src="mcf-core.js"></script>
+    <script>
+    /* core 를 못 찾으면 Generate 가 조용히 무반응이 된다. 원인이 안 보이므로 안내를 띄운다. */
+    if (typeof MCF === "undefined") {
+      document.addEventListener("DOMContentLoaded", function () {
+        var box = document.getElementById("placeholder");
+        if (box) {
+          box.innerHTML =
+            '<strong style="color:#b91c1c">mcf-core.js \uB97C \uCC3E\uC744 \uC218 \uC5C6\uC2B5\uB2C8\uB2E4.</strong><br><br>' +
+            'This lesson needs <code>mcf-core.js</code>.<br>' +
+            'Put it next to <code>progress.js</code> and <code>index.html</code> ' +
+            '(the folder above this one), or in this same folder.';
+          box.style.display = "block";
+        }
+        var b = document.querySelector(".btn-generate");
+        if (b) b.disabled = true;
+      });
+    }
+    </script>
+    <script>
+
+        /* ── mcf-core.js 로 옮겨간 이름들의 지역 별칭 ── */
+        const randInt = MCF.randInt;
+        const gcd = MCF.gcd;
+        const gcd3 = MCF.gcd3;
+        const mcfPick = MCF.pick;
+        const mcfRich = MCF.rich;
+        const mcfShuffle = MCF.shuffle;
+        const mcfKey = MCF.key;
+        const mcfDedupe = MCF.dedupe;
+        const mcfFactorKey = MCF.factorKey;
+        const mcfUniqueByValue = MCF.uniqueByValue;
+        const mcfSpareOption = MCF.spareOption;
+        const shuffleMC = MCF.shuffleMC;
+        const M = MCF.M;
+        const Mu = MCF.Mu;
+        /* --- audit fix: uniform in-place shuffle (Fisher-Yates) --- */
+
+        /* --- audit fix: 같은 보기가 두 번 나오면 하나로 합친다.
+           정답과 글자가 똑같은 보기를 골랐는데 오답 처리되는 것을 막는다. --- */
+        /* Nudge one number inside an existing option to build a replacement
+           distractor. Skips digit groups that follow a thousands separator, so
+           "\\$11\\,045.96" is altered at the 11 and never left malformed.
+           Uniqueness is checked by the caller, so this can never reproduce the
+           correct answer. */
+        /* Two options can differ only in whitespace -- an empty middle term leaves
+           "4x^2  + 16" beside "4x^2 + 16" -- and MathJax renders them identically, so
+           the student sees the same card twice and only one of them scores. Compare
+           options on this normalised key, not on the raw string. */
+
+
+
+        const TEACHER_SPREADSHEET_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwygR6-l7XPRC1KL-Pqci33Yw_4pmCWa8mW7gNHJ_RsmN41ax15-d0sE-CrIxU0z22m/exec";
+
+        let globalScore = 0;
+        let globalAttempts = 0;
+        let currentProblemData = null;
+        let currentState = { answered: false, selectedMcOption: "", isCorrect: false, currentStep: 0, solRevealed: false, attempts: 0 };
+        let visibleStepElements = [];
+        let currentStepIndex = 0;
+
+        // --- Math & Logic Utilities ---
+
+        function fmtCoef(c, isFirst) {
+            if (c === 0) return "";
+            if (c === 1) return isFirst ? "" : "+";
+            if (c === -1) return "-";
+            return (c > 0 && !isFirst ? "+" + c : c.toString());
+        }
+
+        function fmtTerm(c, v, isFirst) {
+            if (c === 0) return "";
+            let s = fmtCoef(c, isFirst);
+            if (s === "+" && v !== "") s = "+";
+            if (s === "-" && v !== "") s = "-";
+            if (v === "") return (c > 0 && !isFirst ? "+" + c : c.toString());
+            if (c === 1) return isFirst ? v : "+" + v;
+            if (c === -1) return "-" + v;
+            return (c > 0 && !isFirst ? "+" + c + v : c + v);
+        }
+
+        /* audit fix: 예비 오답이 "0","1" 두 개뿐이라 정답·오답과 겹치면 보기가 3개로 줄었다.
+           정답 주변 정수를 넉넉히 만들어 항상 4개가 채워지게 한다. */
+        function mcfNearby(v) {
+            const out = [];
+            for (let d = 1; d <= 6; d++) { out.push(v - d, v + d); }
+            return out.filter(n => n !== v && n >= -8 && n <= 8).map(String);
+        }
+
+        /* Last-resort spare options.
+
+           Some types pass an empty fallback list, so when two of their planned
+           distractors happened to land on the same value the question dropped to three
+           options. This nudges the number inside the correct answer instead, keeping the
+           surrounding text and the number of decimal places exactly as they were, so the
+           spare reads like every other option. Returns null when the answer holds no
+           number, in which case the old three-option behaviour still applies. */
+
+        /* Picks one of several wordings for the same question, so a student cannot
+           recognise a type by its sentence alone. */
+
+
+        function gdef(v, d) { return (v === undefined || v === null) ? d : v; }
+
+        // --- SVG Graphing Engine ---
+        function buildGraph(spec) {
+            const xmin = gdef(spec.xmin, -7), xmax = gdef(spec.xmax, 7);
+            const ymin = gdef(spec.ymin, -7), ymax = gdef(spec.ymax, 7);
+            const W = 300, H = 300, pad = 10;
+            const X = function (x) { return pad + (x - xmin) / (xmax - xmin) * (W - 2 * pad); };
+            const Y = function (y) { return pad + (ymax - y) / (ymax - ymin) * (H - 2 * pad); };
+            const uid = "g" + Math.random().toString(36).slice(2, 8);
+            
+            let s = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" class="coord-svg">`;
+            /* Arrow direction fix: orient="auto" rotates a marker to the direction the
+               path is travelling AT that point. At the start of a path that direction
+               points inward, so a start arrowhead pointed back into the curve instead of
+               away from it. The -s markers below are the same triangle mirrored, and are
+               used for every marker-start. */
+            s += '<defs>';
+            /* audit fix 2026-07-30: 화살촉은 격자 경계 바깥으로 4 * stroke-width 만큼
+               뻗기 때문에, 클립 사각형이 격자에 딱 맞으면 촉이 잘려 안 보였다.
+               곡선 자체는 drawCurve에서 이미 격자 안으로 잘라 그린다. */
+            const clipPad = 10;
+            s += `<clipPath id="clip-${uid}"><rect x="${pad - clipPad}" y="${pad - clipPad}" width="${W - 2 * pad + 2 * clipPad}" height="${H - 2 * pad + 2 * clipPad}"/></clipPath>`;
+            s += `<marker id="ax-${uid}" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#0f172a"/></marker>`;
+            s += `<marker id="ax-s-${uid}" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M8,0 L0,4 L8,8 Z" fill="#0f172a"/></marker>`;
+            s += `<marker id="cv-${uid}" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#2563eb"/></marker>`;
+            s += `<marker id="cv-s-${uid}" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M8,0 L0,4 L8,8 Z" fill="#2563eb"/></marker>`;
+            s += '</defs>';
+            
+            for (let gx = Math.ceil(xmin); gx <= xmax; gx++) s += `<line x1="${X(gx)}" y1="${Y(ymax)}" x2="${X(gx)}" y2="${Y(ymin)}" stroke="#e8edf3" stroke-width="1"/>`;
+            for (let gy = Math.ceil(ymin); gy <= ymax; gy++) s += `<line x1="${X(xmin)}" y1="${Y(gy)}" x2="${X(xmax)}" y2="${Y(gy)}" stroke="#e8edf3" stroke-width="1"/>`;
+            s += `<line x1="${X(xmin)}" y1="${Y(0)}" x2="${X(xmax)}" y2="${Y(0)}" stroke="#0f172a" stroke-width="1.5" marker-start="url(#ax-s-${uid})" marker-end="url(#ax-${uid})"/>`;
+            s += `<line x1="${X(0)}" y1="${Y(ymin)}" x2="${X(0)}" y2="${Y(ymax)}" stroke="#0f172a" stroke-width="1.5" marker-start="url(#ax-s-${uid})" marker-end="url(#ax-${uid})"/>`;
+            
+            for (let gx = Math.ceil(xmin); gx <= xmax; gx++) { if (gx !== 0 && gx % 2 === 0) s += `<text x="${X(gx)}" y="${Y(0) + 12}" font-size="9" fill="#64748b" text-anchor="middle">${gx}</text>`; }
+            for (let gy = Math.ceil(ymin); gy <= ymax; gy++) { if (gy !== 0 && gy % 2 === 0) s += `<text x="${X(0) - 5}" y="${Y(gy) + 3}" font-size="9" fill="#64748b" text-anchor="end">${gy}</text>`; }
+            s += `<text x="${X(0) - 5}" y="${Y(0) + 12}" font-size="9" fill="#64748b" text-anchor="end">0</text>`;
+            
+            const curves = spec.curves || [];
+            for (let i = 0; i < curves.length; i++) s += `<g clip-path="url(#clip-${uid})">${drawCurve(curves[i], X, Y, xmin, xmax, ymin, ymax, uid)}</g>`;
+            const dots = spec.dots || [];
+            for (let i = 0; i < dots.length; i++) { 
+                const dd = dots[i]; 
+                s += `<circle cx="${X(dd.x)}" cy="${Y(dd.y)}" r="4.5" fill="${dd.open ? '#ffffff' : '#2563eb'}" stroke="#2563eb" stroke-width="2"/>`; 
+            }
+            s += '</svg>';
+            return s;
+        }
+
+        /* --- audit fix 2026-07-30: 화살촉이 화면에서 사라지던 문제 ---
+           곡선은 clipPath로 잘리는데 SVG marker는 자르기 전 path 끝점에 붙는다.
+           포물선처럼 끝점이 격자 밖인 곡선은 화살촉이 통째로 잘려 나가서,
+           "화살표를 보고 무한히 뻗는지 판단하라"는 문항이 성립하지 않았다.
+           이제 곡선을 격자 안으로 먼저 자르고, 그 끝에서 화살촉을 붙인다. */
+        function mcfClipRuns(pts, xmin, xmax, ymin, ymax) {
+            const EPS = 1e-9;
+            /* Liang-Barsky. 선분의 양 끝이 둘 다 격자 밖이면서 격자를 가로지르는
+               경우(기울기 큰 직선)도 놓치지 않으려면 구간별 정식 클리핑이 필요하다. */
+            function clipSeg(a, b) {
+                let t0 = 0, t1 = 1;
+                const dx = b[0] - a[0], dy = b[1] - a[1];
+                const pp = [-dx, dx, -dy, dy];
+                const qq = [a[0] - xmin, xmax - a[0], a[1] - ymin, ymax - a[1]];
+                for (let i = 0; i < 4; i++) {
+                    if (Math.abs(pp[i]) < EPS) { if (qq[i] < -EPS) return null; continue; }
+                    const r = qq[i] / pp[i];
+                    if (pp[i] < 0) { if (r > t1) return null; if (r > t0) t0 = r; }
+                    else { if (r < t0) return null; if (r < t1) t1 = r; }
+                }
+                return [[a[0] + dx * t0, a[1] + dy * t0], [a[0] + dx * t1, a[1] + dy * t1]];
+            }
+            const runs = [];
+            let cur = null;
+            for (let i = 0; i + 1 < pts.length; i++) {
+                const seg = clipSeg(pts[i], pts[i + 1]);
+                if (!seg) { if (cur) { runs.push(cur); cur = null; } continue; }
+                if (!cur) { cur = [seg[0], seg[1]]; continue; }
+                const last = cur[cur.length - 1];
+                if (Math.abs(last[0] - seg[0][0]) > 1e-7 || Math.abs(last[1] - seg[0][1]) > 1e-7) {
+                    runs.push(cur); cur = [seg[0], seg[1]];
+                } else cur.push(seg[1]);
+            }
+            if (cur) runs.push(cur);
+            return runs;
+        }
+
+        /* 화살촉 자체가 약 7px이라, 경계에 정확히 놓으면 clipPath에 반쯤 잘린다.
+           화살표가 붙는 쪽만 화면 좌표로 몇 px 물러나게 해서 전부 보이게 한다. */
+        function mcfRetreat(run, px, fromStart) {
+            const pts = fromStart ? run.slice().reverse() : run.slice();
+            let need = px;
+            while (pts.length >= 2 && need > 0) {
+                const a = pts[pts.length - 2], b = pts[pts.length - 1];
+                const dx = b[0] - a[0], dy = b[1] - a[1];
+                const len = Math.sqrt(dx * dx + dy * dy);
+                if (len <= 1e-9) { pts.pop(); continue; }
+                if (len > need) {
+                    const t = (len - need) / len;
+                    pts[pts.length - 1] = [a[0] + dx * t, a[1] + dy * t];
+                    need = 0;
+                } else {
+                    need -= len;
+                    pts.pop();
+                }
+            }
+            return fromStart ? pts.reverse() : pts;
+        }
+
+        function drawCurve(c, X, Y, xmin, xmax, ymin, ymax, uid) {
+            function path(pts, aStart, aEnd) {
+                if (pts.length < 2) return "";
+                const runs = mcfClipRuns(pts, xmin, xmax, ymin, ymax);
+                if (!runs.length) return "";
+                let out = "";
+                for (let r = 0; r < runs.length; r++) {
+                    let run = [];
+                    for (let i = 0; i < runs[r].length; i++) run.push([X(runs[r][i][0]), Y(runs[r][i][1])]);
+                    const headArrow = aStart && r === 0;
+                    const tailArrow = aEnd && r === runs.length - 1;
+                    /* 화살촉은 refX=4 * stroke-width 만큼 끝점 너머로 뻗는다.
+                       그만큼 물러나야 촉 끝이 정확히 격자 경계에 놓인다. */
+                    const arrowPad = 4 * 2.5;
+                    if (headArrow) run = mcfRetreat(run, arrowPad, true);
+                    if (tailArrow) run = mcfRetreat(run, arrowPad, false);
+                    if (run.length < 2) continue;
+                    let span = 0;
+                    for (let i = 1; i < run.length; i++) span += Math.abs(run[i][0] - run[i - 1][0]) + Math.abs(run[i][1] - run[i - 1][1]);
+                    if (span < 1) continue;
+                    let d = "";
+                    for (let i = 0; i < run.length; i++) d += (i === 0 ? "M" : "L") + run[i][0].toFixed(1) + "," + run[i][1].toFixed(1) + " ";
+                    let attr = 'stroke="#2563eb" stroke-width="2.5" fill="none" stroke-linejoin="round" stroke-linecap="round"';
+                    if (tailArrow) attr += ` marker-end="url(#cv-${uid})"`;
+                    if (headArrow) attr += ` marker-start="url(#cv-s-${uid})"`;
+                    out += `<path d="${d.trim()}" ${attr}/>`;
+                }
+                return out;
+            }
+            const lo = c.dom ? c.dom[0] : xmin, hi = c.dom ? c.dom[1] : xmax;
+            if (c.kind === "line") { return path([[lo, c.m * lo + c.b], [hi, c.m * hi + c.b]], c.arrowLeft, c.arrowRight); }
+            if (c.kind === "hline") { return path([[lo, c.y], [hi, c.y]], c.arrowLeft, c.arrowRight); }
+            if (c.kind === "vline") { const a = c.dom ? c.dom[0] : ymin, b = c.dom ? c.dom[1] : ymax; return path([[c.x, a], [c.x, b]], c.arrowLeft, c.arrowRight); }
+            if (c.kind === "abs") { const f = function (x) { return c.a * Math.abs(x - c.h) + c.k; }; return path([[lo, f(lo)], [c.h, f(c.h)], [hi, f(hi)]], c.arrowLeft, c.arrowRight); }
+            if (c.kind === "circle") { const rpx = (X(c.cx + c.r) - X(c.cx)).toFixed(1); return `<circle cx="${X(c.cx)}" cy="${Y(c.cy)}" r="${rpx}" stroke="#2563eb" stroke-width="2.5" fill="none"/>`; }
+            if (c.kind === "xparab") { const a = c.ydom ? c.ydom[0] : ymin, b = c.ydom ? c.ydom[1] : ymax; let pts = []; for (let i = 0; i <= 80; i++) { const y = a + (b - a) * i / 80; pts.push([c.a * (y - c.k) * (y - c.k) + c.h, y]); } return path(pts, false, false); }
+            let pts = [];
+            for (let i = 0; i <= 80; i++) {
+                const x = lo + (hi - lo) * i / 80; let y;
+                if (c.kind === "parab") y = c.a * (x - c.h) * (x - c.h) + c.k;
+                else if (c.kind === "cubic") y = c.a * (x - c.h) * (x - c.h) * (x - c.h) + c.k;
+                else y = 0;
+                pts.push([x, y]);
+            }
+            return path(pts, c.arrowLeft, c.arrowRight);
+        }
+
+        function buildOptionsHTML(problem, selectedLetter, disabled) {
+            const isGraph = problem.optionType === "graph";
+            let html = `<div class="mc-options-list ${isGraph ? 'graph-grid' : ''}">`;
+            for (let i = 0; i < problem.options.length; i++) {
+                const opt = problem.options[i];
+                const letter = opt.charAt(0);
+                const sel = selectedLetter === letter ? "selected" : "";
+                const dis = disabled ? "disabled" : "";
+                const body = isGraph ? (`<div class="option-graph">${buildGraph(problem.optionSpecs[i])}</div>`) : (`<span>${opt.substring(3)}</span>`);
+                html += `<div class="mc-option-card ${sel} ${dis} ${isGraph ? 'graph-card' : ''}" onclick="selectMcOptionCard('${letter}')"><span class="mc-badge">${letter}</span>${body}</div>`;
+            }
+            html += '</div>';
+            return html;
+        }
+
+        // --- Problem Generators ---
+        function generateProblem(typeId) {
+            if (!typeId) return null;
+            let p = {
+                title: "", type: "mc", assetType: "none", optionType: "text",
+                fullStatement: "", prompt: "", options: [], optionSpecs: [],
+                hint: "", steps: [], ans: "", graphSpec: null, rawAns: ""
+            };
+
+            if (typeId === "t1") {
+                p.title = "Vertical Line Test";
+                p.optionType = "graph";
+                /* Asked one way only, the answer was always a circle, a vertical line or a
+                   sideways parabola, and those three shapes never appeared as a wrong option.
+                   Half the draws now ask the other way, so the same shapes sit on both sides
+                   of the answer key: a circle really is not a function, but it is still a
+                   wrong answer to "which one IS a function". */
+                let askNot = Math.random() > 0.5;
+                p.fullStatement = askNot
+                    ? "Which of the following graphs is <b>not</b> a function? Use the vertical line test."
+                    : "Which of the following graphs <b>is</b> a function? Use the vertical line test.";
+                /* audit fix 2026-07-30: 이 라벨이 askNot을 따라가지 않아,
+                   "IS a function" 문항의 절반에서 정반대 지시가 떴다. */
+                p.prompt = askNot
+                    ? "Tap the graph that is NOT a function:"
+                    : "Tap the graph that IS a function:";
+                
+                let funcs = [
+                    { kind: "line", m: randInt(-2,2,[0]), b: randInt(-2,2), arrowLeft: true, arrowRight: true },
+                    { kind: "parab", a: randInt(1,2)*Math.sign(randInt(-1,1)+0.5)*0.5, h: randInt(-2,2), k: randInt(-2,2), arrowLeft: true, arrowRight: true },
+                    { kind: "abs", a: randInt(1,2)*Math.sign(randInt(-1,1)+0.5), h: randInt(-2,2), k: randInt(-2,2), arrowLeft: true, arrowRight: true },
+                    { kind: "cubic", a: 0.1 * Math.sign(randInt(-1,1)+0.5), h: randInt(-1,1), k: randInt(-1,1), arrowLeft: true, arrowRight: true },
+                    { kind: "hline", y: randInt(-3,3), arrowLeft: true, arrowRight: true }
+                ];
+                let nonFuncs = [
+                    { kind: "circle", cx: randInt(-2,2), cy: randInt(-2,2), r: randInt(2,4) },
+                    { kind: "xparab", a: randInt(1,2)*Math.sign(randInt(-1,1)+0.5)*0.5, h: randInt(-2,2), k: randInt(-2,2), ydom: [-6, 6] },
+                    { kind: "vline", x: randInt(-3,3), arrowLeft: true, arrowRight: true }
+                ];
+                
+                mcfShuffle(funcs);
+                mcfShuffle(nonFuncs);
+
+                /* The question used to be asked one way only, so the answer was always a
+                   circle, a vertical line or a sideways parabola and those three shapes never
+                   appeared as a wrong option. Three pictures memorised and the vertical line
+                   test never gets performed. Half the draws now ask the other way, which puts
+                   the same shapes on both sides of the answer key: a circle really is not a
+                   function, but it is still a wrong answer to "which one IS a function". */
+                let specs = askNot
+                    ? [ { curves: [funcs[0]] }, { curves: [funcs[1]] }, { curves: [funcs[2]] }, { curves: [nonFuncs[0]] } ]
+                    : [ { curves: [nonFuncs[0]] }, { curves: [nonFuncs[1]] }, { curves: [nonFuncs[2]] }, { curves: [funcs[0]] } ];
+                
+                let indices = mcfShuffle([0,1,2,3]);
+                let letters = ["A", "B", "C", "D"];
+                let finalSpecs = [];
+                let ansLetter = "";
+                for(let i=0; i<4; i++){
+                    finalSpecs.push(specs[indices[i]]);
+                    if (indices[i] === 3) ansLetter = letters[i];
+                }
+                
+                p.options = ["A)", "B)", "C)", "D)"];
+                p.optionSpecs = finalSpecs;
+                p.ans = ansLetter;
+                p.hint = "A graph is a function only if every vertical line crosses it at most once.";
+                p.steps = [
+                    { title: "Step 1: Decide What Would Break the Rule", math: "\\(\\text{one input } x \\rightarrow \\text{ at most one output } y\\)", explanation: "A relation stops being a function the moment one x-value has two different y-values attached to it. On a graph that shows up as two points sitting directly above each other. So you are hunting for that one situation, nothing else." },
+                { title: "Step 2: Sweep a Vertical Line Across Each Graph", math: "\\(\\text{a vertical line meets the curve at most once}\\)", explanation: "Picture a straight up-and-down line sweeping from left to right across a graph. Count how many times it touches the curve at each position. Two touches at once anywhere means that graph fails." },
+                    /* audit fix 2026-07-30: 이 단계도 askNot을 따라가지 않아, 정답이
+                       함수인 문항에서 "이 그래프는 함수가 아니다"라고 설명하고 있었다. */
+                    askNot
+                        ? { title: "Step 2: Find the graph that fails", math: `\\(\\text{Option ${ansLetter} fails the test}\\)`, explanation: `A vertical line intersects Option ${ansLetter}'s graph at more than one point, so one x-value gives more than one y-value.` }
+                        : { title: "Step 3: Give Your Answer", math: `\\(\\text{Answer} = \\text{Option } ${ansLetter}\\)`, explanation: `Every vertical line meets Option ${ansLetter} at most once, so each x-value gives exactly one y-value. Each of the other three gets cut twice somewhere. Trap: reading the question backwards, so check whether it asks which one IS or is NOT a function.` }
+                ];
+            }
+            else if (typeId === "t2") {
+                p.title = "Evaluating Function Notation";
+                let a = randInt(-3, 3, [0]);
+                let b = randInt(-5, 5, [0]);
+                let c = randInt(-5, 5, [0]);
+                let x_val = randInt(-4, 4);
+                
+                let funcStr = `\\(f(x) = ${fmtTerm(a, "x^2", true)} ${fmtTerm(b, "x", false)} ${fmtTerm(c, "", false)}\\)`;
+                p.fullStatement = `If ${funcStr}, what is the value of \\(f(${x_val})\\)?`;
+                p.prompt = mcfPick([`Select the value of f(${x_val}):`, `What does f(${x_val}) equal?`, `Work out f(${x_val}) and pick the answer:`]);
+                
+                let ans = a * (x_val * x_val) + b * x_val + c;
+                let d1 = -a * (x_val * x_val) + b * x_val + c;
+                let d2 = a * (x_val * x_val) - b * x_val + c;
+                let d3 = ans + randInt(1, 3) * (Math.random()>0.5?1:-1);
+                
+                let mc = shuffleMC(ans.toString(), [d1.toString(), d2.toString(), d3.toString()], [(ans+2).toString(), (ans-2).toString(), (ans+1).toString()]);
+                p.options = mc.options;
+                p.ans = mc.ansLetter;
+                
+                p.hint = `Replace every x with (${x_val}). Remember to square first, then multiply by ${a}.`;
+                p.steps = [
+                    { title: "Step 1: Work Out What the Notation Is Telling You", math: `\\(f(${x_val}) \\text{ means: put } ${x_val} \\text{ in for } x\\)`, explanation: `The number inside the brackets is not something you multiply by. It is the value you feed into the function. So \\(f(${x_val})\\) is asking what comes out when \\(x\\) is ${x_val}.` },
+                    { title: "Step 2: Replace Every x With the Number", math: `\\(f(${x_val}) = ${a}(${x_val})^2 ${b>0?'+':''}${b}(${x_val}) ${c>0?'+':''}${c}\\)`, explanation: `Swap every single \\(x\\) for ${x_val}, and keep it in brackets. The brackets matter when the number is negative, because a negative squared comes out positive. Trap: replacing only the first x and leaving the others.` },
+                    { title: "Step 3: Do the Powers, Then the Multiplying", math: `\\(= ${a * (x_val * x_val)} ${b * x_val > 0 ? '+' : ''}${b * x_val} ${c > 0 ? '+' : ''}${c}\\)`, explanation: `Order of operations says powers before multiplying. So square first: \\((${x_val})^2 = ${x_val*x_val}\\). Then multiply each term by its number in front. Leave the adding until every term is a plain number.` },
+                    { title: "Step 4: Add Everything Up", math: `\\(f(${x_val}) = ${ans}\\)`, explanation: `Now that every term is a plain number, add them together left to right. The answer ${ans} is the output of the function, so write it as \\(f(${x_val}) = ${ans}\\).` }
+                ];
+            }
+            else if (typeId === "t3") {
+                p.title = "Reading Values from a Graph";
+                p.assetType = "graph";
+                
+                let isLine = Math.random() > 0.5;
+                let targetX = randInt(-3, 3);
+                let targetY = 0;
+                
+                if (isLine) {
+                    let m = randInt(-2, 2, [0]);
+                    let b = randInt(-2, 2);
+                    targetY = m * targetX + b;
+                    while (targetY < -6 || targetY > 6) {
+                        m = randInt(-2, 2, [0]);
+                        b = randInt(-2, 2);
+                        targetY = m * targetX + b;
+                    }
+                    p.graphSpec = { curves: [{ kind: "line", m: m, b: b, arrowLeft: true, arrowRight: true }] };
+                } else {
+                    let a = Math.random() > 0.5 ? 1 : -1;
+                    let h = randInt(-2, 2);
+                    let k = randInt(-3, 3);
+                    targetX = h + randInt(-2, 2);
+                    targetY = a * (targetX - h) * (targetX - h) + k;
+                    while (targetY < -6 || targetY > 6 || targetX < -5 || targetX > 5) {
+                        h = randInt(-2, 2); k = randInt(-3, 3);
+                        targetX = h + randInt(-2, 2);
+                        targetY = a * (targetX - h) * (targetX - h) + k;
+                    }
+                    p.graphSpec = { curves: [{ kind: "parab", a: a, h: h, k: k, arrowLeft: true, arrowRight: true }] };
+                }
+
+                p.fullStatement = MCF.pick([
+                    `The graph of \\(g(x)\\) is shown above. Use the graph to determine \\(g(${targetX})\\).`,
+                    `Read the graph of \\(g(x)\\) above. What is \\(g(${targetX})\\)?`,
+                    `Using the graph of \\(g(x)\\) shown above, find the value of \\(g(${targetX})\\).`
+                ]);
+                p.prompt = mcfPick([`Select the value of g(${targetX}):`, `What is g(${targetX})?`, `Read g(${targetX}) off the graph and pick the answer:`]);
+                
+                let mc = shuffleMC(targetY.toString(), [targetX.toString(), (-targetY).toString(), (targetY+1).toString()], mcfNearby(targetY));
+                p.options = mc.options;
+                p.ans = mc.ansLetter;
+                
+                p.hint = `Find x = ${targetX} on the horizontal axis, go straight up or down to the line, then read the y-value.`;
+                p.steps = [
+                    { title: "Step 1: Work Out Which Axis to Start On", math: `\\(g(${targetX}) \\text{ means: } x = ${targetX}\\)`, explanation: `The number inside the brackets is always an x-value, never a y-value. So you start on the horizontal axis, not the vertical one. Trap: looking for ${targetX} on the y-axis instead.` },
+                    { title: "Step 2: Find That Number on the x-Axis", math: `x = ${targetX}`, explanation: `Run your finger along the horizontal axis until you reach ${targetX}. Mark that spot before you look anywhere else on the graph.` },
+                    { title: "Step 3: Move Straight Up or Down to the Curve", math: `\\(x = ${targetX} \\rightarrow \\text{the curve}\\)`, explanation: `From that spot, travel straight up or straight down until you meet the curve. Keep your line perfectly vertical. Sliding sideways even a little gives the wrong reading.` },
+                    { title: "Step 4: Read the Height Off the y-Axis", math: `\\(g(${targetX}) = ${targetY}\\)`, explanation: `Now look across to the vertical axis to see how high that point sits. The graph passes through \\((${targetX}, ${targetY})\\), so the answer is ${targetY}. That height is what the function gives back.` }
+                ];
+            }
+            else if (typeId === "t4" || typeId === "t5") {
+                let isDomain = (typeId === "t4");
+                p.title = isDomain ? "Domain from a Graph" : "Range from a Graph";
+                p.assetType = "graph";
+                
+                let shapeType = randInt(1, 3); // 1: Segment, 2: Parabola, 3: Ray
+                let correctStr = "";
+                let dist1 = "", dist2 = "", dist3 = "";
+                
+                if (shapeType === 1) { // Segment
+                    let x1 = randInt(-5, -1), x2 = randInt(1, 5);
+                    /* audit fix 2026-07-30: y1 === y2이면 치역이 "-3 <= y <= -3"
+                       같은 퇴화 구간으로 나와, 약 9%의 문항이 낯선 답이 되었다. */
+                    let y1 = randInt(-5, 5), y2 = randInt(-5, 5, [y1]);
+                    p.graphSpec = { 
+                        curves: [{ kind: "line", m: (y2-y1)/(x2-x1), b: y1 - (y2-y1)/(x2-x1)*x1, dom: [x1, x2] }],
+                        dots: [{ x: x1, y: y1 }, { x: x2, y: y2 }]
+                    };
+                    let minY = Math.min(y1, y2), maxY = Math.max(y1, y2);
+                    /* audit fix: 정의역·치역 답은 문장형/부등식이 아니라 집합 표기로 준다
+                       (Lesson 3 · Practice Test와 표기 통일). */
+                    let dStr = `\\(\\{x \\in \\mathbb{R} \\mid ${x1} \\le x \\le ${x2}\\}\\)`;
+                    let rStr = `\\(\\{y \\in \\mathbb{R} \\mid ${minY} \\le y \\le ${maxY}\\}\\)`;
+                    
+                    if (isDomain) {
+                        correctStr = dStr;
+                        dist1 = rStr; dist2 = `\\(\\{y \\in \\mathbb{R} \\mid ${x1} \\le y \\le ${x2}\\}\\)`; dist3 = `\\(\\{x \\in \\mathbb{R}\\}\\)`;
+                    } else {
+                        correctStr = rStr;
+                        dist1 = dStr; dist2 = `\\(\\{x \\in \\mathbb{R} \\mid ${minY} \\le x \\le ${maxY}\\}\\)`; dist3 = `\\(\\{y \\in \\mathbb{R}\\}\\)`;
+                    }
+                }
+                else if (shapeType === 2) { // Parabola
+                    let a = Math.random() > 0.5 ? 1 : -1;
+                    let h = randInt(-3, 3), k = randInt(-4, 4);
+                    p.graphSpec = { curves: [{ kind: "parab", a: a, h: h, k: k, arrowLeft: true, arrowRight: true }] };
+                    
+                    let dStr = `\\(\\{x \\in \\mathbb{R}\\}\\)`;
+                    let rStr = a > 0 ? `\\(\\{y \\in \\mathbb{R} \\mid y \\ge ${k}\\}\\)` : `\\(\\{y \\in \\mathbb{R} \\mid y \\le ${k}\\}\\)`;
+                    
+                    if (isDomain) {
+                        correctStr = dStr;
+                        dist1 = rStr; dist2 = `\\(\\{x \\in \\mathbb{R} \\mid x \\ge ${h}\\}\\)`; dist3 = `\\(\\{x \\in \\mathbb{R} \\mid -7 \\le x \\le 7\\}\\)`;
+                    } else {
+                        correctStr = rStr;
+                        dist1 = dStr; dist2 = a > 0 ? `\\(\\{x \\in \\mathbb{R} \\mid x \\ge ${k}\\}\\)` : `\\(\\{x \\in \\mathbb{R} \\mid x \\le ${k}\\}\\)`; dist3 = `\\(\\{y \\in \\mathbb{R} \\mid y \\ge ${h}\\}\\)`;
+                    }
+                }
+                else { // Ray
+                    let x1 = randInt(-3, 3), y1 = randInt(-3, 3);
+                    let m = Math.random() > 0.5 ? 1 : -1;
+                    let goesRight = Math.random() > 0.5;
+                    p.graphSpec = { 
+                        curves: [{ kind: "line", m: m, b: y1 - m*x1, dom: goesRight ? [x1, 7] : [-7, x1], arrowRight: goesRight, arrowLeft: !goesRight }],
+                        dots: [{ x: x1, y: y1 }]
+                    };
+                    
+                    let dStr = goesRight ? `\\(\\{x \\in \\mathbb{R} \\mid x \\ge ${x1}\\}\\)` : `\\(\\{x \\in \\mathbb{R} \\mid x \\le ${x1}\\}\\)`;
+                    let rStr = (m > 0 && goesRight) || (m < 0 && !goesRight) ? `\\(\\{y \\in \\mathbb{R} \\mid y \\ge ${y1}\\}\\)` : `\\(\\{y \\in \\mathbb{R} \\mid y \\le ${y1}\\}\\)`;
+                    
+                    if (isDomain) {
+                        correctStr = dStr;
+                        dist1 = rStr; dist2 = `\\(\\{x \\in \\mathbb{R}\\}\\)`; dist3 = goesRight ? `\\(\\{x \\in \\mathbb{R} \\mid x \\le ${x1}\\}\\)` : `\\(\\{x \\in \\mathbb{R} \\mid x \\ge ${x1}\\}\\)`;
+                    } else {
+                        correctStr = rStr;
+                        dist1 = dStr; dist2 = `\\(\\{y \\in \\mathbb{R}\\}\\)`; dist3 = (m > 0 && goesRight) || (m < 0 && !goesRight) ? `\\(\\{y \\in \\mathbb{R} \\mid y \\le ${y1}\\}\\)` : `\\(\\{y \\in \\mathbb{R} \\mid y \\ge ${y1}\\}\\)`;
+                    }
+                }
+
+                p.fullStatement = MCF.pick([
+                    `The graph of \\(f(x)\\) is shown above. What is the <b>${isDomain ? 'domain' : 'range'}</b> of the function?`,
+                    `Look at the graph of \\(f(x)\\) above. Write down its <b>${isDomain ? 'domain' : 'range'}</b> in set notation.`,
+                    `Use the graph of \\(f(x)\\) shown above to state the <b>${isDomain ? 'domain' : 'range'}</b> of the function.`
+                ]);
+                p.prompt = mcfPick([`Select the ${isDomain ? 'domain' : 'range'}:`, `Which set is the ${isDomain ? 'domain' : 'range'}?`, `Pick the ${isDomain ? 'domain' : 'range'} of this function:`]);
+                
+                let mc = shuffleMC(correctStr, [dist1, dist2, dist3], ["\\(\\{x \\in \\mathbb{R} \\mid x \\ge 0\\}\\)", "\\(\\{y \\in \\mathbb{R} \\mid y \\ge 0\\}\\)", "\\(\\{x \\in \\mathbb{R} \\mid x \\le 0\\}\\)", "\\(\\{y \\in \\mathbb{R} \\mid y \\le 0\\}\\)"]);
+                p.options = mc.options;
+                p.ans = mc.ansLetter;
+                p.rawAns = correctStr;
+
+                if (isDomain) {
+                    p.hint = "Domain is the set of valid x-values. Read the graph from left to right.";
+                    p.steps = [
+                        { title: "Step 1: Work Out Which Direction to Look", math: "\\(\\text{Domain} = \\text{all the } x \\text{-values the graph uses}\\)", explanation: "Domain means every x-value the graph actually reaches. That is a left-to-right question, so you read the horizontal axis. Trap: reading up and down instead, which gives you the range." },
+                        { title: "Step 2: Check How the Ends Finish", math: "\\(\\text{solid dot} = \\text{included}, \\quad \\text{arrow} = \\text{no boundary}\\)", explanation: "Look at the far left and far right of the curve. A solid dot means the graph stops there and that value counts. An arrow means it keeps going, so that side has no boundary at all." },
+                        { title: "Step 3: Write It in Set Notation", math: correctStr, explanation: `Put the left boundary and the right boundary inside the set brackets, smallest first. Use \\(\\le\\) when the end is a solid dot and \\(<\\) when it is hollow. The letter inside must be \\(x\\), because domain is about x-values.` }
+                    ];
+                } else {
+                    p.hint = "Range is the set of valid y-values. Read the graph from bottom to top.";
+                    p.steps = [
+                        { title: "Step 1: Work Out Which Direction to Look", math: "\\(\\text{Range} = \\text{all the } y \\text{-values the graph reaches}\\)", explanation: "Range means every height the graph actually reaches. That is a bottom-to-top question, so you read the vertical axis. Trap: reading left to right instead, which gives you the domain." },
+                        { title: "Step 2: Find the Lowest and Highest Points", math: "\\(\\text{vertex} = \\text{turning point}, \\quad \\text{arrows} = \\text{no limit}\\)", explanation: "For a parabola the vertex is either the lowest point or the highest point, so it sets one end of the range. If the arms carry arrows, the other end runs on forever and has no boundary." },
+                        { title: "Step 3: Write It in Set Notation", math: correctStr, explanation: `Put the bottom and top boundaries inside the set brackets. The letter inside must be \\(y\\), because range is about heights. Trap: writing \\(x\\) out of habit, which turns a correct answer into a wrong one.` }
+                    ];
+                }
+            }
+
+            return p;
+        }
+
+        // --- Core Application Logic ---
+
+        function renderMathElements() {
+            if (window.renderMathInElement) {
+                renderMathInElement(document.body, {
+                    delimiters: [
+                        {left: '$$', right: '$$', display: true},
+                        {left: '\\(', right: '\\)', display: false}
+                    ],
+                    throwOnError: false
+                });
+            }
+        }
+
+        window.onload = renderMathElements;
+
+        function displaySolution() {
+            document.getElementById("solution-reveal-layer").style.display = "none";
+            var __hb = document.getElementById("hint-box"); if (__hb) __hb.style.display = "none";
+            const placeholder = document.getElementById("placeholder");
+            const quizStation = document.getElementById("quiz-station");
+            const assetMount = document.getElementById("asset-viewport-mount-point");
+            const mountPoint = document.getElementById("dynamic-input-mount-point");
+            const promptLabel = document.getElementById("input-prompt-label");
+
+            placeholder.style.display = "none";
+            quizStation.style.display = "block";
+            
+            if (currentProblemData.assetType && currentProblemData.assetType !== "none") {
+                assetMount.style.display = "flex";
+                assetMount.innerHTML = currentProblemData.assetType === "graph" ? buildGraph(currentProblemData.graphSpec) : currentProblemData.assetHtml;
+            } else {
+                assetMount.style.display = "none";
+            }
+
+            document.getElementById("question-statement-display").innerHTML = currentProblemData.fullStatement;
+            promptLabel.innerHTML = currentProblemData.prompt;
+            
+            mountPoint.innerHTML = buildOptionsHTML(currentProblemData, currentState.selectedMcOption, currentState.answered);
+
+            if (currentState.answered) {
+                lockQuizInterface(currentState.isCorrect);
+                if (currentState.solRevealed) revealSolutionWorkspace();
+            } else {
+                unlockQuizInterface();
+            }
+
+            // Ensure LaTeX renders *after* the DOM is fully constructed
+            setTimeout(renderMathElements, 10);
+        }
+
+
+
+
+        function transmitDataToTeacherSpreadsheet(payload) {
+            fetch(TEACHER_SPREADSHEET_SCRIPT_URL, {
+                method: "POST",
+                mode: "no-cors",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            }).catch(err => console.error("Database cloud logging failure:", err));
+        }
+
+
+
+
+
+
+
+
+
+        function updateHudScoreboard() {
+            document.getElementById("hud-score").innerText = globalScore;
+            document.getElementById("hud-attempts").innerText = globalAttempts;
+        }
+    
+
+        MCF.init({ generate: generateProblem,
+                   /* 이 유닛은 그래프를 buildGraph(spec) 으로 그린다 (자산과 보기 둘 다) */
+                   renderAsset: function (p) { return p.graphSpec ? buildGraph(p.graphSpec) : (p.assetHtml || ""); },
+                   renderOption: function (p, i) {
+                     return (p.optionSpecs && p.optionSpecs[i]) ? buildGraph(p.optionSpecs[i]) : "";
+                   },
+                   logUrl: (typeof TEACHER_SPREADSHEET_SCRIPT_URL !== "undefined" ? TEACHER_SPREADSHEET_SCRIPT_URL : null),
+                   unitId: "Unit_2", lessonId: "Lesson_1_and_2" });
+</script>
+    <script src="../progress.js"></script>
+</body>
+</html>

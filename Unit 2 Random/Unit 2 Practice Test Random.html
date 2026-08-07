@@ -1,0 +1,1111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCF3M Unit 2 Cumulative Practice Test Simulator</title>
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- mcf-core.js 가 그리는 요소들의 기본 스타일. 아래 <style> 보다 먼저 와야
+         파일 고유 스타일이 이기고, 빠진 클래스만 여기서 메워진다.
+         폴더 위치를 몰라도 되게 두 경로를 다 건다(없는 쪽은 404 로 무시). -->
+    <link rel="stylesheet" href="../mcf-core.css">
+    <link rel="stylesheet" href="mcf-core.css">
+    <style>
+        body {
+            background-color: #f8fafc;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+        .coord-svg {
+            width: 100%;
+            height: auto;
+            display: block;
+            background: #ffffff;
+            border-radius: 8px;
+        }
+        .math-render-viewport .coord-svg { width: 340px; max-width: 100%; }
+        .graph-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col text-slate-700 leading-relaxed">
+
+    <header class="bg-[#0f172a] text-white py-10 px-6 text-center shadow-md border-b-4 border-purple-600">
+        <div class="max-w-4xl mx-auto">
+            <span class="bg-purple-600 text-xs font-bold uppercase tracking-widest px-3 py-1.5 rounded-full shadow-sm">
+                Unit 2 Assessment Studio
+            </span>
+            <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight mt-4">
+                Unit 2 &mdash; Cumulative Practice Test
+            </h1>
+            <p class="text-slate-400 mt-2 text-base max-w-xl mx-auto font-medium">
+                Infinite Diagnostic Testing Simulator &middot; 13 Dynamic Modules Covering Quadratic Relations &amp; Functions
+            </p>
+            <div class="inline-flex gap-6 bg-slate-800 border border-slate-700 text-white font-bold px-6 py-2.5 rounded-full mt-6 shadow-md text-sm">
+                <div>Score: <span id="hud-score" class="text-purple-400 font-extrabold">0</span></div>
+                <div class="text-slate-500">|</div>
+                <div>Total Tries: <span id="hud-attempts" class="text-amber-400 font-extrabold">0</span></div>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow max-w-4xl w-full mx-auto px-4 py-10">
+        
+        <div class="bg-white border border-slate-200 rounded-2xl p-6 mb-8 shadow-sm">
+            <label class="block text-sm font-bold text-[#0f172a] uppercase tracking-wider mb-3">Student Identity Verification</label>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <input type="text" id="first-name" placeholder="Enter First Name..." autocomplete="off" class="w-full px-4 py-3 border border-slate-300 rounded-xl outline-none focus:border-purple-500 font-medium transition-colors">
+                <input type="text" id="last-name" placeholder="Enter Last Name..." autocomplete="off" class="w-full px-4 py-3 border border-slate-300 rounded-xl outline-none focus:border-purple-500 font-medium transition-colors">
+            </div>
+        </div>
+
+        <div class="bg-white border border-slate-200 rounded-2xl p-6 mb-8 shadow-sm">
+            <label for="question-select" class="block text-sm font-bold text-[#0f172a] uppercase tracking-wider mb-3">Test Navigation Directory</label>
+            <div class="flex flex-col md:flex-row gap-4">
+                <select id="question-select" class="flex-grow px-4 py-3.5 border-2 border-slate-300 rounded-xl outline-none bg-white text-[#0f172a] font-bold cursor-pointer focus:border-purple-500 transition-colors">
+                    <option value="">-- Select a Diagnostic Test Module --</option>
+                    <option value="m1">Module 1: Vertical Line Test &amp; Function Mapping</option>
+                    <option value="m2">Module 2: Algebraic Function Notation Evaluation f(a)</option>
+                    <option value="m3">Module 3: Reading g(-3) from a Graph</option>
+                    <option value="m4">Module 4: Graph-Based Domain Set Boundaries</option>
+                    <option value="m5">Module 5: Graph-Based Range Set Boundaries</option>
+                    <option value="m6">Module 6: Vertex to Standard Polynomial Expansion</option>
+                    <option value="m7">Module 7: Completing the Square</option>
+                    <option value="m8">Module 8: Finding the Maximum or Minimum Value</option>
+                    <option value="m9">Module 9: Key Features from Factored Form</option>
+                    <option value="m10">Module 10: Optimization Contextual Application Problems</option>
+                    <option value="m11">Module 11: Graphical Key Characteristics Analysis</option>
+                    <option value="m12">Module 12: How to Graph It by Hand</option>
+                    <option value="m13">Module 13: Equation-to-Graph Visual Matching</option>
+                </select>
+                <button class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-3.5 px-8 rounded-xl shadow-sm transition-colors whitespace-nowrap" onclick="triggerNewQuestion()">Generate New</button>
+            </div>
+        </div>
+
+        <div class="bg-white border border-slate-200 rounded-2xl p-8 shadow-sm min-h-[250px]" id="display-window">
+            <div id="placeholder" class="text-center py-16 text-slate-400 font-medium italic">
+                Select a diagnostic evaluation target module and click "Generate New" to initialize testing parameters.
+            </div>
+
+            <div id="quiz-station" style="display: none;">
+                <div id="asset-viewport-mount-point" class="border border-slate-200 rounded-xl p-6 bg-slate-50 mb-6 flex justify-center items-center shadow-inner" style="display: none;"></div>
+
+                <div id="question-statement-display" class="bg-slate-900 text-white border-l-4 border-purple-500 rounded-r-xl p-5 mb-6 text-base font-semibold shadow-sm"></div>
+
+                <label id="input-prompt-label" class="block font-bold text-[#0f172a] text-sm uppercase tracking-wider mb-3"></label>
+                
+                <div id="dynamic-input-mount-point" class="mb-6"></div>
+
+                <div id="hint-box" class="hidden bg-amber-50 border-l-4 border-amber-500 text-amber-900 rounded-r-xl p-4 mb-4 font-medium text-sm"></div>
+                <div id="feedback-msg" class="hidden p-4 rounded-xl border font-bold text-sm mb-6 transition-all"></div>
+
+                <div class="flex flex-wrap gap-3">
+                    <button class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-6 rounded-xl shadow-sm transition-colors text-sm" id="check-ans-btn" onclick="evaluateStudentAnswer()">Check Response</button>
+                    <button class="bg-amber-400 hover:bg-amber-500 text-amber-950 font-bold py-3 px-5 rounded-xl shadow-sm transition-colors text-sm" id="hint-btn" onclick="toggleHint()">Hint</button>
+                    <button class="bg-slate-100 border border-slate-300 hover:bg-slate-200 text-[#0f172a] font-bold py-3 px-6 rounded-xl transition-colors text-sm disabled:opacity-50 disabled:cursor-not-allowed" id="reveal-sol-btn" disabled onclick="unlockSolutionPanel()">Review Steps</button>
+                </div>
+            </div>
+
+            <div class="hidden border-t-2 border-dashed border-slate-200 mt-8 pt-8" id="solution-reveal-layer">
+                <div id="solution-workspace-injected" class="space-y-4"></div>
+                
+                <div class="flex justify-between items-center mt-8 pt-6 border-t border-slate-200 gap-4">
+                    <button class="bg-slate-100 border border-slate-300 hover:bg-slate-200 text-[#0f172a] font-bold py-2.5 px-5 rounded-xl transition-colors text-sm disabled:opacity-40" id="restart-btn" onclick="restartSolution()">Reset Breakdown</button>
+                    <button class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2.5 px-6 rounded-xl shadow-sm transition-colors text-sm disabled:opacity-40" id="next-btn" onclick="showNextStep()">Advance Next Step &rarr;</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-slate-900 text-slate-500 py-6 text-center text-xs font-semibold border-t border-slate-800 mt-10">
+        &copy; 2026 Toronto District School Board Mathematics Department. All Rights Reserved.
+    </footer>
+
+    <!-- mcf-core.js 는 보통 상위 폴더(index.html·progress.js 옆)에 둔다.
+         같은 폴더에 두는 경우도 있어 두 경로를 다 건다. 없는 쪽은 404 로 무시되고,
+         둘 다 있으면 두 번째는 core 내부 가드가 막는다. -->
+    <script src="../mcf-core.js"></script>
+    <script src="mcf-core.js"></script>
+    <script>
+    /* core 를 못 찾으면 Generate 가 조용히 무반응이 된다. 원인이 안 보이므로 안내를 띄운다. */
+    if (typeof MCF === "undefined") {
+      document.addEventListener("DOMContentLoaded", function () {
+        var box = document.getElementById("placeholder");
+        if (box) {
+          box.innerHTML =
+            '<strong style="color:#b91c1c">mcf-core.js \uB97C \uCC3E\uC744 \uC218 \uC5C6\uC2B5\uB2C8\uB2E4.</strong><br><br>' +
+            'This lesson needs <code>mcf-core.js</code>.<br>' +
+            'Put it next to <code>progress.js</code> and <code>index.html</code> ' +
+            '(the folder above this one), or in this same folder.';
+          box.style.display = "block";
+        }
+        var b = document.querySelector(".btn-generate");
+        if (b) b.disabled = true;
+      });
+    }
+    </script>
+    <script>
+
+        /* ── mcf-core.js 로 옮겨간 이름들의 지역 별칭 ── */
+        const randInt = MCF.randInt;
+        const gcd = MCF.gcd;
+        const gcd3 = MCF.gcd3;
+        const mcfPick = MCF.pick;
+        const mcfRich = MCF.rich;
+        const mcfShuffle = MCF.shuffle;
+        const mcfKey = MCF.key;
+        const mcfDedupe = MCF.dedupe;
+        const mcfFactorKey = MCF.factorKey;
+        const mcfUniqueByValue = MCF.uniqueByValue;
+        const mcfSpareOption = MCF.spareOption;
+        const shuffleMC = MCF.shuffleMC;
+        const M = MCF.M;
+        const Mu = MCF.Mu;
+        const fmtTerm = MCF.fmtTerm;
+        /* --- audit fix: uniform in-place shuffle (Fisher-Yates) --- */
+
+        /* --- audit fix: 같은 보기가 두 번 나오면 하나로 합친다.
+           정답과 글자가 똑같은 보기를 골랐는데 오답 처리되는 것을 막는다. --- */
+        /* Nudge one number inside an existing option to build a replacement
+           distractor. Skips digit groups that follow a thousands separator, so
+           "\\$11\\,045.96" is altered at the 11 and never left malformed.
+           Uniqueness is checked by the caller, so this can never reproduce the
+           correct answer. */
+        /* Two options can differ only in whitespace -- an empty middle term leaves
+           "4x^2  + 16" beside "4x^2 + 16" -- and MathJax renders them identically, so
+           the student sees the same card twice and only one of them scores. Compare
+           options on this normalised key, not on the raw string. */
+
+
+
+        const TEACHER_SPREADSHEET_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwygR6-l7XPRC1KL-Pqci33Yw_4pmCWa8mW7gNHJ_RsmN41ax15-d0sE-CrIxU0z22m/exec";
+
+        let globalScore = 0;
+        let globalAttempts = 0;
+        let currentProblemData = null;
+        let currentState = { answered: false, selectedMcOption: "", isCorrect: false, currentStep: 0, solRevealed: false, attempts: 0 };
+        let visibleStepElements = [];
+        let currentStepIndex = 0;
+
+        // --- Math & Logic Utilities ---
+
+        function fmtPoly(a, b, c, fnName = "f") {
+            let res = "";
+            if (a !== 0) res += (a === 1 ? "x^2" : (a === -1 ? "-x^2" : a + "x^2"));
+            if (b !== 0) res += (b > 0 ? (res ? " + " : "") + (b === 1 ? "x" : b + "x") : (res ? " - " : "-") + (b === -1 ? "x" : Math.abs(b) + "x"));
+            if (c !== 0) res += (c > 0 ? (res ? " + " : "") + c : (res ? " - " : "-") + Math.abs(c));
+            if (res === "") res = "0";
+            return `${fnName}(x) = ` + res;
+        }
+
+        function fmtVertex(a, h, k, fnName = "y") {
+            let aStr = a === 1 ? "" : (a === -1 ? "-" : a.toString());
+            let hStr = h === 0 ? "x^2" : "(x " + (h > 0 ? "- " + h : "+ " + Math.abs(h)) + ")^2";
+            let kStr = k === 0 ? "" : (k > 0 ? " + " + k : " - " + Math.abs(k));
+            return `${fnName} = ` + aStr + hStr + kStr;
+        }
+
+        function fmtVertexRight(a, h, k) {
+            let aStr = a === 1 ? "" : (a === -1 ? "-" : a.toString());
+            let hStr = h === 0 ? "x^2" : "(x " + (h > 0 ? "- " + h : "+ " + Math.abs(h)) + ")^2";
+            let kStr = k === 0 ? "" : (k > 0 ? " + " + k : " - " + Math.abs(k));
+            return aStr + hStr + kStr;
+        }
+
+        /* audit fix: 예비 오답이 "0","1" 두 개뿐이라 정답·오답과 겹치면 보기가 3개로 줄었다.
+           정답 주변 정수를 넉넉히 만들어 항상 4개가 채워지게 한다. */
+        function mcfNearby(v) {
+            const out = [];
+            for (let d = 1; d <= 6; d++) { out.push(v - d, v + d); }
+            return out.filter(n => n !== v && n >= -8 && n <= 8).map(String);
+        }
+
+        /* Last-resort spare options.
+
+           Some types pass an empty fallback list, so when two of their planned
+           distractors happened to land on the same value the question dropped to three
+           options. This nudges the number inside the correct answer instead, keeping the
+           surrounding text and the number of decimal places exactly as they were, so the
+           spare reads like every other option. Returns null when the answer holds no
+           number, in which case the old three-option behaviour still applies. */
+
+        /* Picks one of several wordings for the same question, so a student cannot
+           recognise a type by its sentence alone. */
+
+
+        function gdef(v, d) { return (v === undefined || v === null) ? d : v; }
+
+        // --- SVG Graphing Engine (Dynamic Grid Responsive) ---
+        function buildGraph(spec) {
+            let autoXmin = -7, autoXmax = 7, autoYmin = -7, autoYmax = 7;
+            
+            if (spec.curves) {
+                spec.curves.forEach(c => {
+                    if (c.kind === "parab" || c.kind === "abs" || c.kind === "xparab") {
+                        autoXmin = Math.min(autoXmin, (c.h || 0) - 5);
+                        autoXmax = Math.max(autoXmax, (c.h || 0) + 5);
+                        if (c.a > 0) {
+                            autoYmin = Math.min(autoYmin, (c.k || 0) - 2);
+                            autoYmax = Math.max(autoYmax, (c.k || 0) + 8);
+                        } else {
+                            autoYmin = Math.min(autoYmin, (c.k || 0) - 8);
+                            autoYmax = Math.max(autoYmax, (c.k || 0) + 2);
+                        }
+                    }
+                });
+            }
+
+            const xmin = gdef(spec.xmin, Math.floor(autoXmin));
+            const xmax = gdef(spec.xmax, Math.ceil(autoXmax));
+            const ymin = gdef(spec.ymin, Math.floor(autoYmin));
+            const ymax = gdef(spec.ymax, Math.ceil(autoYmax));
+            
+            const W = 320, H = 320, pad = 15;
+            const X = function (x) { return pad + (x - xmin) / (xmax - xmin) * (W - 2 * pad); };
+            const Y = function (y) { return pad + (ymax - y) / (ymax - ymin) * (H - 2 * pad); };
+            const uid = "g" + Math.random().toString(36).slice(2, 8);
+            
+            let s = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" class="coord-svg">`;
+            /* Arrow direction fix: orient="auto" rotates a marker to the direction the
+               path is travelling AT that point. At the start of a path that direction
+               points inward, so a start arrowhead pointed back into the curve instead of
+               away from it. The -s markers below are the same triangle mirrored, and are
+               used for every marker-start. */
+            s += '<defs>';
+            /* audit fix 2026-07-30: 화살촉은 격자 경계 바깥으로 4 * stroke-width 만큼
+               뻗기 때문에, 클립 사각형이 격자에 딱 맞으면 촉이 잘려 안 보였다.
+               곡선 자체는 drawCurve에서 이미 격자 안으로 잘라 그린다. */
+            const clipPad = 10;
+            s += `<clipPath id="clip-${uid}"><rect x="${pad - clipPad}" y="${pad - clipPad}" width="${W - 2 * pad + 2 * clipPad}" height="${H - 2 * pad + 2 * clipPad}"/></clipPath>`;
+            s += `<marker id="ax-${uid}" markerWidth="7" markerHeight="7" refX="3.5" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#0f172a"/></marker>`;
+            s += `<marker id="ax-s-${uid}" markerWidth="7" markerHeight="7" refX="3.5" refY="3.5" orient="auto"><path d="M7,0 L0,3.5 L7,7 Z" fill="#0f172a"/></marker>`;
+            s += `<marker id="cv-${uid}" markerWidth="7" markerHeight="7" refX="3.5" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#2563eb"/></marker>`;
+            s += `<marker id="cv-s-${uid}" markerWidth="7" markerHeight="7" refX="3.5" refY="3.5" orient="auto"><path d="M7,0 L0,3.5 L7,7 Z" fill="#2563eb"/></marker>`;
+            s += '</defs>';
+            
+            for (let gx = Math.ceil(xmin); gx <= xmax; gx++) s += `<line x1="${X(gx)}" y1="${Y(ymax)}" x2="${X(gx)}" y2="${Y(ymin)}" stroke="#cbd5e1" stroke-width="1.2"/>`;
+            for (let gy = Math.ceil(ymin); gy <= ymax; gy++) s += `<line x1="${X(xmin)}" y1="${Y(gy)}" x2="${X(xmax)}" y2="${Y(gy)}" stroke="#cbd5e1" stroke-width="1.2"/>`;
+            
+            if (0 >= ymin && 0 <= ymax) {
+                s += `<line x1="${X(xmin)}" y1="${Y(0)}" x2="${X(xmax)}" y2="${Y(0)}" stroke="#0f172a" stroke-width="2.5" marker-start="url(#ax-s-${uid})" marker-end="url(#ax-${uid})"/>`;
+            }
+            if (0 >= xmin && 0 <= xmax) {
+                s += `<line x1="${X(0)}" y1="${Y(ymin)}" x2="${X(0)}" y2="${Y(ymax)}" stroke="#0f172a" stroke-width="2.5" marker-start="url(#ax-s-${uid})" marker-end="url(#ax-${uid})"/>`;
+            }
+            
+            let xTick = (xmax - xmin) > 16 ? 4 : 2;
+            let yTick = (ymax - ymin) > 16 ? 4 : 2;
+
+            for (let gx = Math.ceil(xmin); gx <= xmax; gx++) { 
+                if (gx !== 0 && gx % xTick === 0) {
+                    let yPos = (0 >= ymin && 0 <= ymax) ? Y(0) + 14 : Y(ymin) - 5;
+                    s += `<text x="${X(gx)}" y="${yPos}" font-size="11" font-weight="900" fill="#0f172a" text-anchor="middle">${gx}</text>`; 
+                }
+            }
+            for (let gy = Math.ceil(ymin); gy <= ymax; gy++) { 
+                if (gy !== 0 && gy % yTick === 0) {
+                    let xPos = (0 >= xmin && 0 <= xmax) ? X(0) - 6 : X(xmin) + 15;
+                    s += `<text x="${xPos}" y="${Y(gy) + 3}" font-size="11" font-weight="900" fill="#0f172a" text-anchor="end">${gy}</text>`; 
+                }
+            }
+            
+            if (0 >= xmin && 0 <= xmax && 0 >= ymin && 0 <= ymax) {
+                s += `<text x="${X(0) - 6}" y="${Y(0) + 14}" font-size="11" font-weight="900" fill="#0f172a" text-anchor="end">0</text>`;
+            }
+            
+            const curves = spec.curves || [];
+            for (let i = 0; i < curves.length; i++) s += `<g clip-path="url(#clip-${uid})">${drawCurve(curves[i], X, Y, xmin, xmax, ymin, ymax, uid)}</g>`;
+            const dots = spec.dots || [];
+            for (let i = 0; i < dots.length; i++) { 
+                const dd = dots[i]; 
+                s += `<circle cx="${X(dd.x)}" cy="${Y(dd.y)}" r="5" fill="${dd.open ? '#ffffff' : '#2563eb'}" stroke="#2563eb" stroke-width="2.5"/>`; 
+            }
+            s += '</svg>';
+            return s;
+        }
+
+        /* --- audit fix 2026-07-30: 화살촉이 화면에서 사라지던 문제 ---
+           곡선은 clipPath로 잘리는데 SVG marker는 자르기 전 path 끝점에 붙는다.
+           포물선처럼 끝점이 격자 밖인 곡선은 화살촉이 통째로 잘려 나가서,
+           "화살표를 보고 무한히 뻗는지 판단하라"는 문항이 성립하지 않았다.
+           이제 곡선을 격자 안으로 먼저 자르고, 그 끝에서 화살촉을 붙인다. */
+        function mcfClipRuns(pts, xmin, xmax, ymin, ymax) {
+            const EPS = 1e-9;
+            /* Liang-Barsky. 선분의 양 끝이 둘 다 격자 밖이면서 격자를 가로지르는
+               경우(기울기 큰 직선)도 놓치지 않으려면 구간별 정식 클리핑이 필요하다. */
+            function clipSeg(a, b) {
+                let t0 = 0, t1 = 1;
+                const dx = b[0] - a[0], dy = b[1] - a[1];
+                const pp = [-dx, dx, -dy, dy];
+                const qq = [a[0] - xmin, xmax - a[0], a[1] - ymin, ymax - a[1]];
+                for (let i = 0; i < 4; i++) {
+                    if (Math.abs(pp[i]) < EPS) { if (qq[i] < -EPS) return null; continue; }
+                    const r = qq[i] / pp[i];
+                    if (pp[i] < 0) { if (r > t1) return null; if (r > t0) t0 = r; }
+                    else { if (r < t0) return null; if (r < t1) t1 = r; }
+                }
+                return [[a[0] + dx * t0, a[1] + dy * t0], [a[0] + dx * t1, a[1] + dy * t1]];
+            }
+            const runs = [];
+            let cur = null;
+            for (let i = 0; i + 1 < pts.length; i++) {
+                const seg = clipSeg(pts[i], pts[i + 1]);
+                if (!seg) { if (cur) { runs.push(cur); cur = null; } continue; }
+                if (!cur) { cur = [seg[0], seg[1]]; continue; }
+                const last = cur[cur.length - 1];
+                if (Math.abs(last[0] - seg[0][0]) > 1e-7 || Math.abs(last[1] - seg[0][1]) > 1e-7) {
+                    runs.push(cur); cur = [seg[0], seg[1]];
+                } else cur.push(seg[1]);
+            }
+            if (cur) runs.push(cur);
+            return runs;
+        }
+
+        /* 화살촉 자체가 약 7px이라, 경계에 정확히 놓으면 clipPath에 반쯤 잘린다.
+           화살표가 붙는 쪽만 화면 좌표로 몇 px 물러나게 해서 전부 보이게 한다. */
+        function mcfRetreat(run, px, fromStart) {
+            const pts = fromStart ? run.slice().reverse() : run.slice();
+            let need = px;
+            while (pts.length >= 2 && need > 0) {
+                const a = pts[pts.length - 2], b = pts[pts.length - 1];
+                const dx = b[0] - a[0], dy = b[1] - a[1];
+                const len = Math.sqrt(dx * dx + dy * dy);
+                if (len <= 1e-9) { pts.pop(); continue; }
+                if (len > need) {
+                    const t = (len - need) / len;
+                    pts[pts.length - 1] = [a[0] + dx * t, a[1] + dy * t];
+                    need = 0;
+                } else {
+                    need -= len;
+                    pts.pop();
+                }
+            }
+            return fromStart ? pts.reverse() : pts;
+        }
+
+        /* audit fix: 보기 그래프 4개를 각각 자동 스케일하면 A~D의 눈금 범위가 서로 달라진다.
+           모양을 비교해서 고르는 문항이므로 네 개가 같은 창을 쓰게 맞춘다. */
+        function mcfCommonWindow(specs) {
+            let xmin = -7, xmax = 7, ymin = -7, ymax = 7;
+            specs.forEach(sp => (sp.curves || []).forEach(c => {
+                xmin = Math.min(xmin, (c.h || 0) - 5);
+                xmax = Math.max(xmax, (c.h || 0) + 5);
+                if (c.a > 0) { ymin = Math.min(ymin, (c.k || 0) - 2); ymax = Math.max(ymax, (c.k || 0) + 8); }
+                else { ymin = Math.min(ymin, (c.k || 0) - 8); ymax = Math.max(ymax, (c.k || 0) + 2); }
+            }));
+            const win = { xmin: Math.floor(xmin), xmax: Math.ceil(xmax), ymin: Math.floor(ymin), ymax: Math.ceil(ymax) };
+            specs.forEach(sp => { sp.xmin = win.xmin; sp.xmax = win.xmax; sp.ymin = win.ymin; sp.ymax = win.ymax; });
+            return specs;
+        }
+
+        function drawCurve(c, X, Y, xmin, xmax, ymin, ymax, uid) {
+            function path(pts, aStart, aEnd) {
+                if (pts.length < 2) return "";
+                const runs = mcfClipRuns(pts, xmin, xmax, ymin, ymax);
+                if (!runs.length) return "";
+                let out = "";
+                for (let r = 0; r < runs.length; r++) {
+                    let run = [];
+                    for (let i = 0; i < runs[r].length; i++) run.push([X(runs[r][i][0]), Y(runs[r][i][1])]);
+                    const headArrow = aStart && r === 0;
+                    const tailArrow = aEnd && r === runs.length - 1;
+                    /* 화살촉은 refX=4 * stroke-width 만큼 끝점 너머로 뻗는다.
+                       그만큼 물러나야 촉 끝이 정확히 격자 경계에 놓인다. */
+                    const arrowPad = 4 * 3;
+                    if (headArrow) run = mcfRetreat(run, arrowPad, true);
+                    if (tailArrow) run = mcfRetreat(run, arrowPad, false);
+                    if (run.length < 2) continue;
+                    let span = 0;
+                    for (let i = 1; i < run.length; i++) span += Math.abs(run[i][0] - run[i - 1][0]) + Math.abs(run[i][1] - run[i - 1][1]);
+                    if (span < 1) continue;
+                    let d = "";
+                    for (let i = 0; i < run.length; i++) d += (i === 0 ? "M" : "L") + run[i][0].toFixed(1) + "," + run[i][1].toFixed(1) + " ";
+                    let attr = 'stroke="#2563eb" stroke-width="3" fill="none" stroke-linejoin="round" stroke-linecap="round"';
+                    if (tailArrow) attr += ` marker-end="url(#cv-${uid})"`;
+                    if (headArrow) attr += ` marker-start="url(#cv-s-${uid})"`;
+                    out += `<path d="${d.trim()}" ${attr}/>`;
+                }
+                return out;
+            }
+            const lo = c.dom ? c.dom[0] : xmin, hi = c.dom ? c.dom[1] : xmax;
+            if (c.kind === "line") { return path([[lo, c.m * lo + c.b], [hi, c.m * hi + c.b]], c.arrowLeft, c.arrowRight); }
+            if (c.kind === "hline") { return path([[lo, c.y], [hi, c.y]], c.arrowLeft, c.arrowRight); }
+            if (c.kind === "vline") { const a = c.dom ? c.dom[0] : ymin, b = c.dom ? c.dom[1] : ymax; return path([[c.x, a], [c.x, b]], c.arrowLeft, c.arrowRight); }
+            if (c.kind === "abs") { const f = function (x) { return c.a * Math.abs(x - c.h) + c.k; }; return path([[lo, f(lo)], [c.h, f(c.h)], [hi, f(hi)]], c.arrowLeft, c.arrowRight); }
+            if (c.kind === "circle") { const rpx = (X(c.cx + c.r) - X(c.cx)).toFixed(1); return `<circle cx="${X(c.cx)}" cy="${Y(c.cy)}" r="${rpx}" stroke="#2563eb" stroke-width="3" fill="none"/>`; }
+            if (c.kind === "xparab") { const a = c.ydom ? c.ydom[0] : ymin, b = c.ydom ? c.ydom[1] : ymax; let pts = []; for (let i = 0; i <= 80; i++) { const y = a + (b - a) * i / 80; pts.push([c.a * (y - c.k) * (y - c.k) + c.h, y]); } return path(pts, false, false); }
+            let pts = [];
+            for (let i = 0; i <= 80; i++) {
+                const x = lo + (hi - lo) * i / 80; let y;
+                if (c.kind === "parab") y = c.a * (x - c.h) * (x - c.h) + c.k;
+                else if (c.kind === "cubic") y = c.a * (x - c.h) * (x - c.h) * (x - c.h) + c.k;
+                else y = 0;
+                pts.push([x, y]);
+            }
+            return path(pts, c.arrowLeft, c.arrowRight);
+        }
+
+        function buildOptionsHTML(problem, selectedLetter, disabled) {
+            const isGraph = problem.optionType === "graph";
+            let html = '<div class="' + (isGraph ? 'graph-grid' : 'flex flex-col gap-3') + '">';
+            for (let i = 0; i < problem.options.length; i++) {
+                const opt = problem.options[i];
+                const letter = opt.charAt(0);
+                const isSelected = selectedLetter === letter;
+                
+                let cardStyles = "border-2 rounded-xl p-4 font-semibold text-sm transition-all flex items-center gap-4 cursor-pointer ";
+                if (disabled) {
+                    cardStyles += isSelected ? "border-purple-500 bg-purple-50 text-purple-950 opacity-90 cursor-not-allowed " : "border-slate-200 bg-slate-50 text-slate-400 cursor-not-allowed ";
+                } else {
+                    cardStyles += isSelected ? "border-purple-600 bg-purple-50 text-purple-900 shadow-sm " : "border-slate-200 bg-white hover:border-purple-300 hover:bg-slate-50 text-slate-800 ";
+                }
+                
+                let badgeStyles = "w-7 h-7 rounded-full flex items-center justify-center text-xs font-black shrink-0 ";
+                badgeStyles += isSelected ? "bg-purple-600 text-white" : "bg-slate-100 text-slate-700";
+
+                const body = isGraph ? ('<div class="w-full mt-2 border border-slate-200 rounded-lg overflow-hidden">' + buildGraph(problem.optionSpecs[i]) + '</div>') : ('<span class="font-medium text-base">' + opt.substring(3) + '</span>');
+                html += '<div class="' + cardStyles + '" onclick="selectMcOptionCard(\'' + letter + '\')"><span class="' + badgeStyles + '">' + letter + '</span>' + body + '</div>';
+            }
+            html += '</div>';
+            return html;
+        }
+
+        // --- Core Module Generators ---
+        function generateProblem(typeId) {
+            if (!typeId) return null;
+            let p = {
+                title: "", type: "mc", assetType: "none", optionType: "text",
+                fullStatement: "", prompt: "", options: [], optionSpecs: [],
+                hint: "", steps: [], ans: "", rawAns: "", graphSpec: null
+            };
+
+            if (typeId === "m1") { // Vertical Line Test
+                p.title = "Vertical Line Test";
+                p.optionType = "graph";
+                /* Asked one way only, the answer was always a circle, a vertical line or a
+                   sideways parabola, and those three shapes never appeared as a wrong option.
+                   Half the draws now ask the other way, so the same shapes sit on both sides
+                   of the answer key: a circle really is not a function, but it is still a
+                   wrong answer to "which one IS a function". */
+                let askNot = Math.random() > 0.5;
+                p.fullStatement = askNot
+                    ? "Which of the following graphical relations is <b>NOT</b> a function? Evaluate using the Vertical Line Test."
+                    : "Which of the following graphical relations <b>IS</b> a function? Evaluate using the Vertical Line Test.";
+                /* audit fix 2026-07-30: 이 라벨이 askNot을 따라가지 않아,
+                   "IS a function" 문항의 절반에서 정반대 지시가 떴다. */
+                p.prompt = askNot
+                    ? "Tap the relation graph setup that fails the functional rule definition:"
+                    : "Tap the relation graph setup that satisfies the functional rule definition:";
+                
+                let funcs = [
+                    { kind: "line", m: randInt(-3,3,[0]), b: randInt(-2,2), arrowLeft: true, arrowRight: true },
+                    { kind: "parab", a: randInt(1,3)*Math.sign(randInt(-1,1)+0.5)*0.5, h: randInt(-3,3), k: randInt(-3,3), arrowLeft: true, arrowRight: true },
+                    { kind: "abs", a: randInt(1,2)*Math.sign(randInt(-1,1)+0.5), h: randInt(-2,2), k: randInt(-2,2), arrowLeft: true, arrowRight: true },
+                    { kind: "cubic", a: 0.2 * Math.sign(randInt(-1,1)+0.5), h: randInt(-2,2), k: randInt(-1,1), arrowLeft: true, arrowRight: true },
+                    { kind: "hline", y: randInt(-4,4), arrowLeft: true, arrowRight: true }
+                ];
+                let nonFuncs = [
+                    { kind: "circle", cx: randInt(-2,2), cy: randInt(-2,2), r: randInt(2,4) },
+                    { kind: "xparab", a: randInt(1,2)*Math.sign(randInt(-1,1)+0.5)*0.5, h: randInt(-2,2), k: randInt(-2,2), ydom: [-6, 6] },
+                    { kind: "vline", x: randInt(-4,4), arrowLeft: true, arrowRight: true }
+                ];
+                mcfShuffle(funcs);
+                mcfShuffle(nonFuncs);
+                
+                let specs = askNot
+                    ? [{ curves: [funcs[0]] }, { curves: [funcs[1]] }, { curves: [funcs[2]] }, { curves: [nonFuncs[0]] }]
+                    : [{ curves: [nonFuncs[0]] }, { curves: [nonFuncs[1]] }, { curves: [nonFuncs[2]] }, { curves: [funcs[0]] }];
+                let indices = mcfShuffle([0,1,2,3]);
+                let letters = ["A", "B", "C", "D"];
+                let finalSpecs = [];
+                let ansLetter = "";
+                for(let i=0; i<4; i++){
+                    finalSpecs.push(specs[indices[i]]);
+                    if (indices[i] === 3) ansLetter = letters[i];
+                }
+                
+                p.options = ["A)", "B)", "C)", "D)"]; p.optionSpecs = finalSpecs; p.ans = ansLetter;
+                p.hint = "A system represents a function if and only if every vertical line drawn intersects the graph boundary structure at most once.";
+                p.steps = [
+                    { title: `Step 1: Decide What Would Break the Rule`, math: "\\( 1 \\text{ Input } x \\rightarrow \\text{ At Most } 1 \\text{ Output } y \\)", explanation: ( "Slide an imaginary vertical line across each workspace mapping options horizontally.") + ` A relation stops being a function the moment one x-value has two different y-values. On a graph that is two points sitting directly above each other.`},
+                    /* audit fix 2026-07-30: 이 단계도 askNot을 따라가지 않아, 정답이
+                       함수인 문항에서 "이 그래프는 함수가 아니다"라고 설명하고 있었다. */
+                    askNot
+                        ? { title: "Step 2: Find where one x gives two y values", math: `\\( \\text{Option } ${ansLetter} \\text{ fails the test.} \\)`, explanation: ( `A vertical line intersects Option ${ansLetter}'s graph at multiple points, mapping one input to multiple outputs.`) + ` Sweep a vertical line from left to right and count the touches. Trap: reading the question backwards, so check whether it asks which one IS or is NOT a function.`}
+                        : { title: "Step 2: Confirm the Single Intersection Mapping", math: `\\( \\text{Option } ${ansLetter} \\text{ passes the test.} \\)`, explanation: `Every vertical line meets Option ${ansLetter}'s graph at most once, so each input maps to exactly one output. Each of the other three is cut twice by some vertical line.` }
+                ];
+            }
+            else if (typeId === "m2") { // Evaluate f(a)
+                p.title = "Evaluate Algebraic Function";
+                let a = randInt(-4, 4, [0]);
+                let b = randInt(-6, 6, [0]);
+                let c = randInt(-10, 10, [0]);
+                let x_val = randInt(-5, 5);
+                
+                let funcStr = `\\( f(x) = ${a === 1 ? "x^2" : (a === -1 ? "-x^2" : a + "x^2")} ${b>0?'+':'-'} ${Math.abs(b)}x ${c>0?'+':'-'} ${Math.abs(c)} \\)`;
+                p.fullStatement = `For the function ${funcStr}, find \\( f(${x_val}) \\).`;
+                p.prompt = mcfPick(["Select the value you get:", "What does the function equal there?", "Pick the answer:"]);
+                
+                let ans = a * (x_val * x_val) + b * x_val + c;
+                let d1 = -a * (x_val * x_val) + b * x_val + c;
+                let d2 = a * (x_val * x_val) - b * x_val + c;
+                let d3 = ans + randInt(1, 4) * (Math.random()>0.5?1:-1);
+                
+                let mc = shuffleMC(ans.toString(), [d1.toString(), d2.toString(), d3.toString()], [(ans+3).toString(), (ans-3).toString(), (ans+2).toString()]);
+                p.options = mc.options; p.ans = mc.ansLetter;
+                
+                p.hint = `Put ${x_val} in for x, and keep it in brackets. Do \\((${x_val})^2\\) first, then multiply by ${a}.`;
+                p.steps = [
+                    { title: `Step 1: Work Out What the Notation Is Telling You`, math: `\\( f(${x_val}) = ${a}(${x_val})^2 ${b>0?'+':'-'} ${Math.abs(b)}(${x_val}) ${c>0?'+':'-'} ${Math.abs(c)} \\)`, explanation: ( `Write ${x_val} in brackets everywhere x used to be. The brackets are what stop you losing a minus sign.`) + ` The number inside the brackets is not something you multiply by. It is the value you feed into the function.`},
+                    { title: "Step 2: Do the square first", math: `\\( f(${x_val}) = ${a * (x_val * x_val)} ${b * x_val > 0 ? '+' : '-'} ${Math.abs(b * x_val)} ${c > 0 ? '+' : '-'} ${Math.abs(c)} \\)`, explanation: ( `Calculate the squared value first, then multiply the front numbers.`) + ` Order of operations says powers before multiplying. Trap: forgetting the brackets, because a negative squared comes out positive.`},
+                    { title: "Step 3: Add it all up", math: `\\( f(${x_val}) = ${ans} \\)`, explanation: ( `Add the three numbers to get ${ans}.`) + ` Now that every term is a plain number, add them together. That total is the output of the function.`}
+                ];
+            }
+            else if (typeId === "m3") { // Reading Graph
+                p.title = "Reading a Value from a Graph";
+                p.assetType = "graph";
+                let isLine = Math.random() > 0.5;
+                let targetX = randInt(-4, 4);
+                let targetY = 0;
+                
+                if (isLine) {
+                    let m = randInt(-3, 3, [0]);
+                    let b = randInt(-3, 3);
+                    targetY = m * targetX + b;
+                    while (targetY < -6 || targetY > 6) {
+                        m = randInt(-3, 3, [0]); b = randInt(-3, 3); targetY = m * targetX + b;
+                    }
+                    p.graphSpec = { curves: [{ kind: "line", m: m, b: b, arrowLeft: true, arrowRight: true }] };
+                } else {
+                    let a = Math.random() > 0.5 ? 1 : -1;
+                    let h = randInt(-3, 3);
+                    let k = randInt(-4, 4);
+                    targetX = h + randInt(-2, 2);
+                    targetY = a * (targetX - h) * (targetX - h) + k;
+                    while (targetY < -6 || targetY > 6 || targetX < -5 || targetX > 5) {
+                        h = randInt(-3, 3); k = randInt(-4, 4); targetX = h + randInt(-2, 2); targetY = a * (targetX - h) * (targetX - h) + k;
+                    }
+                    p.graphSpec = { curves: [{ kind: "parab", a: a, h: h, k: k, arrowLeft: true, arrowRight: true }] };
+                }
+
+                p.fullStatement = MCF.pick([
+                    `The graph of \\( g(x) \\) is shown above. Use it to find \\( g(${targetX}) \\).`,
+                    `Read the graph of \\( g(x) \\) above. What is \\( g(${targetX}) \\)?`,
+                    `Using the graph of \\( g(x) \\) shown above, find the value of \\( g(${targetX}) \\).`
+                ]);
+                p.prompt = mcfPick([`Select the value of g(${targetX}):`, `What is g(${targetX})?`, `Read g(${targetX}) off the graph and pick the answer:`]);
+                
+                let mc = shuffleMC(targetY.toString(), [targetX.toString(), (-targetY).toString(), (targetY+2).toString()], mcfNearby(targetY));
+                p.options = mc.options; p.ans = mc.ansLetter;
+                
+                p.hint = `Find x = ${targetX} on the bottom axis. Go straight up or down until you hit the curve.`;
+                p.steps = [
+                    { title: `Step 1: Work Out Which Axis to Start On`, math: `\\( x = ${targetX} \\)`, explanation: ( `Find ${targetX} on the horizontal axis.`) + ` The number inside the brackets is always an x-value, never a y-value. So you start on the horizontal axis.`},
+                    { title: "Step 2: Read the height where you hit the curve", math: `\\( g(${targetX}) = ${targetY} \\)`, explanation: ( `The curve is at height ${targetY} there, so \\(g(${targetX}) = ${targetY}\\).`) + ` Travel straight up or down, keeping your line perfectly vertical, then read across to the y-axis. Sliding sideways gives the wrong answer.`}
+                ];
+            }
+            else if (typeId === "m4" || typeId === "m5") { // Domain or Range
+                let isDomain = (typeId === "m4");
+                p.title = isDomain ? "Graph-Based Domain Set Boundaries" : "Graph-Based Range Set Boundaries";
+                p.assetType = "graph";
+                
+                /* Weighted, not uniform: shapes 2 and 3 are the two whose domain is all of
+                   R, so leaving the draw uniform made "all reals" the answer two thirds of
+                   the time. Shape 4 (added below) has a restricted domain. */
+                let shapeType = [1, 1, 2, 3, 4, 4][randInt(0, 5)]; // 1 Segment, 2 Parabola/Abs, 3 Line, 4 Restricted curve
+                let correctStr = "", dist1 = "", dist2 = "", dist3 = "";
+                
+                if (shapeType === 1) { // Segment
+                    let x1 = randInt(-6, -1), x2 = randInt(1, 6);
+                    /* audit fix 2026-07-30: y1 === y2이면 치역이 "-3 <= y <= -3"
+                       같은 퇴화 구간으로 나와, 약 9%의 문항이 낯선 답이 되었다. */
+                    let y1 = randInt(-5, 5), y2 = randInt(-5, 5, [y1]);
+                    p.graphSpec = { 
+                        curves: [{ kind: "line", m: (y2-y1)/(x2-x1), b: y1 - (y2-y1)/(x2-x1)*x1, dom: [x1, x2] }],
+                        dots: [{ x: x1, y: y1 }, { x: x2, y: y2 }]
+                    };
+                    let minY = Math.min(y1, y2), maxY = Math.max(y1, y2);
+                    let dStr = `\\( \\{x \\in \\mathbb{R} \\mid ${x1} \\le x \\le ${x2}\\} \\)`;
+                    let rStr = `\\( \\{y \\in \\mathbb{R} \\mid ${minY} \\le y \\le ${maxY}\\} \\)`;
+                    
+                    if (isDomain) {
+                        correctStr = dStr; dist1 = rStr; dist2 = `\\( \\{y \\in \\mathbb{R} \\mid ${x1} \\le y \\le ${x2}\\} \\)`; dist3 = `\\( \\{x \\in \\mathbb{R}\\} \\)`;
+                    } else {
+                        correctStr = rStr; dist1 = dStr; dist2 = `\\( \\{x \\in \\mathbb{R} \\mid ${minY} \\le x \\le ${maxY}\\} \\)`; dist3 = `\\( \\{y \\in \\mathbb{R}\\} \\)`;
+                    }
+                }
+                else if (shapeType === 2) { // Parabola/Abs
+                    let isAbs = Math.random() > 0.5;
+                    let a = Math.random() > 0.5 ? 1 : -1;
+                    let h = randInt(-3, 3), k = randInt(-4, 4);
+                    p.graphSpec = { curves: [{ kind: isAbs ? "abs" : "parab", a: a, h: h, k: k, arrowLeft: true, arrowRight: true }] };
+                    
+                    let dStr = `\\( \\{x \\in \\mathbb{R}\\} \\)`;
+                    let rStr = a > 0 ? `\\( \\{y \\in \\mathbb{R} \\mid y \\ge ${k}\\} \\)` : `\\( \\{y \\in \\mathbb{R} \\mid y \\le ${k}\\} \\)`;
+                    
+                    if (isDomain) {
+                        /* the answer was the only short option here, so "pick the shortest"
+                           always worked. Two more short distractors: the range (domain/range
+                           mix-up) and the integers (continuous curve read as discrete). */
+                        correctStr = dStr; dist1 = rStr; dist2 = `\\( \\{y \\in \\mathbb{R}\\} \\)`; dist3 = `\\( \\{x \\in \\mathbb{Z}\\} \\)`;
+                    } else {
+                        correctStr = rStr; dist1 = dStr; dist2 = a > 0 ? `\\( \\{y \\in \\mathbb{R} \\mid y \\le ${k}\\} \\)` : `\\( \\{y \\in \\mathbb{R} \\mid y \\ge ${k}\\} \\)`; dist3 = `\\( \\{y \\in \\mathbb{R} \\mid y \\ge ${h}\\} \\)`;
+                    }
+                }
+                else if (shapeType === 3) { // Line
+                    let m = randInt(-2, 2, [0]);
+                    let b = randInt(-3, 3);
+                    p.graphSpec = { curves: [{ kind: "line", m: m, b: b, arrowLeft: true, arrowRight: true }] };
+                    let allR_X = `\\( \\{x \\in \\mathbb{R}\\} \\)`;
+                    let allR_Y = `\\( \\{y \\in \\mathbb{R}\\} \\)`;
+                    
+                    if (isDomain) {
+                        correctStr = allR_X; dist1 = `\\( \\{x \\in \\mathbb{R} \\mid x \\ge 0\\} \\)`; dist2 = `\\( \\{x \\in \\mathbb{Z}\\} \\)`; dist3 = allR_Y;
+                    } else {
+                        correctStr = allR_Y; dist1 = `\\( \\{y \\in \\mathbb{R} \\mid y \\ge 0\\} \\)`; dist2 = `\\( \\{y \\in \\mathbb{R} \\mid y \\neq ${b}\\} \\)`; dist3 = `\\( \\{x \\in \\mathbb{R}\\} \\)`;
+                    }
+                }
+                else { // 4: parabola or absolute value drawn over a closed interval only
+                    /* Added 2026-07-30. Shapes 2 and 3 both have domain "all reals", so a
+                       student could answer the domain question correctly about two thirds of
+                       the time by always picking that option without reading the graph. This
+                       shape has a genuinely restricted domain, and the weighted mix above
+                       stops the unrestricted answer being the single most likely one. */
+                    let isAbs = Math.random() > 0.5;
+                    let a = Math.random() > 0.5 ? 1 : -1;
+                    let h = randInt(-2, 2), k = randInt(-2, 2);
+                    /* every plotted y has to stay inside the -7..7 grid; the parabola grows
+                       fast, so its arms are cut at most two units from the vertex */
+                    let w1 = isAbs ? randInt(2, 4) : randInt(1, 2);
+                    let w2 = isAbs ? randInt(2, 4) : randInt(1, 2);
+                    let x1 = h - w1, x2 = h + w2;
+                    let fEnd = function (x) { return isAbs ? a * Math.abs(x - h) + k : a * (x - h) * (x - h) + k; };
+                    let e1 = fEnd(x1), e2 = fEnd(x2);
+                    let lowY = a > 0 ? k : Math.min(e1, e2);
+                    let highY = a > 0 ? Math.max(e1, e2) : k;
+                    p.graphSpec = {
+                        curves: [{ kind: isAbs ? "abs" : "parab", a: a, h: h, k: k, dom: [x1, x2] }],
+                        dots: [{ x: x1, y: e1 }, { x: x2, y: e2 }]
+                    };
+                    let dStr = `\\( \\{x \\in \\mathbb{R} \\mid ${x1} \\le x \\le ${x2}\\} \\)`;
+                    let rStr = `\\( \\{y \\in \\mathbb{R} \\mid ${lowY} \\le y \\le ${highY}\\} \\)`;
+
+                    if (isDomain) {
+                        correctStr = dStr;
+                        dist1 = rStr;
+                        dist2 = `\\( \\{x \\in \\mathbb{R}\\} \\)`;
+                        dist3 = `\\( \\{x \\in \\mathbb{R} \\mid ${lowY} \\le x \\le ${highY}\\} \\)`;
+                    } else {
+                        correctStr = rStr;
+                        dist1 = dStr;
+                        dist2 = a > 0 ? `\\( \\{y \\in \\mathbb{R} \\mid y \\ge ${k}\\} \\)` : `\\( \\{y \\in \\mathbb{R} \\mid y \\le ${k}\\} \\)`;
+                        dist3 = `\\( \\{y \\in \\mathbb{R}\\} \\)`;
+                    }
+                }
+
+                p.fullStatement = MCF.pick([
+                    `The graph of a function is shown above. What is its ${isDomain ? 'domain' : 'range'}?`,
+                    `Look at the graph above. Write down its ${isDomain ? 'domain' : 'range'} in set notation.`,
+                    `Use the graph shown above to state the ${isDomain ? 'domain' : 'range'} of the function.`
+                ]);
+                p.prompt = mcfPick([`Select the ${isDomain ? 'domain' : 'range'}:`, `Which set is the ${isDomain ? 'domain' : 'range'}?`, `Pick the ${isDomain ? 'domain' : 'range'} of this function:`]);
+                let mc = shuffleMC(correctStr, [dist1, dist2, dist3], ["None of the above", "\\( \\{x \\in \\mathbb{R} \\mid x \\ge 0\\} \\)", "\\( \\{y \\in \\mathbb{R} \\mid y \\ge 0\\} \\)"]);
+                p.options = mc.options; p.ans = mc.ansLetter;
+
+                if (isDomain) {
+                    p.hint = "Domain describes all valid horizontal x-inputs. Check for left/right boundaries or infinite arrows.";
+                    p.steps = [
+                        { title: `Step 1: Work Out Which Direction to Look`, math: "\\( \\text{Domain} = \\text{the x-values} \\)", explanation: ( "Look at how far the graph goes left and right.") + ` Domain means every x-value the graph reaches, so it is a left-to-right question. Trap: reading up and down, which gives the range.`},
+                        { title: "Step 2: Look for dots or arrows", math: "\\( \\text{Dots stop the graph. Arrows keep it going.} \\)", explanation: ( `An arrow means the graph keeps going forever that way. A dot means it stops there.`) + ` A solid dot means the graph stops there and that value counts. An arrow means it keeps going, so that side has no boundary.`},
+                        { title: "Step 3: Write it as a set", math: correctStr, explanation: ( `Write the left and right edges inside set brackets.`) + ` Put the two boundaries inside the set brackets. Trap: writing the wrong letter, since domain uses \\(x\\) and range uses \\(y\\).`}
+                    ];
+                } else {
+                    p.hint = "The range is the set of y-values. Find the lowest and highest points the graph reaches.";
+                    p.steps = [
+                        { title: `Step 1: Work Out Which Direction to Look`, math: "\\( \\text{Range} = \\text{the y-values} \\)", explanation: ( "Find the lowest point and the highest point on the curve.") + ` Range means every height the graph reaches, so it is a bottom-to-top question. Trap: reading left to right, which gives the domain.`},
+                        { title: "Step 2: Check which way it opens", math: "\\( \\text{Which way does it open?} \\)", explanation: ( `If it opens upward the y-values keep rising. If it opens downward they keep falling.`) + ` The vertex is the lowest point when it opens upward, and the highest when it opens downward. Either way it sets one end of the range.`},
+                        { title: "Step 3: Write it as a set", math: correctStr, explanation: ( `Write the bottom and top edges inside set brackets.`) + ` Put the two boundaries inside the set brackets. Trap: writing the wrong letter, since domain uses \\(x\\) and range uses \\(y\\).`}
+                    ];
+                }
+            }
+            else if (typeId === "m6") { // Vertex to Standard
+                p.title = "Vertex to Standard Polynomial Expansion";
+                let a = randInt(-5, 5, [0]);
+                let h = randInt(-8, 8, [0]);
+                let k = randInt(-20, 20, [0]);
+                let fnName = Math.random() > 0.5 ? "f" : "g";
+
+                let vForm = fmtVertex(a, h, k, fnName);
+                let b = -2 * a * h;
+                let c = a * h * h + k;
+                
+                let correctStr = "\\( " + fmtPoly(a, b, c, fnName) + " \\)";
+                let dist1 = "\\( " + fmtPoly(a, -b, c, fnName) + " \\)";
+                let dist2 = "\\( " + fmtPoly(a, b, c + randInt(2,10)*Math.sign(a), fnName) + " \\)";
+                let dist3 = "\\( " + fmtPoly(a, b, a * h * h - k, fnName) + " \\)";
+                let dist4 = "\\( " + fmtPoly(-a, b, c, fnName) + " \\)";
+
+                p.fullStatement = `Transform the vertex form quadratic relation function expression into its equivalent standard trinomial polynomial form layout: \\( ${vForm} \\)`;
+                p.prompt = mcfPick(["Select the correct standard form:", "Which line is this function in standard form?", "Pick the expanded form:"]);
+                let mc = shuffleMC(correctStr, [dist1, dist2, dist3, dist4], []);
+                p.options = mc.options; p.ans = mc.ansLetter;
+                
+                let signH = h > 0 ? "-" : "+";
+                let absH = Math.abs(h);
+                let expandSq = `x^2 ${h>0?'-':'+'} ${2*absH}x + ${absH*absH}`;
+
+                p.hint = `Expand the perfect square binomial bracket system \\((x ${signH} ${absH})^2\\) first, multiply by ${a}, then add ${k}.`;
+                p.steps = [
+                    { title: `Step 1: Decide What Order to Expand In`, math: `\\( (x ${signH} ${absH})^2 = ${expandSq} \\)`, explanation: ( "Apply algebraic pattern rule: \\((x \\pm y)^2 = x^2 \\pm 2xy + y^2\\).") + ` Do the bracket on its own first, before touching the number in front. Trap: multiplying the front number in too early, which loses a term.`}
+                ];
+                if (a !== 1) {
+                    let distInner = `${a === -1 ? '-' : a}(${expandSq})`;
+                    let distOut = `${a===1?'':(a===-1?'-':a)}x^2 ${b>0?'+':'-'} ${Math.abs(b)}x ${a*absH*absH>0?'+':'-'} ${Math.abs(a*absH*absH)}`;
+                    p.steps.push({ title: `Step 2: Multiply Every Term by the Front Number`, math: `\\( ${distInner} = ${distOut} \\)`, explanation: ( `Multiply each term inside the brackets by ${a}.`) + ` Every single term inside the bracket gets multiplied, not just the first one. Trap: leaving the last term untouched.`});
+                    p.steps.push({ title: `Step 3: Add the Last Number On`, math: `\\( ${distOut} ${k>0?'+':'-'} ${Math.abs(k)} = ${fmtPoly(a, b, c, '').substring(6)} \\)`, explanation: ( `Simplify the final constants: ${a*absH*absH} ${k>0?'+':'-'} ${Math.abs(k)} = ${c}.`) + ` Only plain numbers can be joined together here. Write the answer highest power first, as \\(y = ax^2 + bx + c\\).`});
+                } else {
+                    p.steps.push({ title: "Step 2: Collect the constant terms", math: `\\( ${expandSq} ${k>0?'+':'-'} ${Math.abs(k)} \\)`, explanation: `Add the trailing constant ${k} to the expanded equation.` });
+                    p.steps.push({ title: "Step 3: Simplify to final form", math: `\\( ${fmtPoly(a, b, c, '').substring(6)} \\)`, explanation: `Combine the numbers: ${absH*absH} ${k>0?'+':'-'} ${Math.abs(k)} = ${c}.` });
+                }
+            }
+            else if (typeId === "m7") { // Completing the Square
+                p.title = "Completing the Square";
+                let a = randInt(-4, 4, [0]);
+                let h = randInt(-6, 6, [0]);
+                let k = randInt(-20, 20);
+                let fnName = Math.random() > 0.5 ? "f" : "g";
+
+                let b = -2 * a * h;
+                let c = a * h * h + k;
+                
+                let sForm = fmtPoly(a, b, c, fnName);
+                let correctStr = "\\( " + fmtVertex(a, h, k, fnName) + " \\)";
+                let dist1 = "\\( " + fmtVertex(a, -h, k, fnName) + " \\)";
+                let dist2 = "\\( " + fmtVertex(a, h, c + a*h*h, fnName) + " \\)";
+                let dist3 = "\\( " + fmtVertex(a, -h, c + a*h*h, fnName) + " \\)";
+                let dist4 = "\\( " + fmtVertex(a, h, k + randInt(2,10)*Math.sign(a||1), fnName) + " \\)";
+
+                p.fullStatement = `Complete the square to write this function in vertex form: \\( ${sForm} \\)`;
+                p.prompt = mcfPick(["Select the correct vertex form:", "Which line is this function in vertex form?", "Pick the completed-square form:"]);
+                let mc = shuffleMC(correctStr, [dist1, dist2, dist3, dist4], []);
+                p.options = mc.options; p.ans = mc.ansLetter;
+                
+                let B = b / a; 
+                let halfB = B / 2;
+                let halfBSq = halfB * halfB;
+
+                if (a === 1) {
+                    p.hint = `Take half of the x front number (${b} ÷ 2 = ${halfB}), square it (${halfBSq}), then add and subtract ${halfBSq} inside the expression.`;
+                    p.steps = [
+                        { title: "Step 1: Calculate Balancing Perfect Value Identifier", math: `\\( (\\frac{${b}}{2})^2 = (${halfB})^2 = ${halfBSq} \\)`, explanation: "Find half of the linear x front number and square it." },
+                        { title: "Step 2: Insert Magic Value Setup", math: `\\( ${fnName}(x) = (x^2 ${MCF.signed(b)}x + ${halfBSq}) - ${halfBSq} ${MCF.signed(c)} \\)`, explanation: `Add and subtract ${halfBSq} immediately after the x term to preserve equivalence.` },
+                        { title: "Step 3: Factor and Collapse", math: `\\( ${correctStr.slice(3, -3)} \\)`, explanation: `Factor the trinomial into \\((x ${MCF.signed(halfB)})^2\\) and calculate \\(-${halfBSq} ${MCF.signed(c)} = ${k}\\).` }
+                    ];
+                } else {
+                    p.hint = `Factor out the leading front number ${a} from the first two terms first: \\(${a}(x^2 ${MCF.signed(B)}x) ${MCF.signed(c)}\\). Then apply square building algorithms inside.`;
+                    p.steps = [
+                        { title: `Step 1: Work Out Why the Front Number Must Come Out`, math: `\\( ${fnName}(x) = ${a}(x^2 ${MCF.signed(B)}x) ${MCF.signed(c)} \\)`, explanation: ( `Pull ${a} out of the first two terms only. Leave ${c} outside the bracket.`) + ` The front number has to come out before you can complete the square, because the method only works when \\(x^2\\) stands alone.`},
+                        { title: "Step 2: Add and subtract the missing number", math: `\\( (\\frac{${B}}{2})^2 = ${halfBSq} \\rightarrow ${a}(x^2 ${MCF.signed(B)}x + ${halfBSq} - ${halfBSq}) ${MCF.signed(c)} \\)`, explanation: ( `Add and subtract ${halfBSq} inside the parentheses.`) + ` Half the middle number and square it. Adding and subtracting the same amount changes nothing, which is what makes this legal.`},
+                        { title: "Step 3: Move the subtracted number out", math: `\\( ${a} \\times (-${halfBSq}) = ${-a*halfBSq} \\rightarrow ${a}(x^2 ${MCF.signed(B)}x + ${halfBSq}) ${MCF.signed(-a*halfBSq)} ${MCF.signed(c)} \\)`, explanation: ( `It has to be multiplied by ${a} on the way out, because everything in the bracket is multiplied by ${a}.`) + ` The number is trapped inside the bracket, so it gets multiplied by the front number on its way out. Trap: moving it out unchanged.`},
+                        { title: "Step 4: Factor the bracket and add the numbers", math: `\\( ${correctStr.slice(3, -3)} \\)`, explanation: ( `Simplify the layout completely: \\(${-a*halfBSq} ${MCF.signed(c)} = ${k}\\).`) + ` The bracket is a perfect square now, so it collapses into one bracket squared. Add every loose number to get \\(k\\).`}
+                    ];
+                }
+            }
+            else if (typeId === "m8") { // Extrema Max/Min
+                p.title = "Finding the Maximum or Minimum Value";
+                let a = randInt(-4, 4, [0]);
+                let h = randInt(-6, 6, [0]);
+                let k = randInt(-30, 30);
+                let fnName = Math.random() > 0.5 ? "f" : "g";
+                let b = -2 * a * h; let c = a * h * h + k;
+                
+                let sForm = fmtPoly(a, b, c, fnName);
+                let isMin = (a > 0);
+                let extType = isMin ? "Minimum" : "Maximum";
+                let oppType = isMin ? "Maximum" : "Minimum";
+                
+                let correctStr = `${extType} value of ${k} at x = ${h}`;
+                let dist1 = `${oppType} value of ${k} at x = ${h}`;
+                let dist2 = `${extType} value of ${k} at x = ${-h}`;
+                let dist3 = `${extType} value of ${c} at x = 0`;
+                let dist4 = `${oppType} value of ${k+Math.abs(a)} at x = ${h}`;
+
+                p.fullStatement = `Complete the square to find the maximum or minimum value of: \\( ${sForm} \\)`;
+                p.prompt = mcfPick(["Select the correct maximum or minimum value:", "Which choice gives the turning point correctly?", "Pick the largest or smallest value this function reaches:"]);
+                let mc = shuffleMC(correctStr, [dist1, dist2, dist3, dist4], []);
+                p.options = mc.options; p.ans = mc.ansLetter;
+                
+                let B = b / a; let halfB = B / 2; let halfBSq = halfB * halfB;
+
+                p.hint = `Convert to vertex form first. If the leading front number 'a' is positive, the parabola opens upward (minimum). If negative, it opens downward (maximum).`;
+                p.steps = [
+                    { title: `Step 1: Decide Why You Need Vertex Form Here`, math: `\\( ${a}(x^2 ${MCF.signed(B)}x + ${halfBSq} - ${halfBSq}) ${MCF.signed(c)} \\)`, explanation: ( `Take ${a} out of the first two terms, then add and subtract ${halfBSq} inside the bracket.`) + ` A maximum or minimum always sits at the vertex, and vertex form shows the vertex directly. So convert first, then read.`},
+                    { title: "Step 2: Write the vertex form", math: `\\( ${fmtVertex(a, h, k, fnName)} \\)`, explanation: ( `Moving \\(-${halfBSq}\\) out gives \\(${a} \\times (-${halfBSq}) = ${-a*halfBSq}\\). The vertex is \\((${h}, ${k})\\).`) + ` Once it is in the form \\(y = a(x - h)^2 + k\\), the vertex is \\((h, k)\\). No further work is needed.`},
+                    { title: "Step 3: Check which way it opens", math: `\\( a = ${a} \\rightarrow \\text{Opens } ${isMin ? 'Upward' : 'Downward'} \\text{ (${extType} Value)} \\)`, explanation: ( `Since \\(a ${isMin ? '>' : '<'} 0\\), the vertex represents the ${isMin ? 'lowest' : 'highest'} point on the graph.`) + ` A positive \\(a\\) opens upward and gives a minimum. A negative one opens downward and gives a maximum. Trap: naming the wrong one.`},
+                    { title: "Step 4: Read the answer off the vertex", math: `\\( \\text{${extType}} = ${k} \\text{ at } x = ${h} \\)`, explanation: ( `The vertex is \\((${h}, ${k})\\), so the ${extType.toLowerCase()} value is ${k} and it happens at x = ${h}.`) + ` The \\(k\\) value is the maximum or minimum itself, and \\(h\\) is where it happens. Trap: swapping those two round.`}
+                ];
+            }
+            else if (typeId === "m9") { // Factored Form
+                p.title = "Key Features from Factored Form";
+                let a = Math.random() > 0.5 ? randInt(1, 2) : (Math.random() > 0.5 ? -1 : 0.5);
+                let r1 = randInt(-5, 1);
+                let dist = randInt(1, 4);
+                let r2 = r1 + 2 * dist; 
+                let h = r1 + dist;
+                let k = a * (h - r1) * (h - r2);
+                let yInt = a * (-r1) * (-r2);
+                
+                let eqStr = `f(x) = ${a===1?'':(a===-1?'-':a)}(x ${r1<=0?'+ '+Math.abs(r1):'- '+r1})(x ${r2<=0?'+ '+Math.abs(r2):'- '+r2})`;
+                
+                p.fullStatement = `Find the key features of this quadratic from its factored form: \\( ${eqStr} \\)`;
+                p.prompt = mcfPick(["Select the correct set of key features:", "Which list of key features is right?", "Pick the set that matches this quadratic:"]);
+                let correctStr = `x-intercepts: ${r1} and ${r2}; y-int: ${yInt}; axis: x = ${h}; vertex: (${h}, ${k})`;
+                /* audit fix: h === 0 이면 부호를 뒤집어도 같은 답이 되어 정답이 두 개였다.
+                   그 경우에는 다른 오해(꼭짓점 y값을 0으로 읽음)로 갈아탄다. */
+                let dist1 = (h === 0)
+                    ? `x-intercepts: ${r1} and ${r2}; y-int: ${yInt}; axis: x = ${h}; vertex: (${h}, 0)`
+                    : `x-intercepts: ${-r1} and ${-r2}; y-int: ${yInt}; axis: x = ${-h}; vertex: (${-h}, ${k})`;
+                let dist2 = `x-intercepts: ${r1} and ${r2}; y-int: ${-yInt}; axis: x = ${h}; vertex: (${h}, ${-k})`;
+                let dist3 = `x-intercepts: ${r1+1} and ${r2+1}; y-int: ${yInt}; axis: x = ${h+1}; vertex: (${h+1}, ${k})`;
+                
+                let mc = shuffleMC(correctStr, [dist1, dist2, dist3], []);
+                p.options = mc.options; p.ans = mc.ansLetter;
+                
+                p.hint = "Set each bracket equal to zero to get the x-intercepts. Average those two numbers to get the axis of symmetry.";
+                p.steps = [
+                    { title: `Step 1: Work Out Why Factored Form Helps Here`, math: `\\( x = ${r1} \\text{ and } x = ${r2} \\)`, explanation: ( "Set each bracket equal to zero. The sign flips when you solve, so (x + 3) gives x = -3.") + ` Factored form is built so the roots fall out with almost no work, which is why this comes first.`},
+                    { title: "Step 2: Find the axis of symmetry", math: `\\( x = \\frac{${r1} ${MCF.signed(r2)}}{2} = ${h} \\)`, explanation: ( "The axis of symmetry sits exactly halfway between the two x-intercepts.") + ` Add the two roots and halve them. A parabola is symmetric, so the middle of the roots is the middle of the curve.`},
+                    { title: "Step 3: Find the vertex and the y-intercept", math: `\\( f(${h}) = ${k} \\, | \\, f(0) = ${yInt} \\)`, explanation: ( `Put x = ${h} in to get the vertex y-value ${k}. Put x = 0 in to get the y-intercept ${yInt}.`) + ` The axis of symmetry gives the vertex x-value, so put it back in to get the height. Trap: giving the axis as the vertex.`}
+                ];
+            }
+            else if (typeId === "m10") { // Word Problems
+                p.title = "Optimization Contextual Application Problems";
+                let scenario = randInt(1, 3);
+                
+                if (scenario === 1) { 
+                    let t_peak = randInt(2, 6); let c = randInt(1, 10);
+                    let b = 10 * t_peak; let k = 5 * t_peak * t_peak + c;
+                    p.fullStatement = `A toy rocket is launched from a platform. Its height follows \\( h = -5t^2 + ${b}t + ${c} \\), where \\( h \\) is the height in metres and \\( t \\) is the time in seconds. What is the greatest height the rocket reaches?`;
+                    p.prompt = mcfPick(["Select the greatest height:", "How high does it get?", "Pick the highest point reached:"]);
+                    let correctStr = `${k} meters`;
+                    let mc = shuffleMC(correctStr, [`${k-5} meters`, `${k+5} meters`, `${t_peak} meters`, `${c} meters`], []);
+                    p.options = mc.options; p.ans = mc.ansLetter;
+                    p.hint = "Calculate the exact timeline coordinate index where the peak vertex is reached using axis optimization equation formulas \\( t = -b / (2a) \\) before calculating actual height values.";
+                    p.steps = [
+                        { title: `Step 1: Work Out What the Question Is Really Asking`, math: `\\( t = -\\frac{${b}}{2(-5)} = ${t_peak} \\text{ seconds} \\)`, explanation: ( `Use \\(t = -b \\div 2a\\). The rocket is highest ${t_peak} seconds after launch.`) + ` A maximum always sits at the vertex, so the question is really asking you to find the vertex first.`},
+                        { title: "Step 2: Put that time back in to get the height", math: `\\( h = -5(${t_peak})^2 + ${b}(${t_peak}) + ${c} = ${k}\\text{ m} \\)`, explanation: ( `Put t = ${t_peak} into the equation. The greatest height is ${k} metres.`) + ` The time tells you where the maximum happens, not what it is. You have to substitute it back to get the height.`}
+                    ];
+                }
+                else if (scenario === 2) { 
+                    let x_peak = randInt(5, 15); let c = randInt(50, 200, [100]); c = Math.floor(c/50)*50; 
+                    let b = 4 * x_peak; let k = 2 * x_peak * x_peak + c;
+                    p.fullStatement = `A shop models its revenue with \\( R = -2x^2 + ${b}x + ${c} \\), where \\( R \\) is the revenue in dollars and \\( x \\) is the number of items sold. What is the greatest revenue the shop can make?`;
+                    p.prompt = mcfPick(["Select the greatest revenue:", "What is the most revenue possible?", "Pick the largest revenue:"]);
+                    let correctStr = `$${k}`;
+                    let mc = shuffleMC(correctStr, [`$${k-100}`, `$${k+100}`, `$${x_peak}`, `$${c}`], []);
+                    p.options = mc.options; p.ans = mc.ansLetter;
+                    p.hint = "Use \\( x = -b \\div 2a \\) to find how many items give the most revenue. Then put that number back in.";
+                    p.steps = [
+                        { title: `Step 1: Work Out What the Question Is Really Asking`, math: `\\( x = -\\frac{${b}}{2(-2)} = ${x_peak} \\text{ items} \\)`, explanation: ( `Selling ${x_peak} items gives the most revenue.`) + ` Maximum revenue always sits at the vertex, so the question is really asking you to find the vertex.`},
+                        { title: "Step 2: Put that number back in to get the revenue", math: `\\( R = -2(${x_peak})^2 + ${b}(${x_peak}) + ${c} = ${k} \\)`, explanation: ( `Put x = ${x_peak} into the equation. The greatest revenue is $${k}.`) + ` The x-value tells you where the maximum happens, not what it is. You have to substitute it back to get the amount.`}
+                    ];
+                }
+                else { 
+                    let t_peak = randInt(20, 28, [21, 23, 25, 27]);
+                    /* audit fix: c가 너무 작으면 "최대 높이 -7.0 cm" 같은 말이 안 되는 답이 나왔다.
+                       꼭짓점 높이가 항상 양수가 되도록 c의 범위를 t_peak에 맞춰 잡는다. */
+                    let c = randInt(-Math.floor(0.05 * t_peak * t_peak) + 6, -5);
+                    let b = 0.1 * t_peak; let k = 0.05 * t_peak * t_peak + c;
+                    p.fullStatement = `A student models how tall a plant grows at different temperatures: \\( h = -0.05t^2 + ${b.toFixed(1)}t ${c} \\), where \\( h \\) is the height in cm and \\( t \\) is the temperature in °C. What is the greatest height?`;
+                    p.prompt = mcfPick(["Select the greatest height:", "How high does it get?", "Pick the highest point reached:"]);
+                    let correctStr = `${k.toFixed(1)} cm`;
+                    /* audit fix 2026-08-01: the answer printed as "10.0 cm" while these two
+                       printed raw, so "10 cm" could appear beside it as a second correct
+                       answer. Every option now uses one decimal place. */
+                    const cmFmt = (v) => `${Number(v).toFixed(1)} cm`;
+                    let mc = shuffleMC(correctStr, [cmFmt(k - 2), cmFmt(k + 2), cmFmt(t_peak), cmFmt(Math.abs(c))], []);
+                    p.options = mc.options; p.ans = mc.ansLetter;
+                    p.hint = "Find the t-coordinate for the maximum using t = -b / (2a). Then substitute t back into the equation to find the height h.";
+                    p.steps = [
+                        { title: `Step 1: Work Out What the Question Is Really Asking`, math: `\\( t = -\\frac{${b.toFixed(1)}}{2(-0.05)} = ${t_peak}^\\circ\\text{C} \\)`, explanation: ( `Use \\(t = -b \\div 2a\\). The plant grows tallest at ${t_peak}°C.`) + ` Maximum always sits at the vertex, so the question is really asking you to find the vertex.`},
+                        { title: "Step 2: Put that temperature back in", math: `\\( h = -0.05(${t_peak})^2 + ${b.toFixed(1)}(${t_peak}) ${c > 0 ? '+' : ''} ${c} = ${k.toFixed(1)}\\text{ cm} \\)`, explanation: `Put t = ${t_peak} into the equation. The greatest height is ${k.toFixed(1)} cm.` }
+                    ];
+                }
+            }
+            else if (typeId === "m11") { // Key Chars from Graph
+                p.title = "Graphical Key Characteristics Analysis";
+                p.assetType = "graph";
+                let r1 = randInt(-4, 0); let dist = randInt(1, 3);
+                let r2 = r1 + 2 * dist; let h = r1 + dist;
+                let a = randInt(-2, 2, [0]); let k = -a * (dist * dist);
+                let yInt = a * (-r1) * (-r2);
+                p.graphSpec = { curves: [{ kind: "parab", a: a, h: h, k: k, arrowLeft: true, arrowRight: true }] };
+                
+                p.fullStatement = MCF.pick([
+                    "Use the graph above to find the key features of this quadratic.",
+                    "Read the graph above. Which description of its key features is correct?",
+                    "Look at the graph above and pick the set of key features that matches it."
+                ]);
+                p.prompt = mcfPick(["Select the correct set of key features:", "Which list of key features is right?", "Pick the set that matches this quadratic:"]);
+                let posInt = a < 0 ? `${r1} < x < ${r2}` : `x < ${r1} \\text{ or } x > ${r2}`;
+                let negInt = a > 0 ? `${r1} < x < ${r2}` : `x < ${r1} \\text{ or } x > ${r2}`;
+                let incInt = a < 0 ? `x < ${h}` : `x > ${h}`;
+                let decInt = a > 0 ? `x < ${h}` : `x > ${h}`;
+                let correctStr = `x-ints: ${r1} & ${r2}; y-int: ${yInt}; vertex: (${h}, ${k}); ` + (a > 0 ? `negative: ${negInt}` : `positive: ${posInt}`) + `; increasing: ${incInt}`;
+                let dist1 = `x-ints: ${r1+1} & ${r2+1}; y-int: ${yInt}; vertex: (${h+1}, ${k}); ` + (a > 0 ? `negative: ${negInt}` : `positive: ${posInt}`) + `; increasing: ${incInt}`;
+                let dist2 = `x-ints: ${-r1} & ${-r2}; y-int: ${-yInt}; vertex: (${-h}, ${k}); ` + (a < 0 ? `negative: ${negInt}` : `positive: ${posInt}`) + `; increasing: ${decInt}`;
+                let dist3 = `x-ints: ${r1} & ${r2}; y-int: ${yInt}; vertex: (${h}, ${k}); ` + (a < 0 ? `negative: ${posInt}` : `positive: ${negInt}`) + `; increasing: ${decInt}`;
+                
+                let mc = shuffleMC(correctStr, [dist1, dist2, dist3], []);
+                p.options = mc.options; p.ans = mc.ansLetter;
+                p.hint = "Look for the vertex peak point. The interval of increase describes where the graph goes up from left to right.";
+                p.steps = [
+                    { title: `Step 1: Decide Which Features to Read First`, math: `\\( \\text{Vertex} = (${h}, ${k}), y\\text{-int} = ${yInt} \\)`, explanation: ( `The peak/valley point is at (${h}, ${k}). The curve cuts the vertical axis at y = ${yInt}.`) + ` Read the picture feature by feature rather than all at once. The vertex is the turning point of the curve.`},
+                    { title: "Step 2: Read the x-intercepts", math: `\\( x = ${r1} \\text{ and } x = ${r2} \\)`, explanation: ( `The parabola slices through the horizontal x-axis at exactly ${r1} and ${r2}.`) + ` These are where the curve crosses the horizontal axis, so their y-value is zero. Trap: reading the y-axis by mistake.`},
+                    { title: "Step 3: Describe the intervals", math: `\\( ` + (a > 0 ? `\\text{Negative: } ${negInt}` : `\\text{Positive: } ${posInt}`) + ` \\, | \\, \\text{Increasing: } ${incInt} \\)`, explanation: ( `The graph is ${a > 0 ? 'below' : 'above'} the x-axis for the stated interval, and climbs upwards when ${incInt}.`) + ` An interval is a stretch of x-values, so describe it using x and not y. Trap: writing the heights instead.`}
+                ];
+            }
+            else if (typeId === "m12") { // Graphing Protocols
+                p.title = "How to Graph It by Hand";
+                let a = randInt(-3, 3, [0]); let h = randInt(-3, 3); let k = randInt(-5, 5);
+                let b = -2 * a * h; let c = a * h * h + k;
+                let sForm = fmtPoly(a, b, c, "y");
+                
+                p.fullStatement = `Which set of steps correctly graphs this quadratic by hand? \\( ${sForm} \\)`;
+                p.prompt = mcfPick(["Select the correct set of steps:", "Which set of steps graphs it correctly?", "Pick the right order of steps:"]);
+                let correctStr = `Step 1: Plot y-int (${c}). Step 2: Complete square for vertex (${h}, ${k}). Step 3: Use step pattern: go ${a>0?'up':'down'} ${Math.abs(a)}, then ${Math.abs(3*a)}, then ${Math.abs(5*a)} units per 1 unit horizontal shift.`;
+                /* dist1 and dist3 listed only two step values while the answer listed
+                   three, so the answer was the longest option. All four now list three. */
+                let dist1 = `Step 1: Plot y-int (${c}). Step 2: Complete square for vertex (${-h}, ${k}). Step 3: Use step pattern: go ${a<0?'up':'down'} ${Math.abs(a)}, then ${Math.abs(3*a)}, then ${Math.abs(5*a)} units per 1 unit horizontal shift.`;
+                let dist2 = `Step 1: Plot x-int (${c}). Step 2: Complete square for vertex (${h}, ${-k}). Step 3: Use step pattern: go ${a>0?'up':'down'} 1, then 3, then 5 units per 1 unit horizontal shift.`;
+                let dist3 = `Step 1: Plot y-int (${b}). Step 2: Complete square for vertex (${h}, ${k}). Step 3: Use step pattern: go ${a>0?'up':'down'} ${Math.abs(2*a)}, then ${Math.abs(4*a)}, then ${Math.abs(6*a)} units per 1 unit horizontal shift.`;
+                
+                let mc = shuffleMC(correctStr, [dist1, dist2, dist3], []);
+                p.options = mc.options; p.ans = mc.ansLetter;
+                p.hint = `The standard step pattern 1, 3, 5 is multiplied by the 'a' front number (${a}). For a = ${a}, it becomes ${a>0?'up':'down'} ${Math.abs(a)}, ${Math.abs(3*a)}, ${Math.abs(5*a)}.`;
+                p.steps = [
+                    { title: `Step 1: Decide Which Point Is Easiest to Get`, math: `\\( y\\text{-intercept} = (0, ${c}) \\)`, explanation: ( `Setting x = 0 leaves the constant term ${c}.`) + ` The y-intercept is the easiest feature to get, because setting \\(x = 0\\) wipes out every term with an x in it.`},
+                    { title: "Step 2: Complete the square to find the vertex", math: `\\( ${fmtVertex(a, h, k, "y")} \\)`, explanation: ( `Completing the square puts the vertex in plain sight: (${h}, ${k}).`) + ` Standard form hides the vertex, but vertex form shows it directly. That is why the conversion is worth doing.`},
+                    { title: "Step 3: Work out the step pattern", math: `\\( 1a, 3a, 5a \\rightarrow ${Math.abs(a)}, ${Math.abs(3*a)}, ${Math.abs(5*a)} \\text{ (${a>0?'up':'down'})} \\)`, explanation: ( `From the vertex, each consecutive horizontal shift of 1 unit requires moving ${a>0?'up':'down'} ${Math.abs(a)}, ${Math.abs(3*a)}, then ${Math.abs(5*a)} units.`) + ` The step pattern is \\(a\\) times 1, 3 and 5. It lets you plot points either side of the vertex with no more calculation.`}
+                ];
+            }
+            else if (typeId === "m13") { // Equation to Graph Visual Match
+                p.title = "Equation-to-Graph Visual Matching";
+                p.optionType = "graph";
+                let a = randInt(-3, 3, [0]); let h = randInt(-3, 3, [0]); let k = randInt(-4, 4, [0]);
+                let b = -2 * a * h; let c = a * h * h + k;
+                
+                p.fullStatement = `Which graph matches this quadratic? \\( ${fmtPoly(a, b, c, "f")} \\)`;
+                p.prompt = mcfPick(["Tap the graph that matches the equation:", "Which graph belongs to this equation?", "Pick the matching graph:"]);
+                
+                let specs = [
+                    { curves: [{ kind: "parab", a: a, h: h, k: k, arrowLeft: true, arrowRight: true }] },
+                    { curves: [{ kind: "parab", a: -a, h: h, k: k, arrowLeft: true, arrowRight: true }] },
+                    { curves: [{ kind: "parab", a: a, h: -h, k: k, arrowLeft: true, arrowRight: true }] },
+                    { curves: [{ kind: "parab", a: a, h: h, k: -k, arrowLeft: true, arrowRight: true }] }
+                ];
+                mcfCommonWindow(specs);
+                let indices = mcfShuffle([0, 1, 2, 3]);
+                let letters = ["A", "B", "C", "D"];
+                let finalSpecs = []; let ansLetter = "";
+                for(let i=0; i<4; i++){
+                    finalSpecs.push(specs[indices[i]]);
+                    if (indices[i] === 0) ansLetter = letters[i]; 
+                }
+                p.options = ["A)", "B)", "C)", "D)"]; p.optionSpecs = finalSpecs; p.ans = ansLetter;
+                
+                p.hint = `Complete the square to find the vertex at (${h}, ${k}). The sign of 'a' determines if it opens up or down.`;
+                p.steps = [
+                    { title: `Step 1: Decide What to Compare First`, math: `\\( ${fmtPoly(a, b, c, "f")} \\rightarrow f(x) = ${fmtVertexRight(a, h, k)} \\)`, explanation: ( `The vertex is (${h}, ${k}), and it opens ${a>0?'upward':'downward'} because a = ${a}.`) + ` The vertex is the fastest way to rule graphs out, so find it before you compare anything else.`},
+                    { title: "Step 2: Find the graph that matches", math: `\\( \\text{Vertex } (${h}, ${k}), \\, y\\text{-int } ${c} \\)`, explanation: ( `Only option ${ansLetter} has its vertex at (${h}, ${k}).`) + ` Check the direction and width too, not just the vertex. Trap: stopping as soon as one feature matches.`}
+                ];
+            }
+
+            return p;
+        }
+
+        // --- Core Application Logic ---
+
+        function renderMathElements() {
+            if (window.renderMathInElement) {
+                renderMathInElement(document.body, {
+                    delimiters: [
+                        {left: '$$', right: '$$', display: true},
+                        {left: '\\(', right: '\\)', display: false}
+                    ],
+                    throwOnError: false
+                });
+            }
+        }
+
+        window.onload = renderMathElements;
+
+        function displaySolution() {
+            document.getElementById("solution-reveal-layer").classList.add("hidden");
+            const hintBox = document.getElementById("hint-box");
+            if (hintBox) hintBox.classList.add("hidden");
+            
+            const placeholder = document.getElementById("placeholder");
+            const quizStation = document.getElementById("quiz-station");
+            const assetMount = document.getElementById("asset-viewport-mount-point");
+            const mountPoint = document.getElementById("dynamic-input-mount-point");
+            const promptLabel = document.getElementById("input-prompt-label");
+
+            placeholder.style.display = "none";
+            quizStation.style.display = "block";
+            
+            if (currentProblemData.assetType && currentProblemData.assetType === "graph") {
+                assetMount.style.display = "flex";
+                assetMount.innerHTML = buildGraph(currentProblemData.graphSpec);
+            } else {
+                assetMount.style.display = "none";
+            }
+
+            document.getElementById("question-statement-display").innerHTML = currentProblemData.fullStatement;
+            promptLabel.innerHTML = currentProblemData.prompt;
+            
+            mountPoint.innerHTML = buildOptionsHTML(currentProblemData, currentState.selectedMcOption, currentState.answered);
+
+            if (currentState.answered) {
+                lockQuizInterface(currentState.isCorrect);
+                if (currentState.solRevealed) revealSolutionWorkspace();
+            } else {
+                unlockQuizInterface();
+            }
+
+            setTimeout(renderMathElements, 10);
+        }
+
+
+
+
+
+
+
+
+
+
+        /* This function was referenced by the Next Step button but never defined, so the
+           button did nothing. */
+
+    
+
+        MCF.init({ generate: generateProblem,
+                   /* 이 유닛은 그래프를 buildGraph(spec) 으로 그린다 (자산과 보기 둘 다) */
+                   renderAsset: function (p) { return p.graphSpec ? buildGraph(p.graphSpec) : (p.assetHtml || ""); },
+                   renderOption: function (p, i) {
+                     return (p.optionSpecs && p.optionSpecs[i]) ? buildGraph(p.optionSpecs[i]) : "";
+                   },
+                   logUrl: (typeof TEACHER_SPREADSHEET_SCRIPT_URL !== "undefined" ? TEACHER_SPREADSHEET_SCRIPT_URL : null),
+                   unitId: "Unit_2", lessonId: "Practice_Test" });
+</script>
+    <script src="../progress.js"></script>
+</body>
+</html>

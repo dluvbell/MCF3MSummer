@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MCF3M &mdash; Choose your world</title>
+<!--
+    theme.html  —  the door  (v1, 2026-08-06)
+
+    progress.js sends a student here from the portal when no world has been
+    chosen yet. Picking one writes mcf3m.v1.meta.theme and returns to
+    index.html, which then loads theme-<id>.js.
+
+    Deliberately dependency-free: no Tailwind, no fonts, no scripts to fetch.
+    This is the first page a student ever sees, so it has to appear instantly
+    and work even if a CDN is blocked at school.
+
+    Nothing here touches stars, progress or streaks. Changing worlds is only
+    a change of clothes; the mathematics and everything earned stays put.
+-->
+<style>
+    :root {
+        --ink: #0f172a;
+        --muted: #64748b;
+        --line: #e2e8f0;
+    }
+    * { box-sizing: border-box; }
+    body {
+        margin: 0;
+        min-height: 100vh;
+        background: #f8fafc;
+        color: var(--ink);
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        display: flex;
+        flex-direction: column;
+    }
+
+    header {
+        background: var(--ink);
+        color: #fff;
+        border-bottom: 4px solid #2563eb;
+        padding: 44px 20px 40px;
+        text-align: center;
+    }
+    .tag {
+        display: inline-block;
+        background: #2563eb;
+        font-size: .68rem;
+        font-weight: 800;
+        letter-spacing: .12em;
+        text-transform: uppercase;
+        padding: 6px 13px;
+        border-radius: 999px;
+    }
+    h1 { font-size: 1.9rem; font-weight: 800; margin: 15px 0 0; letter-spacing: -.02em; }
+    header p { color: #94a3b8; font-weight: 500; margin: 9px auto 0; max-width: 34rem; }
+
+    main { flex: 1; width: 100%; max-width: 60rem; margin: 0 auto; padding: 34px 18px 60px; }
+
+    .grid { display: grid; grid-template-columns: 1fr; gap: 15px; }
+    @media (min-width: 760px) { .grid { grid-template-columns: repeat(3, 1fr); } }
+
+    .card {
+        background: #fff;
+        border: 2px solid var(--line);
+        border-radius: 16px;
+        padding: 22px 20px 20px;
+        text-align: left;
+        font: inherit;
+        cursor: pointer;
+        display: flex;
+        flex-direction: column;
+        gap: 9px;
+        transition: border-color .18s ease, transform .18s ease, box-shadow .18s ease;
+    }
+    .card:hover:not([disabled]) {
+        border-color: #2563eb;
+        transform: translateY(-3px);
+        box-shadow: 0 10px 26px rgba(15, 23, 42, .09);
+    }
+    .card[disabled] { cursor: not-allowed; opacity: .62; background: #f8fafc; }
+
+    .glyph { font-size: 2.1rem; line-height: 1; }
+    .name { font-size: 1.22rem; font-weight: 800; }
+    .desc { font-size: .88rem; font-weight: 500; color: var(--muted); line-height: 1.5; }
+
+    .flag {
+        align-self: flex-start;
+        font-size: .64rem;
+        font-weight: 900;
+        letter-spacing: .09em;
+        text-transform: uppercase;
+        padding: 4px 9px;
+        border-radius: 999px;
+        background: #f1f5f9;
+        color: #94a3b8;
+    }
+    .flag.on { background: #dbeafe; color: #1d4ed8; }
+    .flag.now { background: #ecfdf5; color: #047857; }
+
+    .note {
+        margin-top: 26px;
+        font-size: .85rem;
+        font-weight: 500;
+        color: var(--muted);
+        line-height: 1.6;
+        border-top: 1px solid var(--line);
+        padding-top: 18px;
+    }
+    .note b { color: var(--ink); }
+
+    .back {
+        display: inline-block;
+        margin-top: 14px;
+        font-size: .85rem;
+        font-weight: 700;
+        color: var(--muted);
+    }
+</style>
+</head>
+<body>
+
+<header>
+    <span class="tag">MCF3M &middot; Grade 11</span>
+    <h1>Choose your world</h1>
+    <p>The questions are the same in every world. What changes is what your practice builds. You can switch later without losing anything.</p>
+</header>
+
+<main>
+    <div class="grid">
+        <button class="card" data-theme="battle">
+            <span class="glyph">&#9876;</span>
+            <span class="flag now" data-current="battle" hidden>Your world</span>
+            <span class="name">Battle</span>
+            <span class="desc">Fight a boss at the end of every lesson. Earn ranks, titles and a trophy wall. Buy items that hit harder.</span>
+        </button>
+
+        <button class="card" data-theme="farm">
+            <span class="glyph">&#127793;</span>
+            <span class="flag now" data-current="farm" hidden>Your world</span>
+            <span class="name">Farm</span>
+            <span class="desc">Build a farm instead. Buy fields, crops, animals and decorations, plant something, and practise until it is ready to harvest.</span>
+        </button>
+
+        <button class="card" data-theme="avatar" disabled>
+            <span class="glyph">&#128100;</span>
+            <span class="flag">Coming soon</span>
+            <span class="name">Character</span>
+            <span class="desc">Dress a character of your own. Collect outfits, keep a wardrobe, and carry your look through the whole course.</span>
+        </button>
+    </div>
+
+    <p class="note">
+        Your stars, streaks, mastered topics and beaten bosses are <b>shared across all three worlds</b>.
+        Switching is only a change of scenery. Stars you have already spent do not come back, so an item
+        bought in one world stays bought.
+    </p>
+
+    <a class="back" href="index.html" id="back" hidden>&larr; Back to the portal</a>
+</main>
+
+<script>
+(function () {
+    "use strict";
+
+    var K = "mcf3m.v1.meta";
+
+    function readMeta() {
+        try { return JSON.parse(window.localStorage.getItem(K) || "{}") || {}; }
+        catch (e) { return {}; }
+    }
+
+    /* Merge, never replace. This object also holds stars, streak days and
+       timer settings; overwriting it would wipe a student's account. */
+    function writeTheme(id) {
+        try {
+            var m = readMeta();
+            m.theme = id;
+            window.localStorage.setItem(K, JSON.stringify(m));
+            return true;
+        } catch (e) { return false; }
+    }
+
+    var current = readMeta().theme || "";
+
+    if (current) {
+        var flag = document.querySelector('[data-current="' + current + '"]');
+        if (flag) flag.hidden = false;
+        document.getElementById("back").hidden = false;
+    }
+
+    Array.prototype.forEach.call(document.querySelectorAll(".card"), function (b) {
+        b.addEventListener("click", function () {
+            if (b.disabled) return;
+            var id = b.getAttribute("data-theme");
+            if (!writeTheme(id)) {
+                window.alert("This browser is blocking site storage, so a world cannot be saved. Turn off private browsing, then try again.");
+                return;
+            }
+            /* carry ?dev and anything like it back to the portal */
+            window.location.href = "index.html" + window.location.search;
+        });
+    });
+})();
+</script>
+
+</body>
+</html>

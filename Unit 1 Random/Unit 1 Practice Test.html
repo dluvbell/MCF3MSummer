@@ -1,0 +1,1321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCF3M Unit 1 Cumulative Practice Test Studio</title>
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+
+    <!-- mcf-core.js 가 그리는 요소들의 기본 스타일. 아래 <style> 보다 먼저 와야
+         파일 고유 스타일이 이기고, 빠진 클래스만 여기서 메워진다.
+         폴더 위치를 몰라도 되게 두 경로를 다 건다(없는 쪽은 404 로 무시). -->
+    <link rel="stylesheet" href="../mcf-core.css">
+    <link rel="stylesheet" href="mcf-core.css">
+    <style>
+        :root {
+            --primary-color: #0f172a;
+            --secondary-color: #2563eb;
+            --disabled-color: #94a3b8;
+            --text-color: #334155;
+            --math-color: #000000;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --border-color: #cbd5e1;
+            --highlight-bg: #eff6ff;
+            --explanation-bg: #f1f5f9;
+            --rule-bg: #fef08a;
+            --rule-text: #713f12;
+            --matrix-bg: #f8fafc;
+            --success-color: #16a34a;
+            --error-color: #dc2626;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.8;
+            margin: 0;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: -0.025em;
+        }
+
+        .scoreboard {
+            background-color: #1e293b;
+            color: white;
+            display: inline-flex;
+            gap: 20px;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-weight: 700;
+            margin-top: 15px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.2);
+        }
+
+        .scoreboard span {
+            color: #60a5fa;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .profile-box, .selector-box {
+            background-color: var(--card-bg);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-color);
+            margin-bottom: 25px;
+        }
+
+        .profile-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .profile-grid input {
+            width: 100%;
+            padding: 12px;
+            font-size: 1rem;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        .profile-grid input:focus {
+            border-color: var(--secondary-color);
+        }
+
+        label {
+            display: block;
+            font-weight: 700;
+            color: var(--primary-color);
+            font-size: 1.1rem;
+            margin-bottom: 12px;
+        }
+
+        .control-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        select {
+            flex: 1;
+            padding: 16px;
+            font-size: 1.1rem;
+            font-family: inherit;
+            border-radius: 8px;
+            border: 2px solid var(--border-color);
+            background-color: white;
+            color: var(--primary-color);
+            outline: none;
+            cursor: pointer;
+        }
+
+        .btn-generate {
+            padding: 16px 24px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .btn-generate:hover {
+            background-color: #1e293b;
+        }
+
+        .method-toggle-container {
+            display: none;
+            background-color: #e2e8f0;
+            padding: 6px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            gap: 8px;
+        }
+
+        .method-btn {
+            flex: 1;
+            padding: 12px;
+            font-size: 1rem;
+            font-weight: 700;
+            border: none;
+            background: transparent;
+            color: var(--text-color);
+            cursor: pointer;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .method-btn.active {
+            background-color: var(--secondary-color);
+            color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .solution-container {
+            background-color: var(--card-bg);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-color);
+            min-height: 200px;
+        }
+
+        .placeholder-text {
+            color: #64748b;
+            text-align: center;
+            font-style: italic;
+            padding: 60px 0;
+            font-size: 1.1rem;
+        }
+
+        .quiz-interface-box {
+            background-color: var(--explanation-bg);
+            border: 1px solid var(--border-color);
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+
+        .math-render-viewport {
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+        }
+
+        .math-tov {
+            border-collapse: collapse;
+            font-size: 1.1rem;
+            font-weight: 600;
+            min-width: 220px;
+            text-align: center;
+            margin: 0 auto;
+        }
+
+        .math-tov th, .math-tov td {
+            border: 2px solid var(--primary-color);
+            padding: 10px 20px;
+        }
+
+        .math-tov th {
+            background-color: #f1f5f9;
+            color: var(--primary-color);
+            font-weight: 800;
+        }
+
+        .mc-options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 10px;
+        }
+
+        .mc-option-card {
+            background: white;
+            border: 2px solid var(--border-color);
+            padding: 14px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1.05rem;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .mc-option-card:hover:not(.disabled) {
+            border-color: var(--secondary-color);
+            background-color: var(--highlight-bg);
+        }
+
+        .mc-option-card.selected {
+            border-color: var(--secondary-color);
+            background-color: #dbeafe;
+            color: #1e40af;
+        }
+
+        .mc-option-card.disabled {
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .mc-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background-color: #e2e8f0;
+            color: var(--primary-color);
+            font-weight: 800;
+            font-size: 0.9rem;
+        }
+
+        .mc-option-card.selected .mc-badge {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+
+        .feedback-msg-area {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            display: none;
+            padding: 10px 15px;
+            border-radius: 6px;
+        }
+
+        .feedback-success {
+            background-color: #dcfce7;
+            color: var(--success-color);
+            border-left: 5px solid var(--success-color);
+        }
+
+        .feedback-error {
+            background-color: #fee2e2;
+            color: var(--error-color);
+            border-left: 5px solid var(--error-color);
+        }
+
+        .quiz-action-bar {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .solution-reveal-window {
+            display: none;
+            border-top: 3px double var(--border-color);
+            margin-top: 30px;
+            padding-top: 30px;
+        }
+
+        .step-block {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e2e8f0;
+            display: none;
+        }
+
+        .step-title {
+            font-weight: 800;
+            color: var(--secondary-color);
+            display: block;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 8px;
+        }
+
+        .step-math {
+            font-size: 1.3rem;
+            font-weight: 700;
+            background-color: var(--explanation-bg);
+            padding: 14px 20px;
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin: 8px 0;
+            color: var(--math-color);
+            letter-spacing: 0.02em;
+            flex-wrap: wrap;
+        }
+
+        .fraction {
+            display: inline-flex;
+            flex-direction: column;
+            vertical-align: middle;
+            text-align: center;
+            padding: 0 6px;
+            font-size: 1.1rem;
+        }
+
+        .numerator {
+            border-bottom: 2px solid var(--math-color);
+            padding-bottom: 2px;
+        }
+
+        .denominator {
+            padding-top: 2px;
+        }
+
+        .criss-cross-box {
+            display: block;
+            background-color: var(--matrix-bg);
+            border: 2px dashed var(--border-color);
+            border-radius: 10px;
+            padding: 24px;
+            margin: 12px 0;
+            max-width: 500px;
+        }
+
+        .matrix-grid {
+            display: grid;
+            grid-template-columns: 1fr 80px 1fr 40px 1.2fr;
+            align-items: center;
+            text-align: center;
+            font-weight: 700;
+            font-size: 1.3rem;
+            row-gap: 10px;
+        }
+
+        .svg-intersection-container {
+            grid-row: span 2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 80px;
+            width: 80px;
+            user-select: none;
+        }
+
+        .grid-arrow-label {
+            font-size: 1.3rem;
+            color: var(--disabled-color);
+        }
+
+        .matrix-total-line {
+            grid-column: 1 / -1;
+            border-top: 2px solid var(--border-color);
+            margin-top: 12px;
+            padding-top: 12px;
+            text-align: left;
+            font-size: 1.15rem;
+            color: var(--primary-color);
+        }
+
+        .step-explanation {
+            display: block;
+            font-size: 1.05rem;
+            color: #334155;
+            margin-top: 6px;
+        }
+
+        .math-rule {
+            background-color: var(--rule-bg);
+            color: var(--rule-text);
+            padding: 12px 16px;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            margin: 10px 0;
+            display: block;
+            border-left: 4px solid #eab308;
+        }
+
+        .question-statement-card {
+            background: #ffffff;
+            border-left: 4px solid var(--secondary-color);
+            padding: 16px 20px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            border-radius: 0 6px 6px 0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .final-answer-box {
+            background-color: var(--highlight-bg);
+            border-left: 6px solid var(--secondary-color);
+            padding: 20px 25px;
+            border-radius: 0 8px 8px 0;
+            margin-top: 30px;
+            display: none;
+        }
+
+        .final-answer-label {
+            font-weight: 800;
+            color: var(--secondary-color);
+            display: block;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .final-answer-math {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            margin-top: 6px;
+            display: inline-flex;
+            align-items: center;
+            letter-spacing: 0.02em;
+        }
+
+        .control-panel {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid var(--border-color);
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 14px 24px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            border-radius: 8px;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary { background-color: var(--secondary-color); color: white; }
+        .btn-primary:hover:not(:disabled) { background-color: #1d4ed8; }
+        .btn-success { background-color: var(--success-color); color: white; }
+        .btn-success:hover:not(:disabled) { background-color: #166534; }
+        .btn-secondary { background-color: var(--explanation-bg); color: var(--primary-color); border: 1px solid var(--border-color); }
+        .btn-secondary:hover:not(:disabled) { background-color: #e2e8f0; }
+
+        .btn:disabled {
+            background-color: var(--disabled-color);
+            color: #f1f5f9;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        .hint-box {
+            display: none;
+            background-color: #fef9c3;
+            border-left: 5px solid #eab308;
+            color: #713f12;
+            padding: 12px 16px;
+            border-radius: 0 6px 6px 0;
+            margin-bottom: 15px;
+            font-size: 1.05rem;
+            font-weight: 600;
+        }
+
+        .btn-hint { background-color: #fde047; color: #713f12; }
+        .btn-hint:hover:not(:disabled) { background-color: #facc15; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>MCF3M Unit 1 Cumulative Practice Test</h1>
+        <p>Infinite Diagnostic Assessment Studio &middot; 13 Comprehensive Modules</p>
+        <div class="scoreboard">
+            <div>Score: <span id="hud-score">0</span></div>
+            <div>Tries: <span id="hud-attempts">0</span></div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="profile-box">
+            <label>Student Profile Setup:</label>
+            <div class="profile-grid">
+                <input type="text" id="first-name" placeholder="First name" autocomplete="off">
+                <input type="text" id="last-name" placeholder="Last name" autocomplete="off">
+            </div>
+        </div>
+
+        <div class="selector-box">
+            <label for="question-select">Select Test Question Category:</label>
+            <div class="control-group">
+                <select id="question-select">
+                    <option value="t1">Type 1: Greatest Common Factor (GCF) Factoring</option>
+                    <option value="t2">Type 2: Binomial Expansion (FOIL)</option>
+                    <option value="t3">Type 3: First and Second Differences</option>
+                    <option value="t4">Type 4: Vertical Line Test &amp; Function Properties</option>
+                    <option value="t5">Type 5: Difference of Squares Factoring</option>
+                    <option value="t6">Type 6: Perfect Square Trinomial Factoring</option>
+                    <option value="t7">Type 7: Simple Trinomial Factoring (a = 1)</option>
+                    <option value="t8">Type 8: Complex Trinomial Factoring (a &gt; 1)</option>
+                    <option value="t9">Type 9: Multi-Step Factoring (GCF + Advanced)</option>
+                    <option value="t10">Type 10: Number of Zeros via Discriminant</option>
+                    <option value="t11">Type 11: Solving Quadratic Equations by Factoring</option>
+                    <option value="t12">Type 12: Solving Quadratic Equations via Quadratic Formula</option>
+                    <option value="t13">Type 13: Real-World Quadratic Word Problems</option>
+                </select>
+                <button class="btn-generate" onclick="generateNewProblem()">Generate</button>
+            </div>
+        </div>
+
+        <div class="solution-container" id="display-window">
+            <div id="placeholder" class="placeholder-text">
+                Select an assignment category from the dropdown menu and click "Generate" to build a new dynamic problem.
+            </div>
+
+            <div id="quiz-station" class="quiz-interface-box" style="display: none;">
+                <div id="asset-viewport-mount-point" class="math-render-viewport" style="display: none;"></div>
+                <div id="question-statement-display" class="question-statement-card"></div>
+
+                <label id="input-prompt-label" style="margin-bottom: 12px; font-weight: 700; display: block;"></label>
+                <div id="dynamic-input-mount-point" style="margin-top: 10px;"></div>
+
+                <div id="hint-box" class="hint-box"></div>
+                <div id="feedback-msg" class="feedback-msg-area"></div>
+
+                <div class="quiz-action-bar">
+                    <button class="btn btn-success" id="check-ans-btn" onclick="evaluateStudentAnswer()">Check Answer</button>
+                    <button class="btn btn-hint" id="hint-btn" onclick="toggleHint()">Hint</button>
+                    <button class="btn btn-secondary" id="reveal-sol-btn" disabled onclick="unlockSolutionPanel()">Show Solution Steps</button>
+                </div>
+            </div>
+
+            <div class="method-toggle-container" id="method-toggle-bar"></div>
+
+            <div class="solution-reveal-window" id="solution-reveal-layer">
+                <div id="solution-workspace-injected"></div>
+                
+                <div class="control-panel" id="controls-panel">
+                    <button class="btn btn-secondary" id="restart-btn" onclick="restartSolution()">Restart Steps</button>
+                    <button class="btn btn-primary" id="next-btn" onclick="showNextStep()">Next Step &rarr;</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- mcf-core.js 는 보통 상위 폴더(index.html·progress.js 옆)에 둔다.
+         같은 폴더에 두는 경우도 있어 두 경로를 다 건다. 없는 쪽은 404 로 무시되고,
+         둘 다 있으면 두 번째는 core 내부 가드가 막는다. -->
+    <script src="../mcf-core.js"></script>
+    <script src="mcf-core.js"></script>
+    <script>
+    /* core 를 못 찾으면 Generate 가 조용히 무반응이 된다. 원인이 안 보이므로 안내를 띄운다. */
+    if (typeof MCF === "undefined") {
+      document.addEventListener("DOMContentLoaded", function () {
+        var box = document.getElementById("placeholder");
+        if (box) {
+          box.innerHTML =
+            '<strong style="color:#b91c1c">mcf-core.js \uB97C \uCC3E\uC744 \uC218 \uC5C6\uC2B5\uB2C8\uB2E4.</strong><br><br>' +
+            'This lesson needs <code>mcf-core.js</code>.<br>' +
+            'Put it next to <code>progress.js</code> and <code>index.html</code> ' +
+            '(the folder above this one), or in this same folder.';
+          box.style.display = "block";
+        }
+        var b = document.querySelector(".btn-generate");
+        if (b) b.disabled = true;
+      });
+    }
+    </script>
+    <script>
+
+        /* ── mcf-core.js 로 옮겨간 이름들의 지역 별칭 ── */
+        const randInt = MCF.randInt;
+        const gcd = MCF.gcd;
+        const gcd3 = MCF.gcd3;
+        const mcfPick = MCF.pick;
+        const mcfRich = MCF.rich;
+        const mcfShuffle = MCF.shuffle;
+        const mcfKey = MCF.key;
+        const mcfDedupe = MCF.dedupe;
+        const mcfFactorKey = MCF.factorKey;
+        const mcfUniqueByValue = MCF.uniqueByValue;
+        const mcfSpareOption = MCF.spareOption;
+        const shuffleMC = MCF.shuffleMC;
+        const M = MCF.M;
+        const Mu = MCF.Mu;
+        /* --- audit fix: uniform in-place shuffle (Fisher-Yates) --- */
+
+        /* 근의공식 유형용: 인수분해가 되면 두 방법 단계를, 안 되면 안내 단계를 돌려준다.
+           탭 개수는 문제마다 바뀌지 않는다. 안 되는 이유를 탭 안에서 알려주는 쪽이
+           학생에게 덜 헷갈린다. */
+        function factorTabs(a, b, c) {
+          const sp = MCF.splitPair(a, b, c);
+          if (!sp) return [MCF.noFactorStep("ps", a, b, c), MCF.noFactorStep("cc", a, b, c)];
+          const { m, n, a1, a2, c1, c2 } = sp;
+          const br = `(${fmtTerm(a1, "x", true)} ${fmtTerm(c1, "")})(${fmtTerm(a2, "x", true)} ${fmtTerm(c2, "")})`;
+          return [
+            { title: "Product & Sum: Find the target product and sum", mode: "ps",
+              math: `\\text{Product} = ${a} \\times (${c}) = ${a * c}, \\quad \\text{Sum} = ${b}`,
+              explanation: `Multiply the front number by the last number to get ${MCF.M(a * c)}. That is your product target, and the middle number ${MCF.M(b)} is your sum target. The pair that does both is ${MCF.M(m)} and ${MCF.M(n)}.` },
+            { title: "Product & Sum: Split and factor in pairs", mode: "ps",
+              math: `${fmtTerm(a, "x^2", true)} ${fmtTerm(m, "x")} ${fmtTerm(n, "x")} ${fmtTerm(c, "")} = ${br}`,
+              explanation: `Break the middle term into ${MCF.M(fmtTerm(m, "x", true))} and ${MCF.M(fmtTerm(n, "x", true))}, then group the four terms into two pairs. Pull the biggest common factor out of each pair and the same bracket is left behind both times.` },
+            { title: "Criss-Cross: Fill in the box", mode: "cc", isMatrix: true,
+              matrixData: { lt: fmtTerm(a1, "x", true), lb: fmtTerm(a2, "x", true),
+                            rt: fmtTerm(c1, "", true), rb: fmtTerm(c2, "", true),
+                            pt: fmtTerm(a1 * c2, "x", true), pb: fmtTerm(a2 * c1, "x", true),
+                            sum: fmtTerm(b, "x", true) },
+              explanation: `Put factors of the front term, ${MCF.M(fmtTerm(a1, "x", true))} and ${MCF.M(fmtTerm(a2, "x", true))}, down the left side. Put factors of the last number, ${MCF.M(fmtTerm(c1, "", true))} and ${MCF.M(fmtTerm(c2, "", true))}, down the right side.` },
+            { title: "Criss-Cross: Check the diagonals and read the rows", mode: "cc",
+              math: `(${fmtTerm(a1 * c2, "x", true)}) + (${fmtTerm(a2 * c1, "x", true)}) = ${fmtTerm(b, "x", true)} \\quad\\Rightarrow\\quad ${br}`,
+              explanation: `Multiply along each arrow and add the two answers. You get ${MCF.M(fmtTerm(b, "x", true))}, which matches the middle term. Now read across the rows to get your two brackets. Trap: if the diagonals do not match, swap the numbers on the right.` }
+          ];
+        }
+
+
+        /* --- audit fix: 같은 보기가 두 번 나오면 하나로 합친다.
+           정답과 글자가 똑같은 보기를 골랐는데 오답 처리되는 것을 막는다. --- */
+        /* Nudge one number inside an existing option to build a replacement
+           distractor. Skips digit groups that follow a thousands separator, so
+           "\\$11\\,045.96" is altered at the 11 and never left malformed.
+           Uniqueness is checked by the caller, so this can never reproduce the
+           correct answer. */
+        /* Two options can differ only in whitespace -- an empty middle term leaves
+           "4x^2  + 16" beside "4x^2 + 16" -- and MathJax renders them identically, so
+           the student sees the same card twice and only one of them scores. Compare
+           options on this normalised key, not on the raw string. */
+
+
+
+        const TEACHER_SPREADSHEET_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwygR6-l7XPRC1KL-Pqci33Yw_4pmCWa8mW7gNHJ_RsmN41ax15-d0sE-CrIxU0z22m/exec";
+
+        let globalScore = 0;
+        let globalAttempts = 0;
+        let currentProblemData = null;
+        let currentState = { answered: false, selectedMcOption: "", isCorrect: false, currentStep: 0, solRevealed: false, selectedMethod: 'ps', attempts: 0 };
+        let visibleStepElements = [];
+
+        window.onload = () => {
+            if (window.renderMathInElement) {
+                renderMathInElement(document.body, { delimiters: [{left: '$$', right: '$$', display: true}, {left: '\\(', right: '\\)', display: false}], throwOnError: false });
+            }
+        };
+
+        // --- Core Utility Functions ---
+
+
+        function fmtTerm(c, v, isFirst = false) {
+            if (c === 0) return "";
+            let abs = Math.abs(c);
+            let numStr = (abs === 1 && v !== "") ? "" : abs;
+            if (isFirst) {
+                return c < 0 ? `-${numStr}${v}` : `${numStr}${v}`;
+            } else {
+                return c < 0 ? `- ${numStr}${v}` : `+ ${numStr}${v}`;
+            }
+        }
+
+        // --- Infinite Mathematical Generators ---
+        /* audit fix 2026-07-30 (round A): (x+2)(x-2) 와 (x-2)(x+2) 는 문자열이 달라
+           기존 중복 제거(mcfKey)를 통과했지만 수학적으로는 완전히 같은 답이다.
+           정답과 같은 값이 오답 보기로 붙으면, 맞게 푼 학생이 틀리게 된다.
+           괄호 안 내용을 정렬해 값 기준 키를 만들어 걸러낸다. */
+
+        /* round C 2026-07-31 */
+
+        function genType1() {
+            let g = randInt(2, 6);
+            let u = randInt(2, 5), v = randInt(2, 5);
+            while (u === v || gcd(u, v) !== 1) { v = randInt(2, 5); }
+            let a = g * u, b = g * v;
+            
+            let exp = `${a}x^2y - ${b}xy^2`;
+            let correctAns = `\\(${g}xy(${u}x - ${v}y)\\)`;
+            let optArr = [correctAns, `\\(${g}x^2y(${u} - ${v}y)\\)`, `\\(${g}xy(${u}x + ${v}y)\\)`, `\\(${g+1}xy(${u}x - ${v}y)\\)`];
+            let mc = shuffleMC(optArr, correctAns);
+
+            return {
+                title: "Type 1: Greatest Common Factor (GCF) Factoring", type: "mc", assetType: "none",
+                fullStatement: mcfPick(["Factor out the greatest common factor completely", "Take the largest common factor out of this expression", "Rewrite this with its greatest common factor outside the brackets"]) + `:<br>$$\\small ${exp}$$`,
+                prompt: "Choose the fully factored variant:",
+                options: mc.options,
+                hint: `Find the biggest number that divides into both ${a} and ${b}. Then take any letter that appears in every term, using its smallest power.`,
+                steps: [
+                    { title: "Step 1: Decide how far this can be factored", mode: "common",
+                      math: `${exp}`,
+                      explanation: `Check every term for a shared factor first. Once that comes out, look at what is left inside the brackets. Here it is only two terms, so there is nothing more to split. Trap: reaching for a splitting method when only two terms are left inside.` },
+                    { title: "Step 2: Find the GCF of the numbers", mode: "common",
+                      math: `\\text{GCF}(${a}, ${b}) = ${g}`,
+                      explanation: `Find the biggest whole number that divides into both ${a} and ${b} with nothing left over. That number is ${MCF.M(g)}, so it goes out front.` },
+                    { title: "Step 3: Now do the letters", mode: "common",
+                      math: `\\text{GCF}(x^2, x) = x \\quad\\text{and}\\quad \\text{GCF}(y, y^2) = y \\Rightarrow \\text{GCF} = ${g}xy`,
+                      explanation: `A letter can only come out if it appears in every single term. When it does, take the smallest power you can see, not the biggest. Trap: pulling out a letter that is missing from one term.` },
+                    { title: "Step 4: Divide each term and write the answer", mode: "common",
+                      math: `${g}xy(${u}x - ${v}y)`,
+                      explanation: `Divide every term by ${MCF.M(g + "xy")} and whatever survives goes inside the brackets. Multiply it back out to check you land on the original expression again.` }
+                ], ans: mc.ans
+            };
+        }
+
+        function genType2() {
+            let a = randInt(2, 5), c = randInt(2, 5);
+            let b = randInt(-4, 4); if (b === 0) b = 1;
+            let d = randInt(-4, 4); if (d === 0) d = 1;
+
+            let exp = `(${fmtTerm(a, 'x', true)} ${fmtTerm(b, '')})(${fmtTerm(c, 'x', true)} ${fmtTerm(d, '')})`;
+            let A = a*c, B = a*d + b*c, C = b*d;
+            let correctAns = `\\(${fmtTerm(A, 'x^2', true)} ${fmtTerm(B, 'x')} ${fmtTerm(C, '')}\\)`;
+            
+            let B_alt = a*d - b*c;
+            let optArr = [correctAns, `\\(${fmtTerm(A, 'x^2', true)} ${fmtTerm(B_alt, 'x')} ${fmtTerm(C, '')}\\)`, `\\(${fmtTerm(A, 'x^2', true)} ${fmtTerm(C, '')}\\)`, `\\(${fmtTerm(A, 'x^2', true)} ${fmtTerm(B, 'x')} ${fmtTerm(-C, '')}\\)`];
+            let mc = shuffleMC(optArr, correctAns);
+
+            return {
+                title: "Type 2: Binomial Expansion (FOIL)", hasMethods: false, type: "mc", assetType: "none",
+                fullStatement: mcfPick(["Expand and simplify the expression below", "Multiply out and collect like terms", "Write this without brackets, then simplify"]) + `:<br>$$\\small ${exp}$$`,
+                prompt: "Choose the simplified polynomial expression:",
+                options: mc.options,
+                hint: "Use FOIL: First, Outer, Inner, Last. That gives four answers, then add the two middle x terms together.",
+                steps: [
+                    { title: "Step 1: Work out how many products you need", mode: "common", math: `(${a}x)(${c}x) + (${a}x)(${d}) + (${b})(${c}x) + (${b})(${d})`, explanation: "Every term in the first bracket has to meet every term in the second. Two times two makes four products. FOIL is just a way of keeping those four in order: First, Outer, Inner, Last." },
+                    { title: "Step 2: Multiply the pairs out", mode: "common", math: `${A}x^2 ${fmtTerm(a*d, 'x')} ${fmtTerm(b*c, 'x')} ${fmtTerm(C, '')}`, explanation: "Work out each of the four multiplications one at a time and write them in a row. Keep every sign attached to its number as you go. Trap: losing a minus sign on the outer or inner product." },
+                    { title: "Step 3: Add the two middle terms", mode: "common", math: `${fmtTerm(a*d, 'x', true)} ${fmtTerm(b*c, 'x')} = ${fmtTerm(B, 'x', true)} \\Rightarrow ${fmtTerm(A, 'x^2', true)} ${fmtTerm(B, 'x')} ${fmtTerm(C, '')}`, explanation: "Only the two middle terms can be combined, because both are plain x terms. Adding them leaves three terms in total, and that is your final answer. The x squared and the plain number cannot join anything." }
+                ], ans: mc.ans
+            };
+        }
+
+        function genType3() {
+            /* "Neither Type Pattern" and "Cubic Relation" were offered every time but were
+               never the answer, so a student learns to ignore two of the four options and the
+               question collapses to a coin flip between Linear and Quadratic. A third case
+               makes "Neither" a live answer. */
+            let relKind = ["linear", "quad", "neither"][randInt(0, 2)];
+            let isQuad = (relKind === "quad");
+            let yVals = [], d1 = [], d2 = [];
+            let xVals = [-2, -1, 0, 1, 2];
+            
+            if (isQuad) {
+                let a = randInt(1, 3) * (Math.random() > 0.5 ? 1 : -1);
+                let b = randInt(-3, 3);
+                let c = randInt(-5, 5);
+                xVals.forEach(x => yVals.push(a*x*x + b*x + c));
+            } else if (relKind === "linear") {
+                let m = randInt(2, 5) * (Math.random() > 0.5 ? 1 : -1);
+                let b = randInt(-5, 5);
+                xVals.forEach(x => yVals.push(m*x + b));
+            } else {
+                /* exponential: first differences grow, second differences grow too */
+                let base = randInt(2, 4), lead = randInt(1, 3);
+                xVals.forEach((x, i) => yVals.push(lead * Math.pow(base, i + 1)));
+            }
+
+            for(let i=0; i<4; i++) d1.push(yVals[i+1] - yVals[i]);
+            for(let i=0; i<3; i++) d2.push(d1[i+1] - d1[i]);
+
+            let isD1Const = d1.every(v => v === d1[0]);
+            let isD2Const = d2.every(v => v === d2[0]);
+
+            let tableHtml = `<table class="math-tov"><tr><th>x</th><th>y</th></tr>` + 
+                xVals.map((x, i) => `<tr><td>${x}</td><td>${yVals[i]}</td></tr>`).join('') + `</table>`;
+
+            let correctAns = relKind === "quad" ? "\\text{Quadratic Relation}"
+                           : relKind === "linear" ? "\\text{Linear Relation}"
+                           : "\\text{Neither Type Pattern}";
+            let optArr = ["\\text{Linear Relation}", "\\text{Quadratic Relation}", "\\text{Neither Type Pattern}", "\\text{Cubic Relation}"];
+            let mc = shuffleMC(optArr, correctAns);
+
+            let steps = [];
+            if (isQuad) {
+                steps = [
+                    { title: "Step 1: Work out the first differences", mode: "common", math: `${yVals[1]}-(${yVals[0]})=${d1[0]},\\quad ${yVals[2]}-(${yVals[1]})=${d1[1]},\\dots`, explanation: "Take each y-value away from the one below it, all the way down the table. If every answer comes out the same, the relation is linear. Trap: subtracting the wrong way round, which flips all your signs." },
+                    { title: "Step 2: Work out the second differences", mode: "common", math: `${d1[1]}-(${d1[0]})=${d2[0]},\\quad ${d1[2]}-(${d1[1]})=${d2[1]},\\dots`, explanation: "Now run the same subtraction again, but this time on the first differences instead of the y-values. That is all a second difference is. Line them up carefully so you do not lose your place." },
+                    { title: "Step 3: Give your answer", mode: "common", math: `\\text{Second Differences} = ${d2[0]} \\quad (\\text{Constant}) \\Rightarrow \\text{Quadratic}`, explanation: "The second differences all come out equal. That only ever happens for a quadratic relation, so this table is quadratic. Equal second differences are the definition, not a coincidence." }
+                ];
+            } else if (relKind === "neither") {
+                steps = [
+                    { title: "Step 1: Work out the first differences", mode: "common", math: `${yVals[1]}-(${yVals[0]})=${d1[0]},\\quad ${yVals[2]}-(${yVals[1]})=${d1[1]},\\dots`, explanation: "The first differences are not all equal, so the relation is definitely not linear. That does not make it quadratic yet. You have to run the second differences before you can decide." },
+                    { title: "Step 2: Work out the second differences", mode: "common", math: `${d1[1]}-(${d1[0]})=${d2[0]},\\quad ${d1[2]}-(${d1[1]})=${d2[1]},\\dots`, explanation: "The second differences are not all equal either, so it is not quadratic. Both tests have now failed, which leaves only one answer available to you." },
+                    { title: "Step 3: Give your answer", mode: "common", math: `\\text{Neither } \\Delta y \\text{ nor } \\Delta^2 y \\text{ is constant}`, explanation: "Neither row of differences came out equal, so this table is neither linear nor quadratic. Trap: guessing quadratic just because the numbers grow quickly down the table." }
+                ];
+            } else {
+                steps = [
+                    { title: "Step 1: Work out the first differences", mode: "common", math: `${yVals[1]}-(${yVals[0]})=${d1[0]},\\quad ${yVals[2]}-(${yVals[1]})=${d1[1]},\\dots`, explanation: "Take each y-value away from the one directly below it in the table." },
+                    { title: "Step 2: Work it out", mode: "common", math: `\\text{First Differences} = ${d1[0]} \\quad (\\text{Constant}) \\Rightarrow \\text{Linear}`, explanation: "The first differences are all the same. That means the relation is linear, so you can stop here." }
+                ];
+            }
+
+            return {
+                title: "Type 3: First and Second Differences", type: "mc", assetType: "tov", hasMethods: false,
+                fullStatement: mcfPick([
+                    "Use first and second differences to decide whether this table is linear, quadratic, or neither.",
+                    "Look at the differences in this table. Is the relation linear, quadratic, or neither?",
+                    "Work out the differences for this table, then say which kind of relation it is."
+                ]),
+                assetHtml: tableHtml, prompt: "Identify the mathematical nature of the relation mapping framework:",
+                options: mc.options, hint: "Take each y-value away from the one below it. If those answers are all equal it is linear. If not, do it again to those answers.",
+                steps: steps, ans: mc.ans
+            };
+        }
+
+        function genType4() {
+            let isFunc = Math.random() > 0.5;
+            let exp, correctAns, optArr;
+
+            /* The two cases used to carry their own wordings -- "cuts it twice" when it was a
+               distractor, "cuts the locus boundary twice" when it was the answer -- so each
+               correct sentence only ever appeared where it was correct. Memorising two
+               sentences scored 100% without looking at the equation. One shared pool now. */
+            /* Lengths are levelled too: with the pool shared, whichever sentence was longest
+               would otherwise be the answer half the time. The two live answers now sit
+               between the two permanent distractors. */
+            const VLT = {
+                isFn:    "\\text{Function - Any vertical line crosses the graph exactly once.}",
+                notFn:   "\\text{Not a Function - Some vertical line crosses it twice over.}",
+                loop:    "\\text{Function - The relation forms one continuous closed coordinate loop.}",
+                undef:   "\\text{Undefined Relation - No real point satisfies it.}"
+            };
+            optArr = [VLT.isFn, VLT.notFn, VLT.loop, VLT.undef];
+
+            if (isFunc) {
+                let a = randInt(1, 4) * (Math.random() > 0.5 ? 1 : -1);
+                let c = randInt(-5, 5);
+                exp = `y = ${fmtTerm(a, 'x^2', true)} ${fmtTerm(c, '')}`;
+                correctAns = VLT.isFn;
+            } else {
+                let r = randInt(3, 7);
+                exp = `x^2 + y^2 = ${r*r}`;
+                correctAns = VLT.notFn;
+            }
+            
+            let mc = shuffleMC(optArr, correctAns);
+
+            let steps = [];
+            if (isFunc) {
+                steps = [
+                    { title: "Step 1: Work out what kind of expression this is", mode: "common", math: `${exp} \\Rightarrow \\text{Parabola opening ${exp.includes('-') ? 'down' : 'up'}}`, explanation: "Look at the equation before you look at the picture. Only x is squared here, so it draws a parabola, a U shape opening up or down. Knowing the shape first tells you what to expect." },
+                    { title: "Step 2: See where a vertical line crosses", mode: "common", math: "\\text{Every independent vertical line path intersects the locus grid exactly once.}", explanation: "Picture a straight up-and-down line sweeping across the graph from left to right. It only ever touches the curve in one place, so each x-value gives exactly one y-value." },
+                    { title: "Step 3: Give your answer", mode: "common", math: "\\text{Passes Vertical Line Test Criteria} \\Rightarrow \\text{Function}", explanation: "No vertical line anywhere hits this curve twice, so the relation is a function. Trap: thinking a U shape fails because it has two branches. What matters is crossings, not branches." }
+                ];
+            } else {
+                steps = [
+                    { title: "Step 1: Work out what shape this graph is", mode: "common", math: `${exp} \\Rightarrow \\text{Circle centered at (0,0)}`, explanation: "Look at the equation before you look at the picture. Both x and y are squared and added together here, and that is the giveaway for a circle. A circle is the classic relation that fails this test." },
+                    { title: "Step 2: Slide a vertical line across", mode: "common", math: `\\text{At baseline } x=0, \\quad y^2=${exp.split('=')[1].trim()} \\Rightarrow y = \\pm \\sqrt{${exp.split('=')[1].trim()}}`, explanation: "Draw a straight up-and-down line through the middle of the circle. It hits the top edge and the bottom edge, so that single x-value has two different y-values attached to it." },
+                    { title: "Step 3: Give your answer", mode: "common", math: "\\text{Fails Vertical Line Test Criteria} \\Rightarrow \\text{Not a Function}", explanation: "One x-value gives two different y-values, so this relation is not a function. Trap: reading the question backwards. Check carefully whether it asks which one IS or is NOT a function." }
+                ];
+            }
+
+            return {
+                title: "Type 4: Vertical Line Test & Function Properties", hasMethods: false, type: "mc", assetType: "none",
+                fullStatement: `Evaluate coordinate geometry parameters. Does the mathematical relation describe a function?<br>$$\\small ${exp}$$`,
+                prompt: "Choose the correct analytical conclusion statement:",
+                options: mc.options,
+                hint: isFunc ? "This represents a vertical parabola. Think about how any vertical line intersects it." : "This equation charts a perfect circle. Visualize passing a vertical test line straight down.",
+                steps: steps, ans: mc.ans
+            };
+        }
+
+        function genType5() {
+            let a = randInt(2, 9), b = randInt(2, 11);
+            /* audit fix 2026-07-30 (round A): a 와 b 에 공약수가 있으면 숫자 공약수가
+               남아서 "completely" 정답이 아니게 된다(예: 4x^2-16 -> 4(x-2)(x+2)). */
+            while (gcd(a, b) > 1) { b = randInt(2, 11); }
+            let a2 = a*a, b2 = b*b;
+            let exp = `${a2}x^2 - ${b2}`;
+            
+            let correctAns = `\\((${a}x - ${b})(${a}x + ${b})\\)`;
+            /* all four options are two-bracket forms, so shape no longer gives it away */
+            let optArr = [correctAns,
+                `\\((${a}x + ${b})(${a}x + ${b})\\)`,
+                `\\((${a}x - ${b})(${a}x - ${b})\\)`,
+                `\\((${a}x - ${2 * b})(${a}x + ${2 * b})\\)`,
+                `\\((${a2}x - ${b})(x + ${b})\\)`];
+            let mc = shuffleMC(optArr, correctAns);
+
+            return {
+                title: "Type 5: Difference of Squares Factoring", type: "mc", assetType: "none",
+                fullStatement: mcfPick(["Factor the binomial completely", "This is a difference of squares. Factor it completely", "Factor this expression all the way down"]) + `:<br>$$\\small ${exp}$$`,
+                prompt: "Select the completely factored expression form:",
+                options: mc.options,
+                hint: "Two perfect squares with a minus between them always factor the same way: \\(a^2 - b^2 = (a - b)(a + b)\\). Square root each term to find a and b.",
+                steps: [
+                    { title: "Step 1: Spot which pattern this is", mode: "common",
+                      math: `${a2}x^2 = (${a}x)^2 \\quad\\text{and}\\quad ${b2} = ${b}^2`,
+                      explanation: `There are only two terms, both are perfect squares, and a minus sign sits between them. That combination is the difference of squares signal. Spotting it saves you the whole splitting process.` },
+                    { title: "Step 2: Square root each end", mode: "common",
+                      math: `\\sqrt{${a2}x^2} = ${a}x \\quad\\text{and}\\quad \\sqrt{${b2}} = ${b}`,
+                      explanation: `Take the square root of each term separately, which gives ${MCF.M(a + "x")} and ${MCF.M(b)}. If either end is not a perfect square, this pattern does not apply.` },
+                    { title: "Step 3: Write the two brackets", mode: "common",
+                      math: `(${a}x - ${b})(${a}x + ${b})`,
+                      explanation: `Use the same two roots in both brackets, one with a minus and one with a plus. Trap: writing the same sign twice. Opposite signs are what make the middle term cancel out.` }
+                ], ans: mc.ans
+            };
+        }
+
+        function genType6() {
+            let a = randInt(1, 5), b = randInt(1, 7);
+            /* audit fix 2026-07-30 (round A): 위와 같은 이유로 a, b 를 서로소로 만든다. */
+            while (gcd(a, b) > 1) { b = randInt(1, 7); }
+            let a2 = a*a, b2 = b*b;
+            let isNeg = Math.random() > 0.5;
+            let mid = 2*a*b * (isNeg ? -1 : 1);
+            
+            let exp = `${fmtTerm(a2, 'x^2', true)} ${fmtTerm(mid, 'x')} ${fmtTerm(b2, '')}`;
+            let correctAns = `\\((${fmtTerm(a, 'x', true)} ${fmtTerm(isNeg?-b:b, '')})^2\\)`;
+            /* mostly squared-bracket distractors so "pick the shortest" stops working;
+               the difference-of-squares form is kept as the fourth option half the time */
+            let optArr = [correctAns,
+                `\\((${fmtTerm(a, 'x', true)} ${fmtTerm(isNeg?b:-b, '')})^2\\)`,
+                `\\((${fmtTerm(b, 'x', true)} ${fmtTerm(isNeg?-a:a, '')})^2\\)`,
+                Math.random() > 0.5
+                    ? `\\((${fmtTerm(b, 'x', true)} ${fmtTerm(isNeg?a:-a, '')})^2\\)`
+                    : `\\((${fmtTerm(a, 'x', true)} - ${b})(${fmtTerm(a, 'x', true)} + ${b})\\)`,
+                `\\((${fmtTerm(a, 'x', true)} ${fmtTerm(isNeg?-(b+1):(b+1), '')})^2\\)`,
+                `\\((${fmtTerm(a2, 'x', true)} ${fmtTerm(isNeg?-b:b, '')})(x ${fmtTerm(isNeg?-b:b, '')})\\)`];
+            /* audit fix 2026-07-30 (round A): a === b 이면 오답 하나가 정답과 같은 식이 된다. */
+            /* 값 기준으로 걸러내면 후보가 4개 미만이 될 수 있어 예비를 더 둔다 */
+            optArr.push(`\\((${fmtTerm(a, 'x', true)} ${fmtTerm(isNeg?-(b+2):(b+2), '')})^2\\)`);
+            optArr.push(`\\((${fmtTerm(a + 1, 'x', true)} ${fmtTerm(isNeg?-b:b, '')})^2\\)`);
+            optArr.push(`\\((${fmtTerm(a, 'x', true)} ${fmtTerm(isNeg?-b:b, '')})(${fmtTerm(a, 'x', true)} ${fmtTerm(isNeg?-(b+1):(b+1), '')})\\)`);
+            let mc = shuffleMC(mcfUniqueByValue(optArr), correctAns);
+
+            let midTermParts = isNeg ? `-${a*b}x - ${a*b}x` : `+ ${a*b}x + ${a*b}x`;
+
+            return {
+                title: "Type 6: Perfect Square Trinomial Factoring", type: "mc", assetType: "none",
+                fullStatement: `Factor the trinomial expression completely using special product patterns:<br>$$\\small ${exp}$$`,
+                prompt: "Select the completely factored expression form:",
+                options: mc.options,
+                hint: `Both ends are perfect squares. The middle term is ${isNeg?'negative':'positive'}, so your bracket will have a ${isNeg?'minus':'plus'} sign in it.`,
+                steps: [
+                    { title: "Step 1: Spot which pattern this is", mode: "common",
+                      math: `\\sqrt{${a2}x^2} = ${a}x \\quad\\text{and}\\quad \\sqrt{${b2}} = ${b}`,
+                      explanation: `Check both ends first, and here they are both perfect squares. That is the first clue. A perfect square trinomial comes from one bracket squared, so you never have to split the middle term.` },
+                    { title: "Step 2: Test the middle term", mode: "common",
+                      math: `2 \\times ${a}x \\times ${b} = ${2*a*b}x`,
+                      explanation: `Double the two roots multiplied together, which gives ${MCF.M(2*a*b + "x")}. That matches the size of the middle term, so the pattern really does fit. If it did not match, you would have to split instead.` },
+                    { title: "Step 3: Read the sign off the middle term", mode: "common",
+                      math: `\\text{Middle is } ${isNeg ? '-' : '+'}${mid < 0 ? -mid : mid}x \\Rightarrow ${isNeg ? '\\text{minus}' : '\\text{plus}'} \\text{ inside}`,
+                      explanation: `The middle term is ${isNeg ? 'negative, so a minus' : 'positive, so a plus'} goes inside the bracket. The middle term is the only place that sign comes from. Trap: copying a minus out of habit without checking.` },
+                    { title: "Step 4: Write it as one bracket squared", mode: "common",
+                      math: `(${fmtTerm(a, 'x', true)} ${fmtTerm(isNeg?-b:b, '')})^2`,
+                      explanation: `Put both roots inside one bracket with that sign, then square the whole bracket. Trap: leaving it as two identical brackets. That is correct but not the fully simplified form.` }
+                ], ans: mc.ans
+            };
+        }
+
+        function genType7() {
+            let r1 = randInt(-8, 8); if (r1===0) r1=1;
+            let r2 = randInt(-8, 8); if (r2===0) r2=2;
+            let b = r1 + r2;
+            let c = r1 * r2;
+            
+            let exp = `x^2 ${fmtTerm(b, 'x')} ${fmtTerm(c, '')}`;
+            let correctAns = `\\((x ${fmtTerm(r1, '')})(x ${fmtTerm(r2, '')})\\)`;
+            /* audit fix 2026-07-30 (round A): r2 === -r1 이면 오답 하나가 정답의
+               괄호 순서만 바꾼 것과 같아진다. 값 기준으로 거르고 예비 후보로 채운다. */
+            let optArr = mcfUniqueByValue([correctAns,
+                `\\((x ${fmtTerm(-r1, '')})(x ${fmtTerm(-r2, '')})\\)`,
+                `\\((x ${fmtTerm(r1, '')})(x ${fmtTerm(-r2, '')})\\)`,
+                `\\((x ${fmtTerm(-r1, '')})(x ${fmtTerm(r2, '')})\\)`,
+                `\\((x ${fmtTerm(r1 + 1, '')})(x ${fmtTerm(r2, '')})\\)`,
+                `\\((x ${fmtTerm(r1, '')})(x ${fmtTerm(r2 + 1, '')})\\)`,
+                `\\((x ${fmtTerm(r1 - 1, '')})(x ${fmtTerm(r2, '')})\\)`]);
+            let mc = shuffleMC(optArr, correctAns);
+
+            return {
+                title: "Type 7: Simple Trinomial Factoring (a = 1)", hasMethods: true, type: "mc", assetType: "none",
+                fullStatement: `Factor the trinomial expression completely where leading coefficient a = 1:<br>$$\\small ${exp}$$`,
+                prompt: "Identify the correct binomial factor pairs:",
+                options: mc.options,
+                hint: `Find two numbers that multiply to ${c} and add to ${b}. Those two numbers go straight into your brackets.`,
+                steps: [
+                    { title: "Step 1: Find your two targets", mode: "common", math: `\\text{Product} = ${c}, \\quad \\text{Sum} = ${b}`, explanation: "The front number is 1, so this is the easier kind. You need one pair of numbers doing two jobs at once. They have to multiply to the last number and add to the number in front of x." },
+                    { title: "Step 2 (Product & Sum Split): Find the two numbers", mode: "ps", math: `(${r1}) \\times (${r2}) = ${c} \\quad\\text{and}\\quad (${r1}) + (${r2}) = ${b} \\Rightarrow x^2 ${fmtTerm(r1, 'x')} ${fmtTerm(r2, 'x')} ${fmtTerm(c, '')}`, explanation: `${MCF.M(r1)} and ${MCF.M(r2)} are the only pair that does both jobs at once. Use them to break the middle term into two pieces. If no whole number pair works, the expression does not factor.` },
+                    { title: "Step 2 (Criss-Cross Matrix): Fill in the box", mode: "cc", isMatrix: true, matrixData: { lt: `x`, lb: `x`, rt: fmtTerm(r1, '', true), rb: fmtTerm(r2, '', true), pt: fmtTerm(r2, 'x', true), pb: fmtTerm(r1, 'x', true), sum: fmtTerm(b, 'x', true) }, explanation: `Put ${MCF.M("x")} and ${MCF.M("x")} down the left side, because x times x gives x squared. Then put ${MCF.M(r1>0?'+'+r1:r1)} and ${MCF.M(r2>0?'+'+r2:r2)} down the right side.` },
+                    { title: "Step 3: Write out your brackets", mode: "common", math: `(x ${fmtTerm(r1, '')})(x ${fmtTerm(r2, '')})`, explanation: "Read straight across the top row to get your first bracket, then straight across the bottom row for your second. Trap: writing the same sign in both brackets, which would leave a middle term behind." }
+                ], ans: mc.ans
+            };
+        }
+
+        function genType8() {
+            /* audit fix 2026-07-30 (round A): 세 계수에 공약수가 남으면 "completely"
+               정답이 아니게 된다(43.8%). 예: 4x^2-6x-4 는 (2x+1)(2x-4) 가 아니라
+               2(2x+1)(x-2) 가 완전한 인수분해다. 서로소가 될 때까지 다시 뽑는다. */
+            let a1, a2, c1, c2, a, b, c;
+            do {
+                a1 = randInt(2, 5); a2 = randInt(1, 3);
+                c1 = randInt(-4, 4); if (c1===0) c1=1;
+                c2 = randInt(-4, 4); if (c2===0) c2=1;
+                a = a1*a2; b = a1*c2 + a2*c1; c = c1*c2;
+            } while (gcd(a1, Math.abs(c1)) > 1 || gcd(a2, Math.abs(c2)) > 1 || gcd3(a, Math.abs(b), Math.abs(c)) > 1);
+            
+            let exp = `${fmtTerm(a, 'x^2', true)} ${fmtTerm(b, 'x')} ${fmtTerm(c, '')}`;
+            let correctAns = `\\((${fmtTerm(a1, 'x', true)} ${fmtTerm(c1, '')})(${fmtTerm(a2, 'x', true)} ${fmtTerm(c2, '')})\\)`;
+            var _f = function (p, q, r, t) { return `\\((${fmtTerm(p, 'x', true)} ${fmtTerm(q, '')})(${fmtTerm(r, 'x', true)} ${fmtTerm(t, '')})\\)`; };
+            var _nz = function (v) { return v === 0 ? v + 1 : v; };
+            // 후보를 넉넉히 만들어 중복/정답과 같은 것을 걸러낸다 (2지선다 방지)
+            var _cand = [ _f(a1, -c1, a2, -c2), _f(a1, c2, a2, c1), _f(a1, -c2, a2, -c1),
+                          _f(a1, _nz(c1 + 1), a2, c2), _f(a1, c1, a2, _nz(c2 + 1)),
+                          _f(a1, _nz(c1 - 1), a2, c2), _f(a2, c1, a1, c2),
+                          _f(a1, c1, a2, _nz(c2 - 1)),
+                          _f(a1, _nz(c1 + 2), a2, c2), _f(a1, c1, a2, _nz(c2 + 2)),
+                          _f(a1 + 1, c1, a2, c2), _f(a1, c1, a2 + 1, c2) ];
+            var optArr = mcfUniqueByValue([correctAns].concat(_cand)).slice(0, 4);
+            let mc = shuffleMC(optArr, correctAns);
+
+            return {
+                title: "Type 8: Complex Trinomial Factoring (a > 1)", hasMethods: true, type: "mc", assetType: "none",
+                fullStatement: `Factor the complex trinomial expression completely where leading coefficient a > 1:<br>$$\\small ${exp}$$`,
+                prompt: "Identify the correct binomial factor pairs:",
+                options: mc.options,
+                hint: `Multiply the front number by the last number: \\(${a} \\times (${c}) = ${a*c}\\). Now find two numbers that multiply to that and add to ${b}.`,
+                steps: [
+                    { title: "Step 1: Find your two targets", mode: "common", math: `\\text{Product (a} \\times \\text{c)} = ${a} \\times (${c}) = ${a*c}, \\quad \\text{Sum (b)} = ${b}`, explanation: "The front number is bigger than 1, so you cannot drop two numbers straight into brackets. Multiply the front number by the last number to get your product target. The middle number is your sum target." },
+                    { title: "Step 2 (Product & Sum Split): Split the middle term", mode: "ps", math: `(${a1*c2}) \\times (${a2*c1}) = ${a*c} \\ \\text{and} \\ (${a1*c2}) + (${a2*c1}) = ${b} \\Rightarrow ${a}x^2 ${fmtTerm(a1*c2, 'x')} ${fmtTerm(a2*c1, 'x')} ${fmtTerm(c, '')} = ${fmtTerm(a1, 'x', true)}(${fmtTerm(a2, 'x', true)} ${fmtTerm(c2, '')}) ${fmtTerm(c1, '')}(${fmtTerm(a2, 'x', true)} ${fmtTerm(c2, '')})`, explanation: `Rewrite the middle term as ${a1*c2}x and ${a2*c1}x. The expression is worth the same, it just has four terms now.` },
+                    { title: "Step 2 (Criss-Cross Matrix): Fill in the box", mode: "cc", isMatrix: true, matrixData: { lt: `${a1}x`, lb: `${a2}x`, rt: fmtTerm(c1, '', true), rb: fmtTerm(c2, '', true), pt: fmtTerm(a1*c2, 'x', true), pb: fmtTerm(a2*c1, 'x', true), sum: fmtTerm(b, 'x', true) }, explanation: `Put ${a1}x and ${a2}x down the left side of the box, then ${c1>0?'+'+c1:c1} and ${c2>0?'+'+c2:c2} down the right side.` },
+                    { title: "Step 3: Write out your brackets", mode: "common", math: `(${fmtTerm(a1, 'x', true)} ${fmtTerm(c1, '')})(${fmtTerm(a2, 'x', true)} ${fmtTerm(c2, '')})`, explanation: "Read straight across the top row to get your first bracket, then straight across the bottom row for your second. Trap: writing the same sign in both brackets, which would leave a middle term behind." }
+                ], ans: mc.ans
+            };
+        }
+
+        function genType9() {
+            let gcf = randInt(2, 5);
+            let r1 = randInt(-4, 4); if (r1===0) r1=1;
+            let r2 = randInt(-4, 4); if (r2===0) r2=2;
+            let b = r1 + r2; let c = r1 * r2;
+            
+            let exp = `${gcf}x^2 ${fmtTerm(gcf*b, 'x')} ${fmtTerm(gcf*c, '')}`;
+            let correctAns = `\\(${gcf}(x ${fmtTerm(r1, '')})(x ${fmtTerm(r2, '')})\\)`;
+            /* audit fix 2026-07-30 (round A): r2 === -r1 이면 1번 오답이 정답과 같아진다. */
+            let optArr = mcfUniqueByValue([correctAns,
+                `\\(${gcf}(x ${fmtTerm(-r1, '')})(x ${fmtTerm(-r2, '')})\\)`,
+                `\\((x ${fmtTerm(r1, '')})(x ${fmtTerm(r2, '')})\\)`,
+                `\\(${gcf+1}(x ${fmtTerm(r1, '')})(x ${fmtTerm(r2, '')})\\)`,
+                `\\(${gcf}(x ${fmtTerm(r1 + 1, '')})(x ${fmtTerm(r2, '')})\\)`,
+                `\\(${gcf}(x ${fmtTerm(r1, '')})(x ${fmtTerm(r2 + 1, '')})\\)`]);
+            let mc = shuffleMC(optArr, correctAns);
+
+            return {
+                title: "Type 9: Multi-Step Factoring (GCF + Advanced)", hasMethods: true, type: "mc", assetType: "none",
+                fullStatement: mcfPick(["Factor the expression completely. It will take more than one step", "Take out the common factor first, then factor what is left", "Factor this expression all the way down"]) + `:<br>$$\\small ${exp}$$`,
+                prompt: "Select the completely factored expression form:",
+                options: mc.options,
+                hint: `Always check for a common factor first. Take out the ${gcf}, then factor the simpler trinomial left inside the brackets.`,
+                steps: [
+                    { title: "Step 1: Decide what order to do things in", mode: "common", math: `${gcf}(x^2 ${fmtTerm(b, 'x')} ${fmtTerm(c, '')})`, explanation: `Always check for a shared factor before trying anything else. All three terms divide by ${MCF.M(gcf)}, so take that out front first. What is left inside is much easier to factor. Trap: skipping this and fighting the big numbers.` },
+                    { title: "Step 2 (Product & Sum Split): Split the middle term inside the brackets", mode: "ps", math: `\\text{Product} = ${c}, \\ \\text{Sum} = ${b} \\Rightarrow ${gcf}[x^2 ${fmtTerm(r1, 'x')} ${fmtTerm(r2, 'x')} ${fmtTerm(c, '')}] = ${gcf}[x(x${fmtTerm(r1, '')}) ${fmtTerm(r2, '')}(x${fmtTerm(r1, '')})]`, explanation: `Now work on what is inside the brackets. Find two numbers that multiply to ${c} and add to ${b}.` },
+                    { title: "Step 2 (Criss-Cross Matrix): Fill in the box for the inside part", mode: "cc", isMatrix: true, matrixData: { lt: `x`, lb: `x`, rt: fmtTerm(r1, '', true), rb: fmtTerm(r2, '', true), pt: fmtTerm(r2, 'x', true), pb: fmtTerm(r1, 'x', true), sum: fmtTerm(b, 'x', true) }, explanation: `Use only the numbers from inside the brackets: x and x down the left side, ${r1} and ${r2} down the right.` },
+                    { title: "Step 3: Put it all together", mode: "common", math: `${gcf}(x ${fmtTerm(r1, '')})(x ${fmtTerm(r2, '')})`, explanation: "Read across the rows to get your two brackets, then put the common factor back out front. Trap: leaving that factor off. Without it the answer is not equal to the expression you started with." }
+                ], ans: mc.ans
+            };
+        }
+
+        function genType10() {
+            // 0/1/2 zeros 를 먼저 균등하게 고르고 계수를 역산한다
+            let _kind = randInt(0, 2);
+            let a, b, c;
+            if (_kind === 1) {
+                a = randInt(1, 3) * (Math.random() > 0.5 ? 1 : -1);
+                let _k = randInt(1, 4) * (Math.random() > 0.5 ? 1 : -1);
+                b = 2 * a * _k; c = a * _k * _k;
+            } else if (_kind === 0) {
+                a = randInt(1, 4); c = randInt(1, 4);
+                let _mb = Math.floor(Math.sqrt(4 * a * c));
+                if (_mb * _mb === 4 * a * c) _mb--;
+                b = randInt(-_mb, _mb);
+                if (Math.random() > 0.5) { a = -a; c = -c; }
+            } else {
+                a = randInt(1, 4) * (Math.random() > 0.5 ? 1 : -1);
+                b = randInt(-5, 5);
+                c = randInt(1, 4) * (a > 0 ? -1 : 1);
+            }
+            let D = b*b - 4*a*c;
+            
+            let ansStr, ansLetter;
+            if (D > 0) { ansStr = "2 zeros"; ansLetter = "C"; }
+            else if (D === 0) { ansStr = "1 zero"; ansLetter = "B"; }
+            else { ansStr = "0 zeros"; ansLetter = "A"; }
+            
+            let exp = `y = ${fmtTerm(a, 'x^2', true)} ${fmtTerm(b, 'x')} ${fmtTerm(c, '')}`;
+            let signD = D === 0 ? "0" : (D < 0 ? `${D} \\quad (< 0)` : `${D} \\quad (> 0)`);
+            
+            return {
+                title: "Type 10: Number of Zeros via Discriminant", hasMethods: false, type: "mc", assetType: "none",
+                fullStatement: `Calculate the value of the discriminant to determine the number of real zeros for the quadratic relation:<br>$$\\small ${exp}$$`,
+                prompt: "Choose the correct number of real zeros:",
+                options: ["A) \\(0 \\text{ zeros}\\)", "B) \\(1 \\text{ zero}\\)", "C) \\(2 \\text{ zeros}\\)"],
+                hint: "Work out \\(D = b^2 - 4ac\\). Bigger than 0 means 2 zeros, exactly 0 means 1 zero, and negative means none.",
+                steps: [
+                    { title: "Step 1: Decide why you do not need to solve it", mode: "common", math: `D = b^2 - 4ac`, explanation: "The question asks how many zeros there are, not what they are. So you never have to finish the formula. Only the part under the square root matters, and that part is called the discriminant." },
+                    { title: "Step 2: Read off a, b and c", mode: "common", math: `a = ${a},\\quad b = ${b},\\quad c = ${c}`, explanation: `Line the equation up with ${MCF.M("ax^2 + bx + c")}. That gives ${MCF.M("a = " + a)}, ${MCF.M("b = " + b)} and ${MCF.M("c = " + c)}. Trap: leaving a minus sign behind when you copy a number across.` },
+                    { title: "Step 3: Put your numbers in", mode: "common", math: `D = (${b})^2 - 4(${a})(${c}) = ${b*b} ${fmtTerm(-4*a*c, '', false)} = ${D}`, explanation: "Swap each letter for its number and keep every number inside brackets. The brackets are what stop a minus sign from disappearing. This is where most marks are lost on this question." },
+                    { title: "Step 4: Look at the sign", mode: "common", math: `D = ${signD} \\Rightarrow ${ansStr.replace(/zeros?/, function (mm) { return '\\text{ real ' + mm + '}'; })}`, explanation: `D = ${D}. ${D>0?"That is bigger than 0, so the parabola cuts the x-axis in two places.":(D===0?"That is exactly 0, so the parabola just touches the x-axis once.":"That is negative, so the parabola never reaches the x-axis at all.")}` }
+                ], ans: ansLetter
+            };
+        }
+
+        function genType11() {
+            let r1 = randInt(-6, 6); if (r1===0) r1=1;
+            let r2 = randInt(-6, 6); if (r2===0) r2=2;
+            let b = -(r1 + r2);
+            let c = r1 * r2;
+            
+            let exp = `${fmtTerm(1, 'x^2', true)} ${fmtTerm(b, 'x')} = ${-c}`;
+            let correctAns = `\\(x = ${r1} \\text{ and } x = ${r2}\\)`;
+            /* audit fix 2026-07-30 (round A): r2 === -r1 이면 보기 두 개가 같은 근 짝이 된다(17%). */
+            let _rootKey = (p, q) => [p, q].sort((m, n) => m - n).join(",");
+            let _cand11 = [[-r1, -r2], [r1, -r2], [-r1, r2], [r1 + 1, r2], [r1, r2 + 1], [r1 - 1, r2]];
+            let _seen11 = [_rootKey(r1, r2)];
+            let optArr = [correctAns];
+            for (let _i = 0; _i < _cand11.length && optArr.length < 4; _i++) {
+                let _k = _rootKey(_cand11[_i][0], _cand11[_i][1]);
+                if (_seen11.indexOf(_k) !== -1) continue;
+                _seen11.push(_k);
+                optArr.push(`\\(x = ${_cand11[_i][0]} \\text{ and } x = ${_cand11[_i][1]}\\)`);
+            }
+            let mc = shuffleMC(optArr, correctAns);
+
+            return {
+                title: "Type 11: Solving Quadratic Equations by Factoring", hasMethods: true, type: "mc", assetType: "none",
+                fullStatement: `Solve the quadratic equation by rearranging it into standard form and factoring:<br>$$\\small ${exp}$$`,
+                prompt: "Select the correct solution roots values:",
+                options: mc.options,
+                hint: `Move ${-c} across so the right side becomes 0. Nothing can be factored until one side is zero.`,
+                steps: [
+                    { title: "Step 1: Move everything to one side", mode: "common", math: `x^2 ${fmtTerm(b, 'x')} ${fmtTerm(c, '')} = 0`, explanation: "Factoring only helps when one side is zero, so move everything across first. Take every term on the right away from both sides. When a term crosses the equals sign its sign flips." },
+                    { title: "Step 2 (Product & Sum Split): Split the middle term", mode: "ps", math: `(${-r1}) \\times (${-r2}) = ${c} \\ \\text{and} \\ (${-r1}) + (${-r2}) = ${b} \\Rightarrow (x ${MCF.signed(-r1)})(x ${MCF.signed(-r2)}) = 0`, explanation: `Find two numbers that multiply to ${c} and add to ${b}. Those two numbers go straight into your brackets.` },
+                    { title: "Step 2 (Criss-Cross Matrix): Fill in the box", mode: "cc", isMatrix: true, matrixData: { lt: `x`, lb: `x`, rt: fmtTerm(-r1, '', true), rb: fmtTerm(-r2, '', true), pt: fmtTerm(-r2, 'x', true), pb: fmtTerm(-r1, 'x', true), sum: fmtTerm(b, 'x', true) }, explanation: `Put ${MCF.M("x")} and ${MCF.M("x")} down the left side, because x times x gives the squared term. Then put ${MCF.M(fmtTerm(-r1, '', true))} and ${MCF.M(fmtTerm(-r2, '', true))} down the right side.` },
+                    { title: "Step 3: Set each bracket to zero", mode: "common", math: `x ${MCF.signed(-r1)} = 0 \\Rightarrow x = ${r1} \\quad\\text{and}\\quad x ${MCF.signed(-r2)} = 0 \\Rightarrow x = ${r2}`, explanation: "If two things multiply together to give zero, at least one of them has to be zero. So set each bracket equal to zero and solve each one separately. A quadratic gives you two answers." }
+                ], ans: mc.ans
+            };
+        }
+
+        function genType12() {
+            let a, b, c, D;
+            do {
+                a = randInt(2, 5) * (Math.random() > 0.5 ? 1 : -1);
+                b = randInt(-6, 6);
+                c = randInt(-5, 5);
+                D = b*b - 4*a*c;
+            } while (D <= 0 || Math.sqrt(D) % 1 === 0);
+
+            let exp = `${fmtTerm(a, 'x^2', true)} ${fmtTerm(b, 'x')} ${fmtTerm(c, '')} = 0`;
+            let sqrtD = Math.sqrt(D);
+            let x1 = ((-b + sqrtD) / (2*a)).toFixed(2);
+            let x2 = ((-b - sqrtD) / (2*a)).toFixed(2);
+            
+            let correctAns = `\\(x = ${x1} \\text{ and } x = ${x2}\\)`;
+            /* audit fix 2026-07-30 (round A): {-x1,-x2} 와 {(b±√D)/2a} 는 순서만 다른
+               같은 짝이라 항상 보기 두 개가 겹쳤다(100%). 앞쪽을 2a 대신 a 로 나눈
+               오해로 바꾼다. */
+            let optArr = [correctAns,
+                `\\(x = ${((-b + sqrtD) / a).toFixed(2)} \\text{ and } x = ${((-b - sqrtD) / a).toFixed(2)}\\)`,
+                `\\(x = ${x1} \\text{ and } x = ${(-x2).toFixed(2)}\\)`,
+                `\\(x = ${((b + sqrtD) / (2*a)).toFixed(2)} \\text{ and } x = ${((b - sqrtD) / (2*a)).toFixed(2)}\\)`];
+            let mc = shuffleMC(optArr, correctAns);
+
+            return {
+                title: "Type 12: Solving Quadratic Equations via Quadratic Formula", hasMethods: true, methods: MCF.METHODS_SOLVING, type: "mc", assetType: "none",
+                fullStatement: `Solve the quadratic equation using the Quadratic Formula. Round your answers to two decimal places:<br>$$\\small ${exp}$$`,
+                prompt: "Select the correct decimal root options set:",
+                options: mc.options,
+                hint: `Use the quadratic formula with \\(a = ${a}, b = ${b}, c = ${c}\\). Watch the signs carefully on the \\(-4ac\\) part.`,
+                steps: [
+                    { title: "Step 1: Decide why the formula is the right tool", mode: "qf", math: `x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}`, explanation: "Try factoring first. When no pair of whole numbers works, factoring is a dead end. The quadratic formula always works, even when the answers are not whole numbers." },
+                    { title: "Step 2: Read off a, b and c", mode: "qf", math: `a = ${a},\\quad b = ${b},\\quad c = ${c}`, explanation: `Line the equation up with ${MCF.M("ax^2 + bx + c")}. That gives ${MCF.M("a = " + a)} and ${MCF.M("b = " + b)}. The last one is ${MCF.M("c = " + c)}. Each minus sign belongs to its number.` },
+                    { title: "Step 3: Work out the discriminant", mode: "qf", math: `b^2 - 4ac = (${b})^2 - 4(${a})(${c}) = ${b*b} ${fmtTerm(-4*a*c, '', false)} = ${D}`, explanation: "Square b first, keeping the result positive even if b was negative. Then work out -4 times a times c and add the two pieces together. Trap: writing a negative answer after squaring a negative b." },
+                    { title: "Step 4: Put your numbers into the formula", mode: "qf", math: `x = \\frac{-(${b}) \\pm \\sqrt{${D}}}{2(${a})} = \\frac{${-b} \\pm ${sqrtD.toFixed(4)}}{${2*a}}`, explanation: "Take the square root on your calculator and keep 4 decimal places for now. Rounding early throws the final answer off. Only round to 2 decimal places at the very end." },
+                    { title: "Step 5: Do it twice, once with + and once with -", mode: "qf", math: `x_1 = \\frac{${-b} + ${sqrtD.toFixed(4)}}{${2*a}} \\approx ${x1}, \\quad x_2 = \\frac{${-b} - ${sqrtD.toFixed(4)}}{${2*a}} \\approx ${x2}`, explanation: "The plus-or-minus sign means there are two answers, not one. Work out the top with a plus, then start again with a minus. Divide by the bottom both times to get your two zeros." }
+                ,
+                    ...factorTabs(a, b, c)
+                ], ans: mc.ans
+            };
+        }
+
+        function genType13() {
+            let isRocket = Math.random() > 0.5;
+            if (isRocket) {
+                let a = -5, b = randInt(10, 30), c = randInt(2, 10);
+                let D = b*b - 4*a*c;
+                let sqrtD = Math.sqrt(D);
+                let ans1 = ((-b - sqrtD) / (2*a)).toFixed(2);
+                let ans2 = ((-b + sqrtD) / (2*a)).toFixed(2);
+                
+                let exp = `h = -5t^2 + ${b}t + ${c}`;
+                let correctAns = `\\(t = ${ans1} \\text{ seconds}\\)`;
+                let optArr = [correctAns, `\\(t = ${(-ans1).toFixed(2)} \\text{ seconds}\\)`, `\\(t = ${ans2} \\text{ seconds}\\)`, `\\(t = ${Math.abs(ans2).toFixed(2)} \\text{ seconds}\\)`];
+                let mc = shuffleMC(optArr, correctAns);
+
+                return {
+                    title: "Type 13: Real-World Quadratic Word Problems (Rocket)", hasMethods: false, type: "mc", assetType: "none",
+                    fullStatement: `<b>Word Problem Application:</b> A rocket projectile is launched upward. Its height tracking profile matches the relation equation:<br>$$\\small ${exp}$$<br>where <i>h</i> is height in meters and <i>t</i> is elapsed flight time in seconds. Determine when the object hits the ground surface grid line (\\(h = 0\\)).`,
+                    prompt: "Select the correct elapsed flight timestamp value:",
+                    options: mc.options,
+                    hint: "The object hits the ground when h = 0, so set h = 0 and solve. Throw away the negative answer, because time cannot be negative.",
+                    steps: [
+                        { title: "Step 1: Work out when the object is on the ground", mode: "common", math: `a = ${a}, \\quad b = ${b}, \\quad c = ${c}`, explanation: "Work out what the question is really asking first. The object is on the ground exactly when its height is zero. So set h equal to zero and solve for the time that makes it happen." },
+                        { title: "Step 2: Work out the part under the square root", mode: "common", math: `b^2 - 4ac = (${b})^2 - 4(${a})(${c}) = ${b*b} + ${-4*a*c} = ${D}`, explanation: "Work out the part under the square root first, which is b squared minus 4 times a times c. Doing this piece on its own keeps the fraction manageable and stops sign mistakes creeping in." },
+                        { title: "Step 3: Put your numbers into the formula", mode: "common", math: `t = \\frac{${-b} \\pm \\sqrt{${D}}}{2(${a})} = \\frac{${-b} \\pm ${sqrtD.toFixed(4)}}{${2*a}}`, explanation: "Swap each letter for its number and keep every number inside brackets. The brackets are what stop a minus sign from getting lost when you square or multiply." },
+                        { title: "Step 4: Pick the answer that makes sense", mode: "common", math: `t_1 = \\frac{${-b} - ${sqrtD.toFixed(4)}}{${2*a}} = ${ans1}\\text{ s}, \\quad t_2 = \\frac{${-b} + ${sqrtD.toFixed(4)}}{${2*a}} = ${ans2}\\text{ s}`, explanation: `You get two answers, but time cannot be negative. So the answer that makes sense here is ${ans1} seconds.` }
+                    ], ans: mc.ans
+                };
+            } else {
+                let a = randInt(1, 4), r1 = randInt(1, 4), r2 = randInt(5, 10);
+                let b = a * (r1 + r2), c = a * (r1 * r2);
+                let exp = `P = -${a}x^2 + ${b}x - ${c}`;
+                
+                let correctAns = `\\(x = \\$${r1} \\text{ and } x = \\$${r2}\\)`;
+                let optArr = [correctAns, `\\(x = \\$${r1+1} \\text{ and } x = \\$${r2+1}\\)`, `\\(x = \\$${r1} \\text{ and } x = \\$${r2-1}\\)`, `\\text{No real break-even limits}`];
+                let mc = shuffleMC(optArr, correctAns);
+
+                return {
+                    title: "Type 13: Real-World Quadratic Word Problems (Profit)", hasMethods: true, type: "mc", assetType: "none",
+                    fullStatement: `<b>Business Application:</b> A company models its daily profit using the quadratic function relationship:<br>$$\\small ${exp}$$<br>where <i>P</i> is the profit in thousands of dollars, and <i>x</i> is the selling price of a single unit item. Find the lower and upper break-even prices where profit equals exactly zero (\\(P = 0\\)).`,
+                    prompt: "Select the correct break-even unit price values set:",
+                    options: mc.options,
+                    hint: `Break-even means P = 0. Divide everything by -${a} to make the numbers smaller, then factor what is left.`,
+                    steps: [
+                        { title: `Step 1: Work out what break-even actually means`, mode: "common", math: `-${a}(x^2 - ${b/a}x + ${c/a}) = 0 \\Rightarrow x^2 - ${b/a}x + ${c/a} = 0`, explanation: "Break-even means the profit is exactly zero, so set P equal to zero. Then divide every term by the common factor to shrink the numbers. Smaller numbers make the factoring far easier." },
+                        { title: "Step 2 (Product & Sum Split): Find the two numbers", mode: "ps", math: `(${-r1}) \\times (${-r2}) = ${c/a} \\ \\text{and} \\ (${-r1}) + (${-r2}) = ${-b/a} \\Rightarrow (x ${MCF.signed(-r1)})(x ${MCF.signed(-r2)}) = 0`, explanation: `Find two numbers that multiply to ${c/a} and add to -${b/a}. Those two numbers go into your brackets.` },
+                        { title: "Step 2 (Criss-Cross Matrix): Fill in the box for the inside part", mode: "cc", isMatrix: true, matrixData: { lt: `x`, lb: `x`, rt: fmtTerm(-r1, '', true), rb: fmtTerm(-r2, '', true), pt: fmtTerm(-r2, 'x', true), pb: fmtTerm(-r1, 'x', true), sum: fmtTerm(-r1 - r2, 'x', true) }, explanation: `Put ${MCF.M("x")} and ${MCF.M("x")} down the left side, because x times x gives the squared term. Then put ${MCF.M(fmtTerm(-r1, '', true))} and ${MCF.M(fmtTerm(-r2, '', true))} down the right side.` },
+                        { title: "Step 3: Set each bracket to zero", mode: "common", math: `x ${MCF.signed(-r1)} = 0 \\Rightarrow x = ${r1} \\quad\\text{and}\\quad x ${MCF.signed(-r2)} = 0 \\Rightarrow x = ${r2}`, explanation: "Set each bracket equal to 0 and solve. Those two x-values are the prices where the profit is exactly zero." }
+                    ], ans: mc.ans
+                };
+            }
+        }
+
+        // --- Core Execution ---
+
+
+
+
+
+
+
+
+
+
+
+
+    
+
+        /* 진입점. DOM 을 건드리지 않는 순수 함수라 그대로 테스트할 수 있다. */
+        const GENERATORS = { t1: genType1, t2: genType2, t3: genType3, t4: genType4, t5: genType5, t6: genType6, t7: genType7, t8: genType8, t9: genType9, t10: genType10, t11: genType11, t12: genType12, t13: genType13 };
+        function generateProblem(typeId) {
+          const f = GENERATORS[typeId];
+          return f ? f() : null;
+        }
+
+        MCF.init({ generate: generateProblem,
+                   logUrl: (typeof TEACHER_SPREADSHEET_SCRIPT_URL !== "undefined" ? TEACHER_SPREADSHEET_SCRIPT_URL : null),
+                   unitId: "Unit_1", lessonId: "Practice_Test" });
+</script>
+    <script src="../progress.js"></script>
+</body>
+</html>

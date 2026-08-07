@@ -1,0 +1,1007 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCF3M Unit 1 Lesson 1 &amp; 2 Practice Studio</title>
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+
+    <!-- mcf-core.js 가 그리는 요소들의 기본 스타일. 아래 <style> 보다 먼저 와야
+         파일 고유 스타일이 이기고, 빠진 클래스만 여기서 메워진다.
+         폴더 위치를 몰라도 되게 두 경로를 다 건다(없는 쪽은 404 로 무시). -->
+    <link rel="stylesheet" href="../mcf-core.css">
+    <link rel="stylesheet" href="mcf-core.css">
+    <style>
+        :root {
+            --primary-color: #0f172a;
+            --secondary-color: #2563eb;
+            --disabled-color: #94a3b8;
+            --text-color: #334155;
+            --math-color: #000000;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --border-color: #cbd5e1;
+            --highlight-bg: #eff6ff;
+            --explanation-bg: #f1f5f9;
+            --rule-bg: #fef08a;
+            --rule-text: #713f12;
+            --success-color: #16a34a;
+            --error-color: #dc2626;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.8;
+            margin: 0;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: -0.025em;
+        }
+
+        .scoreboard {
+            background-color: #1e293b;
+            color: white;
+            display: inline-flex;
+            gap: 20px;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-weight: 700;
+            margin-top: 15px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.2);
+        }
+
+        .scoreboard span {
+            color: #60a5fa;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .profile-box, .selector-box {
+            background-color: var(--card-bg);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-color);
+            margin-bottom: 25px;
+        }
+
+        .profile-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .profile-grid input {
+            width: 100%;
+            padding: 12px;
+            font-size: 1rem;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        .profile-grid input:focus {
+            border-color: var(--secondary-color);
+        }
+
+        label {
+            display: block;
+            font-weight: 700;
+            color: var(--primary-color);
+            font-size: 1.1rem;
+            margin-bottom: 12px;
+        }
+
+        .control-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        select {
+            flex: 1;
+            padding: 16px;
+            font-size: 1.1rem;
+            font-family: inherit;
+            border-radius: 8px;
+            border: 2px solid var(--border-color);
+            background-color: white;
+            color: var(--primary-color);
+            outline: none;
+            cursor: pointer;
+        }
+
+        .btn-generate {
+            padding: 16px 24px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .btn-generate:hover {
+            background-color: #1e293b;
+        }
+
+        .solution-container {
+            background-color: var(--card-bg);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-color);
+            min-height: 200px;
+        }
+
+        .placeholder-text {
+            color: #64748b;
+            text-align: center;
+            font-style: italic;
+            padding: 60px 0;
+            font-size: 1.1rem;
+        }
+
+        .quiz-interface-box {
+            background-color: var(--explanation-bg);
+            border: 1px solid var(--border-color);
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+
+        .question-statement-card {
+            background: #ffffff;
+            border-left: 4px solid var(--secondary-color);
+            padding: 16px 20px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            border-radius: 0 6px 6px 0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .math-render-viewport {
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+        }
+
+        .math-tov {
+            border-collapse: collapse;
+            font-size: 1.1rem;
+            font-weight: 600;
+            min-width: 220px;
+            text-align: center;
+        }
+
+        .math-tov th, .math-tov td {
+            border: 2px solid var(--primary-color);
+            padding: 10px 20px;
+        }
+
+        .math-tov th {
+            background-color: #f1f5f9;
+            color: var(--primary-color);
+            font-weight: 800;
+        }
+
+        .mc-options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 10px;
+        }
+
+        .mc-option-card {
+            background: white;
+            border: 2px solid var(--border-color);
+            padding: 14px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1.05rem;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .mc-option-card:hover:not(.disabled) {
+            border-color: var(--secondary-color);
+            background-color: var(--highlight-bg);
+        }
+
+        .mc-option-card.selected {
+            border-color: var(--secondary-color);
+            background-color: #dbeafe;
+            color: #1e40af;
+        }
+
+        .mc-option-card.disabled {
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .mc-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background-color: #e2e8f0;
+            color: var(--primary-color);
+            font-weight: 800;
+            font-size: 0.9rem;
+        }
+
+        .mc-option-card.selected .mc-badge {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+
+        .feedback-msg-area {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            display: none;
+            padding: 10px 15px;
+            border-radius: 6px;
+        }
+
+        .feedback-success {
+            background-color: #dcfce7;
+            color: var(--success-color);
+            border-left: 5px solid var(--success-color);
+        }
+
+        .feedback-error {
+            background-color: #fee2e2;
+            color: var(--error-color);
+            border-left: 5px solid var(--error-color);
+        }
+
+        .quiz-action-bar {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .solution-reveal-window {
+            display: none;
+            border-top: 3px double var(--border-color);
+            margin-top: 30px;
+            padding-top: 30px;
+        }
+
+        .step-block {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e2e8f0;
+            display: none;
+        }
+
+        .step-title {
+            font-weight: 800;
+            color: var(--secondary-color);
+            display: block;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 8px;
+        }
+
+        .step-math {
+            font-size: 1.3rem;
+            font-weight: 700;
+            background-color: var(--explanation-bg);
+            padding: 14px 20px;
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin: 8px 0;
+            color: var(--math-color);
+            letter-spacing: 0.02em;
+            flex-wrap: wrap;
+        }
+
+        .step-explanation {
+            display: block;
+            font-size: 1.05rem;
+            color: #334155;
+            margin-top: 6px;
+        }
+
+        .final-answer-box {
+            background-color: var(--highlight-bg);
+            border-left: 6px solid var(--secondary-color);
+            padding: 20px 25px;
+            border-radius: 0 8px 8px 0;
+            margin-top: 30px;
+            display: none;
+        }
+
+        .final-answer-label {
+            font-weight: 800;
+            color: var(--secondary-color);
+            display: block;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .final-answer-math {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            margin-top: 6px;
+            display: inline-flex;
+            align-items: center;
+            letter-spacing: 0.02em;
+        }
+
+        .control-panel {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid var(--border-color);
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 14px 24px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            border-radius: 8px;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary { background-color: var(--secondary-color); color: white; }
+        .btn-primary:hover:not(:disabled) { background-color: #1d4ed8; }
+        .btn-success { background-color: var(--success-color); color: white; }
+        .btn-success:hover:not(:disabled) { background-color: #166534; }
+        .btn-secondary { background-color: var(--explanation-bg); color: var(--primary-color); border: 1px solid var(--border-color); }
+        .btn-secondary:hover:not(:disabled) { background-color: #e2e8f0; }
+
+        .btn:disabled {
+            background-color: var(--disabled-color);
+            color: #f1f5f9;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+        
+        .hint-box {
+            display: none;
+            background-color: #fef9c3;
+            border-left: 5px solid #eab308;
+            color: #713f12;
+            padding: 12px 16px;
+            border-radius: 0 6px 6px 0;
+            margin-bottom: 15px;
+            font-size: 1.05rem;
+            font-weight: 600;
+        }
+        
+        .btn-hint { background-color: #fde047; color: #713f12; }
+        .btn-hint:hover:not(:disabled) { background-color: #facc15; }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>MCF3M Unit 1 Lesson 1 &amp; 2</h1>
+        <p>Infinite Dynamic Practice Studio</p>
+        <div class="scoreboard">
+            <div>Score: <span id="hud-score">0</span></div>
+            <div>Tries: <span id="hud-attempts">0</span></div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="profile-box">
+            <label>Student Profile Setup:</label>
+            <div class="profile-grid">
+                <input type="text" id="first-name" placeholder="First name" autocomplete="off">
+                <input type="text" id="last-name" placeholder="Last name" autocomplete="off">
+            </div>
+        </div>
+
+        <div class="selector-box">
+            <label for="question-select">Practice Topic:</label>
+            <div class="control-group">
+                <select id="question-select">
+                    <option value="t1">Type 1: Greatest Common Factor (GCF) of Numbers</option>
+                    <option value="t2">Type 2: Fully Factoring Expressions using GCF</option>
+                    <option value="t3">Type 3: First and Second Differences</option>
+                    <option value="t4">Type 4: Vertical Line Test & Function Properties</option>
+                    <option value="t5">Type 5: Expanding Algebraic Expressions (Binomials)</option>
+                    <option value="t6">Type 6: Spotting the Quadratic Table</option>
+                </select>
+                <button class="btn-generate" onclick="generateNewProblem()">Generate</button>
+            </div>
+        </div>
+
+        <div class="solution-container" id="display-window">
+            <div id="placeholder" class="placeholder-text">
+                Select a topic and click "Generate" to start practicing.
+            </div>
+
+            <div id="quiz-station" class="quiz-interface-box" style="display: none;">
+                <div id="asset-viewport-mount-point" class="math-render-viewport" style="display: none;"></div>
+
+                <div id="question-statement-display" class="question-statement-card"></div>
+
+                <label id="input-prompt-label" style="margin-bottom: 12px; font-weight: 700; display: block;"></label>
+                
+                <div id="dynamic-input-mount-point" style="margin-top: 10px;"></div>
+
+                <div id="hint-box" class="hint-box"></div>
+                <div id="feedback-msg" class="feedback-msg-area"></div>
+
+                <div class="quiz-action-bar">
+                    <button class="btn btn-success" id="check-ans-btn" onclick="evaluateStudentAnswer()">Check Answer</button>
+                    <button class="btn btn-hint" id="hint-btn" onclick="toggleHint()">Hint</button>
+                    <button class="btn btn-secondary" id="reveal-sol-btn" disabled onclick="unlockSolutionPanel()">Show Solution Steps</button>
+                </div>
+            </div>
+
+            <div class="solution-reveal-window" id="solution-reveal-layer">
+                <div id="solution-workspace-injected"></div>
+                
+                <div class="control-panel" id="controls-panel">
+                    <button class="btn btn-secondary" id="restart-btn" onclick="restartSolution()">Restart Steps</button>
+                    <button class="btn btn-primary" id="next-btn" onclick="showNextStep()">Next Step &rarr;</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- mcf-core.js 는 보통 상위 폴더(index.html·progress.js 옆)에 둔다.
+         같은 폴더에 두는 경우도 있어 두 경로를 다 건다. 없는 쪽은 404 로 무시되고,
+         둘 다 있으면 두 번째는 core 내부 가드가 막는다. -->
+    <script src="../mcf-core.js"></script>
+    <script src="mcf-core.js"></script>
+    <script>
+    /* core 를 못 찾으면 Generate 가 조용히 무반응이 된다. 원인이 안 보이므로 안내를 띄운다. */
+    if (typeof MCF === "undefined") {
+      document.addEventListener("DOMContentLoaded", function () {
+        var box = document.getElementById("placeholder");
+        if (box) {
+          box.innerHTML =
+            '<strong style="color:#b91c1c">mcf-core.js \uB97C \uCC3E\uC744 \uC218 \uC5C6\uC2B5\uB2C8\uB2E4.</strong><br><br>' +
+            'This lesson needs <code>mcf-core.js</code>.<br>' +
+            'Put it next to <code>progress.js</code> and <code>index.html</code> ' +
+            '(the folder above this one), or in this same folder.';
+          box.style.display = "block";
+        }
+        var b = document.querySelector(".btn-generate");
+        if (b) b.disabled = true;
+      });
+    }
+    </script>
+    <script>
+
+        /* ── mcf-core.js 로 옮겨간 이름들의 지역 별칭 ── */
+        const randInt = MCF.randInt;
+        const gcd = MCF.gcd;
+        const gcd3 = MCF.gcd3;
+        const mcfPick = MCF.pick;
+        const mcfRich = MCF.rich;
+        const mcfShuffle = MCF.shuffle;
+        const mcfKey = MCF.key;
+        const mcfDedupe = MCF.dedupe;
+        const mcfFactorKey = MCF.factorKey;
+        const mcfUniqueByValue = MCF.uniqueByValue;
+        const mcfSpareOption = MCF.spareOption;
+        const shuffleMC = MCF.shuffleMC;
+        const M = MCF.M;
+        const Mu = MCF.Mu;
+        const fmtTerm = MCF.fmtTerm;
+        /* --- audit fix: uniform in-place shuffle (Fisher-Yates) --- */
+
+        /* --- audit fix: 같은 보기가 두 번 나오면 하나로 합친다.
+           정답과 글자가 똑같은 보기를 골랐는데 오답 처리되는 것을 막는다. --- */
+        /* Nudge one number inside an existing option to build a replacement
+           distractor. Skips digit groups that follow a thousands separator, so
+           "\\$11\\,045.96" is altered at the 11 and never left malformed.
+           Uniqueness is checked by the caller, so this can never reproduce the
+           correct answer. */
+        /* Two options can differ only in whitespace -- an empty middle term leaves
+           "4x^2  + 16" beside "4x^2 + 16" -- and MathJax renders them identically, so
+           the student sees the same card twice and only one of them scores. Compare
+           options on this normalised key, not on the raw string. */
+
+
+
+        const TEACHER_SPREADSHEET_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwygR6-l7XPRC1KL-Pqci33Yw_4pmCWa8mW7gNHJ_RsmN41ax15-d0sE-CrIxU0z22m/exec";
+
+        let globalScore = 0;
+        let globalAttempts = 0;
+        let currentProblemData = null;
+        let currentState = { answered: false, selectedMcOption: "", isCorrect: false, currentStep: 0, solRevealed: false, attempts: 0 };
+        let visibleStepElements = [];
+
+        window.onload = () => {
+            if (window.renderMathInElement) {
+                renderMathInElement(document.body, { delimiters: [{left: '$$', right: '$$', display: true}, {left: '\\(', right: '\\)', display: false}], throwOnError: false });
+            }
+        };
+
+        // --- Core Utility Functions ---
+        
+        function getFactors(n) {
+            let factors = [];
+            for (let i = 1; i <= n; i++) if (n % i === 0) factors.push(i);
+            return factors;
+        }
+
+
+        /* audit fix 2026-07-30 (round A) */
+        function mcfGcd(a, b) { a = Math.abs(a); b = Math.abs(b); while (b) { var t = b; b = a % b; a = t; } return a || 1; }
+        function mcfGcd3(a, b, c) { return mcfGcd(mcfGcd(a, b), c); }
+
+        function fmtSign(n, isFirst = false) {
+            if (n === 0) return "";
+            if (isFirst) return n < 0 ? "-" + Math.abs(n) : Math.abs(n);
+            return n < 0 ? "- " + Math.abs(n) : "+ " + Math.abs(n);
+        }
+
+        function fmtCoef(n, isFirst = false) {
+            if (n === 0) return "";
+            let abs = Math.abs(n);
+            let val = abs === 1 ? "" : abs;
+            if (isFirst) return n < 0 ? "-" + val : val;
+            return n < 0 ? "- " + val : "+ " + val;
+        }
+
+        // --- Infinite Mathematical Generators ---
+        /* --- round C 2026-07-31: 시각 자산 헬퍼 --- */
+        function mcfGridSvg(inner) {
+            let g = "";
+            for (let i = 30; i <= 270; i += 30) {
+                g += `<line x1="${i}" y1="0" x2="${i}" y2="300" stroke="#e2e8f0" stroke-width="1"/>`;
+                g += `<line x1="0" y1="${i}" x2="300" y2="${i}" stroke="#e2e8f0" stroke-width="1"/>`;
+            }
+            g += `<line x1="150" y1="0" x2="150" y2="300" stroke="#64748b" stroke-width="2"/><line x1="0" y1="150" x2="300" y2="150" stroke="#64748b" stroke-width="2"/>`;
+            return `<svg viewBox="0 0 300 300" style="width:100%;height:auto;display:block;">${g}${inner}</svg>`;
+        }
+        function mcfCard(label, inner, pct) {
+            return `<div style="background:#fff;border:1px solid #cbd5e1;border-radius:8px;padding:6px;width:${pct};box-sizing:border-box;">
+                <div style="font-weight:700;color:#334155;font-size:0.95rem;margin-bottom:3px;">${label}</div>${inner}</div>`;
+        }
+        function mcfQuad(cards) {
+            return `<div style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center;max-width:560px;margin:0 auto;">${cards.join("")}</div>`;
+        }
+        function mcfMiniTable(xs, ys) {
+            let h = "", r = "";
+            for (let i = 0; i < xs.length; i++) {
+                h += `<th style="border:1px solid #cbd5e1;padding:3px 7px;background:#f1f5f9;">${xs[i]}</th>`;
+                r += `<td style="border:1px solid #cbd5e1;padding:3px 7px;text-align:center;">${ys[i]}</td>`;
+            }
+            return `<table style="border-collapse:collapse;width:100%;font-size:0.85rem;"><tr><th style="border:1px solid #cbd5e1;padding:3px 7px;background:#f1f5f9;">x</th>${h}</tr><tr><td style="border:1px solid #cbd5e1;padding:3px 7px;font-weight:700;background:#f8fafc;">y</td>${r}</tr></table>`;
+        }
+
+        function genType1() {
+            let n1 = randInt(2, 8) * randInt(2, 6);
+            let n2 = randInt(2, 8) * randInt(2, 6);
+            while(n1 === n2 || getFactors(n1).filter(v => getFactors(n2).includes(v)).pop() === 1) {
+                n2 = randInt(2, 8) * randInt(2, 6); 
+            }
+            
+            let f1 = getFactors(n1), f2 = getFactors(n2);
+            let shared = f1.filter(v => f2.includes(v));
+            let gcf = shared[shared.length - 1];
+
+            let dist = [gcf, gcf+1, Math.max(1, gcf-1), gcf*2, shared.length > 1 ? shared[0] : gcf+3];
+            let mc = shuffleMC(dist.map(String), String(gcf));
+
+            return {
+                title: "Type 1: GCF", type: "mc", assetType: "none",
+                fullStatement: mcfPick([`Find the Greatest Common Factor (GCF) of ${n1} and ${n2}.`, `What is the largest number that divides into both ${n1} and ${n2}?`, `${n1} and ${n2} share several factors. Which one is the biggest?`]),
+                prompt: "Pick the GCF:", options: mc.options, hint: "Write out every number that divides into each one. Then find the biggest number that appears on both lists.",
+                steps: [
+                    { title: "Step 1: Sort Out What the Question Is Asking For",
+                      math: `\\text{Factors of } ${n1} \\text{ and factors of } ${n2}`,
+                      explanation: `A factor is a number that divides in with nothing left over. You need one that divides into both ${n1} and ${n2}. Out of all the numbers that do that, the question wants the biggest one.` },
+                    { title: `Step 2: List every factor of ${n1}`,
+                      math: `${n1} \\Rightarrow ${f1.join(', ')}`,
+                      explanation: `Start at 1 and work upward, keeping every number that divides into ${n1} evenly. That gives ${MCF.M(f1.join(', '))}. Working in order stops you from missing one.` },
+                    { title: `Step 3: List every factor of ${n2}`,
+                      math: `${n2} \\Rightarrow ${f2.join(', ')}`,
+                      explanation: `Do exactly the same thing for ${n2}, which gives ${MCF.M(f2.join(', '))}. Take your time here. A missed factor is the usual reason this question goes wrong.` },
+                    { title: "Step 4: Circle the numbers on both lists",
+                      math: `\\text{Shared} = \\{${shared.join(', ')}\\}`,
+                      explanation: `Compare the two lists and keep only the numbers that appear on both. Here that is ${MCF.M(shared.join(', '))}. These are the common factors, but you are not finished yet.` },
+                    { title: "Step 5: Take the largest one",
+                      math: `\\text{GCF} = ${gcf}`,
+                      explanation: `The biggest number on the shared list is ${MCF.M(gcf)}, so that is the GCF. Trap: stopping at the first shared number you notice instead of the largest one.` }
+                ], ans: mc.ans
+            };
+        }
+
+        function genType2() {
+            /* audit fix 2026-07-30 (round A): 남은 세 계수에 다시 공약수가 있으면
+               gcfNum 이 진짜 GCF가 아니라, "완전히 인수분해" 정답이 아니게 된다
+               (예: 30xy - 12x^2y + 12x 를 6x(...) 로 뽑아도 안쪽에 2가 남는 경우).
+               안쪽 계수들의 최대공약수가 1이 될 때까지 다시 뽑는다. */
+            let gcfNum, c1, c2, c3, k1, k2, k3;
+            do {
+                gcfNum = randInt(2, 6);
+                k1 = randInt(2, 5); k2 = randInt(1, 4); k3 = randInt(1, 5);
+            } while (mcfGcd3(k1, k2, k3) > 1);
+            c1 = gcfNum * k1;
+            c2 = -1 * gcfNum * k2;
+            c3 = gcfNum * k3;
+            
+            let varSets = [['x','y'], ['a','b'], ['m','n']];
+            let v = varSets[randInt(0, 2)];
+            let v1 = v[0], v2 = v[1];
+
+            let exp = `${c1}${v1}${v2} ${fmtCoef(c2)}${v1}^2${v2} ${fmtSign(c3)}${v1}`;
+            
+            let i1 = c1 / gcfNum;
+            let i2 = c2 / gcfNum;
+            let i3 = c3 / gcfNum;
+            let correctAns = `${gcfNum}${v1}(${i1}${v2} ${fmtCoef(i2)}${v1}${v2} ${fmtSign(i3)})`;
+            
+            let dist1 = `${gcfNum}(${i1}${v1}${v2} ${fmtCoef(i2)}${v1}^2${v2} ${fmtCoef(i3)}${v1})`;
+            let dist2 = `${gcfNum}${v1}${v2}(${i1} ${fmtCoef(i2)}${v1} ${fmtSign(i3)})`;
+            let dist3 = `${gcfNum + 1}${v1}(${i1}${v2} ${fmtCoef(i2)}${v1}${v2} ${fmtSign(i3)})`;
+
+            let mc = shuffleMC([correctAns, dist1, dist2, dist3], correctAns);
+
+            return {
+                title: "Type 2: Factoring", type: "mc", assetType: "none",
+                fullStatement: mcfPick(["Fully factor", "Take out the greatest common factor", "Write this in factored form"]) + `: \\(${exp}\\)`, prompt: "Pick the fully factored form:",
+                options: mc.options, hint: `Find the GCF of the numbers (${c1}, ${Math.abs(c2)}, ${c3}) and the variable that is in every term.`,
+                steps: [
+                    { title: "Step 1: Decide What Can Come Out Front",
+                      math: `${exp}`,
+                      explanation: `Something can only come out front if it sits in every single term. So check the numbers first, then check each letter one at a time. Anything missing from even one term has to stay.` },
+                    { title: "Step 2: Start with the numbers",
+                      math: `\\text{GCF}(${c1}, ${Math.abs(c2)}, ${c3}) = ${gcfNum}`,
+                      explanation: `Find the biggest whole number that divides into ${c1}, ${Math.abs(c2)} and ${c3} with nothing left over. That number is ${MCF.M(gcfNum)}, so it comes out front.` },
+                    { title: `Step 3: Check the letter ${v1}`,
+                      math: `${v1}^1, ${v1}^2, ${v1}^1 \\Rightarrow ${v1}`,
+                      explanation: `Every term has at least one ${MCF.M(v1)} in it, so ${MCF.M(v1)} comes out too. Always take the smallest power you can see across the terms, not the biggest.` },
+                    { title: `Step 4: Check the letter ${v2}`,
+                      math: `\\text{Last term has no } ${v2}`,
+                      explanation: `The last term has no ${MCF.M(v2)} at all, so ${MCF.M(v2)} cannot come out. Trap: pulling out a letter that only shows up in two of the three terms.` },
+                    { title: "Step 5: Put the GCF together",
+                      math: `\\text{GCF} = ${gcfNum}${v1}`,
+                      explanation: `Join the number and the letter you kept, which gives ${MCF.M(gcfNum + v1)}. That whole thing is what goes out in front of the brackets.` },
+                    { title: "Step 6: Divide each term by the GCF",
+                      math: `\\frac{${c1}${v1}${v2}}{${gcfNum}${v1}}=${i1}${v2}, \\quad \\frac{${c2}${v1}^2${v2}}{${gcfNum}${v1}}=${fmtCoef(i2, true)}${v1}${v2}, \\quad \\frac{${c3}${v1}}{${gcfNum}${v1}}=${i3}`,
+                      explanation: `Divide all three terms by ${MCF.M(gcfNum + v1)} and whatever is left goes inside the brackets. Keep the signs exactly as they were. Trap: dropping a term that divides down to 1.` },
+                    { title: "Step 7: Write your answer and check it",
+                      math: correctAns,
+                      explanation: `Put ${MCF.M(gcfNum + v1)} out front and the leftovers inside the brackets. Multiply it back out to make sure you land on the original expression.` }
+                ], ans: mc.ans
+            };
+        }
+
+        function genType3() {
+            let type = randInt(0, 2); 
+            let yVals = [], d1 = [], d2 = [];
+            let xVals = [-2, -1, 0, 1, 2];
+            
+            if (type === 0) { 
+                let m = randInt(2, 5) * (Math.random() < 0.5 ? 1 : -1);
+                let b = randInt(-3, 3);
+                xVals.forEach(x => yVals.push(m*x + b));
+            } else if (type === 1) { 
+                let a = randInt(1, 3);
+                let c = randInt(-2, 2);
+                xVals.forEach(x => yVals.push(a*x*x + c));
+            } else { 
+                let a = randInt(1, 3);
+                xVals.forEach(x => yVals.push(a * Math.pow(2, x + 2))); 
+            }
+
+            for(let i=0; i<4; i++) d1.push(yVals[i+1] - yVals[i]);
+            for(let i=0; i<3; i++) d2.push(d1[i+1] - d1[i]);
+
+            let isD1Const = d1.every(v => v === d1[0]);
+            let isD2Const = d2.every(v => v === d2[0]);
+            let ansStr = isD1Const ? "Linear" : (isD2Const ? "Quadratic" : "Neither");
+            
+            let mc = shuffleMC(["Linear", "Quadratic", "Neither", "Cubic"], ansStr);
+            // audit fix: 4 real options, answer always present
+
+            let tableHtml = `<table class="math-tov"><tr><th>x</th><th>y</th></tr>` + 
+                xVals.map((x, i) => `<tr><td>${x}</td><td>${yVals[i]}</td></tr>`).join('') + `</table>`;
+
+            return {
+                title: "Type 3: Differences", type: "mc", assetType: "tov",
+                fullStatement: mcfPick([
+                    "Use first and second differences to decide if this table is linear, quadratic, or neither.",
+                    "Look at the differences in this table. Is the relation linear, quadratic, or neither?",
+                    "Work out the differences for this table, then say which type of relation it is."
+                ]),
+                assetHtml: tableHtml, prompt: "Pick the type:", options: mc.options, 
+                hint: "Take each y-value away from the one below it. If those answers are all equal it is linear. If not, do it again to those answers.",
+                steps: [
+                    { title: "Step 1: Decide Which Test to Run First",
+                      math: `\\text{First differences, then second if needed}`,
+                      explanation: `You cannot tell the type just by looking at the y-values. Always take first differences first. Only if those come out uneven do you go on to second differences. Doing it in that order saves work on linear tables.` },
+                    { title: "Step 2: Work out the first differences",
+                      math: `${yVals[1]} - (${yVals[0]}) = ${d1[0]}, \\quad ${yVals[2]} - (${yVals[1]}) = ${d1[1]} \\dots`,
+                      explanation: `Take each y-value away from the one below it, all the way down the table. Here that gives ${MCF.M(d1.join(', '))}. Trap: subtracting the wrong way round. It is always the lower value minus the one above it.` },
+                    { title: "Step 3: Are those first differences all equal?",
+                      math: `\\text{First} = \\{${d1.join(', ')}\\}`,
+                      explanation: isD1Const
+                        ? `They all come out the same, ${MCF.M(d1[0])}. Equal first differences mean the relation climbs by the same amount each step, and that is what linear means.`
+                        : `They are ${MCF.M(d1.join(', '))}, which are not all equal. So it is not linear. Now run the same subtraction on these numbers.` },
+                    { title: "Step 4: Work out the second differences",
+                      math: isD1Const ? `\\text{Not needed}` : `${d1[1]} - (${d1[0]}) = ${d2[0]}, \\quad ${d1[2]} - (${d1[1]}) = ${d2[1]} \\dots`,
+                      explanation: isD1Const
+                        ? `The first differences already matched, so you can stop here. Going further would just tell you the same thing a second time.`
+                        : `Do the subtraction again, but this time on the first differences instead of the y-values. That is all a second difference is. Line the numbers up carefully so you do not lose track of which row you are on.` },
+                    { title: "Step 5: Are those second differences all equal?",
+                      math: isD1Const ? `\\text{Not needed}` : `\\text{Second} = \\{${d2.join(', ')}\\}`,
+                      explanation: isD1Const
+                        ? `Nothing left to check. The first differences already gave you the answer, so the second row does not matter.`
+                        : (isD2Const
+                          ? `They all come out as ${MCF.M(d2[0])}. Equal second differences are exactly what a quadratic relation does, every time.`
+                          : `These are ${MCF.M(d2.join(', '))}, still not equal. Neither test came out even, so it is neither linear nor quadratic.`) },
+                    { title: "Step 6: Write down the answer",
+                      math: `\\text{Relation Type} = \\text{${ansStr}}`,
+                      explanation: `${isD1Const ? "Equal first differences mean linear." : (isD2Const ? "Equal second differences mean quadratic." : "Neither row came out equal.")} So this relation is ${ansStr}. Trap: calling it quadratic without ever checking the first differences.` }
+                ], ans: mc.ans
+            };
+        }
+
+        function genType4() {
+            /* round C 2026-07-31: 예/아니오 2지선다(찍으면 50%)를 그래프 4개 중
+               고르는 문제로 바꿨다. Unit 2 와 같이 방향도 절반씩 뒤집되,
+               지시문과 풀이가 반드시 방향을 따라가게 한다. */
+            const color = "#2563eb";
+            const funcPaths = [
+                `<path d="M 30 270 Q 150 -100 270 270" fill="none" stroke="${color}" stroke-width="4"/>`,
+                `<path d="M 30 250 L 270 50" fill="none" stroke="${color}" stroke-width="4"/>`,
+                `<path d="M 30 250 C 150 250 150 50 270 50" fill="none" stroke="${color}" stroke-width="4"/>`,
+                `<path d="M 0 150 Q 75 50 150 150 T 300 150" fill="none" stroke="${color}" stroke-width="4"/>`,
+                `<path d="M 30 60 L 270 240" fill="none" stroke="${color}" stroke-width="4"/>`,
+                `<path d="M 30 40 Q 150 400 270 40" fill="none" stroke="${color}" stroke-width="4"/>`
+            ];
+            const nonFuncPaths = [
+                `<circle cx="150" cy="150" r="90" fill="none" stroke="${color}" stroke-width="4"/>`,
+                `<path d="M 250 30 Q -50 150 250 270" fill="none" stroke="${color}" stroke-width="4"/>`,
+                `<ellipse cx="150" cy="150" rx="60" ry="110" fill="none" stroke="${color}" stroke-width="4"/>`,
+                `<path d="M 200 50 C 50 50 50 250 200 250 C 350 250 350 150 150 150" fill="none" stroke="${color}" stroke-width="4"/>`,
+                `<line x1="150" y1="20" x2="150" y2="280" stroke="${color}" stroke-width="4"/>`,
+                `<path d="M 50 30 Q 350 150 50 270" fill="none" stroke="${color}" stroke-width="4"/>`
+            ];
+            const askNot = Math.random() > 0.5;
+            const F = mcfShuffle(funcPaths.slice());
+            const N = mcfShuffle(nonFuncPaths.slice());
+            /* 정답은 항상 배열의 마지막 자리에 두고, 카드 순서를 섞어 위치를 바꾼다 */
+            const picked = askNot ? [F[0], F[1], F[2], N[0]] : [N[0], N[1], N[2], F[0]];
+            const letters = ["A", "B", "C", "D"];
+            const order = mcfShuffle([0, 1, 2, 3]);
+            let cards = [], ansLetter = "A";
+            for (let pos = 0; pos < 4; pos++) {
+                const idx = order[pos];
+                cards.push(mcfCard("Graph " + letters[pos], mcfGridSvg(picked[idx]), "47%"));
+                if (idx === 3) ansLetter = letters[pos];
+            }
+            const options = letters.map(L => `${L}) Graph ${L}`);
+
+            return {
+                title: "Type 4: Vertical Line Test", type: "mc", assetType: "custom",
+                fullStatement: askNot
+                    ? "Four graphs are drawn below. Which one is <strong>NOT</strong> a function?"
+                    : "Four graphs are drawn below. Which one <strong>IS</strong> a function?",
+                assetHtml: mcfQuad(cards),
+                prompt: askNot ? "Pick the graph that is NOT a function:" : "Pick the graph that IS a function:",
+                options: options,
+                hint: "Picture sliding a straight up-and-down line across each grid. Does it ever touch the curve in two places at the same time?",
+                steps: [
+                    { title: "Step 1: Decide What Would Break the Rule",
+                      math: `\\text{One } x \\text{ value may have only one } y \\text{ value}`,
+                      explanation: `A relation stops being a function the moment one x-value has two different y-values. On a graph that shows up as two points sitting directly above each other.` },
+                    { title: "Step 2: Slide a vertical line across each graph",
+                      math: `\\text{At most one crossing per vertical line}`,
+                      explanation: `Picture a straight up-and-down line sweeping left to right across a graph. If it ever touches the curve in two places at once, that graph is not a function.` },
+                    { title: "Step 3: Check the graphs one at a time",
+                      math: `\\text{Visual check}`,
+                      explanation: askNot
+                        ? `Three of these pass the sweep with only one crossing everywhere. One of them gets hit twice somewhere, and that is the one the question wants.`
+                        : `Three of these get crossed twice somewhere along the sweep, so they fail. Only one survives with a single crossing the whole way across.` },
+                    { title: "Step 4: Give your answer",
+                      math: `\\text{Answer} = \\text{Graph ${ansLetter}}`,
+                      explanation: askNot
+                        ? `Graph ${ansLetter} is the one a vertical line can cut twice, so it is not a function. Trap: reading the question as "which one IS a function" when it asks the opposite.`
+                        : `Graph ${ansLetter} is never cut twice by any vertical line, so it is the function. Trap: picking a graph just because it looks tidy or symmetric.` }
+                ], ans: ansLetter
+            };
+        }
+
+        function genType5() {
+            let isDiffSquares = (randInt(1, 3) === 3); 
+            let a = randInt(2, 5), b = randInt(1, 6), c = randInt(2, 5), d = randInt(1, 6);
+            if (isDiffSquares) { c = a; d = -b; } else { if (Math.random() > 0.5) b = -b; if (Math.random() > 0.5) d = -d; }
+
+            let f = a * c, o = a * d, i = b * c, l = b * d;
+            let mid = o + i;
+            /* audit fix 2026-07-30 (round A): 계수가 0이면 fmtCoef 가 "" 를 돌려주는데
+               뒤의 x 는 그대로 찍혀서 "16x^2 x - 4" 같은 깨진 보기가 나왔다(35.5%).
+               계수가 0이면 x 항 전체를 없앤다. */
+            const fmtXTerm = (n) => (n === 0 ? "" : `${fmtCoef(n)}x`);
+            /* isDiffSquares 가 아니어도 중간항이 우연히 0이 될 수 있고, 그때는
+               차의 제곱 꼴과 똑같아지므로 오답도 같은 규칙으로 만든다. */
+            const noMid = (mid === 0);
+            let expForm = noMid ? `${f}x^2 ${fmtSign(l)}` : `${f}x^2 ${fmtXTerm(mid)} ${fmtSign(l)}`;
+
+            let dist1 = `${f}x^2 ${fmtSign(l)}`;
+            let dist2 = `${f}x^2 ${fmtXTerm(-mid)} ${fmtSign(l)}`;
+            let dist3 = `${f+c}x^2 ${fmtXTerm(mid)} ${fmtSign(l+1)}`;
+            if (noMid) {
+                dist1 = `${f}x^2 ${fmtXTerm(mid + 1)} ${fmtSign(l)}`;
+                dist2 = `${f}x^2 ${fmtXTerm(mid - 1)} ${fmtSign(l)}`;
+            }
+
+            let mc = shuffleMC([expForm, dist1, dist2, dist3], expForm);
+
+            return {
+                title: "Type 5: Expanding Binomials", type: "mc", assetType: "none",
+                fullStatement: mcfPick(["Expand", "Multiply out", "Write without brackets"]) + `: \\((${fmtCoef(a, true)}x ${fmtSign(b)})(${fmtCoef(c, true)}x ${fmtSign(d)})\\)`,
+                prompt: "Pick the expanded form:", options: mc.options, hint: "Use FOIL: First, Outer, Inner, Last. That gives four answers, then add the two middle x terms together.",
+                steps: [
+                    { title: "Step 1: Work Out How Many Products You Need",
+                      math: `(${a}x ${fmtSign(b)})(${c}x ${fmtSign(d)})`,
+                      explanation: `Each term in the first bracket has to meet each term in the second. Two times two gives four products. FOIL is just a way to keep track of those four.` },
+                    { title: "Step 2: First parts",
+                      math: `(${a}x) \\times (${c}x) = ${f}x^2`,
+                      explanation: `Multiply the first term of each bracket, so ${MCF.M(a + "x")} times ${MCF.M(c + "x")}. That gives ${MCF.M(f + "x^2")}, because x times x makes x squared. This is the only term with an x squared in it.` },
+                    { title: "Step 3: Outer parts",
+                      math: `(${a}x) \\times (${d}) = ${fmtCoef(o, true)}x`,
+                      explanation: `Now the two on the outside, ${MCF.M(a + "x")} and ${MCF.M(d)}. Keep the sign attached to ${MCF.M(d)}. Trap: dropping a minus sign here is the most common slip in this question.` },
+                    { title: "Step 4: Inner parts",
+                      math: `(${b}) \\times (${c}x) = ${fmtCoef(i, true)}x`,
+                      explanation: `Next the two sitting next to each other in the middle, ${MCF.M(b)} and ${MCF.M(c + "x")}. That gives ${MCF.M(fmtCoef(i, true) + "x")}. Both middle products end up as plain x terms, which matters in the last step.` },
+                    { title: "Step 5: Last parts",
+                      math: `(${b}) \\times (${d}) = ${l}`,
+                      explanation: `Finally the last term inside each bracket, ${MCF.M(b)} times ${MCF.M(d)}, which comes to ${MCF.M(l)}. Two negatives here would make a positive.` },
+                    { title: "Step 6: Add the two middle terms",
+                      math: noMid
+                        ? `${fmtCoef(o, true)}x ${fmtCoef(i)}x = 0 \\Rightarrow ${expForm}`
+                        : `${fmtCoef(o, true)}x ${fmtCoef(i)}x = ${fmtCoef(mid, true)}x \\Rightarrow ${expForm}`,
+                      explanation: noMid
+                        ? `The two middle terms cancel each other out completely, so no x term survives. That is exactly why this shape is called a difference of squares.`
+                        : `Only the two middle terms can be combined, because both are plain x terms. Adding them gives ${MCF.M(fmtCoef(mid, true) + "x")} and the expansion is finished.` }
+                ], ans: mc.ans
+            };
+        }
+
+        function genType6() {
+            /* round C 2026-07-31: 표 자산을 4개 보기로 확장. 1차 차분이 일정하면
+               선형, 1차는 변하고 2차가 일정하면 이차 - 그 구분을 직접 시키는 문제. */
+            const xs = [1, 2, 3, 4, 5];
+            const qa = randInt(1, 3), qb = randInt(-3, 3), qc = randInt(-4, 6);
+            const quad = xs.map(x => qa * x * x + qb * x + qc);
+            const lm = randInt(2, 7) * (Math.random() > 0.5 ? 1 : -1), lb = randInt(-5, 5);
+            const lin = xs.map(x => lm * x + lb);
+            const cb = randInt(1, 2), cc0 = randInt(-3, 3);
+            const cub = xs.map(x => cb * x * x * x + cc0);
+            const eb = randInt(2, 3), ea = randInt(1, 3);
+            const exp = xs.map(x => ea * Math.pow(eb, x));
+
+            const kinds = [
+                { ys: quad, key: "quad" },
+                { ys: lin, key: "lin" },
+                { ys: cub, key: "cub" },
+                { ys: exp, key: "exp" }
+            ];
+            const letters = ["A", "B", "C", "D"];
+            const order = mcfShuffle([0, 1, 2, 3]);
+            let cards = [], ansLetter = "A";
+            for (let pos = 0; pos < 4; pos++) {
+                const k = kinds[order[pos]];
+                cards.push(mcfCard("Table " + letters[pos], mcfMiniTable(xs, k.ys), "47%"));
+                if (k.key === "quad") ansLetter = letters[pos];
+            }
+            const d1 = [], d2 = [];
+            for (let i = 1; i < quad.length; i++) d1.push(quad[i] - quad[i - 1]);
+            for (let i = 1; i < d1.length; i++) d2.push(d1[i] - d1[i - 1]);
+
+            return {
+                title: "Type 6: Spotting the Quadratic Table", type: "mc", assetType: "custom",
+                fullStatement: mcfPick([
+                    "Four tables of values are shown below. Which one shows a <strong>quadratic</strong> relation?",
+                    "Only one of these four tables is <strong>quadratic</strong>. Which one is it?",
+                    "Check the differences in each table below. Which table is <strong>quadratic</strong>?"
+                ]),
+                assetHtml: mcfQuad(cards),
+                prompt: "Pick the quadratic table:",
+                options: letters.map(L => `${L}) Table ${L}`),
+                hint: "Work out the first differences for each table. If they are all equal it is linear, not quadratic. If not, do it again to those answers.",
+                steps: [
+                    { title: "Step 1: Decide What a Quadratic Table Looks Like",
+                      math: `\\text{First differences uneven, second differences equal}`,
+                      explanation: `A linear table has equal first differences. A quadratic table does not, but its second differences come out equal. So you need both rows before you can decide.` },
+                    { title: "Step 2: Take first differences on every table",
+                      math: `\\text{First differences} = y_2 - y_1,\\; y_3 - y_2,\\; \\dots`,
+                      explanation: `Work one table at a time and subtract each y-value from the one below it. Doing all four before you judge any of them stops you from guessing early.` },
+                    { title: "Step 3: Rule out the linear table",
+                      math: `\\text{Equal first differences} \\Rightarrow \\text{linear}`,
+                      explanation: `One table has first differences that are all identical. That one is linear, so cross it off. Trap: picking it because equal numbers look like the tidy answer.` },
+                    { title: "Step 4: Take second differences on what is left",
+                      math: `\\text{First} = \\{${d1.join(", ")}\\} \\Rightarrow \\text{Second} = \\{${d2.join(", ")}\\}`,
+                      explanation: `Run the same subtraction again on the first differences. For the quadratic table these come out as ${MCF.M(d2.join(", "))}, all the same value.` },
+                    { title: "Step 5: Give your answer",
+                      math: `\\text{Answer} = \\text{Table ${ansLetter}}`,
+                      explanation: `Table ${ansLetter} has first differences that keep changing but second differences that are all equal. That pattern only happens for a quadratic relation.` }
+                ], ans: ansLetter
+            };
+        }
+
+        // --- Core Execution ---
+
+
+
+
+
+
+
+
+
+
+    
+
+        /* 진입점. DOM 을 건드리지 않는 순수 함수라 그대로 테스트할 수 있다. */
+        const GENERATORS = { t1: genType1, t2: genType2, t3: genType3, t4: genType4, t5: genType5, t6: genType6 };
+        function generateProblem(typeId) {
+          const f = GENERATORS[typeId];
+          return f ? f() : null;
+        }
+
+        MCF.init({ generate: generateProblem,
+                   logUrl: (typeof TEACHER_SPREADSHEET_SCRIPT_URL !== "undefined" ? TEACHER_SPREADSHEET_SCRIPT_URL : null),
+                   unitId: "Unit_1", lessonId: "Lesson_1_and_2" });
+</script>
+    <script src="../progress.js"></script>
+</body>
+</html>

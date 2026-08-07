@@ -1,0 +1,1081 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCF3M Unit 1 Lesson 4 Practice Studio</title>
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+
+    <!-- mcf-core.js 가 그리는 요소들의 기본 스타일. 아래 <style> 보다 먼저 와야
+         파일 고유 스타일이 이기고, 빠진 클래스만 여기서 메워진다.
+         폴더 위치를 몰라도 되게 두 경로를 다 건다(없는 쪽은 404 로 무시). -->
+    <link rel="stylesheet" href="../mcf-core.css">
+    <link rel="stylesheet" href="mcf-core.css">
+    <style>
+        :root {
+            --primary-color: #0f172a;
+            --secondary-color: #2563eb;
+            --disabled-color: #94a3b8;
+            --text-color: #334155;
+            --math-color: #000000;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --border-color: #cbd5e1;
+            --highlight-bg: #eff6ff;
+            --explanation-bg: #f1f5f9;
+            --rule-bg: #fef08a;
+            --rule-text: #713f12;
+            --matrix-bg: #f8fafc;
+            --success-color: #16a34a;
+            --error-color: #dc2626;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.8;
+            margin: 0;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: -0.025em;
+        }
+
+        .scoreboard {
+            background-color: #1e293b;
+            color: white;
+            display: inline-flex;
+            gap: 20px;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-weight: 700;
+            margin-top: 15px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.2);
+        }
+
+        .scoreboard span {
+            color: #60a5fa;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .profile-box, .selector-box {
+            background-color: var(--card-bg);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-color);
+            margin-bottom: 25px;
+        }
+
+        .profile-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .profile-grid input {
+            width: 100%;
+            padding: 12px;
+            font-size: 1rem;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        .profile-grid input:focus {
+            border-color: var(--secondary-color);
+        }
+
+        label {
+            display: block;
+            font-weight: 700;
+            color: var(--primary-color);
+            font-size: 1.1rem;
+            margin-bottom: 12px;
+        }
+
+        .control-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        select {
+            flex: 1;
+            padding: 16px;
+            font-size: 1.1rem;
+            font-family: inherit;
+            border-radius: 8px;
+            border: 2px solid var(--border-color);
+            background-color: white;
+            color: var(--primary-color);
+            outline: none;
+            cursor: pointer;
+        }
+
+        .btn-generate {
+            padding: 16px 24px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .btn-generate:hover {
+            background-color: #1e293b;
+        }
+
+        .method-toggle-container {
+            display: none;
+            background-color: #e2e8f0;
+            padding: 6px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            gap: 8px;
+        }
+
+        .method-btn {
+            flex: 1;
+            padding: 12px;
+            font-size: 1rem;
+            font-weight: 700;
+            border: none;
+            background: transparent;
+            color: var(--text-color);
+            cursor: pointer;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .method-btn.active {
+            background-color: var(--secondary-color);
+            color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .solution-container {
+            background-color: var(--card-bg);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-color);
+            min-height: 200px;
+        }
+
+        .placeholder-text {
+            color: #64748b;
+            text-align: center;
+            font-style: italic;
+            padding: 60px 0;
+            font-size: 1.1rem;
+        }
+
+        .quiz-interface-box {
+            background-color: var(--explanation-bg);
+            border: 1px solid var(--border-color);
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+
+        .question-statement-card {
+            background: #ffffff;
+            border-left: 4px solid var(--secondary-color);
+            padding: 16px 20px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            border-radius: 0 6px 6px 0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .math-render-viewport {
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+        }
+
+        .mc-options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 10px;
+        }
+
+        .mc-option-card {
+            background: white;
+            border: 2px solid var(--border-color);
+            padding: 14px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1.05rem;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .mc-option-card:hover:not(.disabled) {
+            border-color: var(--secondary-color);
+            background-color: var(--highlight-bg);
+        }
+
+        .mc-option-card.selected {
+            border-color: var(--secondary-color);
+            background-color: #dbeafe;
+            color: #1e40af;
+        }
+
+        .mc-option-card.disabled {
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .mc-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background-color: #e2e8f0;
+            color: var(--primary-color);
+            font-weight: 800;
+            font-size: 0.9rem;
+        }
+
+        .mc-option-card.selected .mc-badge {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+
+        .feedback-msg-area {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            display: none;
+            padding: 10px 15px;
+            border-radius: 6px;
+        }
+
+        .feedback-success {
+            background-color: #dcfce7;
+            color: var(--success-color);
+            border-left: 5px solid var(--success-color);
+        }
+
+        .feedback-error {
+            background-color: #fee2e2;
+            color: var(--error-color);
+            border-left: 5px solid var(--error-color);
+        }
+
+        .quiz-action-bar {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .solution-reveal-window {
+            display: none;
+            border-top: 3px double var(--border-color);
+            margin-top: 30px;
+            padding-top: 30px;
+        }
+
+        .step-block {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e2e8f0;
+            display: none;
+        }
+
+        .step-title {
+            font-weight: 800;
+            color: var(--secondary-color);
+            display: block;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 8px;
+        }
+
+        .step-math {
+            font-size: 1.3rem;
+            font-weight: 700;
+            background-color: var(--explanation-bg);
+            padding: 14px 20px;
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin: 8px 0;
+            color: var(--math-color);
+            letter-spacing: 0.02em;
+            flex-wrap: wrap;
+        }
+
+        .criss-cross-box {
+            display: block;
+            background-color: var(--matrix-bg);
+            border: 2px dashed var(--border-color);
+            border-radius: 10px;
+            padding: 24px;
+            margin: 12px 0;
+            max-width: 500px;
+        }
+
+        .matrix-grid {
+            display: grid;
+            grid-template-columns: 1fr 80px 1fr 40px 1.2fr;
+            align-items: center;
+            text-align: center;
+            font-weight: 700;
+            font-size: 1.3rem;
+            row-gap: 10px;
+        }
+
+        .svg-intersection-container {
+            grid-row: span 2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 80px;
+            width: 80px;
+            user-select: none;
+        }
+
+        .grid-arrow-label {
+            font-size: 1.3rem;
+            color: var(--disabled-color);
+        }
+
+        .matrix-total-line {
+            grid-column: 1 / -1;
+            border-top: 2px solid var(--border-color);
+            margin-top: 12px;
+            padding-top: 12px;
+            text-align: left;
+            font-size: 1.15rem;
+            color: var(--primary-color);
+        }
+
+        .step-explanation {
+            display: block;
+            font-size: 1.05rem;
+            color: #334155;
+            margin-top: 6px;
+        }
+
+        .math-rule {
+            background-color: var(--rule-bg);
+            color: var(--rule-text);
+            padding: 12px 16px;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            margin: 10px 0;
+            display: block;
+            border-left: 4px solid #eab308;
+        }
+
+        .final-answer-box {
+            background-color: var(--highlight-bg);
+            border-left: 6px solid var(--secondary-color);
+            padding: 20px 25px;
+            border-radius: 0 8px 8px 0;
+            margin-top: 30px;
+            display: none;
+        }
+
+        .final-answer-label {
+            font-weight: 800;
+            color: var(--secondary-color);
+            display: block;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .final-answer-math {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            margin-top: 6px;
+            display: inline-flex;
+            align-items: center;
+            letter-spacing: 0.02em;
+        }
+
+        .control-panel {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid var(--border-color);
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 14px 24px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            border-radius: 8px;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary { background-color: var(--secondary-color); color: white; }
+        .btn-primary:hover:not(:disabled) { background-color: #1d4ed8; }
+        .btn-success { background-color: var(--success-color); color: white; }
+        .btn-success:hover:not(:disabled) { background-color: #166534; }
+        .btn-secondary { background-color: var(--explanation-bg); color: var(--primary-color); border: 1px solid var(--border-color); }
+        .btn-secondary:hover:not(:disabled) { background-color: #e2e8f0; }
+
+        .btn:disabled {
+            background-color: var(--disabled-color);
+            color: #f1f5f9;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+        .hint-box {
+            display: none;
+            background-color: #fef9c3;
+            border-left: 5px solid #eab308;
+            color: #713f12;
+            padding: 12px 16px;
+            border-radius: 0 6px 6px 0;
+            margin-bottom: 15px;
+            font-size: 1.05rem;
+            font-weight: 600;
+        }
+        .btn-hint { background-color: #fde047; color: #713f12; }
+        .btn-hint:hover:not(:disabled) { background-color: #facc15; }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>MCF3M Unit 1 Lesson 4</h1>
+        <p>Infinite Comprehensive Trinomial Factoring Studio</p>
+        <div class="scoreboard">
+            <div>Score: <span id="hud-score">0</span></div>
+            <div>Tries: <span id="hud-attempts">0</span></div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="profile-box">
+            <label>Student Profile Setup:</label>
+            <div class="profile-grid">
+                <input type="text" id="first-name" placeholder="First name" autocomplete="off">
+                <input type="text" id="last-name" placeholder="Last name" autocomplete="off">
+            </div>
+        </div>
+
+        <div class="selector-box">
+            <label for="question-select">Factoring Target Menu:</label>
+            <div class="control-group">
+                <select id="question-select">
+                    <option value="t1">Type 1: Determine Two Numbers (Multiply/Add)</option>
+                    <option value="t2">Type 2: Trinomial Factoring (a = 1)</option>
+                    <option value="t3">Type 3: Trinomial Factoring (a > 1)</option>
+                    <option value="t4">Type 4: GCF Extraction + Trinomial Factoring</option>
+                    <option value="t5">Type 5: Rectangle Area Modeling</option>
+                </select>
+                <button class="btn-generate" onclick="generateNewProblem()">Generate</button>
+            </div>
+        </div>
+
+        <div class="solution-container" id="display-window">
+            <div id="placeholder" class="placeholder-text">
+                Select a topic and click "Generate" to start practicing.
+            </div>
+
+            <div id="quiz-station" class="quiz-interface-box" style="display: none;">
+                <div id="asset-viewport-mount-point" class="math-render-viewport" style="display: none;"></div>
+
+                <div id="question-statement-display" class="question-statement-card"></div>
+
+                <label id="input-prompt-label" style="margin-bottom: 12px; font-weight: 700; display: block;"></label>
+                
+                <div id="dynamic-input-mount-point" style="margin-top: 10px;"></div>
+
+                <div id="hint-box" class="hint-box"></div>
+                <div id="feedback-msg" class="feedback-msg-area"></div>
+
+                <div class="quiz-action-bar">
+                    <button class="btn btn-success" id="check-ans-btn" onclick="evaluateStudentAnswer()">Check Answer</button>
+                    <button class="btn btn-hint" id="hint-btn" onclick="toggleHint()">Hint</button>
+                    <button class="btn btn-secondary" id="reveal-sol-btn" disabled onclick="unlockSolutionPanel()">Show Solution Steps</button>
+                </div>
+            </div>
+
+            <div class="method-toggle-container" id="method-toggle-bar"></div>
+
+            <div class="solution-reveal-window" id="solution-reveal-layer">
+                <div id="solution-workspace-injected"></div>
+                
+                <div class="control-panel" id="controls-panel">
+                    <button class="btn btn-secondary" id="restart-btn" onclick="restartSolution()">Restart Steps</button>
+                    <button class="btn btn-primary" id="next-btn" onclick="showNextStep()">Next Step &rarr;</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- mcf-core.js 는 보통 상위 폴더(index.html·progress.js 옆)에 둔다.
+         같은 폴더에 두는 경우도 있어 두 경로를 다 건다. 없는 쪽은 404 로 그냥 무시되고,
+         둘 다 있으면 두 번째는 core 내부 가드가 막는다. -->
+    <script src="../mcf-core.js"></script>
+    <script src="mcf-core.js"></script>
+    <script>
+    /* core 를 못 찾으면 Generate 가 조용히 무반응이 된다. 그러면 원인을 알 수 없으므로
+       화면에 눈에 보이는 안내를 띄운다. */
+    if (typeof MCF === "undefined") {
+      document.addEventListener("DOMContentLoaded", function () {
+        var box = document.getElementById("placeholder");
+        if (box) {
+          box.innerHTML =
+            '<strong style="color:#b91c1c">mcf-core.js \uB97C \uCC3E\uC744 \uC218 \uC5C6\uC2B5\uB2C8\uB2E4.</strong><br><br>' +
+            'This lesson needs <code>mcf-core.js</code>.<br>' +
+            'Put it next to <code>progress.js</code> and <code>index.html</code> ' +
+            '(the folder above this one), or in this same folder.';
+          box.style.display = "block";
+        }
+        var b = document.querySelector(".btn-generate");
+        if (b) b.disabled = true;
+      });
+    }
+    </script>
+    <script>
+        /* ====================================================================
+           Unit 1 Lesson 4 — 문항 생성기
+           엔진(채점·렌더·단계공개·방법토글)은 ../mcf-core.js 에 있다.
+           이 파일에는 "무엇을 물어보고 어떻게 푸는가"만 남긴다.
+
+           2026-08-04 구조 전환:
+             예전에는 풀이가 buildSolutionHTMLElements() 안에 25개 블록으로
+             하드코딩돼 있었다. 그래서 설명문이 그 문제의 실제 숫자를 받지
+             못하고 "You need two numbers that do two jobs at once." 같은
+             일반론만 나왔다. 이제 steps[] 배열이라 숫자가 그대로 들어간다.
+             방법 토글(Product&Sum / Criss-Cross)은 steps[].mode 로 유지된다.
+             화살표 상자와 화살표 방향은 core 의 matrixBox() 에 원본 그대로 옮겼다.
+
+           설명문 기준: 60점 미만 학생과 수학을 모르는 학부모가 읽고 알 수 있을 것.
+             - 1단계는 "무엇을 계산하라"가 아니라 "이게 어떤 문제인지 어떻게 아나"
+             - 설명문에는 반드시 그 문제의 실제 숫자를 넣는다
+             - 한 문장 22단어 이하, 설명 하나는 12단어 이상
+             - 자주 틀리는 자리는 함정으로 명시한다
+           ==================================================================== */
+
+        const TEACHER_SPREADSHEET_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwygR6-l7XPRC1KL-Pqci33Yw_4pmCWa8mW7gNHJ_RsmN41ax15-d0sE-CrIxU0z22m/exec";
+
+        const randInt = MCF.randInt, gcd = MCF.gcd, gcd3 = MCF.gcd3;
+        const fmtTerm = MCF.fmtTerm, mcfPick = MCF.pick, M = MCF.M;
+
+        /* 음수를 문장 안에 넣을 때 괄호를 씌운다. "-4" 보다 "(-4)" 가 읽기 쉽다. */
+        function par(n) { return n < 0 ? "(" + n + ")" : String(n); }
+
+        /* |n| 의 곱 짝을 순서대로 나열한다. Product&Sum 1단계에서 학생이
+           실제로 손으로 적어보는 목록이다. */
+        function pairListTex(n) {
+          const a = Math.abs(n), out = [];
+          for (let i = 1; i * i <= a; i++) if (a % i === 0) out.push("(" + i + ")(" + (a / i) + ")");
+          return out.join(",\\ ");
+        }
+
+        const FACTOR_PROMPTS = [
+          "Fully factor the following expression, if possible",
+          "Write this expression as a product of two brackets, if you can",
+          "Factor completely, if it factors at all"
+        ];
+
+        const METHODS = [
+          { key: "ps", label: "Product &amp; Sum Method" },
+          { key: "cc", label: "Criss-Cross Matrix Method" }
+        ];
+
+        /* 두 방법 공용으로 쓰는 대각선 곱 상자 단계. 유형 3·4·5 가 같이 쓴다. */
+        function ccBoxStep(stepNo, d, explanation) {
+          return {
+            title: "Step " + stepNo + " (Criss-Cross): Fill In the Box",
+            mode: "cc", isMatrix: true, matrixData: d,
+            explanation: explanation
+          };
+        }
+        function ccCheckStep(stepNo, d, b, extra) {
+          return {
+            title: "Step " + stepNo + " (Criss-Cross): Check the Diagonals",
+            mode: "cc",
+            math: "(" + d.pt + ") + (" + d.pb + ") = " + (String(d.sum).trim() || "0"),
+            explanation: "Multiply along each arrow, then add the two answers together. You get " +
+              M(d.sum) + ", and that matches the middle term. " +
+              "Trap: if it does not match, swap the two numbers on the right side and try again." +
+              (extra || "")
+          };
+        }
+
+        /* ─────────────────── Type 1: 두 수 찾기 ─────────────────── */
+        function genType1() {
+          const n1 = randInt(4, 9);
+          const n2 = -randInt(2, n1 - 1);
+          const p = n1 * n2;               /* 항상 음수 */
+          const s = n1 + n2;               /* 항상 양수 */
+
+          const correct = `${n1} \\text{ and } ${n2}`;
+          const mc = MCF.shuffleMC(correct, [
+            `${-n1} \\text{ and } ${-n2}`,
+            `${-n1} \\text{ and } ${n2}`,
+            `${n1} \\text{ and } ${-n2}`
+          ]);
+
+          return {
+            title: "Type 1: Determine Two Numbers", type: "mc", assetType: "none", optionType: "text",
+            fullStatement: mcfPick([
+              `Determine two numbers that multiply to ${p} and add to ${s}.`,
+              `Which pair of numbers has a product of ${p} and a sum of ${s}?`,
+              `Two numbers multiply to give ${p} and add to give ${s}. What are they?`
+            ]),
+            prompt: "Pick the correct pair of numbers:",
+            hint: `You need one pair doing two jobs: multiply to ${p}, add to ${s}. The product is negative, so one number is positive and one is negative.`,
+            options: mc.options, ans: mc.ans, rawAns: correct,
+            ansBox: correct, finalLabel: "The Pair",
+            hasMethods: true, methods: METHODS,
+            steps: [
+              {
+                title: "Step 1: Work Out What the Signs Must Be",
+                math: `\\text{Product} = ${p}, \\quad \\text{Sum} = +${s}`,
+                explanation: `You are looking for one pair of numbers doing two jobs at once. ` +
+                  `They must multiply to ${M(p)} and add to ${M("+" + s)}. ` +
+                  `Check the product first. It is negative, so one number is positive and the other is negative.`
+              },
+              {
+                title: `Step 2 (Product & Sum): List Every Pair That Multiplies to ${Math.abs(p)}`,
+                mode: "ps",
+                math: pairListTex(p),
+                explanation: `Write out every whole number pair whose product is ${M(Math.abs(p))}. ` +
+                  `Start at 1 and work upward so you do not skip any. Leave the signs off for now.`
+              },
+              {
+                title: `Step 3 (Product & Sum): Test Which Pair Adds to ${s}`,
+                mode: "ps",
+                math: `${n1} + ${par(n2)} = ${s}`,
+                explanation: `Now put the signs back on and add each pair. Only ${M(n1)} and ${M(n2)} give ${M(s)}. ` +
+                  `Trap: flipping both signs gives ${M(-n1)} and ${M(-n2)}, which adds to ${M(-s)} instead.`
+              },
+              {
+                title: "Step 2 (Criss-Cross): Read the Signs Before You Guess",
+                mode: "cc",
+                math: `${p} < 0 \\Rightarrow \\text{one} + \\text{, one} -`,
+                explanation: `A negative product always means the two signs are opposite. ` +
+                  `The sum ${M("+" + s)} is positive. So the number that is further from zero takes the plus sign.`
+              },
+              {
+                title: "Step 3 (Criss-Cross): Check the Pair Against Both Targets",
+                mode: "cc",
+                math: `${n1} \\times ${par(n2)} = ${p} \\quad \\text{and} \\quad ${n1} + ${par(n2)} = ${s}`,
+                explanation: `Try ${M(n1)} and ${M(n2)}. They multiply to ${M(p)} and they add to ${M(s)}. ` +
+                  `Both targets are met at the same time, so this is the pair.`
+              },
+              {
+                title: "Step 4: Write the Pair Down",
+                math: correct,
+                explanation: `The answer is ${M(n1)} and ${M(n2)}. Either order is fine. ` +
+                  `Multiplying and adding both give the same result whichever number you write first.`
+              }
+            ]
+          };
+        }
+
+        /* ─────────────────── Type 2: a = 1 삼항식 ─────────────────── */
+        function genType2() {
+          const n1 = randInt(2, 6) * (Math.random() > 0.5 ? 1 : -1);
+          const n2 = randInt(2, 6) * (Math.random() > 0.5 ? 1 : -1);
+          const b = n1 + n2, c = n1 * n2;
+
+          const exp = `x^2 ${fmtTerm(b, "x")} ${fmtTerm(c, "")}`;
+          const row1 = `x ${fmtTerm(n1, "")}`, row2 = `x ${fmtTerm(n2, "")}`;
+          const correct = `(${row1})(${row2})`;
+
+          const mc = MCF.shuffleMC(correct, [
+            `(x ${fmtTerm(-n1, "")})(x ${fmtTerm(-n2, "")})`,
+            `(x ${fmtTerm(n1, "")})(x ${fmtTerm(-n2, "")})`,
+            `(x ${fmtTerm(-n1, "")})(x ${fmtTerm(n2, "")})`
+          ], [
+            `(x ${fmtTerm(n1 + 1, "")})(x ${fmtTerm(n2, "")})`,
+            `(x ${fmtTerm(n1, "")})(x ${fmtTerm(n2 + 1, "")})`,
+            `(x ${fmtTerm(n1 - 1, "")})(x ${fmtTerm(n2, "")})`
+          ]);
+
+          const d = {
+            lt: "x", lb: "x",
+            rt: fmtTerm(n1, "", true), rb: fmtTerm(n2, "", true),
+            pt: fmtTerm(n2, "x", true), pb: fmtTerm(n1, "x", true),
+            sum: fmtTerm(b, "x", true)
+          };
+
+          return {
+            title: "Type 2: Trinomial Factoring (a = 1)", type: "mc", assetType: "none", optionType: "text",
+            fullStatement: mcfPick(FACTOR_PROMPTS) + `: ${M(exp)}`,
+            prompt: "Pick the fully factored form:",
+            hint: `Find two numbers that multiply to ${c} and add to ${b}. Because the front number is 1, those two numbers go straight into the brackets.`,
+            options: mc.options, ans: mc.ans, rawAns: correct,
+            ansBox: correct, finalLabel: "Completely Factored Form",
+            hasMethods: true, methods: METHODS,
+            steps: [
+              {
+                title: "Step 1: Check the Number in Front of x&sup2;",
+                math: exp,
+                explanation: `Nothing is written in front of ${M("x^2")}, so the front number is 1. ` +
+                  `That makes this the easy kind. You can drop two numbers straight into the brackets with no extra step.`
+              },
+              {
+                title: "Step 2 (Product & Sum): Write Down Your Two Targets",
+                mode: "ps",
+                rule: `Target product = the last number. Target sum = the middle number.`,
+                explanation: `The last number is ${M(c)}, so you need two numbers that multiply to ${M(c)}. ` +
+                  `The middle number is ${M(b)}, so the same two numbers must add to ${M(b)}.`
+              },
+              {
+                title: "Step 3 (Product & Sum): Find the Pair That Does Both Jobs",
+                mode: "ps",
+                math: `${n1} \\times ${par(n2)} = ${c} \\quad \\text{and} \\quad ${n1} + ${par(n2)} = ${b}`,
+                explanation: `The pair is ${M(n1)} and ${M(n2)}. They multiply to ${M(c)} and add to ${M(b)}. ` +
+                  `If no whole number pair does both jobs, the expression does not factor.`
+              },
+              ccBoxStep(2, d,
+                `Put ${M("x")} and ${M("x")} down the left side, because ${M("x \\times x")} gives ${M("x^2")}. ` +
+                `Then put ${M(n1)} and ${M(n2)} down the right side.`),
+              ccCheckStep(3, d, b),
+              {
+                title: "Step 4: Read the Answer Off the Rows",
+                math: correct,
+                explanation: `Read straight across the top row to get ${M("(" + row1 + ")")}. ` +
+                  `Then read straight across the bottom row to get ${M("(" + row2 + ")")}. Those two brackets are your answer.`
+              }
+            ]
+          };
+        }
+
+        /* 유형 3·4·5 가 공유하는 계수 뽑기. 약분이 남거나 중간항이 0 이면 다시 뽑는다. */
+        function drawCoeffs(aLo, aHi, cLo, cHi, extraReject) {
+          let a1, a2, c1, c2, a, b, c;
+          do {
+            a1 = randInt(aLo, aHi); a2 = randInt(aLo, aHi);
+            c1 = randInt(cLo, cHi) * (Math.random() > 0.5 ? 1 : -1);
+            c2 = randInt(cLo, cHi) * (Math.random() > 0.5 ? 1 : -1);
+            a = a1 * a2; b = a1 * c2 + a2 * c1; c = c1 * c2;
+          } while (gcd(a1, Math.abs(c1)) > 1 || gcd(a2, Math.abs(c2)) > 1 ||
+                   gcd3(a, b, c) > 1 || b === 0 || (extraReject && extraReject(a)));
+          return { a1, a2, c1, c2, a, b, c };
+        }
+
+        /* ─────────────────── Type 3: a > 1 삼항식 ─────────────────── */
+        function genType3() {
+          const k = drawCoeffs(2, 4, 1, 5);
+          const { a1, a2, c1, c2, a, b, c } = k;
+
+          const exp = `${a}x^2 ${fmtTerm(b, "x")} ${fmtTerm(c, "")}`;
+          const row1 = `${fmtTerm(a1, "x", true)} ${fmtTerm(c1, "")}`;
+          const row2 = `${fmtTerm(a2, "x", true)} ${fmtTerm(c2, "")}`;
+          const correct = `(${row1})(${row2})`;
+
+          const mc = MCF.shuffleMC(correct, [
+            `(${fmtTerm(a1, "x", true)} ${fmtTerm(-c1, "")})(${fmtTerm(a2, "x", true)} ${fmtTerm(-c2, "")})`,
+            `(${fmtTerm(a1, "x", true)} ${fmtTerm(c2, "")})(${fmtTerm(a2, "x", true)} ${fmtTerm(c1, "")})`,
+            `(${fmtTerm(a1, "x", true)} ${fmtTerm(-c2, "")})(${fmtTerm(a2, "x", true)} ${fmtTerm(-c1, "")})`
+          ], [
+            `(${fmtTerm(a1, "x", true)} ${fmtTerm(c1, "")})(${fmtTerm(a2, "x", true)} ${fmtTerm(-c2, "")})`,
+            `(${fmtTerm(a1, "x", true)} ${fmtTerm(c1 + 1, "")})(${fmtTerm(a2, "x", true)} ${fmtTerm(c2, "")})`,
+            `(${fmtTerm(a1 + 1, "x", true)} ${fmtTerm(c1, "")})(${fmtTerm(a2, "x", true)} ${fmtTerm(c2, "")})`
+          ]);
+
+          const d = {
+            lt: fmtTerm(a1, "x", true), lb: fmtTerm(a2, "x", true),
+            rt: fmtTerm(c1, "", true), rb: fmtTerm(c2, "", true),
+            pt: fmtTerm(a1 * c2, "x", true), pb: fmtTerm(a2 * c1, "x", true),
+            sum: fmtTerm(b, "x", true)
+          };
+          const split = `${a}x^2 ${fmtTerm(a1 * c2, "x")} ${fmtTerm(a2 * c1, "x")} ${fmtTerm(c, "")}`;
+          const grouped = `${fmtTerm(a1, "x", true)}(${row2}) ${fmtTerm(c1, "")}(${row2})`;
+
+          return {
+            title: "Type 3: Trinomial Factoring (a > 1)", type: "mc", assetType: "none", optionType: "text",
+            fullStatement: mcfPick(FACTOR_PROMPTS) + `: ${M(exp)}`,
+            prompt: "Pick the fully factored form:",
+            hint: `Multiply the front number by the last number: ${a} times ${par(c)} is ${a * c}. Now find two numbers that multiply to ${a * c} and add to ${b}.`,
+            options: mc.options, ans: mc.ans, rawAns: correct,
+            ansBox: correct, finalLabel: "Completely Factored Form",
+            hasMethods: true, methods: METHODS,
+            steps: [
+              {
+                title: "Step 1: Decide Whether You Can Factor Straight Away",
+                math: exp,
+                explanation: `The number in front of ${M("x^2")} is ${M(a)}, which is bigger than 1. ` +
+                  `So you cannot just drop two numbers into brackets. This one needs one extra step first.`
+              },
+              {
+                title: "Step 2 (Product & Sum): Work Out Your Two Targets",
+                mode: "ps",
+                rule: `Target product = front number &times; last number. Target sum = middle number.`,
+                explanation: `Multiply the front number by the last number: ${M(a + " \\times " + par(c) + " = " + a * c)}. ` +
+                  `That is your product target. Your sum target is the middle number, ${M(b)}. ` +
+                  `The pair that does both is ${M(a1 * c2)} and ${M(a2 * c1)}.`
+              },
+              {
+                title: "Step 3 (Product & Sum): Split the Middle Term",
+                mode: "ps",
+                math: split,
+                explanation: `Replace the single middle term with those two pieces, ${M(fmtTerm(a1 * c2, "x", true))} and ${M(fmtTerm(a2 * c1, "x", true))}. ` +
+                  `The expression is worth exactly the same as before. It just has four terms now instead of three.`
+              },
+              {
+                title: "Step 4 (Product & Sum): Factor in Pairs",
+                mode: "ps",
+                math: grouped,
+                explanation: `Split the four terms into two pairs and pull the biggest common factor out of each pair. ` +
+                  `The bracket left behind is ${M("(" + row2 + ")")} both times. That repeated bracket is one of your factors.`
+              },
+              ccBoxStep(2, d,
+                `Put factors of the front term, ${M(fmtTerm(a1, "x", true))} and ${M(fmtTerm(a2, "x", true))}, down the left side. ` +
+                `Put factors of the last number, ${M(fmtTerm(c1, "", true))} and ${M(fmtTerm(c2, "", true))}, down the right side.`),
+              ccCheckStep(3, d, b),
+              {
+                title: "Step 5: Read the Answer Off the Rows",
+                math: correct,
+                explanation: `Read straight across the top row to get ${M("(" + row1 + ")")}. ` +
+                  `Then read across the bottom row to get ${M("(" + row2 + ")")}. Those two brackets are the answer.`
+              }
+            ]
+          };
+        }
+
+        /* ─────────────────── Type 4: 공통인수 + 삼항식 ─────────────────── */
+        function genType4() {
+          const gcfVal = randInt(2, 6);
+          const k = drawCoeffs(1, 3, 1, 4, a => a === 1);
+          const { a1, a2, c1, c2, a, b, c } = k;
+
+          const expOut = `${gcfVal * a}x^2 ${fmtTerm(gcfVal * b, "x")} ${fmtTerm(gcfVal * c, "")}`;
+          const expIn = `${fmtTerm(a, "x^2", true)} ${fmtTerm(b, "x")} ${fmtTerm(c, "")}`;
+          const row1 = `${fmtTerm(a1, "x", true)} ${fmtTerm(c1, "")}`;
+          const row2 = `${fmtTerm(a2, "x", true)} ${fmtTerm(c2, "")}`;
+          const correct = `${gcfVal}(${row1})(${row2})`;
+
+          const mc = MCF.shuffleMC(correct, [
+            `${gcfVal}(${fmtTerm(a1, "x", true)} ${fmtTerm(-c1, "")})(${fmtTerm(a2, "x", true)} ${fmtTerm(-c2, "")})`,
+            `(${row1})(${row2})`,
+            `(${gcfVal * a1}x ${fmtTerm(gcfVal * c1, "")})(${row2})`
+          ], [
+            `${gcfVal + 1}(${row1})(${row2})`,
+            `${gcfVal}(${fmtTerm(a1, "x", true)} ${fmtTerm(c2, "")})(${fmtTerm(a2, "x", true)} ${fmtTerm(c1, "")})`
+          ]);
+
+          const d = {
+            lt: fmtTerm(a1, "x", true), lb: fmtTerm(a2, "x", true),
+            rt: fmtTerm(c1, "", true), rb: fmtTerm(c2, "", true),
+            pt: fmtTerm(a1 * c2, "x", true), pb: fmtTerm(a2 * c1, "x", true),
+            sum: fmtTerm(b, "x", true)
+          };
+          const split = `${fmtTerm(a, "x^2", true)} ${fmtTerm(a1 * c2, "x")} ${fmtTerm(a2 * c1, "x")} ${fmtTerm(c, "")}`;
+          const grouped = `${fmtTerm(a1, "x", true)}(${row2}) ${fmtTerm(c1, "")}(${row2})`;
+
+          return {
+            title: "Type 4: GCF + Trinomial Factoring", type: "mc", assetType: "none", optionType: "text",
+            fullStatement: mcfPick([
+              "Fully factor the following expression, if possible",
+              "Take out the common factor first, then factor completely",
+              "Factor this expression all the way down"
+            ]) + `: ${M(expOut)}`,
+            prompt: "Pick the fully factored form:",
+            hint: `Every term divides by ${gcfVal}. Take that out front first, then factor the simpler trinomial left inside the brackets.`,
+            options: mc.options, ans: mc.ans, rawAns: correct,
+            ansBox: correct, finalLabel: "Completely Factored Form",
+            hasMethods: true, methods: METHODS,
+            steps: [
+              {
+                title: "Step 1: Look for a Common Factor Before Anything Else",
+                math: `${expOut} = ${gcfVal}(${expIn})`,
+                explanation: `Check all three terms for a shared factor first. Every term here divides by ${M(gcfVal)}. ` +
+                  `Take it out front and a much simpler trinomial is left inside. ` +
+                  `Trap: skipping this and wrestling with the big numbers instead.`
+              },
+              {
+                title: "Step 2: Now Work Only Inside the Brackets",
+                math: expIn,
+                explanation: `Leave the ${M(gcfVal)} sitting out front and forget about it for now. ` +
+                  `From here you only factor ${M(expIn)}. The ${M(gcfVal)} comes back at the very end.`
+              },
+              {
+                title: "Step 3 (Product & Sum): Work Out Your Two Targets",
+                mode: "ps",
+                rule: `Inside the brackets: product target = ${a} &times; ${par(c)} = ${a * c}, sum target = ${b}.`,
+                explanation: `Use only the numbers inside the brackets, not the original big ones. ` +
+                  `You need two numbers that multiply to ${M(a * c)} and add to ${M(b)}. ` +
+                  `The pair is ${M(a1 * c2)} and ${M(a2 * c1)}.`
+              },
+              {
+                title: "Step 4 (Product & Sum): Split and Factor in Pairs",
+                mode: "ps",
+                math: `${split} = ${grouped}`,
+                explanation: `Break the middle term into those two pieces, then group the four terms into two pairs. ` +
+                  `Pull the biggest common factor out of each pair. The bracket ${M("(" + row2 + ")")} is left behind both times.`
+              },
+              ccBoxStep(3, d,
+                `Use only the numbers from inside the brackets. Put ${M(fmtTerm(a1, "x", true))} and ${M(fmtTerm(a2, "x", true))} down the left side. ` +
+                `Put ${M(fmtTerm(c1, "", true))} and ${M(fmtTerm(c2, "", true))} down the right side.`),
+              ccCheckStep(4, d, b),
+              {
+                title: "Step 5: Put the Common Factor Back On",
+                math: correct,
+                explanation: `Read across the rows to get ${M("(" + row1 + ")")} and ${M("(" + row2 + ")")}. ` +
+                  `Now put the ${M(gcfVal)} back out front. ` +
+                  `Trap: leaving the ${M(gcfVal)} out of the final answer. Then the answer is not fully factored.`
+              }
+            ]
+          };
+        }
+
+        /* ─────────────────── Type 5: 직사각형 넓이 모델링 ─────────────────── */
+        function genType5() {
+          const k = drawCoeffs(2, 4, 1, 5);
+          const { a1, a2, c1, c2, a, b, c } = k;
+
+          const exp = `${a}x^2 ${fmtTerm(b, "x")} ${fmtTerm(c, "")}`;
+          const row1 = `${fmtTerm(a1, "x", true)} ${fmtTerm(c1, "")}`;
+          const row2 = `${fmtTerm(a2, "x", true)} ${fmtTerm(c2, "")}`;
+          const correct = `A = (${row1})(${row2})`;
+
+          const mc = MCF.shuffleMC(correct, [
+            `A = (${fmtTerm(a1, "x", true)} ${fmtTerm(-c1, "")})(${fmtTerm(a2, "x", true)} ${fmtTerm(-c2, "")})`,
+            `A = (${fmtTerm(a1, "x", true)} ${fmtTerm(c2, "")})(${fmtTerm(a2, "x", true)} ${fmtTerm(c1, "")})`,
+            `x = ${c1 < 0 ? Math.abs(c1) : -c1}/${a1} \\text{ and } x = ${c2 < 0 ? Math.abs(c2) : -c2}/${a2}`
+          ], [
+            `A = (${fmtTerm(a1, "x", true)} ${fmtTerm(c1, "")})(${fmtTerm(a2, "x", true)} ${fmtTerm(-c2, "")})`,
+            `A = (${fmtTerm(a1, "x", true)} ${fmtTerm(-c1, "")})(${fmtTerm(a2, "x", true)} ${fmtTerm(c2, "")})`
+          ]);
+
+          const d = {
+            lt: fmtTerm(a1, "x", true), lb: fmtTerm(a2, "x", true),
+            rt: fmtTerm(c1, "", true), rb: fmtTerm(c2, "", true),
+            pt: fmtTerm(a1 * c2, "x", true), pb: fmtTerm(a2 * c1, "x", true),
+            sum: fmtTerm(b, "x", true)
+          };
+          const split = `${a}x^2 ${fmtTerm(a1 * c2, "x")} ${fmtTerm(a2 * c1, "x")} ${fmtTerm(c, "")}`;
+          const grouped = `${fmtTerm(a1, "x", true)}(${row2}) ${fmtTerm(c1, "")}(${row2})`;
+
+          return {
+            title: "Type 5: Rectangle Area Modeling", type: "mc", assetType: "none", optionType: "text",
+            fullStatement: mcfPick([
+              "Determine the area equation that represents the length and width of a rectangle if the area is",
+              "A rectangle has this area. Write it as length times width",
+              "Find expressions for the length and width of a rectangle whose area is"
+            ]) + `: ${M("A = " + exp)}`,
+            prompt: "Pick the correct dimensions (length &times; width):",
+            hint: `Area equals length times width, so the two factors are the two side lengths. Find two numbers that multiply to ${a * c} and add to ${b}.`,
+            options: mc.options, ans: mc.ans, rawAns: correct,
+            ansBox: correct, finalLabel: "Length &times; Width",
+            hasMethods: true, methods: METHODS,
+            steps: [
+              {
+                title: "Step 1: Work Out What the Question Is Really Asking",
+                math: `A = \\text{length} \\times \\text{width}`,
+                explanation: `The area of a rectangle is always length times width. ` +
+                  `So the two factors of ${M(exp)} are the two side lengths. ` +
+                  `That means this is a factoring question wearing a word problem costume.`
+              },
+              {
+                title: "Step 2 (Product & Sum): Work Out Your Two Targets",
+                mode: "ps",
+                rule: `Target product = front number &times; last number. Target sum = middle number.`,
+                explanation: `Multiply the front number by the last number: ${M(a + " \\times " + par(c) + " = " + a * c)}. ` +
+                  `Your sum target is the middle number, ${M(b)}. The pair that does both jobs is ${M(a1 * c2)} and ${M(a2 * c1)}.`
+              },
+              {
+                title: "Step 3 (Product & Sum): Split the Middle Term",
+                mode: "ps",
+                math: split,
+                explanation: `Replace the middle term with those two pieces. ` +
+                  `The expression still has the same value. It just has four terms now, which lets you group them.`
+              },
+              {
+                title: "Step 4 (Product & Sum): Factor in Pairs",
+                mode: "ps",
+                math: grouped,
+                explanation: `Group the four terms into two pairs and take the biggest common factor out of each pair. ` +
+                  `The bracket ${M("(" + row2 + ")")} appears both times, so it is one of the sides.`
+              },
+              ccBoxStep(2, d,
+                `Put factors of the front term down the left side of the box. ` +
+                `Put factors of the last number, ${M(fmtTerm(c1, "", true))} and ${M(fmtTerm(c2, "", true))}, down the right side.`),
+              ccCheckStep(3, d, b),
+              {
+                title: "Step 5: Read Off the Two Side Lengths",
+                math: correct,
+                explanation: `The top row gives one side, ${M("(" + row1 + ")")}. The bottom row gives the other, ${M("(" + row2 + ")")}. ` +
+                  `Trap: giving the values of ${M("x")} instead. The question wants the side lengths, not the roots.`
+              }
+            ]
+          };
+        }
+
+        /* ─── 진입점. DOM 을 건드리지 않는 순수 함수라 그대로 테스트할 수 있다. ─── */
+        const GENERATORS = { t1: genType1, t2: genType2, t3: genType3, t4: genType4, t5: genType5 };
+
+        function generateProblem(typeId) {
+          const f = GENERATORS[typeId];
+          return f ? f() : null;
+        }
+
+        MCF.init({
+          generate: generateProblem,
+          logUrl: TEACHER_SPREADSHEET_SCRIPT_URL,
+          unitId: "Unit_1",
+          lessonId: "Lesson_4"
+        });
+
+    </script>
+    <script src="../progress.js"></script>
+</body>
+</html>

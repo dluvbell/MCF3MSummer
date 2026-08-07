@@ -1,0 +1,1338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCF3M Unit 4 Comprehensive Practice Test Studio</title>
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+
+    <!-- mcf-core.js 가 그리는 요소들의 기본 스타일. 아래 <style> 보다 먼저 와야
+         파일 고유 스타일이 이기고, 빠진 클래스만 여기서 메워진다.
+         폴더 위치를 몰라도 되게 두 경로를 다 건다(없는 쪽은 404 로 무시). -->
+    <link rel="stylesheet" href="../mcf-core.css">
+    <link rel="stylesheet" href="mcf-core.css">
+    <style>
+        :root {
+            --primary-color: #0f172a;
+            --secondary-color: #2563eb;
+            --disabled-color: #94a3b8;
+            --text-color: #334155;
+            --math-color: #000000;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --border-color: #cbd5e1;
+            --highlight-bg: #eff6ff;
+            --explanation-bg: #f1f5f9;
+            --rule-bg: #fef08a;
+            --rule-text: #713f12;
+            --success-color: #16a34a;
+            --error-color: #dc2626;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.8;
+            margin: 0;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: -0.025em;
+        }
+
+        header p {
+            margin: 8px 0 0 0;
+            color: #94a3b8;
+            font-size: 1.05rem;
+        }
+
+        .scoreboard {
+            background-color: #1e293b;
+            color: white;
+            display: inline-flex;
+            gap: 20px;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-weight: 700;
+            margin-top: 15px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.2);
+        }
+
+        .scoreboard span {
+            color: #60a5fa;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .profile-box, .selector-box {
+            background-color: var(--card-bg);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-color);
+            margin-bottom: 25px;
+        }
+
+        .profile-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .profile-grid input {
+            width: 100%;
+            padding: 12px;
+            font-size: 1rem;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        .profile-grid input:focus {
+            border-color: var(--secondary-color);
+        }
+
+        label {
+            display: block;
+            font-weight: 700;
+            color: var(--primary-color);
+            font-size: 1.1rem;
+            margin-bottom: 12px;
+        }
+
+        .selector-controls {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        select {
+            flex: 1;
+            padding: 16px;
+            font-size: 1.1rem;
+            font-family: inherit;
+            border-radius: 8px;
+            border: 2px solid var(--border-color);
+            background-color: white;
+            color: var(--primary-color);
+            outline: none;
+            cursor: pointer;
+        }
+
+        .solution-container {
+            background-color: var(--card-bg);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-color);
+            min-height: 200px;
+        }
+
+        .placeholder-text {
+            color: #64748b;
+            text-align: center;
+            font-style: italic;
+            padding: 60px 0;
+            font-size: 1.1rem;
+        }
+
+        .quiz-interface-box {
+            background-color: var(--explanation-bg);
+            border: 1px solid var(--border-color);
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+
+        .math-render-viewport {
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+        }
+
+        .mc-options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 10px;
+        }
+
+        .mc-option-card {
+            background: white;
+            border: 2px solid var(--border-color);
+            padding: 14px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1.05rem;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .mc-option-card:hover:not(.disabled) {
+            border-color: var(--secondary-color);
+            background-color: var(--highlight-bg);
+        }
+
+        .mc-option-card.selected {
+            border-color: var(--secondary-color);
+            background-color: #dbeafe;
+            color: #1e40af;
+        }
+
+        .mc-option-card.disabled {
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .mc-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background-color: #e2e8f0;
+            color: var(--primary-color);
+            font-weight: 800;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+
+        .mc-option-card.selected .mc-badge {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+
+        .feedback-msg-area {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            display: none;
+            padding: 10px 15px;
+            border-radius: 6px;
+        }
+
+        .feedback-success {
+            background-color: #dcfce7;
+            color: var(--success-color);
+            border-left: 5px solid var(--success-color);
+        }
+
+        .feedback-error {
+            background-color: #fee2e2;
+            color: var(--error-color);
+            border-left: 5px solid var(--error-color);
+        }
+
+        .quiz-action-bar {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .solution-reveal-window {
+            display: none;
+            border-top: 3px double var(--border-color);
+            margin-top: 30px;
+            padding-top: 30px;
+        }
+
+        .step-block {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e2e8f0;
+            display: none;
+        }
+
+        .step-title {
+            font-weight: 800;
+            color: var(--secondary-color);
+            display: block;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 8px;
+        }
+
+        .step-math {
+            font-size: 1.3rem;
+            font-weight: 700;
+            background-color: var(--explanation-bg);
+            padding: 14px 20px;
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin: 8px 0;
+            color: var(--math-color);
+            letter-spacing: 0.02em;
+            flex-wrap: wrap;
+        }
+
+        .step-explanation {
+            display: block;
+            font-size: 1.05rem;
+            color: #334155;
+            margin-top: 6px;
+        }
+
+        .final-answer-box {
+            background-color: var(--highlight-bg);
+            border-left: 6px solid var(--secondary-color);
+            padding: 20px 25px;
+            border-radius: 0 8px 8px 0;
+            margin-top: 30px;
+            display: none;
+        }
+
+        .final-answer-label {
+            font-weight: 800;
+            color: var(--secondary-color);
+            display: block;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .final-answer-math {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            margin-top: 6px;
+            display: inline-flex;
+            align-items: center;
+            letter-spacing: 0.02em;
+        }
+
+        .control-panel {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid var(--border-color);
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 14px 24px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            border-radius: 8px;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary { background-color: var(--secondary-color); color: white; }
+        .btn-primary:hover:not(:disabled) { background-color: #1d4ed8; }
+        .btn-success { background-color: var(--success-color); color: white; }
+        .btn-success:hover:not(:disabled) { background-color: #166534; }
+        .btn-secondary { background-color: var(--explanation-bg); color: var(--primary-color); border: 1px solid var(--border-color); }
+        .btn-secondary:hover:not(:disabled) { background-color: #e2e8f0; }
+        .btn-accent { background-color: var(--primary-color); color: white; }
+        .btn-accent:hover:not(:disabled) { background-color: #1e293b; }
+
+        .btn:disabled {
+            background-color: var(--disabled-color);
+            color: #f1f5f9;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        .question-statement-card {
+            background: #ffffff;
+            border-left: 4px solid var(--secondary-color);
+            padding: 16px 20px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            border-radius: 0 6px 6px 0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .hint-box {
+            display: none;
+            background-color: #fef9c3;
+            border-left: 5px solid #eab308;
+            color: #713f12;
+            padding: 12px 16px;
+            border-radius: 0 6px 6px 0;
+            margin-bottom: 15px;
+            font-size: 1.05rem;
+            font-weight: 600;
+        }
+
+        .btn-hint { background-color: #fde047; color: #713f12; }
+        .btn-hint:hover:not(:disabled) { background-color: #facc15; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>MCF3M Unit 4 Practice Test Studio</h1>
+        <p>Infinite Practice: Comprehensive Trigonometry &amp; Sinusoidal Modeling Studio</p>
+        <div class="scoreboard">
+            <div>Score: <span id="hud-score">0</span></div>
+            <div>Tries: <span id="hud-attempts">0</span></div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="profile-box">
+            <label>Student Profile Setup:</label>
+            <div class="profile-grid">
+                <input type="text" id="first-name" placeholder="First name" autocomplete="off">
+                <input type="text" id="last-name" placeholder="Last name" autocomplete="off">
+            </div>
+        </div>
+
+        <div class="selector-box">
+            <label for="question-select">Select Practice Test Concept Area (Q1 - Q10):</label>
+            <div class="selector-controls">
+                <select id="question-select" onchange="triggerNewQuestion()">
+                    <option value="">-- Choose a Concept (10 Core Types) --</option>
+                    <option value="q1">Q1: Right Triangle Calculations (SOH CAH TOA)</option>
+                    <option value="q2">Q2: Amplitude Identification from Function Form</option>
+                    <option value="q3">Q3: Best Cosine Law Equation Selection</option>
+                    <option value="q4">Q4: Best Sine Law Equation Selection</option>
+                    <option value="q5">Q5: Surveyor &amp; Field Trigonometry (Word Problems)</option>
+                    <option value="q6">Q6: Matching Sinusoid Graph Properties</option>
+                    <option value="q7">Q7: Transformed Sinusoid vs. Reference Graph</option>
+                    <option value="q8">Q8: Building an Equation from Given Facts</option>
+                    <option value="q9">Q9: Particle &amp; Wave Motion Analysis (Word Problems)</option>
+                    <option value="q10">Q10: Ocean Survey &amp; Navigation Triangles (Word Problems)</option>
+                </select>
+                <button class="btn btn-accent" onclick="triggerNewQuestion()">Generate New</button>
+            </div>
+        </div>
+
+        <div class="solution-container" id="display-window">
+            <div id="placeholder" class="placeholder-text">
+                Choose a concept from the menu and click "Generate New" to begin your comprehensive test.
+            </div>
+
+            <div id="quiz-station" class="quiz-interface-box" style="display: none;">
+                <div id="asset-viewport-mount-point" class="math-render-viewport" style="display: none;"></div>
+
+                <div id="question-statement-display" class="question-statement-card"></div>
+
+                <label id="input-prompt-label" style="margin-bottom: 12px; font-weight: 700; display: block;"></label>
+                
+                <div id="dynamic-input-mount-point" style="margin-top: 10px;"></div>
+
+                <div id="hint-box" class="hint-box"></div>
+                <div id="feedback-msg" class="feedback-msg-area"></div>
+
+                <div class="quiz-action-bar">
+                    <button class="btn btn-success" id="check-ans-btn" onclick="evaluateStudentAnswer()">Check Answer</button>
+                    <button class="btn btn-hint" id="hint-btn" onclick="toggleHint()">Hint</button>
+                    <button class="btn btn-secondary" id="reveal-sol-btn" disabled onclick="unlockSolutionPanel()">Show Solution Steps</button>
+                </div>
+            </div>
+
+            <div class="solution-reveal-window" id="solution-reveal-layer">
+                <div id="solution-workspace-injected"></div>
+                
+                <div class="control-panel" id="controls-panel">
+                    <button class="btn btn-secondary" id="restart-btn" onclick="restartSolution()">Restart Steps</button>
+                    <button class="btn btn-primary" id="next-btn" onclick="showNextStep()">Next Step &rarr;</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- mcf-core.js 는 보통 상위 폴더(index.html·progress.js 옆)에 둔다.
+         같은 폴더에 두는 경우도 있어 두 경로를 다 건다. 없는 쪽은 404 로 무시되고,
+         둘 다 있으면 두 번째는 core 내부 가드가 막는다. -->
+    <script src="../mcf-core.js"></script>
+    <script src="mcf-core.js"></script>
+    <script>
+    /* core 를 못 찾으면 Generate 가 조용히 무반응이 된다. 원인이 안 보이므로 안내를 띄운다. */
+    if (typeof MCF === "undefined") {
+      document.addEventListener("DOMContentLoaded", function () {
+        var box = document.getElementById("placeholder");
+        if (box) {
+          box.innerHTML =
+            '<strong style="color:#b91c1c">mcf-core.js \uB97C \uCC3E\uC744 \uC218 \uC5C6\uC2B5\uB2C8\uB2E4.</strong><br><br>' +
+            'This lesson needs <code>mcf-core.js</code>.<br>' +
+            'Put it next to <code>progress.js</code> and <code>index.html</code> ' +
+            '(the folder above this one), or in this same folder.';
+          box.style.display = "block";
+        }
+        var b = document.querySelector(".btn-generate");
+        if (b) b.disabled = true;
+      });
+    }
+    </script>
+    <script>
+
+        /* ── mcf-core.js 로 옮겨간 이름들의 지역 별칭 ── */
+        const randInt = MCF.randInt;
+        const gcd = MCF.gcd;
+        const gcd3 = MCF.gcd3;
+        const mcfPick = MCF.pick;
+        const mcfRich = MCF.rich;
+        const mcfShuffle = MCF.shuffle;
+        const mcfKey = MCF.key;
+        const mcfDedupe = MCF.dedupe;
+        const mcfFactorKey = MCF.factorKey;
+        const mcfUniqueByValue = MCF.uniqueByValue;
+        const mcfSpareOption = MCF.spareOption;
+        const shuffleMC = MCF.shuffleMC;
+        const M = MCF.M;
+        const Mu = MCF.Mu;
+        const fmtTerm = MCF.fmtTerm;
+        /* --- audit fix: 같은 보기가 두 번 나오면 하나로 합친다.
+           정답과 글자가 똑같은 보기를 골랐는데 오답 처리되는 것을 막는다. --- */
+        /* Nudge one number inside an existing option to build a replacement
+           distractor. Skips digit groups that follow a thousands separator, so
+           "\\$11\\,045.96" is altered at the 11 and never left malformed.
+           Uniqueness is checked by the caller, so this can never reproduce the
+           correct answer. */
+        /* Two options can differ only in whitespace -- an empty middle term leaves
+           "4x^2  + 16" beside "4x^2 + 16" -- and MathJax renders them identically, so
+           the student sees the same card twice and only one of them scores. Compare
+           options on this normalised key, not on the raw string. */
+
+
+
+        const TEACHER_SPREADSHEET_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwygR6-l7XPRC1KL-Pqci33Yw_4pmCWa8mW7gNHJ_RsmN41ax15-d0sE-CrIxU0z22m/exec";
+
+        let globalScore = 0;
+        let globalAttempts = 0;
+        let currentProblemData = null;
+        let currentState = { answered: false, selectedMcOption: "", isCorrect: false, currentStep: 0, solRevealed: false, attempts: 0 };
+        let visibleStepElements = [];
+        let currentStepIndex = 0;
+
+        // --- Math & Logic Utilities ---
+
+
+        /* Pick exactly three distractors that differ from each other and from the
+           answer, so a clash is replaced instead of shrinking the question. */
+        function distractors3(correct, candidates) {
+            const seen = [String(correct)];
+            const out = [];
+            for (let i = 0; i < candidates.length && out.length < 3; i++) {
+                const c = String(candidates[i]);
+                if (seen.indexOf(c) !== -1) continue;
+                seen.push(c);
+                out.push(c);
+            }
+            if (out.length < 3) console.warn("distractors3: only " + out.length + " usable distractors");
+            return out;
+        }
+
+        // --- Dynamic SVG Helpers ---
+        function makeRightTriangleSVG(angleVal, sideBottom, sideVertical, sideHypotenuse, angleLocation, rightPos) {
+            let pts = "40,140 220,140 40,40";
+            let rectX = 40, rectY = 125;
+            let textA_X = 30, textA_Y = 155;
+            let textB_X = 225, textB_Y = 155;
+            let textC_X = 30, textC_Y = 35;
+            
+            let bottomX = 130, bottomY = 158, bottomAnchor = "middle";
+            let vertX = 35, vertY = 95, vertAnchor = "end";
+            let hypX = 140, hypY = 85, hypAnchor = "start";
+            let angleX = 175, angleY = 133, angleAnchor = "end";
+
+            if (rightPos === "top") {
+                pts = "40,40 220,40 40,140";
+                rectX = 40; rectY = 40;
+                textA_X = 30; textA_Y = 155; textB_X = 225; textB_Y = 35; textC_X = 30; textC_Y = 35;
+                bottomY = 30; hypY = 100;
+                if (angleLocation === "top") { angleX = 175; angleY = 58; angleAnchor = "end"; }
+                else { angleX = 55; angleY = 120; angleAnchor = "start"; }
+            } else if (rightPos === "right") {
+                pts = "40,140 220,140 220,40";
+                rectX = 205; rectY = 125;
+                vertX = 235; vertAnchor = "start";
+                hypX = 120; hypY = 85; hypAnchor = "end";
+                if (angleLocation === "bottom") { angleX = 80; angleY = 133; angleAnchor = "start"; }
+                else { angleX = 205; angleY = 70; angleAnchor = "end"; }
+            } else {
+                if (angleLocation === "top") { angleX = 55; angleY = 70; angleAnchor = "start"; }
+                else { angleX = 175; angleY = 133; angleAnchor = "end"; }
+            }
+
+            let svg = `<svg width="260" height="170" viewBox="0 0 260 170" xmlns="http://www.w3.org/2000/svg">
+                <polygon points="${pts}" fill="#f8f9fa" stroke="#222222" stroke-width="2"/>
+                <rect x="${rectX}" y="${rectY}" width="15" height="15" fill="none" stroke="#222222" stroke-width="1.5"/>
+                <text x="${textA_X}" y="${textA_Y}" font-family="Arial" font-size="12" font-weight="bold">A</text>
+                <text x="${textB_X}" y="${textB_Y}" font-family="Arial" font-size="12" font-weight="bold">B</text>
+                <text x="${textC_X}" y="${textC_Y}" font-family="Arial" font-size="12" font-weight="bold">C</text>`;
+
+            if (sideBottom) svg += `<text x="${bottomX}" y="${bottomY}" font-family="Arial" font-size="12" font-weight="bold" text-anchor="${bottomAnchor}">${sideBottom}</text>`;
+            if (sideVertical) svg += `<text x="${vertX}" y="${vertY}" font-family="Arial" font-size="12" font-weight="bold" text-anchor="${vertAnchor}">${sideVertical}</text>`;
+            if (sideHypotenuse) svg += `<text x="${hypX}" y="${hypY}" font-family="Arial" font-size="12" font-weight="bold" text-anchor="${hypAnchor}">${sideHypotenuse}</text>`;
+            if (angleVal) svg += `<text x="${angleX}" y="${angleY}" font-family="Arial" font-size="12" font-weight="bold" fill="#2563eb" text-anchor="${angleAnchor}">${angleVal}</text>`;
+
+            svg += `</svg>`;
+            return svg;
+        }
+
+        function renderDynamicSVG(spec) {
+            /* A problem that forgets to build a graphSpec used to throw here and leave
+               the student staring at an unchanged page. Fail quietly instead. */
+            if (!spec || spec.yMax == null || spec.yMin == null || !spec.xMax) {
+                console.warn("renderDynamicSVG called without a usable spec");
+                return "";
+            }
+            const W = 380, H = 230, padL = 55, padR = 30, padT = 25, padB = 40;
+            const viewW = W - padL - padR;
+            const viewH = H - padT - padB;
+
+            const mapX = (x) => padL + (x / spec.xMax) * viewW;
+            const mapY = (y) => padT + (1 - (y - spec.yMin) / (spec.yMax - spec.yMin)) * viewH;
+
+            let s = `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">`;
+            
+            // Grid Lines
+            const yStep = (spec.yMax - spec.yMin) / 8;
+            for (let y = spec.yMin; y <= spec.yMax; y += yStep) {
+                let yPos = mapY(y);
+                s += `<line x1="${padL}" y1="${yPos}" x2="${W - padR}" y2="${yPos}" stroke="#e2e8f0" stroke-width="1"/>`;
+            }
+
+            const xStep = spec.xMax / 12;
+            for (let x = 0; x <= spec.xMax; x += xStep) {
+                let xPos = mapX(x);
+                s += `<line x1="${xPos}" y1="${padT}" x2="${xPos}" y2="${H - padB}" stroke="#e2e8f0" stroke-width="1"/>`;
+            }
+
+            s += `<line x1="${padL}" y1="${mapY(0)}" x2="${W - padR}" y2="${mapY(0)}" stroke="#0f172a" stroke-width="1.5"/>`;
+            s += `<line x1="${padL}" y1="${padT}" x2="${padL}" y2="${H - padB}" stroke="#0f172a" stroke-width="1.5"/>`;
+
+            if (spec.type === "grid_sinusoid" || spec.type === "particle_motion") {
+                const maxVal = spec.c + spec.a;
+                const minVal = spec.c - Math.abs(spec.a);
+                const midVal = spec.c;
+                const period = spec.period || 360;
+                const k = spec.k || (360 / period);
+
+                [minVal, midVal, maxVal].forEach(v => {
+                    let yPos = mapY(v);
+                    s += `<line x1="${padL - 5}" y1="${yPos}" x2="${padL}" y2="${yPos}" stroke="#0f172a" stroke-width="1.5"/>`;
+                    s += `<text x="${padL - 8}" y="${yPos + 4}" font-family="Arial" font-size="10" font-weight="bold" text-anchor="end">${v}</text>`;
+                });
+
+                s += `<line x1="${padL}" y1="${mapY(midVal)}" x2="${W - padR}" y2="${mapY(midVal)}" stroke="#94a3b8" stroke-dasharray="4,4" stroke-width="1.5"/>`;
+
+                const keyStep = period / 2;
+                for (let x = keyStep; x <= spec.xMax; x += keyStep) {
+                    let xPos = mapX(x);
+                    let yPosMid = mapY(midVal);
+                    s += `<line x1="${xPos}" y1="${yPosMid - 3}" x2="${xPos}" y2="${yPosMid + 3}" stroke="#0f172a" stroke-width="1.5"/>`;
+                    s += `<text x="${xPos}" y="${yPosMid + 15}" font-family="Arial" font-size="10" font-weight="bold" text-anchor="middle">${Math.round(x)}°</text>`;
+                }
+
+                let pts = [];
+                for (let i = 0; i <= 200; i++) {
+                    let xVal = (spec.xMax * i) / 200;
+                    let yVal = spec.c + spec.a * Math.sin((k * xVal * Math.PI) / 180);
+                    pts.push(`${mapX(xVal).toFixed(1)},${mapY(yVal).toFixed(1)}`);
+                }
+                s += `<path d="M ${pts.join(' L ')}" fill="none" stroke="#2563eb" stroke-width="2.5"/>`;
+            }
+            else if (spec.type === "sine_reference" || spec.type === "cosine_reference") {
+                const period = spec.period || 360;
+                const k = spec.k || (360 / period);
+
+                let ptsRef = [];
+                for (let i = 0; i <= 200; i++) {
+                    let xDeg = (spec.xMax * i) / 200;
+                    let yRef = spec.type === "sine_reference" ? Math.sin((k * xDeg * Math.PI) / 180) : Math.cos((k * xDeg * Math.PI) / 180);
+                    ptsRef.push(`${mapX(xDeg).toFixed(1)},${mapY(yRef).toFixed(1)}`);
+                }
+                s += `<path d="M ${ptsRef.join(' L ')}" fill="none" stroke="#16a34a" stroke-width="2" stroke-dasharray="4,4"/>`;
+
+                let maxVal = spec.c + Math.abs(spec.a);
+                let minVal = spec.c - Math.abs(spec.a);
+                [minVal, spec.c, maxVal].forEach(v => {
+                    let yPos = mapY(v);
+                    s += `<line x1="${padL - 5}" y1="${yPos}" x2="${padL}" y2="${yPos}" stroke="#0f172a" stroke-width="1.5"/>`;
+                    s += `<text x="${padL - 8}" y="${yPos + 4}" font-family="Arial" font-size="10" font-weight="bold" text-anchor="end">${v}</text>`;
+                });
+
+                const xTickStep = period / 4;
+                for (let deg = xTickStep; deg <= spec.xMax; deg += xTickStep) {
+                    let xPos = mapX(deg);
+                    s += `<line x1="${xPos}" y1="${mapY(0) - 3}" x2="${xPos}" y2="${mapY(0) + 3}" stroke="#0f172a" stroke-width="1.5"/>`;
+                    s += `<text x="${xPos}" y="${mapY(0) + 16}" font-family="Arial" font-size="10" font-weight="bold" text-anchor="middle">${Math.round(deg)}°</text>`;
+                }
+
+                let pts = [];
+                for (let i = 0; i <= 200; i++) {
+                    let xDeg = (spec.xMax * i) / 200;
+                    let dVal = spec.d || 0;
+                    let y = spec.type === "sine_reference" ? 
+                        spec.c + spec.a * Math.sin((k * (xDeg - dVal) * Math.PI) / 180) :
+                        spec.c + spec.a * Math.cos((k * (xDeg - dVal) * Math.PI) / 180);
+                    pts.push(`${mapX(xDeg).toFixed(1)},${mapY(y).toFixed(1)}`);
+                }
+                s += `<path d="M ${pts.join(' L ')}" fill="none" stroke="#0f172a" stroke-width="2.5"/>`;
+            }
+
+            s += `</svg>`;
+            return s;
+        }
+
+        // --- Generative Infinite Factory ---
+        /* audit fix (diversity round): one phrasing per type meant students learned to
+           recognise the sentence instead of the maths. mcfPick rotates the wording. */
+
+        function generateProblem(typeId) {
+            if (!typeId) return null;
+            let p = {
+                title: "", type: "mc", assetType: "none", optionType: "text",
+                fullStatement: "", prompt: "", options: [], hint: "", steps: [], ans: "", rawAns: ""
+            };
+
+            const subScenario = randInt(1, 3);
+
+            switch (typeId) {
+                case "q1": {
+                    p.title = "Right Triangle Calculations (SOH CAH TOA)";
+                    p.assetType = "svg";
+                    
+                    if (subScenario === 1) { 
+                        const ang = randInt(28, 62);
+                        const adj = randInt(8, 22);
+                        const hyp = adj / Math.cos(ang * Math.PI / 180);
+                        p.assetHtml = makeRightTriangleSVG(`${ang}°`, `${adj} cm`, "", "x", "bottom", "left");
+                        
+                        const correctStr = `\\(${hyp.toFixed(1)}\\text{ cm}\\)`;
+                        const dist1 = `\\(${(hyp - 3.2).toFixed(1)}\\text{ cm}\\)`;
+                        const dist2 = `\\(${(hyp + 4.5).toFixed(1)}\\text{ cm}\\)`;
+                        const dist3 = `\\(${(adj * Math.sin(ang * Math.PI / 180)).toFixed(1)}\\text{ cm}\\)`;
+                        const mc = shuffleMC(correctStr, [dist1, dist2, dist3]);
+                        p.options = mc.options; p.ans = mc.ansLetter;
+                        p.fullStatement = `Find the value of side length \\(x\\) in the right-angled triangle below, rounded to the nearest tenth.`;
+                        p.prompt = "Select the calculated hypotenuse length:";
+                        p.hint = `\\(\\cos(${ang}^\\circ) = \\dfrac{${adj}}{x} \\implies x = \\dfrac{${adj}}{\\cos(${ang}^\\circ)}\\).`;
+                        p.steps = [
+                            { title: "Step 1: Label the Sides From the Given Angle", math: `\\(\\text{Adjacent} = ${adj}\\text{ cm}, \\quad \\text{Hypotenuse} = x\\)`, explanation: `Before picking a ratio, name the two sides that are actually involved. Standing at ${ang}°, the ${adj} cm side is the one you are touching, so it is the adjacent. x sits across from the right angle, which always makes it the hypotenuse.` },
+                            { title: "Step 2: Pick the Ratio That Uses Those Two", math: `\\(\\cos(${ang}^\\circ) = \\dfrac{${adj}}{x}\\)`, explanation: "Adjacent with hypotenuse is the cosine pair in SOH CAH TOA. Cosine is the only ratio that uses exactly the two sides you have. Sine or tangent would drag in a third side you were never given." },
+                            { title: "Step 3: Get x by Itself", math: `\\(x = \\dfrac{${adj}}{\\cos(${ang}^\\circ)} = \\dfrac{${adj}}{${Math.cos(ang*Math.PI/180).toFixed(4)}} \\approx ${hyp.toFixed(1)}\\text{ cm}\\)`, explanation: `The unknown is underneath, so you divide rather than multiply. Check the size at the end: ${hyp.toFixed(1)} cm must be bigger than ${adj} cm, because the hypotenuse is always the longest side.` }
+                        ];
+                    } else if (subScenario === 2) { 
+                        const ang = randInt(25, 58);
+                        const adj = randInt(10, 25);
+                        const opp = adj * Math.tan(ang * Math.PI / 180);
+                        p.assetHtml = makeRightTriangleSVG(`${ang}°`, `${adj} cm`, "x", "", "bottom", "left");
+
+                        const correctStr = `\\(${opp.toFixed(1)}\\text{ cm}\\)`;
+                        const dist1 = `\\(${(opp + 2.8).toFixed(1)}\\text{ cm}\\)`;
+                        const dist2 = `\\(${(opp - 2.1).toFixed(1)}\\text{ cm}\\)`;
+                        const dist3 = `\\(${(adj / Math.tan(ang * Math.PI / 180)).toFixed(1)}\\text{ cm}\\)`;
+                        const mc = shuffleMC(correctStr, [dist1, dist2, dist3]);
+                        p.options = mc.options; p.ans = mc.ansLetter;
+                        p.fullStatement = `Find the value of side length \\(x\\) in the right-angled triangle below, rounded to the nearest tenth.`;
+                        p.prompt = "Select the calculated opposite side length:";
+                        p.hint = `\\(\\tan(${ang}^\\circ) = \\dfrac{x}{${adj}} \\implies x = ${adj} \\cdot \\tan(${ang}^\\circ)\\).`;
+                        p.steps = [
+                            { title: "Step 1: Label the Sides From the Given Angle", math: `\\(\\text{Opposite} = x, \\quad \\text{Adjacent} = ${adj}\\text{ cm}\\)`, explanation: `Standing at the ${ang}° angle, x is straight across the triangle, so it is the opposite. ${adj} cm is the side you are touching, so it is the adjacent. Neither of them is the hypotenuse, and that fact decides the next step.` },
+                            { title: "Step 2: Pick the Ratio That Uses Those Two", math: `\\(\\tan(${ang}^\\circ) = \\dfrac{x}{${adj}}\\)` , explanation: "Opposite with adjacent and no hypotenuse in sight is the tangent pair. Whenever the slanted side is neither given nor asked for, tangent is the ratio you want." },
+                            { title: "Step 3: Solve for x", math: `\\(x = ${adj} \\cdot \\tan(${ang}^\\circ) = ${adj} \\cdot ${Math.tan(ang*Math.PI/180).toFixed(4)} \\approx ${opp.toFixed(1)}\\text{ cm}\\)`, explanation: `This time the unknown is on top, so you multiply instead of divide. ${ang < 45 ? `Since ${ang}° is under 45°, tan comes out below 1 and x lands shorter than ${adj} cm.` : `Since ${ang}° is over 45°, tan comes out above 1 and x lands longer than ${adj} cm.`}` }
+                        ];
+                    } else { 
+                        const opp = randInt(6, 15);
+                        const hyp = opp + randInt(4, 10);
+                        const ang = Math.asin(opp / hyp) * (180 / Math.PI);
+                        p.assetHtml = makeRightTriangleSVG("θ", `${opp} cm`, "", `${hyp} cm`, "top", "left");
+
+                        const correctStr = `\\(${ang.toFixed(1)}^\\circ\\)`;
+                        const dist1 = `\\(${(90 - ang).toFixed(1)}^\\circ\\)`;
+                        const dist2 = `\\(${(ang + 8.4).toFixed(1)}^\\circ\\)`;
+                        const dist3 = `\\(${(ang - 6.2).toFixed(1)}^\\circ\\)`;
+                        const mc = shuffleMC(correctStr, [dist1, dist2, dist3]);
+                        p.options = mc.options; p.ans = mc.ansLetter;
+                        p.fullStatement = `Find the measure of angle \\(\\theta\\) in degrees in the right-angled triangle below, rounded to the nearest tenth.`;
+                        p.prompt = "Select the calculated angle:";
+                        p.hint = `\\(\\sin\\theta = \\dfrac{${opp}}{${hyp}} \\implies \\theta = \\sin^{-1}\\left(\\dfrac{${opp}}{${hyp}}\\right)\\).`;
+                        p.steps = [
+                            { title: "Step 1: Label the Sides From Angle θ", math: `\\(\\text{Opposite} = ${opp}\\text{ cm}, \\quad \\text{Hypotenuse} = ${hyp}\\text{ cm}\\)`, explanation: `Here both sides are known and the angle is missing, which is the reverse of the usual question. From θ, the ${opp} cm side is straight across, so it is the opposite. ${hyp} cm is the longest side and sits opposite the right angle, so it is the hypotenuse.` },
+                            { title: "Step 2: Pick the Ratio That Uses Those Two", math: `\\(\\sin\\theta = \\dfrac{${opp}}{${hyp}} = ${(opp/hyp).toFixed(4)}\\)`, explanation: `Opposite over hypotenuse is the sine pair, so write that ratio down and divide it out to a decimal. You now have the ratio, not the angle.` },
+                            { title: "Step 3: Turn the Ratio Back Into an Angle", math: `\\(\\theta = \\sin^{-1}(${(opp/hyp).toFixed(4)}) \\approx ${ang.toFixed(1)}^\\circ\\)`, explanation: `Opposite over hypotenuse is the sine pair, so build the ratio first: ${(opp/hyp).toFixed(4)}. That number is not degrees. \\(\\sin^{-1}\\) is the button that runs sine backwards and returns the angle that made the ratio.` }
+                        ];
+                    }
+                    break;
+                }
+                case "q2": {
+                    p.title = "Amplitude Identification from Function Form";
+                    const aVal = (randInt(12, 48) / 10) * (Math.random() > 0.5 ? -1 : 1);
+                    const cVal = randInt(-8, 8);
+                    const dVal = randInt(15, 75);
+                    const isSine = Math.random() > 0.5;
+                    const funcName = isSine ? "\\sin" : "\\cos";
+                    const absA = Math.abs(aVal);
+
+                    const exprStr = `f(x) = ${aVal}${funcName}(x ${Math.random() > 0.5 ? '-' : '+'} ${dVal}^\\circ) ${cVal >= 0 ? '+ ' + cVal : '- ' + Math.abs(cVal)}`;
+                    /* audit fix: every option goes through the SAME formatter, and any
+                       candidate whose VALUE equals the amplitude is dropped. Previously the
+                       answer was toFixed(1) while the midline distractor was raw, so
+                       "2.0" and "2" appeared as two separate cards with one value. */
+                    const q2fmt = function (v) { return `\\(${Number(v).toFixed(1)}\\)`; };
+                    const correctStr = q2fmt(absA);
+                    const q2pool = [aVal, cVal, absA + Math.abs(cVal), 2 * absA, absA + 1, absA + 2, absA + 0.5];
+                    const q2dists = [];
+                    for (let qi = 0; qi < q2pool.length && q2dists.length < 3; qi++) {
+                        if (Math.abs(q2pool[qi] - absA) < 1e-9) continue;
+                        const cand = q2fmt(q2pool[qi]);
+                        if (cand !== correctStr && q2dists.indexOf(cand) === -1) q2dists.push(cand);
+                    }
+
+                    const mc = shuffleMC(correctStr, q2dists);
+                    p.options = mc.options; p.ans = mc.ansLetter;
+                    p.fullStatement = `Determine the amplitude of the sinusoidal function \\(${exprStr}\\).`;
+                    p.prompt = mcfPick([
+                        "Select the correct amplitude:",
+                        "What is the amplitude of this function?",
+                        "Pick the amplitude:"
+                    ]);
+                    p.hint = "Amplitude is the positive distance from the midline: \\(A = |a|\\). Ignore any negative sign in front.";
+                    p.steps = [
+                        { title: "Step 1: Find Which Number Is a", math: `\\(f(x) = a${funcName}(x - d) + c \\implies a = ${aVal}\\)`, explanation: `Line the function up against the general form \\(f(x) = a${funcName}(x - d) + c\\). Only the number written directly in front of the \\(${funcName}\\) is a, so here \\(a = ${aVal}\\). The number inside the bracket and the one added at the end control the shifts. Neither of them touches the amplitude.` },
+                        { title: "Step 2: Drop the Sign", math: `\\(\\text{Amplitude} = |a| = |${aVal}| = ${absA.toFixed(1)}\\)`, explanation: `Amplitude is a distance, the height from the middle line up to a peak, and a distance can never be negative. ${aVal < 0 ? `The minus sign in ${aVal} only means the wave is flipped upside down. It does not make the wave shorter, so the amplitude is ${absA.toFixed(1)}.` : `Here a is already positive, so the amplitude is just ${absA.toFixed(1)}.`}` }
+                    ];
+                    break;
+                }
+                case "q3": {
+                    p.title = "Best Cosine Law Equation Selection";
+                    const triangles = [
+                        { name: "\\triangle ABC", sideA: "a", sideB: "b", sideC: "c", target: "a", bVal: randInt(10, 22), cVal: randInt(12, 28), angName: "A", angVal: randInt(40, 120) },
+                        { name: "\\triangle PQR", sideA: "p", sideB: "q", sideC: "r", target: "q", bVal: randInt(8, 18), cVal: randInt(11, 24), angName: "Q", angVal: randInt(45, 115) },
+                        { name: "\\triangle XYZ", sideA: "x", sideB: "y", sideC: "z", target: "x", bVal: randInt(15, 35), cVal: randInt(18, 40), angName: "X", angVal: randInt(35, 130) }
+                    ];
+                    const tri = triangles[randInt(0, 2)];
+
+                    const correctEq = `${tri.target}^2 = ${tri.bVal}^2 + ${tri.cVal}^2 - 2(${tri.bVal})(${tri.cVal})\\cos(${tri.angVal}^\\circ)`;
+                    const dist1 = `${tri.target}^2 = ${tri.bVal}^2 + ${tri.cVal}^2 + 2(${tri.bVal})(${tri.cVal})\\cos(${tri.angVal}^\\circ)`;
+                    const dist2 = `${tri.target}^2 = ${tri.bVal}^2 + ${tri.cVal}^2 - 2(${tri.bVal})(${tri.cVal})\\sin(${tri.angVal}^\\circ)`;
+                    const dist3 = `${tri.target} = ${tri.bVal} + ${tri.cVal} - 2(${tri.bVal})(${tri.cVal})\\cos(${tri.angVal}^\\circ)`;
+
+                    const mc = shuffleMC(`\\(${correctEq}\\)`, [`\\(${dist1}\\)`, `\\(${dist2}\\)`, `\\(${dist3}\\)`]);
+                    p.options = mc.options; p.ans = mc.ansLetter;
+
+                    p.fullStatement = `Which is the best Cosine Law equation to find side length \\(${tri.target}\\) in \\(${tri.name}\\), given side lengths \\(${tri.bVal}\\) and \\(${tri.cVal}\\) with contained angle \\(\\angle ${tri.angName} = ${tri.angVal}^\\circ\\)?`;
+                    p.prompt = mcfPick([
+                        "Select the correct Cosine Law equation:",
+                        "Which Cosine Law setup fits this triangle?",
+                        "Pick the equation that solves for the missing part:"
+                    ]);
+                    p.hint = "Cosine Law: \\(a^2 = b^2 + c^2 - 2bc\\cos A\\). Check for the minus sign before the product term.";
+                    p.steps = [
+                        { title: "Step 1: Match the Side With the Angle Facing It", math: `\\(${tri.target}^2 = b^2 + c^2 - 2bc\\cos(${tri.angName})\\)`, explanation: `Cosine Law only works when the angle you use is the one sitting directly across from the side you want. You are after ${tri.target}, so the angle in the formula has to be ${tri.angName}. Picking any other angle is what makes most of the wrong answers here look almost right.` },
+                        { title: "Step 2: Put the Given Numbers In", math: `\\(${correctEq}\\)`, explanation: `Swap the letters for ${tri.bVal} and ${tri.cVal}, with ${tri.angVal}° in the cosine. The question asks only for the setup, so stop here rather than working it out.` },
+                        { title: "Step 3: Check It Against the Three Traps", math: `\\(\\text{minus} \\;\\cdot\\; \\cos \\;\\cdot\\; \\text{squares}\\)`, explanation: `The wrong answers each break one thing. One uses a plus instead of the minus. One uses sine where cosine belongs. One drops the squares, reading \\(${tri.target} =\\) instead of \\(${tri.target}^2 =\\). Run those three checks and only one option survives.` }
+                    ];
+                    break;
+                }
+                case "q4": {
+                    p.title = "Best Sine Law Equation Selection";
+                    const aVal = randInt(12, 28);
+                    const angA = randInt(35, 65);
+                    const angB = randInt(70, 110);
+                    const angC = 180 - angA - angB;
+
+                    const correctEq = `\\dfrac{c}{\\sin ${angC}^\\circ} = \\dfrac{${aVal}}{\\sin ${angA}^\\circ}`;
+                    const dist1 = `\\dfrac{c}{\\sin ${angA}^\\circ} = \\dfrac{${aVal}}{\\sin ${angC}^\\circ}`;
+                    const dist2 = `\\dfrac{c}{\\sin ${angB}^\\circ} = \\dfrac{${aVal}}{\\sin ${angA}^\\circ}`;
+                    const dist3 = `\\dfrac{c}{${angC}^\\circ} = \\dfrac{${aVal}}{${angA}^\\circ}`;
+
+                    const mc = shuffleMC(`\\(${correctEq}\\)`, [`\\(${dist1}\\)`, `\\(${dist2}\\)`, `\\(${dist3}\\)`]);
+                    p.options = mc.options; p.ans = mc.ansLetter;
+
+                    p.fullStatement = MCF.pick([
+                    `Which is the best Sine Law equation to find side length \\(c\\) in \\(\\triangle ABC\\), given side \\(a = ${aVal}\\), \\(\\angle A = ${angA}^\\circ\\), and \\(\\angle B = ${angB}^\\circ\\)?`,
+                    `In \\(\\triangle ABC\\) you know \\(a = ${aVal}\\), \\(\\angle A = ${angA}^\\circ\\), and \\(\\angle B = ${angB}^\\circ\\). Which Sine Law setup finds side \\(c\\)?`,
+                    `You need side \\(c\\) in \\(\\triangle ABC\\). You have \\(a = ${aVal}\\), \\(\\angle A = ${angA}^\\circ\\), and \\(\\angle B = ${angB}^\\circ\\). Pick the equation that gets you there.`
+                ]);
+                    p.prompt = mcfPick([
+                        "Select the correct Sine Law proportion:",
+                        "Which Sine Law setup fits this triangle?",
+                        "Pick the pair of ratios you would use here:"
+                    ]);
+                    p.hint = `First find angle \\(C = 180^\\circ - ${angA}^\\circ - ${angB}^\\circ = ${angC}^\\circ\\), then set up the ratio \\(\\dfrac{c}{\\sin C} = \\dfrac{a}{\\sin A}\\).`;
+                    p.steps = [
+                        { title: "Step 1: Find the Angle You Are Missing", math: `\\(\\angle C = 180^\\circ - ${angA}^\\circ - ${angB}^\\circ = ${angC}^\\circ\\)`, explanation: `Sine Law works in pairs: a side sitting on top of the angle across from it. You want side c, so you need angle C, and it is not given. The three angles always add to 180°, so subtract the two you have.` },
+                        { title: "Step 2: Pair Each Side With the Angle Facing It", math: `\\(\\dfrac{c}{\\sin C} = \\dfrac{a}{\\sin A}\\)`, explanation: `Each fraction is a side over the sine of the angle facing it, never the angle beside it. Side c goes with ${angC}° and side a goes with ${angA}°. Mismatching a pair is the single most common Sine Law error.` },
+                        { title: "Step 3: Put the Numbers In", math: `\\(\\dfrac{c}{\\sin ${angC}^\\circ} = \\dfrac{${aVal}}{\\sin ${angA}^\\circ}\\)`, explanation: `Swap each letter for its number, keeping every side beside the angle across from it. Trap: pairing a side with the angle next to it instead of the one facing it.` }
+                    ];
+                    break;
+                }
+                case "q5": {
+                    p.title = "Surveyor & Field Trigonometry (Word Problems)";
+                    const scenario = randInt(1, 3);
+                    let baseDist, angA, angC, obstacleName;
+
+                    if (scenario === 1) {
+                        baseDist = randInt(220, 380); angA = randInt(72, 84); angC = randInt(38, 48); obstacleName = "canyon width";
+                    } else if (scenario === 2) {
+                        baseDist = randInt(350, 520); angA = randInt(78, 88); angC = randInt(32, 42); obstacleName = "lake span";
+                    } else {
+                        baseDist = randInt(180, 310); angA = randInt(68, 78); angC = randInt(44, 54); obstacleName = "river width";
+                    }
+
+                    const angB = 180 - angA - angC;
+                    const ansWidth = (baseDist * Math.sin(angC * Math.PI / 180)) / Math.sin(angB * Math.PI / 180);
+
+                    const correctStr = `\\(${ansWidth.toFixed(1)}\\text{ m}\\)`;
+                    const dist1 = `\\(${(ansWidth + 24.5).toFixed(1)}\\text{ m}\\)`;
+                    const dist2 = `\\(${(ansWidth - 18.2).toFixed(1)}\\text{ m}\\)`;
+                    const dist3 = `\\(${(baseDist * Math.sin(angA * Math.PI / 180)).toFixed(1)}\\text{ m}\\)`;
+
+                    const mc = shuffleMC(correctStr, [dist1, dist2, dist3]);
+                    p.options = mc.options; p.ans = mc.ansLetter;
+
+                    p.fullStatement = `A field survey team measures an obstacle (${obstacleName}) using a baseline \\(AC = ${baseDist}.0\\text{ m}\\). From the baseline endpoints, they record \\(\\angle A = ${angA}^\\circ\\) and \\(\\angle C = ${angC}^\\circ\\). Calculate distance \\(AB\\) across the obstacle rounded to 1 decimal place.`;
+                    p.prompt = mcfPick([
+                        "Select the calculated distance:",
+                        "How wide is the obstacle?",
+                        "Pick the distance across the obstacle:"
+                    ]);
+                    p.hint = `1. Find top angle \\(\\angle B = 180^\\circ - ${angA}^\\circ - ${angC}^\\circ = ${angB}^\\circ\\). 2. Use Sine Law: \\(\\dfrac{AB}{\\sin C} = \\dfrac{AC}{\\sin B}\\).`;
+
+                    p.steps = [
+                        { title: "Step 1: Find the Angle at the Far Corner", math: `\\(\\angle B = 180^\\circ - ${angA}^\\circ - ${angC}^\\circ = ${angB}^\\circ\\)` , explanation: `The one length you know, the ${baseDist} m baseline, faces the corner at B, and that angle is not given. Get it first: the three angles add to 180°, so subtract the two measured at the ends of the baseline.` },
+                        { title: "Step 2: Pair Each Side With the Angle Facing It", math: `\\(\\dfrac{AB}{\\sin ${angC}^\\circ} = \\dfrac{${baseDist}.0}{\\sin ${angB}^\\circ}\\)` , explanation: `Now one complete pair is known (${baseDist} m with ${angB}°), which is all Sine Law needs to get going. AB is opposite the ${angC}° angle, so those two form the other pair.` },
+                        { title: "Step 3: Cross-Multiply", math: `\\(AB \\cdot \\sin ${angB}^\\circ = ${baseDist}.0 \\cdot \\sin ${angA}^\\circ\\)`, explanation: `Multiply each top by the other bottom. That clears both fractions in one move and leaves a plain equation. AB is still multiplied by something, so there is one more step.` },
+                        { title: "Step 4: Divide to Get AB Alone", math: `\\(AB = \\dfrac{${baseDist}.0 \\cdot \\sin ${angA}^\\circ}{\\sin ${angB}^\\circ} \\approx ${ansWidth.toFixed(1)}\\text{ m}\\)`, explanation: `Cross-multiply to get AB on its own, then work out both sine values before dividing. The bigger angle always faces the longer side. Compare ${angC}° against ${angB}° to see whether AB beats ${baseDist} m.` }
+                    ];
+                    break;
+                }
+                case "q6": {
+                    p.title = "Matching Sinusoid Graph Properties";
+                    p.assetType = "dynamic_svg";
+
+                    const ampVal = randInt(3, 7);
+                    const midVal = randInt(2, 6);
+                    const period = [180, 240, 360, 540, 720][randInt(0, 4)];
+                    const totalSpan = 3 * period;
+
+                    p.graphSpec = {
+                        a: ampVal, c: midVal, period: period,
+                        xMax: totalSpan, yMax: midVal + ampVal + 3, yMin: Math.min(-2, midVal - ampVal - 2),
+                        type: "grid_sinusoid"
+                    };
+
+                    const peak = midVal + ampVal;
+                    const trough = midVal - ampVal;
+
+                    const correctStr = `Peak = \\(${peak}\\), Trough = \\(${trough}\\), 3 cycles in \\(${totalSpan}^\\circ\\)`;
+                    const dist1 = `Peak = \\(${peak + 2}\\), Trough = \\(${trough - 2}\\), 3 cycles in \\(${totalSpan}^\\circ\\)`;
+                    const dist2 = `Peak = \\(${peak}\\), Trough = \\(${trough}\\), 1 cycle in \\(${totalSpan}^\\circ\\)`;
+                    const dist3 = `Peak = \\(${ampVal}\\), Trough = \\(-${ampVal}\\), 3 cycles in \\(${totalSpan}^\\circ\\)`;
+
+                    const mc = shuffleMC(correctStr, [dist1, dist2, dist3]);
+                    p.options = mc.options; p.ans = mc.ansLetter;
+
+                    p.fullStatement = MCF.pick([
+                    `Select the property description that matches the grid graph below showing three complete cycles.`,
+                    `The graph below completes three cycles. Which description of its peak, trough, and span is correct?`,
+                    `Read the peak, trough, and span off the graph below, then pick the matching description.`
+                ]);
+                    p.prompt = mcfPick([
+                        "Select the matching graph properties:",
+                        "Which set of values does this graph show?",
+                        "Pick the peak, trough, and span that match:"
+                    ]);
+                    p.hint = `Peak \\(= c + A = ${midVal} + ${ampVal} = ${peak}\\), Trough \\(= c - A = ${midVal} - ${ampVal} = ${trough}\\). 3 cycles \\(= 3 \\times ${period}^\\circ = ${totalSpan}^\\circ\\).`;
+
+                    p.steps = [
+                        { title: "Step 1: Sort Out What the Two Words Mean", math: `\\(\\text{midline } y = ${midVal}, \\quad \\text{amplitude} = ${ampVal}\\)`, explanation: `The midline is the horizontal line the wave is balanced on, here \\(y = ${midVal}\\). The amplitude, ${ampVal}, is how far the wave climbs above that line and drops below it. Neither one is the top of the graph, which is what trips people up.` },
+                        { title: "Step 2: Find the Peak and the Trough", math: `\\(\\text{Peak} = ${midVal} + ${ampVal} = ${peak}, \\quad \\text{Trough} = ${midVal} - ${ampVal} = ${trough}\\)`, explanation: `Start at the midline and go up by the amplitude for the peak, down by the amplitude for the trough. So the wave lives between ${trough} and ${peak} and never leaves that band.` },
+                        { title: "Step 3: Work Out How Far It Runs Sideways", math: `\\(3 \\times ${period}^\\circ = ${totalSpan}^\\circ\\)`, explanation: `One full cycle takes ${period}°, and the graph shows three of them laid end to end. So the whole picture stretches 3 × ${period}° = ${totalSpan}°. The period is the length of one cycle, not of the entire graph.` }
+                    ];
+                    break;
+                }
+                case "q7": {
+                    p.title = "Transformed Sinusoid vs. Reference Graph";
+                    p.assetType = "dynamic_svg";
+
+                    const isSine = Math.random() > 0.5;
+                    const aVal = [2, 3, -2, -3][randInt(0, 3)];
+                    const cVal = randInt(-2, 3, [0]);
+                    const dVal = [0, 90, -90][randInt(0, 2)];
+                    const periodVal = [180, 360, 540, 720][randInt(0, 3)];
+                    const xMaxVal = [periodVal, periodVal * 2][randInt(0, 1)];
+
+                    p.graphSpec = {
+                        a: aVal, c: cVal, d: dVal, period: periodVal,
+                        xMax: xMaxVal, yMax: Math.max(4, cVal + Math.abs(aVal) + 1), yMin: Math.min(-4, cVal - Math.abs(aVal) - 1),
+                        type: isSine ? "sine_reference" : "cosine_reference"
+                    };
+
+                    const funcName = isSine ? "sin" : "cos";
+                    const dStr = dVal === 0 ? "" : (dVal > 0 ? ` - ${dVal}^\\circ` : ` + ${Math.abs(dVal)}^\\circ`);
+                    const cStr = cVal >= 0 ? ` + ${cVal}` : ` - ${Math.abs(cVal)}`;
+
+                    const correctEq = `f(x) = ${aVal} ${funcName}(x${dStr})${cStr}`;
+                    const dist1 = `f(x) = ${-aVal} ${funcName}(x${dStr})${cStr}`;
+                    const dist2 = `f(x) = ${aVal} ${funcName}(x)${cStr}`;
+                    const dist3 = `f(x) = ${cVal} ${funcName}(x${dStr}) + ${Math.abs(aVal)}`;
+
+                    const mc = shuffleMC(`\\(${correctEq}\\)`, [`\\(${dist1}\\)`, `\\(${dist2}\\)`, `\\(${dist3}\\)`]);
+                    p.options = mc.options; p.ans = mc.ansLetter;
+
+                    p.fullStatement = `Examine the grid graph below across \\(${xMaxVal}^\\circ\\). The green dashed curve is the reference parent function \\(f(x) = ${funcName} x\\). Which equation represents the transformed black curve?`;
+                    p.prompt = mcfPick([
+                        "Select the matching transformed equation:",
+                        "Which equation gives this shifted graph?",
+                        "Pick the equation that matches the picture:"
+                    ]);
+                    p.hint = "Compare midline level c, amplitude height |a|, reflection sign, and left/right phase shift.";
+
+                    p.steps = [
+                        { title: "Step 1: Find the Line the Wave Is Centred On", math: `\\(c = ${cVal}\\)`, explanation: "Find the level the curve swings evenly above and below, halfway between its peaks and its troughs. That height is c, and it is the value added on the end of the equation." },
+                        { title: "Step 2: Measure From That Line Up to the Peak", math: `\\(a = ${aVal}\\)`, explanation: `Measure from the midline to a peak, not from zero, which gives ${Math.abs(aVal)}. ${aVal < 0 ? "The curve dips down before it rises, so it has been flipped, and a takes a minus sign." : "The curve rises before it dips, so there is no flip and a stays positive."}` },
+                        { title: "Step 3: Assemble the Equation", math: `\\(${correctEq}\\)`, explanation: "Put a in front of the " + funcName + ", the sideways shift inside the bracket, and c on the end. Watch the sign inside the bracket, since it runs opposite to the direction of the shift." }
+                    ];
+                    break;
+                }
+                case "q8": {
+                    p.title = "Building an Equation from Given Facts";
+                    /* audit fix: 'a' used to be drawn independently of the range, so the
+                       two givens contradicted each other -- a = 23 alongside a range of
+                       9 to 39 (which forces a = 15). The keyed answer was then wrong for
+                       the stated range. Derive the size of 'a' from the range and let the
+                       random part be the reflection sign only. The span is kept even so
+                       the midline and the amplitude stay whole numbers. */
+                    const halfSpan = randInt(6, 15);
+                    const minVal = randInt(-10, 10);
+                    const maxVal = minVal + 2 * halfSpan;
+                    const cVal = (maxVal + minVal) / 2;
+                    const aVal = (Math.random() > 0.5 ? 1 : -1) * halfSpan;
+                    const shiftVal = [30, 45, 60, 90][randInt(0, 3)];
+                    const isRight = Math.random() > 0.5;
+
+                    const dSign = isRight ? "-" : "+";
+                    const correctEq = `f(x) = ${aVal}\\sin(x ${dSign} ${shiftVal}^\\circ) ${cVal >= 0 ? '+ ' + cVal : '- ' + Math.abs(cVal)}`;
+                    const dist1 = `f(x) = ${aVal}\\sin(x ${isRight ? '+' : '-'} ${shiftVal}^\\circ) ${cVal >= 0 ? '+ ' + cVal : '- ' + Math.abs(cVal)}`;
+                    const dist2 = `f(x) = ${cVal}\\sin(x ${dSign} ${shiftVal}^\\circ) + ${Math.abs(aVal)}`;
+                    const dist3 = `f(x) = ${aVal}\\sin(x ${dSign} ${shiftVal}^\\circ) + ${maxVal}`;
+
+                    const mc = shuffleMC(`\\(${correctEq}\\)`, [`\\(${dist1}\\)`, `\\(${dist2}\\)`, `\\(${dist3}\\)`]);
+                    p.options = mc.options; p.ans = mc.ansLetter;
+
+                    /* audit fix: injected with innerHTML, so "\n" collapsed and the three
+                       givens ran together on a single line. Use <br>. */
+                    p.fullStatement = `Construct the equation of a sinusoidal function given:<br>1) The number in front of sine, \\(a = ${aVal}\\)<br>2) Range \\(\\{y \\in \\mathbb{R} \\mid ${minVal} \\le y \\le ${maxVal}\\}\\)<br>3) Phase shift is \\(${shiftVal}^\\circ\\) to the ${isRight ? 'right' : 'left'}.`;
+                    p.prompt = mcfPick([
+                        "Select the correct equation:",
+                        "Which equation uses all three given facts?",
+                        "Pick the sine equation that fits:"
+                    ]);
+                    p.hint = `Midline \\(c = \\frac{\\text{Max}+\\text{Min}}{2} = \\frac{${maxVal}+(${minVal})}{2} = ${cVal}\\). Shift ${isRight ? 'right' : 'left'} uses \\((x ${dSign} ${shiftVal}^\\circ)\\).`;
+
+                    p.steps = [
+                        { title: "Step 1: Turn the Range Into a Midline", math: `\\(c = \\dfrac{${maxVal} + (${minVal})}{2} = ${cVal}\\)`, explanation: `The range tells you the wave runs between ${minVal} and ${maxVal}. The middle line sits exactly halfway between those, so average them. That average is c, the number added on the end of the equation.` },
+                        { title: "Step 2: Apply the Sideways Shift", math: `\\(\\text{Shift } ${isRight ? 'Right' : 'Left'} \\implies (x ${dSign} ${shiftVal}^\\circ)\\)`, explanation: `Inside the bracket the sign is the opposite of the direction, which is the part everyone gets backwards. Shifting ${isRight ? 'right' : 'left'} by ${shiftVal}° means you write \\((x ${dSign} ${shiftVal}^\\circ)\\).` },
+                        { title: "Step 3: Put the Three Givens Together", math: `\\(${correctEq}\\)`, explanation: `Each given fact has one home. a goes in front of the sine, the ${shiftVal}° shift inside the bracket, c = ${cVal} on the end. Check the size of a against the range: it should be half the distance from ${minVal} to ${maxVal}.` }
+                    ];
+                    break;
+                }
+                case "q9": {
+                    p.title = "Particle & Wave Motion Analysis (Word Problems)";
+
+                    if (subScenario === 1 || subScenario === 2) { 
+                        p.assetType = "dynamic_svg";   /* only this branch builds a graphSpec */
+                        const ampVal = randInt(2, 6);
+                        const midVal = randInt(-3, 5, [0]);   /* 0 would print "+ 0" */
+                        const period = [180, 360, 540, 720][randInt(0, 3)];
+                        const xMaxVal = [period, period * 2][randInt(0, 1)];
+
+                        p.graphSpec = {
+                            a: ampVal, c: midVal, period: period,
+                            xMax: xMaxVal, yMax: midVal + ampVal + 2, yMin: midVal - ampVal - 2,
+                            type: "particle_motion"
+                        };
+
+                        const peak = midVal + ampVal;
+                        const trough = midVal - ampVal;
+                        const term = (v) => v >= 0 ? '+ ' + v : '- ' + Math.abs(v);
+                        const eq = (t) => `\\(f(x) = ${t}\\)`;
+                        const correctEq = `${ampVal}\\sin x ${term(midVal)}`;
+                        /* candidates run SHORTER and LONGER than the answer, so the answer
+                           is no longer the shortest option every single time */
+                        const mc = shuffleMC(eq(correctEq), distractors3(eq(correctEq), [
+                            eq(`${ampVal}\\sin x`),                                   /* dropped the midline */
+                            eq(`${peak}\\sin x ${term(midVal)}`),                      /* used the peak as the amplitude */
+                            eq(`-${ampVal}\\sin x ${term(midVal)}`),                   /* reflected for no reason */
+                            eq(`${ampVal}\\sin x ${term(peak)}`),                      /* used the peak as the midline */
+                            eq(`${ampVal}\\sin(x - 90^\\circ) ${term(midVal)}`)       /* invented a phase shift */
+                        ]));
+                        p.options = mc.options; p.ans = mc.ansLetter;
+
+                        p.fullStatement = `A particle oscillating in a laboratory creates a wave with peak height \\(${peak}\\) and trough \\(${trough}\\) across \\(${xMaxVal}^\\circ\\) on the grid graph below. Write its function in the form \\(f(x) = a\\sin(x - d) + c\\).`;
+                        p.prompt = mcfPick([
+                            "Select the matching motion equation:",
+                            "Which equation describes this motion?",
+                            "Pick the equation for this wave:"
+                        ]);
+                        p.hint = `Midline \\(c = \\frac{${peak} + (${trough})}{2} = ${midVal}\\), Amplitude \\(a = ${peak} - (${midVal}) = ${ampVal}\\).`;
+
+                        p.steps = [
+                            { title: "Step 1: Find the Level It Swings Around", math: `\\(c = \\dfrac{${peak} + (${trough})}{2} = ${midVal}\\)` , explanation: `The particle rises to ${peak} and falls to ${trough}, so its resting level sits exactly halfway between: average the two. That midpoint is c.` },
+                            { title: "Step 2: Measure the Swing", math: `\\(a = ${peak} - (${midVal}) = ${ampVal}\\)` , explanation: `The amplitude is the distance from the resting level up to the peak, so subtract the midline from the peak. It is half the total travel from ${trough} to ${peak}, not the whole thing.` },
+                            { title: "Step 3: Write the Equation", math: `\\(${correctEq}\\)` , explanation: `Drop a = ${ampVal} in front of the sine and c = ${midVal} on the end. A quick test: putting in the value that makes the sine equal 1 should give you back the peak, ${peak}.` }
+                        ];
+                    } else { 
+                        const numCycles = randInt(12, 30);
+                        const period = [180, 360, 720][randInt(0, 2)];
+                        const totalDeg = numCycles * period;
+
+                        const domainSet = (v) => `\\(\\text{Domain} = \\{x \\in \\mathbb{R} \\mid 0^\\circ \\le x \\le ${v}^\\circ\\}\\)`;
+                        const correctStr = domainSet(totalDeg);
+                        /* off-by-a-cycle errors sit on BOTH sides of the answer, so the
+                           correct span is no longer simply the largest number offered */
+                        const mc = shuffleMC(correctStr, distractors3(correctStr, [
+                            domainSet((numCycles + 1) * period),
+                            domainSet((numCycles - 1) * period),
+                            domainSet((numCycles + 2) * period),
+                            domainSet(totalDeg + period / 2),
+                            domainSet(numCycles * period * 2)
+                        ]));
+                        p.options = mc.options; p.ans = mc.ansLetter;
+
+                        p.fullStatement = `A wave generator produces a sinusoidal oscillation with period = \\(${period}^\\circ\\). If the machine operates continuously for <strong>${numCycles} full cycles</strong> starting at \\(x = 0^\\circ\\), determine the complete domain of the function.`;
+                        p.prompt = mcfPick([
+                            "Select the correct domain:",
+                            "Which set describes how far the graph runs?",
+                            "Pick the domain written in set notation:"
+                        ]);
+                        p.hint = `Total degree span \\(= \\text{Cycles} \\times \\text{Period} = ${numCycles} \\times ${period}^\\circ = ${totalDeg}^\\circ\\).`;
+
+                        p.steps = [
+                            { title: "Step 1: Work Out How Far the Graph Runs", math: `\\(\\text{Total Span} = ${numCycles} \\text{ cycles} \\times ${period}^\\circ = ${totalDeg}^\\circ\\)` , explanation: `The domain is how far along x the graph goes, and each cycle takes ${period}°. Lay ${numCycles} of them end to end and you get ${totalDeg}°. The period is one cycle; the domain is all of them together.` },
+                            { title: "Step 2: Write It in Set Notation", math: correctStr , explanation: `Read the notation as: all real numbers x such that x sits between 0° and ${totalDeg}°. The graph starts at 0° and stops once the last cycle finishes, and both ends count as part of the domain.` }
+                        ];
+                    }
+                    break;
+                }
+                case "q10": {
+                    p.title = "Ocean Survey & Navigation Triangles (Word Problems)";
+                    p.assetType = "svg";
+
+                    if (subScenario === 1) { 
+                        const a = randInt(100, 160);
+                        const b = randInt(170, 240);
+                        const minV = Math.abs(a - b) + 20;
+                        const maxV = a + b - 20;
+                        const v = randInt(minV, maxV);
+
+                        const cosV = (a*a + b*b - v*v) / (2 * a * b);
+                        const angV = Math.acos(cosV) * 180 / Math.PI;
+
+                        p.assetHtml = `<svg width="320" height="190" viewBox="0 0 320 190" xmlns="http://www.w3.org/2000/svg">
+                            <polygon points="40,150 280,150 140,30" fill="none" stroke="#222222" stroke-width="2"/>
+                            <text x="20" y="165" font-family="Arial" font-size="12" font-weight="bold">Beacon A</text>
+                            <text x="260" y="165" font-family="Arial" font-size="12" font-weight="bold">Beacon B</text>
+                            <text x="125" y="20" font-family="Arial" font-size="12" font-weight="bold" fill="#2563eb">Vessel (V)</text>
+                            <text x="70" y="85" font-family="Arial" font-size="12" font-weight="bold">${a} km</text>
+                            <text x="210" y="85" font-family="Arial" font-size="12" font-weight="bold">${b} km</text>
+                            <text x="140" y="170" font-family="Arial" font-size="12" font-weight="bold">${v} km</text>
+                        </svg>`;
+
+                        const correctStr = `\\(${Math.round(angV)}^\\circ\\)`;
+                        const dist1 = `\\(${Math.round(180 - angV)}^\\circ\\)`;
+                        const dist2 = `\\(${Math.round(angV + 14)}^\\circ\\)`;
+                        const dist3 = `\\(${Math.round(Math.abs(angV - 18))}^\\circ\\)`;
+
+                        const mc = shuffleMC(correctStr, [dist1, dist2, dist3]);
+                        p.options = mc.options; p.ans = mc.ansLetter;
+
+                        p.fullStatement = `An ocean survey vessel measures distances of \\(${a}\\text{ km}\\) to Beacon A and \\(${b}\\text{ km}\\) to Beacon B. If the baseline distance between the beacons is \\(${v}\\text{ km}\\), calculate the angle formed at the vessel (angle V) rounded to the nearest degree.`;
+                        p.prompt = mcfPick([
+                            "Select the calculated angle V:",
+                            "What is the size of angle V?",
+                            "Pick the measure of angle V:"
+                        ]);
+                        p.hint = `Use Cosine Law: \\(\\cos V = \\dfrac{${a}^2 + ${b}^2 - ${v}^2}{2(${a})(${b})}\\).`;
+
+                        p.steps = [
+                            { title: "Step 1: Rearrange Cosine Law for an Angle", math: `\\(c^2 = a^2 + b^2 - 2ab\\cos C \\implies \\cos C = \\dfrac{a^2 + b^2 - c^2}{2ab}\\)`, explanation: `All three sides are known and not one angle is, so Sine Law has no pair to start from. Cosine Law rearranged for an angle is the only way in. The side across from the angle you want, ${v}, is the one that gets subtracted on top.` },
+                            { title: "Step 2: Put the Three Sides In", math: `\\(\\cos V = \\dfrac{${a}^2 + ${b}^2 - ${v}^2}{2(${a})(${b})}\\)`, explanation: `The side opposite the angle you want goes on top with a minus in front of it. The other two sides go on top as squares and underneath as a product. Trap: putting the wrong side in the minus slot.` },
+                            { title: "Step 3: Work the Fraction Out", math: `\\(\\cos V = \\dfrac{${a*a} + ${b*b} - ${v*v}}{${2*a*b}} = \\dfrac{${a*a+b*b-v*v}}{${2*a*b}} \\approx ${cosV.toFixed(4)}\\)` , explanation: `Finish the whole top line before dividing once. ${cosV < 0 ? "A negative result is normal and tells you angle V is obtuse." : "A positive result tells you angle V comes out under 90°."}` },
+                            { title: "Step 3: Turn the Ratio Into an Angle", math: `\\(V = \\cos^{-1}(${cosV.toFixed(4)}) \\approx ${Math.round(angV)}^\\circ\\)` , explanation: `${cosV.toFixed(4)} is a ratio, not degrees. Run cosine backwards with \\(\\cos^{-1}\\) to recover the angle, then round to the nearest degree.` }
+                        ];
+                    } else { 
+                        const a = (randInt(110, 160) / 10);
+                        const b = (randInt(170, 230) / 10);
+                        const angS = randInt(52, 85);
+
+                        const dSq = a*a + b*b - 2*a*b*Math.cos(angS * Math.PI / 180);
+                        const distD = Math.sqrt(dSq);
+
+                        p.assetHtml = `<svg width="320" height="190" viewBox="0 0 320 190" xmlns="http://www.w3.org/2000/svg">
+                            <polygon points="160,150 50,40 270,40" fill="none" stroke="#222222" stroke-width="2"/>
+                            <text x="125" y="170" font-family="Arial" font-size="12" font-weight="bold" fill="#2563eb">Station (S)</text>
+                            <text x="10" y="35" font-family="Arial" font-size="12" font-weight="bold">Ship A</text>
+                            <text x="275" y="35" font-family="Arial" font-size="12" font-weight="bold">Ship B</text>
+                            <text x="152" y="135" font-family="Arial" font-size="11">${angS}°</text>
+                            <text x="70" y="100" font-family="Arial" font-size="12" font-weight="bold">${a.toFixed(1)} km</text>
+                            <text x="210" y="100" font-family="Arial" font-size="12" font-weight="bold">${b.toFixed(1)} km</text>
+                            <text x="150" y="30" font-family="Arial" font-size="12" font-weight="bold" fill="#2563eb">d = ?</text>
+                        </svg>`;
+
+                        const correctStr = `\\(${distD.toFixed(1)}\\text{ km}\\)`;
+                        const dist1 = `\\(${(distD + 4.2).toFixed(1)}\\text{ km}\\)`;
+                        const dist2 = `\\(${(distD - 3.5).toFixed(1)}\\text{ km}\\)`;
+                        const dist3 = `\\(${(a + b).toFixed(1)}\\text{ km}\\)`;
+
+                        const mc = shuffleMC(correctStr, [dist1, dist2, dist3]);
+                        p.options = mc.options; p.ans = mc.ansLetter;
+
+                        p.fullStatement = `A Coast Guard radar station S tracks Ship A at \\(${a.toFixed(1)}\\text{ km}\\) and Ship B at \\(${b.toFixed(1)}\\text{ km}\\). The angle between radar lines of sight is \\(${angS}^\\circ\\). Calculate direct distance \\(d\\) between the ships rounded to 1 decimal place.`;
+                        p.prompt = mcfPick([
+                            "Select the calculated distance:",
+                            "How far apart are the two ships?",
+                            "Pick the distance between the ships:"
+                        ]);
+                        p.hint = `Apply Cosine Law: \\(d^2 = ${a.toFixed(1)}^2 + ${b.toFixed(1)}^2 - 2(${a.toFixed(1)})(${b.toFixed(1)})\\cos(${angS}^\\circ)\\).`;
+
+                        p.steps = [
+                            { title: "Step 1: Decide Which Law to Use", math: `\\(d^2 = a^2 + b^2 - 2ab\\cos C\\)`, explanation: `Both ships are measured from the same radar station, so the ${angS}° angle sits between the ${a.toFixed(1)} km and ${b.toFixed(1)} km sides. Two sides with the angle between them and the third side missing is the Cosine Law setup.` },
+                            { title: "Step 2: Put the Given Numbers In", math: `\\(d^2 = ${a.toFixed(1)}^2 + ${b.toFixed(1)}^2 - 2(${a.toFixed(1)})(${b.toFixed(1)})\\cos(${angS}^\\circ)\\)`, explanation: `Swap each letter for its number. The angle you put in must be the one wedged between those two sides. Trap: using a different angle, which gives a distance that could not exist.` },
+                            { title: "Step 3: Work Out the Numbers", math: `\\(d^2 = ${(a*a).toFixed(2)} + ${(b*b).toFixed(2)} - ${(2*a*b).toFixed(2)}(${Math.cos(angS*Math.PI/180).toFixed(4)}) \\approx ${dSq.toFixed(2)}\\)` , explanation: `Square both distances, then handle the cosine chunk separately before subtracting. ${angS > 90 ? `\\(\\cos ${angS}^\\circ\\) is negative here, so subtracting it actually adds and the ships end up further apart.` : `\\(\\cos ${angS}^\\circ\\) is positive here, so this really is a subtraction.`}` },
+                            { title: "Step 4: Take the Square Root", math: `\\(d = \\sqrt{${dSq.toFixed(2)}} \\approx ${distD.toFixed(1)}\\text{ km}\\)` , explanation: `The formula gives \\(d^2\\), so one square root finishes it. Sanity check: ${distD.toFixed(1)} km should be in the same ballpark as the two radar distances, not in the hundreds.` }
+                        ];
+                    }
+                    break;
+                }
+            }
+
+            return p;
+        }
+
+        // --- Core Application Logic ---
+
+        function renderMathElements() {
+            if (window.renderMathInElement) {
+                renderMathInElement(document.body, {
+                    delimiters: [
+                        {left: '$$', right: '$$', display: true},
+                        {left: '\\(', right: '\\)', display: false}
+                    ],
+                    throwOnError: false
+                });
+            }
+        }
+
+        window.onload = renderMathElements;
+
+        function displaySolution() {
+            document.getElementById("solution-reveal-layer").style.display = "none";
+            var __hb = document.getElementById("hint-box"); if (__hb) __hb.style.display = "none";
+            const placeholder = document.getElementById("placeholder");
+            const quizStation = document.getElementById("quiz-station");
+            const assetMount = document.getElementById("asset-viewport-mount-point");
+            const mountPoint = document.getElementById("dynamic-input-mount-point");
+            const promptLabel = document.getElementById("input-prompt-label");
+
+            placeholder.style.display = "none";
+            quizStation.style.display = "block";
+            
+            if (currentProblemData.assetType === "dynamic_svg") {
+                assetMount.style.display = "flex";
+                assetMount.innerHTML = renderDynamicSVG(currentProblemData.graphSpec);
+            } else if (currentProblemData.assetType === "svg") {
+                assetMount.style.display = "flex";
+                assetMount.innerHTML = currentProblemData.assetHtml;
+            } else {
+                assetMount.style.display = "none";
+            }
+
+            document.getElementById("question-statement-display").innerHTML = currentProblemData.fullStatement;
+            promptLabel.innerHTML = currentProblemData.prompt;
+            
+            let html = '<div class="mc-options-list">';
+            for (let i = 0; i < currentProblemData.options.length; i++) {
+                const opt = currentProblemData.options[i];
+                const letter = opt.charAt(0);
+                const sel = currentState.selectedMcOption === letter ? "selected" : "";
+                const dis = currentState.answered ? "disabled" : "";
+                html += '<div class="mc-option-card ' + sel + ' ' + dis + '" onclick="selectMcOptionCard(\'' + letter + '\')"><span class="mc-badge">' + letter + '</span><span>' + opt.substring(3) + '</span></div>';
+            }
+            html += '</div>';
+            mountPoint.innerHTML = html;
+
+            if (currentState.answered) {
+                lockQuizInterface(currentState.isCorrect);
+                if (currentState.solRevealed) revealSolutionWorkspace();
+            } else {
+                unlockQuizInterface();
+            }
+
+            setTimeout(renderMathElements, 10);
+        }
+
+
+
+
+        function transmitDataToTeacherSpreadsheet(payload) {
+            fetch(TEACHER_SPREADSHEET_SCRIPT_URL, {
+                method: "POST",
+                mode: "no-cors",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            }).catch(err => console.error("Database cloud logging failure:", err));
+        }
+
+
+
+
+
+
+
+
+
+        function updateHudScoreboard() {
+            document.getElementById("hud-score").innerText = globalScore;
+            document.getElementById("hud-attempts").innerText = globalAttempts;
+        }
+    
+
+        MCF.init({ generate: generateProblem,
+                   /* 이 유닛은 그래프를 p.assetHtml 이 아니라 renderDynamicSVG(p.graphSpec) 로 그린다 */
+                   renderAsset: function (p) { return p.graphSpec ? renderDynamicSVG(p.graphSpec) : ""; },
+                   logUrl: (typeof TEACHER_SPREADSHEET_SCRIPT_URL !== "undefined" ? TEACHER_SPREADSHEET_SCRIPT_URL : null),
+                   unitId: "Unit_4", lessonId: "Practice_Test" });
+</script>
+    <script src="../progress.js"></script>
+</body>
+</html>

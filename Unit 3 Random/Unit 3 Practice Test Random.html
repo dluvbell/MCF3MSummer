@@ -1,0 +1,1301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCF3M Unit 3 Comprehensive Practice Test Studio</title>
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+
+    <!-- mcf-core.js 가 그리는 요소들의 기본 스타일. 아래 <style> 보다 먼저 와야
+         파일 고유 스타일이 이기고, 빠진 클래스만 여기서 메워진다. -->
+    <link rel="stylesheet" href="../mcf-core.css">
+    <link rel="stylesheet" href="mcf-core.css">
+    <style>
+        :root {
+            --primary-color: #0f172a;
+            --secondary-color: #2563eb;
+            --disabled-color: #94a3b8;
+            --text-color: #334155;
+            --math-color: #000000;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --border-color: #cbd5e1;
+            --highlight-bg: #eff6ff;
+            --explanation-bg: #f1f5f9;
+            --rule-bg: #fef08a;
+            --rule-text: #713f12;
+            --success-color: #16a34a;
+            --error-color: #dc2626;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.8;
+            margin: 0;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: -0.025em;
+        }
+
+        header p {
+            margin: 8px 0 0 0;
+            color: #94a3b8;
+            font-size: 1.05rem;
+        }
+
+        .scoreboard {
+            background-color: #1e293b;
+            color: white;
+            display: inline-flex;
+            gap: 20px;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-weight: 700;
+            margin-top: 15px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.2);
+        }
+
+        .scoreboard span {
+            color: #60a5fa;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .profile-box, .selector-box {
+            background-color: var(--card-bg);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-color);
+            margin-bottom: 25px;
+        }
+
+        .profile-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .profile-grid input {
+            width: 100%;
+            padding: 12px;
+            font-size: 1rem;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        .profile-grid input:focus {
+            border-color: var(--secondary-color);
+        }
+
+        label {
+            display: block;
+            font-weight: 700;
+            color: var(--primary-color);
+            font-size: 1.1rem;
+            margin-bottom: 12px;
+        }
+
+        .selector-controls {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        select {
+            flex: 1;
+            padding: 16px;
+            font-size: 1.1rem;
+            font-family: inherit;
+            border-radius: 8px;
+            border: 2px solid var(--border-color);
+            background-color: white;
+            color: var(--primary-color);
+            outline: none;
+            cursor: pointer;
+        }
+
+        .solution-container {
+            background-color: var(--card-bg);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-color);
+            min-height: 200px;
+        }
+
+        .placeholder-text {
+            color: #64748b;
+            text-align: center;
+            font-style: italic;
+            padding: 60px 0;
+            font-size: 1.1rem;
+        }
+
+        .quiz-interface-box {
+            background-color: var(--explanation-bg);
+            border: 1px solid var(--border-color);
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+
+        .math-render-viewport {
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+        }
+
+        .mc-options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 10px;
+        }
+
+        .mc-option-card {
+            background: white;
+            border: 2px solid var(--border-color);
+            padding: 14px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1.05rem;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .mc-option-card:hover:not(.disabled) {
+            border-color: var(--secondary-color);
+            background-color: var(--highlight-bg);
+        }
+
+        .mc-option-card.selected {
+            border-color: var(--secondary-color);
+            background-color: #dbeafe;
+            color: #1e40af;
+        }
+
+        .mc-option-card.disabled {
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .mc-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background-color: #e2e8f0;
+            color: var(--primary-color);
+            font-weight: 800;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+
+        .mc-option-card.selected .mc-badge {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+
+        .feedback-msg-area {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            display: none;
+            padding: 10px 15px;
+            border-radius: 6px;
+        }
+
+        .feedback-success {
+            background-color: #dcfce7;
+            color: var(--success-color);
+            border-left: 5px solid var(--success-color);
+        }
+
+        .feedback-error {
+            background-color: #fee2e2;
+            color: var(--error-color);
+            border-left: 5px solid var(--error-color);
+        }
+
+        .quiz-action-bar {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .solution-reveal-window {
+            display: none;
+            border-top: 3px double var(--border-color);
+            margin-top: 30px;
+            padding-top: 30px;
+        }
+
+        .step-block {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e2e8f0;
+            display: none;
+        }
+
+        .step-title {
+            font-weight: 800;
+            color: var(--secondary-color);
+            display: block;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 8px;
+        }
+
+        .step-math {
+            font-size: 1.3rem;
+            font-weight: 700;
+            background-color: var(--explanation-bg);
+            padding: 14px 20px;
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin: 8px 0;
+            color: var(--math-color);
+            letter-spacing: 0.02em;
+            flex-wrap: wrap;
+        }
+
+        .step-explanation {
+            display: block;
+            font-size: 1.05rem;
+            color: #334155;
+            margin-top: 6px;
+        }
+
+        .final-answer-box {
+            background-color: var(--highlight-bg);
+            border-left: 6px solid var(--secondary-color);
+            padding: 20px 25px;
+            border-radius: 0 8px 8px 0;
+            margin-top: 30px;
+            display: none;
+        }
+
+        .final-answer-label {
+            font-weight: 800;
+            color: var(--secondary-color);
+            display: block;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .final-answer-math {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            margin-top: 6px;
+            display: inline-flex;
+            align-items: center;
+            letter-spacing: 0.02em;
+        }
+
+        .control-panel {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid var(--border-color);
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 14px 24px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            border-radius: 8px;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary { background-color: var(--secondary-color); color: white; }
+        .btn-primary:hover:not(:disabled) { background-color: #1d4ed8; }
+        .btn-success { background-color: var(--success-color); color: white; }
+        .btn-success:hover:not(:disabled) { background-color: #166534; }
+        .btn-secondary { background-color: var(--explanation-bg); color: var(--primary-color); border: 1px solid var(--border-color); }
+        .btn-secondary:hover:not(:disabled) { background-color: #e2e8f0; }
+        .btn-accent { background-color: var(--primary-color); color: white; }
+        .btn-accent:hover:not(:disabled) { background-color: #1e293b; }
+
+        .btn:disabled {
+            background-color: var(--disabled-color);
+            color: #f1f5f9;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        .question-statement-card {
+            background: #ffffff;
+            border-left: 4px solid var(--secondary-color);
+            padding: 16px 20px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            border-radius: 0 6px 6px 0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .hint-box {
+            display: none;
+            background-color: #fef9c3;
+            border-left: 5px solid #eab308;
+            color: #713f12;
+            padding: 12px 16px;
+            border-radius: 0 6px 6px 0;
+            margin-bottom: 15px;
+            font-size: 1.05rem;
+            font-weight: 600;
+        }
+
+        .btn-hint { background-color: #fde047; color: #713f12; }
+        .btn-hint:hover:not(:disabled) { background-color: #facc15; }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>MCF3M Unit 3 Practice Test</h1>
+        <p>Infinite Practice: Comprehensive Review Studio</p>
+        <div class="scoreboard">
+            <div>Score: <span id="hud-score">0</span></div>
+            <div>Tries: <span id="hud-attempts">0</span></div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="profile-box">
+            <label>Student Profile Setup:</label>
+            <div class="profile-grid">
+                <input type="text" id="first-name" placeholder="First name" autocomplete="off">
+                <input type="text" id="last-name" placeholder="Last name" autocomplete="off">
+            </div>
+        </div>
+
+        <div class="selector-box">
+            <label for="question-select">Select Practice Test Concept Area:</label>
+            <div class="selector-controls">
+                <select id="question-select" onchange="triggerNewQuestion()">
+                    <option value="">-- Choose a Concept (18 Core Types) --</option>
+                    <option value="q1">Q1: Parts of a Power</option>
+                    <option value="q2">Q2: Range of an Exponential Function</option>
+                    <option value="q3">Q3: Domain of an Exponential Function</option>
+                    <option value="q4">Q4: Exponential or Linear?</option>
+                    <option value="q5">Q5: Roots as Fraction Exponents</option>
+                    <option value="q6">Q6: Rational Exponent Evaluation</option>
+                    <option value="q7">Q7: Finding the Base from a Point</option>
+                    <option value="q8">Q8: Combining Powers with Letters</option>
+                    <option value="q9">Q9: Doubling and Halving Times</option>
+                    <option value="q10">Q10: Present Value Lump Sums (Discounting)</option>
+                    <option value="q11">Q11: Future Value of Regular Payments</option>
+                    <option value="q12">Q12: Simple vs Compound Interest</option>
+                    <option value="q13">Q13: Horizontal Asymptotes</option>
+                    <option value="q14">Q14: Exponent Common Misconceptions</option>
+                    <option value="q15">Q15: Choosing Between Interest Options</option>
+                    <option value="q16">Q16: Working Back to the Starting Loan</option>
+                    <option value="q17">Q17: Total Interest Earned on Regular Payments</option>
+                    <option value="q18">Q18: Half-Life Calculations</option>
+                </select>
+                <button class="btn btn-accent" onclick="triggerNewQuestion()">Generate New</button>
+            </div>
+        </div>
+
+        <div class="solution-container" id="display-window">
+            <div id="placeholder" class="placeholder-text">
+                Choose a concept from the menu and click "Generate New" to begin your comprehensive test.
+            </div>
+
+            <div id="quiz-station" class="quiz-interface-box" style="display: none;">
+                <div id="asset-viewport-mount-point" class="math-render-viewport" style="display: none;"></div>
+
+                <div id="question-statement-display" class="question-statement-card"></div>
+
+                <label id="input-prompt-label" style="margin-bottom: 12px; font-weight: 700; display: block;"></label>
+                
+                <div id="dynamic-input-mount-point" style="margin-top: 10px;"></div>
+
+                <div id="hint-box" class="hint-box"></div>
+                <div id="feedback-msg" class="feedback-msg-area"></div>
+
+                <div class="quiz-action-bar">
+                    <button class="btn btn-success" id="check-ans-btn" onclick="evaluateStudentAnswer()">Check Answer</button>
+                    <button class="btn btn-hint" id="hint-btn" onclick="toggleHint()">Hint</button>
+                    <button class="btn btn-secondary" id="reveal-sol-btn" disabled onclick="unlockSolutionPanel()">Show Solution Steps</button>
+                </div>
+            </div>
+
+            <div class="solution-reveal-window" id="solution-reveal-layer">
+                <div id="solution-workspace-injected"></div>
+                
+                <div class="control-panel" id="controls-panel">
+                    <button class="btn btn-secondary" id="restart-btn" onclick="restartSolution()">Restart Steps</button>
+                    <button class="btn btn-primary" id="next-btn" onclick="showNextStep()">Next Step &rarr;</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- mcf-core.js 는 보통 상위 폴더(index.html·progress.js 옆)에 둔다.
+         같은 폴더에 두는 경우도 있어 두 경로를 다 건다. 없는 쪽은 404 로 무시되고,
+         둘 다 있으면 두 번째는 core 내부 가드가 막는다. -->
+    <script src="../mcf-core.js"></script>
+    <script src="mcf-core.js"></script>
+    <script>
+    /* core 를 못 찾으면 Generate 가 조용히 무반응이 된다. 원인이 안 보이므로 안내를 띄운다. */
+    if (typeof MCF === "undefined") {
+      document.addEventListener("DOMContentLoaded", function () {
+        var box = document.getElementById("placeholder");
+        if (box) {
+          box.innerHTML =
+            '<strong style="color:#b91c1c">mcf-core.js \uB97C \uCC3E\uC744 \uC218 \uC5C6\uC2B5\uB2C8\uB2E4.</strong><br><br>' +
+            'This lesson needs <code>mcf-core.js</code>.<br>' +
+            'Put it next to <code>progress.js</code> and <code>index.html</code> ' +
+            '(the folder above this one), or in this same folder.';
+          box.style.display = "block";
+        }
+        var b = document.querySelector(".btn-generate");
+        if (b) b.disabled = true;
+      });
+    }
+    </script>
+    <script>
+
+        /* ── mcf-core.js 로 옮겨간 이름들의 지역 별칭 ── */
+        const randInt = MCF.randInt;
+        const gcd = MCF.gcd;
+        const gcd3 = MCF.gcd3;
+        const mcfPick = MCF.pick;
+        const mcfRich = MCF.rich;
+        const mcfShuffle = MCF.shuffle;
+        const mcfKey = MCF.key;
+        const mcfDedupe = MCF.dedupe;
+        const mcfFactorKey = MCF.factorKey;
+        const mcfUniqueByValue = MCF.uniqueByValue;
+        const mcfSpareOption = MCF.spareOption;
+        const shuffleMC = MCF.shuffleMC;
+        const M = MCF.M;
+        const Mu = MCF.Mu;
+        const fmtTerm = MCF.fmtTerm;
+        /* --- audit fix: uniform in-place shuffle (Fisher-Yates) --- */
+
+        /* --- audit fix: 같은 보기가 두 번 나오면 하나로 합친다.
+           정답과 글자가 똑같은 보기를 골랐는데 오답 처리되는 것을 막는다. --- */
+        /* Nudge one number inside an existing option to build a replacement
+           distractor. Skips digit groups that follow a thousands separator, so
+           "\\$11\\,045.96" is altered at the 11 and never left malformed.
+           Uniqueness is checked by the caller, so this can never reproduce the
+           correct answer. */
+        /* Two options can differ only in whitespace -- an empty middle term leaves
+           "4x^2  + 16" beside "4x^2 + 16" -- and MathJax renders them identically, so
+           the student sees the same card twice and only one of them scores. Compare
+           options on this normalised key, not on the raw string. */
+        /* Picks one of several wordings for the same question. Types that only ever
+           printed one sentence taught students to recognise the sentence instead of
+           reading the maths. */
+
+
+
+
+        const TEACHER_SPREADSHEET_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwygR6-l7XPRC1KL-Pqci33Yw_4pmCWa8mW7gNHJ_RsmN41ax15-d0sE-CrIxU0z22m/exec";
+
+        let globalScore = 0;
+        let globalAttempts = 0;
+        let currentProblemData = null;
+        let currentState = { answered: false, selectedMcOption: "", isCorrect: false, currentStep: 0, solRevealed: false, attempts: 0 };
+        let visibleStepElements = [];
+        let currentStepIndex = 0;
+
+        // --- Math & Logic Utilities ---
+
+
+        /* Pick exactly three distractors that differ from each other and from the
+           answer. Callers pass more candidates than they need, so a clash is
+           replaced instead of silently shrinking the question to three options. */
+        function distractors3(correct, candidates) {
+            const seen = [String(correct)];
+            const out = [];
+            /* audit fix 2026-07-30: 앞에서부터 3개를 그대로 집어서, 후보를 4~5개
+               써 둔 유형은 뒤쪽 후보가 학생에게 한 번도 가지 않았다. 복사본을
+               섞은 뒤 고른다 (원본 배열은 건드리지 않는다). */
+            const pool = mcfShuffle(candidates.slice());
+            for (let i = 0; i < pool.length && out.length < 3; i++) {
+                const c = String(pool[i]);
+                if (seen.indexOf(c) !== -1) continue;
+                seen.push(c);
+                out.push(c);
+            }
+            if (out.length < 3) console.warn("distractors3: only " + out.length + " usable distractors");
+            return out;
+        }
+
+        function formatMoney(amount) {
+            let parts = parseFloat(amount).toFixed(2).split(".");
+            parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, "\\,");
+            return "\\(\\$" + parts.join(".") + "\\)";
+        }
+
+        /* audit fix 2026-07-30: 문제문이 **굵게** 표기를 쓰는데 이 파일에는 마크다운
+           처리기가 없어서 화면에 별표가 그대로 찍혔다 (13개 유형, 110곳). */
+
+        /* audit fix 2026-07-30: formatNumber는 LaTeX 얇은공백(\,)을 내보내므로
+           \( \) 밖에 놓으면 백슬래시가 그대로 보인다. 수식 밖 숫자는 이쪽을 쓴다. */
+        function formatNumberText(num) {
+            let parts = parseFloat(num).toString().split(".");
+            parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            return parts.join(".");
+        }
+
+        function formatNumber(num) {
+            let parts = parseFloat(num).toString().split(".");
+            parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, "\\,");
+            return parts.join(".");
+        }
+
+        // --- Infinite Problem Generator Factory ---
+        function generateProblem(typeId) {
+            if (!typeId) return null;
+            let p = {
+                title: "", type: "mc", assetType: "none", optionType: "text",
+                fullStatement: "", prompt: "", options: [], hint: "", steps: [], ans: "", rawAns: ""
+            };
+
+            const scenario = randInt(1, 2);
+
+            switch (typeId) {
+                case "q1": {
+                    const b = randInt(2, 9); const x = randInt(3, 6); const y = Math.pow(b, x);
+                    p.title = "Parts of a Power";
+                    p.fullStatement = MCF.pick([
+                    `In the exponential expression \\\\(${b}^{${x}} = ${y}\\\\), which part is the **power**?`,
+                    `Look at \\\\(${b}^{${x}} = ${y}\\\\). Which part of it is called the **power**?`,
+                    `For \\\\(${b}^{${x}} = ${y}\\\\), identify which part the word **power** refers to.`
+                ]);
+                    p.prompt = mcfPick(["Select the part named in the question:", "Which choice names that part of the power?", "Pick the correct name for that part:"]);
+                    const correctStr = `The whole expression \\(${b}^{${x}}\\), whose value is ${y}`;
+                    const dist1 = `Only the base ${b}, which is the number being repeated`; const dist2 = `Only the exponent ${x}, which counts the repeats`; const dist3 = `The product ${b * x}, found by multiplying base and exponent`;
+                    const mc = shuffleMC(correctStr, [dist1, dist2, dist3]);
+                    p.options = mc.options; p.ans = mc.ansLetter;
+                    p.hint = "Review core definitions: base is multiplied, exponent dictates cycles, and power represents the full evaluated whole.";
+                    p.steps = [
+                        { title: `Step 1: Work Out What the Two Parts Do`, math: `\\(\\text{Base} = ${b}\\)`, explanation: ( "The base number is the factor subjected to repeated self-multiplication.") + ` A power is made of two parts doing different jobs. The base is the number being multiplied, and the exponent counts how many times.`},
+                        { title: "Step 2: Identify Exponent Component", math: `\\(\\text{Exponent} = ${x}\\)`, explanation: ( "The exponent indicates how many times the base factor is multiplied.") + ` The exponent sits raised and small. It is a count, not something you multiply by. Trap: reading it as a normal multiplication.`},
+                        { title: `Step 3: Say What the Word Power Actually Means`, math: `\\(\\text{Power} = ${b}^{${x}} = ${y}\\)`, explanation: ( "The power is the entire exponential part comprising both base and exponent elements.") + ` The whole expression together is the power, and its value is what you get after multiplying it out. Trap: calling just the base or just the exponent the power.`}
+                    ];
+                    break;
+                }
+                case "q2": {
+                    const b = randInt(2, 9);
+                    const k = randInt(-6, 6);              /* vertical shift, sometimes 0 */
+                    const down = randInt(1, 2) === 1;      /* reflected in the x-axis */
+                    const kTerm = k === 0 ? "" : (k > 0 ? ` + ${k}` : ` - ${-k}`);
+                    const fn = `f(x) = ${down ? "-" : ""}${b}^x${kTerm}`;
+                    const yset = (rel, v) => `\\(\\{y \\in \\mathbb{R} \\mid y ${rel} ${v}\\}\\)`;
+                    p.title = "Range of an Exponential Function";
+                    p.fullStatement = `What is the **range** of the exponential function: \\(${fn}\\)?`;
+                    p.prompt = mcfPick(["Select the correct range:", "Which set describes the range?", "Pick the range of this function:"]);
+                    const correctStr = down ? yset("<", k) : yset(">", k);
+                    const mc = shuffleMC(correctStr, distractors3(correctStr, [
+                        down ? yset(">", k) : yset("<", k),                 /* wrong side of the asymptote */
+                        down ? yset("\\le", k) : yset("\\ge", k),           /* includes the asymptote */
+                        yset(down ? "<" : ">", 0),                          /* ignored the vertical shift */
+                        "\\(\\{y \\in \\mathbb{R}\\}\\)",                   /* no restriction at all */
+                        yset(down ? "<" : ">", -k),                         /* wrong sign on the shift */
+                        yset(down ? "\\ge" : "\\le", 0)
+                    ]));
+                    p.options = mc.options; p.ans = mc.ansLetter;
+                    p.hint = `A positive base raised to any real power is strictly positive, so \\(${b}^x\\) never reaches 0. ${down ? "The minus sign flips every output below the asymptote." : ""} Shift that boundary by the constant term to find the asymptote.`;
+                    p.steps = [
+                        { title: `Step 1: Decide What Limits the Heights`, math: `\\(${b}^x > 0 \\quad \\text{for all real } x\\)`, explanation: ( "Any real input returns a strictly positive value; the power alone can never be 0 or negative.") + ` Range is about heights the curve reaches, so work from the asymptote outward. A power of a positive base is always positive, which is what fixes the boundary.`},
+                        { title: "Step 2: Apply the Transformations", math: `\\(${down ? `-${b}^x < 0` : `${b}^x > 0`}${k === 0 ? "" : `, \\quad \\text{then shift by } ${k}`}\\)`, explanation: ( down ? `The minus sign reflects every output below zero, and the constant term moves that boundary to y = ${k}.` : `The constant term raises the boundary from y = 0 to y = ${k}.`) + ` A minus in front flips the curve upside down, and a constant on the end slides it up or down. Both change where the boundary sits.`},
+                        { title: "Step 3: Locate the Horizontal Asymptote", math: `\\(y = ${k}\\)`, explanation: ( `The curve approaches y = ${k} without ever reaching it, so that value is excluded from the range.`) + ` The power shrinks toward zero, so only the constant is left. That constant is the line the curve gets close to but never touches.`},
+                        { title: "Step 4: State the Range", math: correctStr, explanation: ( `The outputs cover every number strictly ${down ? "below" : "above"} ${k}.`) + ` Write it in set notation with \\(y\\), not \\(x\\), and use a strict inequality. Trap: including the asymptote, which the curve never actually reaches.`}
+                    ];
+                    break;
+                }
+                case "q3": {
+                    const b = randInt(2, 9);
+                    const sc = randInt(1, 3);
+                    p.title = "Domain of an Exponential Function";
+                    p.prompt = mcfPick(["Select the correct domain:", "Which set describes the domain?", "Pick the domain of this function:"]);
+                    let correctStr, cands;
+                    if (sc === 1) {
+                        /* the bare function: nothing restricts the input */
+                        p.fullStatement = `Identify the complete **domain** of allowed inputs for the function: \\(f(x) = \\left(\\dfrac{1}{${b}}\\right)^x\\).`;
+                        correctStr = "\\(\\{x \\in \\mathbb{R}\\}\\)";
+                        cands = [
+                            "\\(\\{x \\in \\mathbb{R} \\mid x > 0\\}\\)",
+                            "\\(\\{x \\in \\mathbb{R} \\mid x \\ne 0\\}\\)",
+                            "\\(\\{x \\in \\mathbb{R} \\mid x \\ge 0\\}\\)",
+                            "\\(\\{x \\in \\mathbb{R} \\mid x < 0\\}\\)"
+                        ];
+                        p.hint = "Domain is the set of allowed inputs. Test a negative, a zero and a fractional exponent and see whether any of them break the function.";
+                        p.steps = [
+                            { title: `Step 1: Work Out What Could Be Banned`, math: `\\(x = 0 \\implies y = 1, \\quad x = -1 \\implies y = ${b}\\)`, explanation: ( "Negative, zero and fractional inputs all return valid outputs.") + ` Domain is about which inputs are allowed. So look for the things that break maths: dividing by zero, and even roots of negatives.`},
+                            { title: "Step 2: Look for Restrictions", math: "\\(\\text{No division by zero, no even root of a negative}\\)", explanation: ( ( "Nothing in the expression can be undefined, so no input has to be excluded.") + ` An exponential has no fraction and no root, so nothing is banned. You can raise a positive base to any power at all.`) + ` Fractions ban a zero on the bottom, and even roots ban negatives underneath. An exponential has neither, so nothing gets banned.`},
+                            { title: "Step 3: State the Domain", math: correctStr, explanation: ( ( "With no restriction to apply, the domain is every real number.") + ` Write it in set notation with \\(x\\), because domain is about inputs. Trap: writing the range answer here by mistake.`) + ` Every real number works as an input here, so the domain is all real numbers. Write it with \\(x\\), because domain is about inputs.`}
+                        ];
+                    } else if (sc === 2) {
+                        /* a context that rules out negative inputs */
+                        const P0 = randInt(2, 9) * 100;
+                        const g = randInt(2, 4);
+                        p.fullStatement = `A bacteria colony starting at **${P0}** cells is modelled by \\(P(x) = ${P0}(${g})^x\\), where \\(x\\) is the number of hours **since the colony was first measured**. What is the **domain** of this model in context?`;
+                        correctStr = "\\(\\{x \\in \\mathbb{R} \\mid x \\ge 0\\}\\)";
+                        cands = [
+                            "\\(\\{x \\in \\mathbb{R}\\}\\)",
+                            "\\(\\{x \\in \\mathbb{R} \\mid x > 0\\}\\)",
+                            `\\(\\{x \\in \\mathbb{R} \\mid x \\ge ${P0}\\}\\)`,
+                            "\\(\\{x \\in \\mathbb{R} \\mid x \\le 0\\}\\)"
+                        ];
+                        p.hint = "The algebra allows any real exponent, but ask what the variable measures: can this quantity be negative in the situation described?";
+                        p.steps = [
+                            { title: "Step 1: Domain of the Bare Function", math: `\\(${P0}(${g})^x \\text{ is defined for all real } x\\)`, explanation: "Algebraically there is no restriction on the exponent." },
+                            { title: "Step 2: Read the Context", math: "\\(x = \\text{hours since first measured}\\)", explanation: "Time before the first measurement is not described by this model, so a negative x is meaningless here." },
+                            { title: "Step 3: State the Domain in Context", math: correctStr, explanation: ( ( "t = 0 is the moment of first measurement and is included, so the domain starts at 0.") + ` Write it in set notation with \\(x\\), because domain is about inputs. Trap: writing the range answer here by mistake.`) + ` Every real number works as an input here, so the domain is all real numbers. Write it with \\(x\\), because domain is about inputs.`}
+                        ];
+                    } else {
+                        /* a context with a ceiling as well as a floor */
+                        const V0 = randInt(12, 40) * 1000;
+                        const dep = randInt(10, 25);
+                        const span = randInt(6, 20);
+                        p.fullStatement = `A machine bought for **$${formatNumberText(V0)}** loses **${dep}%** of its value each year, modelled by \\(V(x) = ${V0}(${(1 - dep / 100).toFixed(2)})^x\\). The manufacturer states the model is only valid for the machine's **${span}-year** service life, measured from purchase. What is the **domain** of this model in context?`;
+                        correctStr = `\\(\\{x \\in \\mathbb{R} \\mid 0 \\le x \\le ${span}\\}\\)`;
+                        cands = [
+                            "\\(\\{x \\in \\mathbb{R}\\}\\)",
+                            "\\(\\{x \\in \\mathbb{R} \\mid x \\ge 0\\}\\)",
+                            `\\(\\{x \\in \\mathbb{R} \\mid 0 < x < ${span}\\}\\)`,
+                            `\\(\\{x \\in \\mathbb{R} \\mid -${span} \\le x \\le ${span}\\}\\)`,
+                            `\\(\\{x \\in \\mathbb{R} \\mid x \\ge ${span}\\}\\)`
+                        ];
+                        p.hint = "Two things restrict the input here: the situation has a starting point, and the manufacturer has given an end point. Both endpoints are included.";
+                        p.steps = [
+                            { title: "Step 1: Domain of the Bare Function", math: `\\(${V0}(${(1 - dep / 100).toFixed(2)})^x \\text{ is defined for all real } x\\)`, explanation: "The exponent itself carries no algebraic restriction." },
+                            { title: "Step 2: Find the Lower Bound", math: "\\(x = 0 \\implies \\text{the moment of purchase}\\)", explanation: "x is measured from purchase, so no input before 0 is meaningful." },
+                            { title: "Step 3: Find the Upper Bound", math: `\\(x = ${span} \\implies \\text{end of the stated service life}\\)`, explanation: `The model is only claimed to hold for ${span} years, so it must not be used past that.` },
+                            { title: "Step 4: State the Domain in Context", math: correctStr, explanation: "Both endpoints are part of the valid interval, so both inequalities are inclusive." }
+                        ];
+                    }
+                    const mc = shuffleMC(correctStr, distractors3(correctStr, cands));
+                    p.options = mc.options; p.ans = mc.ansLetter;
+                    break;
+                }
+                case "q4": {
+                    p.title = "Exponential or Linear?";
+                    /* The linear scenarios used to be written much longer than the exponential
+                       ones, so "pick the longest" answered the NOT-exponential version and
+                       "pick the shortest" answered the other. Both pools now span the same
+                       range of lengths; the scenarios themselves are unchanged. */
+                    const linearOpts = ["A taxi charging a flat fare plus \\(\\$2.50\\) per kilometre", "A drone climbing at a steady 5 metres per second", "A worker earning a flat wage of \\(\\$20\\) for each hour"];
+                    const expOpts = ["A town's population doubling in size every decade", "An asset losing 15% of its remaining value each year", "A bacteria culture tripling in number every hour", "A radioactive sample decaying by half every 10 days"];
+                    
+                    const isAskingForLinear = (scenario === 1);
+                    p.fullStatement = isAskingForLinear ? "Which of the following physical scenarios should **NOT** be modelled by an exponential function?" : "Identify the scenario that represents an **exponential relationship** rather than a linear one.";
+                    p.prompt = isAskingForLinear ? "Select the non-exponential (linear) scenario choice:" : "Select the exponential relationship choice:";
+                    
+                    let correctStr, dist1, dist2, dist3;
+                    if (isAskingForLinear) {
+                        correctStr = linearOpts[randInt(0, 2)];
+                        let e_shuffled = mcfShuffle(expOpts);
+                        dist1 = e_shuffled[0]; dist2 = e_shuffled[1]; dist3 = e_shuffled[2];
+                    } else {
+                        correctStr = expOpts[randInt(0, 3)];
+                        let l_shuffled = mcfShuffle(linearOpts);
+                        dist1 = l_shuffled[0]; dist2 = l_shuffled[1]; dist3 = l_shuffled[2];
+                    }
+                    
+                    const mc = shuffleMC(correctStr, [dist1, dist2, dist3]);
+                    p.options = mc.options; p.ans = mc.ansLetter;
+                    p.hint = "Exponential patterns require percentage-based geometric changes, whereas linear structures change by adding a constant amount.";
+                    p.steps = [
+                        { title: `Step 1: Decide Which Pattern the Words Describe`, math: "\\(\\text{Exponential involves multiplying by a factor (e.g., %, doubling)}\\)", explanation: ( "Accounts, isotopes, and bacteria grow or decay by a constant factor.") + ` Exponential means multiplying by the same number each step. Linear means adding the same number each step. Check which one the wording describes.`},
+                        { title: "Step 2: Identify Linear Patterns", math: "\\(\\text{Linear involves adding a constant rate (e.g., flat speed, flat fee)}\\)", explanation: ( ( "Additive patterns form straight lines, not exponential curves.") + ` Words like "increases by 5 each year" mean adding, so that is linear. Words like "doubles" or "grows 5% a year" mean multiplying.`) + ` Words like "increases by 5 each year" mean adding, so that is linear. Words like "doubles" or "grows 5% a year" mean multiplying.`},
+                        { title: "Step 3: Conclude Model Classification", math: "\\(\\text{Match the scenario to its mathematical behavior}\\)", explanation: ( ( `The correct choice perfectly matches the requested ${isAskingForLinear ? 'linear' : 'exponential'} criteria.`) + ` Name the model that matches the wording. Trap: assuming any fast growth must be exponential, when steady adding is still linear.`) + ` Name the model that matches the wording. Trap: assuming any fast growth must be exponential, when steady adding is still linear.`}
+                    ];
+                    break;
+                }
+                case "q5": {
+                    p.title = "Roots as Fraction Exponents";
+                    let n = randInt(3, 7); let m = randInt(2, 9);
+                    if (n === m) m++;
+                    p.fullStatement = MCF.pick([
+                    `The radical expression \\\\(\\\\sqrt[${n}]{x^{${m}}}\\\\) is equal to which fraction exponent form?`,
+                    `Rewrite \\\\(\\\\sqrt[${n}]{x^{${m}}}\\\\) using a fraction exponent. Which option is correct?`,
+                    `Which fraction exponent form matches \\\\(\\\\sqrt[${n}]{x^{${m}}}\\\\)?`
+                ]);
+                    p.prompt = mcfPick(["Select the equivalent fraction-exponent form:", "Which power means the same as this root?", "Pick the matching fraction exponent:"]);
+                    const correctStr = `\\(x^{\\frac{${m}}{${n}}}\\)`;
+                    /* the answer and dist1 were the only fraction exponents, and both were
+                       longer than the two whole-number ones, so "pick a long one" left just
+                       two candidates. A third fraction form fixes that. */
+                    const dist1 = `\\(x^{\\frac{${n}}{${m}}}\\)`; const dist2 = `\\(x^{${m * n}}\\)`; const dist3 = `\\(x^{-\\frac{${m}}{${n}}}\\)`;
+                    const mc = shuffleMC(correctStr, [dist1, dist2, dist3]);
+                    p.options = mc.options; p.ans = mc.ansLetter;
+                    p.hint = "Remember the rational exponent rule: the power inside goes on top (numerator), and the root index goes on the bottom (denominator).";
+                    p.steps = [
+                        { title: `Step 1: Work Out Which Number Does Which Job`, math: `\\(\\text{Power inside} = ${m}, \\quad \\text{Root index} = ${n}\\)`, explanation: ( "Identify the exponent inside the radical and the index of the root.") + ` A root and a power can be written as a single fraction exponent. Work out which number is the root and which is the power first.`},
+                        { title: "Step 2: Apply Rational Exponent Rule", math: "\\(\\sqrt[y]{x^z} = x^{\\frac{z}{y}}\\)", explanation: ( ( "Use the rule where the root index becomes the denominator of the fractional exponent.") + ` The root goes on the bottom of the fraction exponent and the power goes on top. Trap: swapping them, which changes the answer completely.`) + ` The root goes on the bottom of the fraction exponent and the power goes on top. Trap: swapping them, which changes the answer completely.`},
+                        { title: "Step 3: Write Equivalent Form", math: correctStr, explanation: ( ( `The expression is equivalent to ${correctStr}.`) + ` Write the result as one power with a fraction exponent. Both forms mean exactly the same thing, just written differently.`) + ` Write the result as one power with a fraction exponent. Both forms mean exactly the same thing, just written differently.`}
+                    ];
+                    break;
+                }
+                case "q6": {
+                    p.title = "Rational Exponent Evaluation";
+                    const setups = [{B:8,n:3},{B:27,n:3},{B:64,n:3},{B:125,n:3},{B:16,n:2},{B:25,n:2},{B:36,n:2},{B:16,n:4},{B:81,n:4}];
+                    const pick = setups[randInt(0, setups.length - 1)];
+                    const B = pick.B; const n = pick.n;
+                    let m = randInt(2, 3);
+                    const rootVal = Math.round(Math.pow(B, 1/n));
+                    const finalVal = Math.pow(rootVal, m);
+                    
+                    /* The exponent used to be negative every time, so the answer was always
+                       the positive fraction while all three distractors were the negated
+                       fraction or a whole number. Picking the positive fraction scored 100%
+                       without evaluating anything. The sign now varies. */
+                    const negExp = Math.random() > 0.5;
+                    p.fullStatement = `Evaluate the following rational exponent expression completely: \\(${B}^{${negExp ? "-" : ""}\\frac{${m}}{${n}}}\\)`;
+                    p.prompt = mcfPick(["Select the exact answer:", "What does this power work out to?", "Pick the exact value:"]);
+                    const frac = `\\(\\dfrac{1}{${finalVal}}\\)`;
+                    const whole = `\\(${finalVal}\\)`;
+                    const correctStr = negExp ? frac : whole;
+                    /* the root on its own is shorter than either answer form, so neither the
+                       whole number nor the fraction is the shortest option on screen */
+                    const mc = shuffleMC(correctStr, [
+                        negExp ? whole : frac,                          /* ignored the sign of the exponent */
+                        `\\(${rootVal}\\)`,                              /* forgot to apply the power m */
+                        `\\(-\\dfrac{1}{${finalVal}}\\)`,               /* read the exponent sign as the answer sign */
+                        `\\(-${finalVal}\\)`,
+                        `\\(\\dfrac{1}{${rootVal}}\\)`
+                    ].slice(0, 3));
+                    p.options = mc.options; p.ans = mc.ansLetter;
+                    p.hint = "First change the negative sign by inverting into a fraction, evaluate the root of the base, then apply the power.";
+                    p.steps = [
+                        { title: negExp ? "Step 1: Split the Exponent Into Its Jobs" : "Step 1: Read the Exponent", math: negExp ? `\\(${B}^{-\\frac{${m}}{${n}}} = \\dfrac{1}{${B}^{\\frac{${m}}{${n}}}}\\)` : `\\(${B}^{\\frac{${m}}{${n}}}\\)`, explanation: ( ( ( "Move the base to the denominator to make the exponent positive.") + ` A fraction exponent tells you two things at once: the bottom is a root and the top is a power. Split it before calculating.`) + ` A fraction exponent tells you two things at once: the bottom is a root and the top is a power. Split it before calculating.`) + ` A negative fraction exponent does three jobs at once: flip, root, then power. Sort out which is which before touching the calculator.`},
+                        { title: "Step 2: Evaluate Root Base", math: negExp ? `\\(\\sqrt[${n}]{${B}} = ${rootVal} \\implies \\dfrac{1}{(${rootVal})^{${m}}}\\)` : `\\(\\sqrt[${n}]{${B}} = ${rootVal} \\implies (${rootVal})^{${m}}\\)`, explanation: ( ( `Find the ${n}-th root of the base number ${B}.`) + ` Take the root first, because that keeps the numbers small. Doing the power first gives huge numbers that are hard to root.`) + ` Take the root first, because that keeps the numbers small. Doing the power first gives huge numbers that are hard to root.`},
+                        { title: "Step 3: Compute Final Power Value", math: `\\(${rootVal}^{${m}} = ${finalVal} \\implies ${negExp ? `\\dfrac{1}{${finalVal}}` : finalVal}\\)`, explanation: ( ( "Raise the number in the denominator to the numerator power to find the final value.") + ` Now raise that result to the top number. A negative exponent would also mean flipping the answer to the other side of a fraction.`) + ` Now raise that result to the top number. A negative exponent would also mean flipping the answer to the other side of a fraction.`}
+                    ];
+                    break;
+                }
+                case "q7": {
+                    p.title = "Finding the Base from a Point";
+                    const b = randInt(2, 9);
+                    /* The second point always implied a growth base, so the answer was always
+                       the plain "y = b^x" shape while the decay form was permanently a
+                       distractor. Half the graphs now decay. */
+                    const decay = Math.random() > 0.5;
+                    p.fullStatement = `A graph of a basic exponential function passes through the coordinates \\((0, 1)\\) and \\((1, ${decay ? `\\dfrac{1}{${b}}` : b})\\), approaching the horizontal axis line as x decreases. Identify the correct matching equation.`;
+                    p.prompt = mcfPick(["Select the correct equation:", "Which equation passes through that point?", "Pick the equation that fits:"]);
+                    const growthStr = `\\(y = ${b}^x\\)`;
+                    const decayStr = `\\(y = \\left(\\dfrac{1}{${b}}\\right)^x\\)`;
+                    const correctStr = decay ? decayStr : growthStr;
+                    const mc = shuffleMC(correctStr, [
+                        decay ? growthStr : decayStr,       /* inverted the base */
+                        `\\(y = x^{${b}}\\)`,                /* power function, not exponential */
+                        /* one option longer than the decay form, so the long fraction shape is
+                           not a giveaway on the draws where decay happens to be the answer */
+                        `\\(y = -\\left(\\dfrac{1}{${b}}\\right)^x\\)`
+                    ]);
+                    p.options = mc.options; p.ans = mc.ansLetter;
+                    p.hint = "For any basic exponential function \\(y = b^x\\), when \\(x = 1\\), the output \\(y\\) is equal to the base \\(b\\).";
+                    p.steps = [
+                        { title: `Step 1: Decide Why You Work Backwards Here`, math: "\\(y = b^x\\)", explanation: ( "The graph exhibits basic growth, starting at the y-intercept (0,1).") + ` You are given a point and want the base. So put the point into the general form and solve backwards for the base.`},
+                        { title: "Step 2: Substitute Point to Find Base", math: `\\(${b} = b^1 \\implies b = ${b}\\)`, explanation: ( ( `Substitute the point (1, ${b}) into the equation to find that the base b equals ${b}.`) + ` Swap in the x and y from the point, then get the base on its own. Trap: mixing up which number is x and which is y.`) + ` Swap in the x and y from the point, then get the base on its own. Trap: mixing up which number is x and which is y.`},
+                        { title: "Step 3: Write the Finished Equation", math: correctStr, explanation: ( ( `The final equation matching the graph is ${correctStr}.`) + ` Put the base you found back into the general form. Check it by putting the point in again and seeing that both sides match.`) + ` Put the base you found back into the general form. Check it by putting the point in again and seeing that both sides match.`}
+                    ];
+                    break;
+                }
+                case "q8": {
+                    p.title = "Combining Powers with Letters";
+                    const vList = ['x', 'm', 'y', 'p']; const v = vList[randInt(0, 3)];
+                    const a = randInt(5, 9); const b = randInt(2, 5); const c = randInt(2, a+b-2);
+                    const ansExp = a + b - c;
+                    p.fullStatement = MCF.pick([
+                    `Simplify and write the answer as a single power: \\\\(\\\\dfrac{${v}^{${a}} \\\\times ${v}^{${b}}}{${v}^{${c}}}\\\\)`,
+                    `Write \\\\(\\\\dfrac{${v}^{${a}} \\\\times ${v}^{${b}}}{${v}^{${c}}}\\\\) as one power of \\\\(${v}\\\\).`,
+                    `Use the exponent laws to reduce \\\\(\\\\dfrac{${v}^{${a}} \\\\times ${v}^{${b}}}{${v}^{${c}}}\\\\) to a single power.`
+                ]);
+                    p.prompt = mcfPick(["Select the fully simplified single power:", "Which choice writes this as one power?", "Pick the simplified single power:"]);
+                    const correctStr = `\\(${v}^{${ansExp}}\\)`;
+                    const dist1 = `\\(${v}^{${a * b - c}}\\)`; const dist2 = `\\(${v}^{${ansExp + randInt(2, 4)}}\\)`; const dist3 = `\\(${v}^{${Math.max(1, ansExp - randInt(2, 3))}}\\)`;
+                    const mc = shuffleMC(correctStr, [dist1, dist2, dist3]);
+                    p.options = mc.options; p.ans = mc.ansLetter;
+                    p.hint = "Add numerator exponents before subtracting the denominator exponent power index.";
+                    p.steps = [
+                        { title: `Step 1: Decide Which Part to Simplify First`, math: `\\(${v}^{${a}} \\times ${v}^{${b}} = ${v}^{${a} + ${b}} = ${v}^{${a+b}}\\)`, explanation: ( "Add the exponents when multiplying powers with the same base.") + ` Simplify the top and the bottom separately before combining them. Multiplying powers of the same base means adding the exponents.`},
+                        { title: "Step 2: Apply Quotient Law to Fraction", math: `\\(\\dfrac{${v}^{${a+b}}}{${v}^{${c}}} = ${v}^{${a+b} - ${c}}\\)`, explanation: ( ( "Subtract the bottom exponent from the top exponent.") + ` Now divide, which means subtracting the bottom exponent from the top one. Do each letter separately so they do not get mixed up.`) + ` Now divide, which means subtracting the bottom exponent from the top one. Do each letter separately so they do not get mixed up.`},
+                        { title: "Step 3: Simplify to Final Form", math: correctStr, explanation: ( ( `The expression fully simplifies to ${correctStr}.`) + ` Write every exponent as a positive number. Any negative exponent moves to the other side of the fraction line to get there.`) + ` Write every exponent as a positive number. Any negative exponent moves to the other side of the fraction line to get there.`}
+                    ];
+                    break;
+                }
+                case "q9": {
+                    p.title = "Doubling and Halving Times";
+                    const initial = randInt(2, 8) * 100;
+                    const cycleDays = randInt(2, 5);
+                    const cycles = randInt(3, 6);
+                    const totalDays = cycleDays * cycles;
+                    const ansVal = initial * Math.pow(2, cycles);
+                    
+                    p.fullStatement = MCF.pick([
+                    `A specific biological population doubles in size every **${cycleDays} days**. If there are **${formatNumberText(initial)}** entities initially, how many will exist after **${totalDays} days**?`,
+                    `A biological population is observed to double every **${cycleDays} days**. If there are **${formatNumberText(initial)}** entities initially, how many will exist after **${totalDays} days**?`,
+                    `Scientists find that a population doubles in size every **${cycleDays} days**. If there are **${formatNumberText(initial)}** entities initially, how many will exist after **${totalDays} days**?`
+                ]);
+                    p.prompt = mcfPick(["Select the future population:", "How many are there at that time?", "Pick the population at the end:"]);
+                    const correctStr = `${formatNumber(ansVal)} entities`;
+                    const dist1 = `${formatNumber(initial * Math.pow(2, cycles - 1))} entities`;
+                    const dist2 = `${formatNumber(initial * totalDays * 2)} entities`;
+                    const dist3 = `${formatNumber(initial * Math.pow(2, cycles + 1))} entities`;
+                    const mc = shuffleMC(correctStr, [dist1, dist2, dist3]);
+                    p.options = mc.options; p.ans = mc.ansLetter;
+                    p.hint = "Divide total days by the cycle period to find the exponent value.";
+                    p.steps = [
+                        { title: `Step 1: Work Out How Many Periods Have Passed`, math: `\\(n = \\dfrac{${totalDays}}{${cycleDays}} = ${cycles} \\text{ cycles}\\)`, explanation: ( "Divide total days by the cycle period to find the number of iterations.") + ` The exponent counts growth periods, not years, so work out how many periods have passed before anything else.`},
+                        { title: "Step 2: Evaluate Growth Power Component", math: `\\(2^{${cycles}} = ${Math.pow(2, cycles)}\\)`, explanation: ( ( "Calculate the base doubling growth factor value.") + ` Raise the growth factor to that number of periods. Keep several decimal places, because rounding early moves the final answer.`) + ` Raise the growth factor to that number of periods. Keep several decimal places, because rounding early moves the final answer.`},
+                        { title: "Step 3: Multiply by Initial Scale", math: `\\(P = ${initial} \\times ${Math.pow(2, cycles)} = ${ansVal}\\)`, explanation: ( ( `Multiply by the initial count to find the final population size of ${formatNumber(ansVal)}.`) + ` Multiply by the starting amount. Check it makes sense: growth means the answer must be bigger than what you started with.`) + ` Multiply by the starting amount. Check it makes sense: growth means the answer must be bigger than what you started with.`}
+                    ];
+                    break;
+                }
+                case "q10": {
+                    p.title = "Present Value Lump Sums (Discounting)";
+                    const A = randInt(10, 50) * 1000;
+                    const t = randInt(3, 8);
+                    const r_pct = randInt(30, 80) / 10;
+                    const i = r_pct / 100 / 12;
+                    const n = t * 12;
+                    const PV = A / Math.pow(1 + i, n);
+                    
+                    p.fullStatement = MCF.pick([
+                    `A person wants to reach a financial target of **$${formatNumberText(A)}** in **${t} years**. How much must they invest today at **${r_pct.toFixed(1)}%** annual interest compounded monthly to meet this goal?`,
+                    `Someone is saving toward a goal of **$${formatNumberText(A)}** in **${t} years**. How much must they invest today at **${r_pct.toFixed(1)}%** annual interest compounded monthly to meet this goal?`,
+                    `A saver needs to have **$${formatNumberText(A)}** in **${t} years**. How much must they invest today at **${r_pct.toFixed(1)}%** annual interest compounded monthly to meet this goal?`
+                ]);
+                    p.prompt = mcfPick(["Select the deposit needed today:", "How much has to be invested now?", "Pick the present value:"]);
+                    const correctStr = formatMoney(PV);
+                    const dist1 = formatMoney(A / (1 + (r_pct/100) * t)); // simple
+                    const dist2 = formatMoney(A / Math.pow(1 + r_pct/100, t)); // annual
+                    const dist3 = formatMoney(PV + 550);
+                    const mc = shuffleMC(correctStr, [dist1, dist2, dist3]);
+                    p.options = mc.options; p.ans = mc.ansLetter;
+                    p.hint = "Use Present Value formula: \\(PV = A(1 + i)^{-n}\\). Adjust interest rate and term values for monthly compounding.";
+                    p.steps = [
+                        { title: "Step 1: Work Out the Rate for One Period", math: `\\(i = \\dfrac{${r_pct/100}}{12} \\approx ${i.toFixed(6)}, \\quad n = ${t} \\times 12 = ${n}\\)`, explanation: ( "Divide annual rate by 12 months and find total compounding periods.") + ` Everything in the formula is per period, so split the yearly rate first. Divide it by how many times the money compounds each year.`},
+                        { title: "Step 2: Set Up Present Value Discount Fraction", math: `\\(PV = \\dfrac{${A}}{(1 + ${i.toFixed(6)})^{${n}}}\\)`, explanation: ( "Set up the equation to divide future value target by total compound growth factor.") + ` The growth factor goes on the bottom, because you are working backwards from a future amount to today. That is what discounting means.`},
+                        { title: "Step 3: Finish the Division", math: `\\((1 + ${i.toFixed(6)})^{${n}} \\approx ${Math.pow(1+i, n).toFixed(6)} \\implies \\dfrac{${A}}{${Math.pow(1+i, n).toFixed(6)}} = ${PV.toFixed(2)}\\)`, explanation: ( "Evaluate the exponent value first, then complete division to find required deposit.") + ` Work out the power first, then divide. The answer must be smaller than the future amount, since money grows between now and then.`}
+                    ];
+                    break;
+                }
+                case "q11": {
+                    p.title = "Future Value of Regular Payments";
+                    const R = randInt(2, 8) * 50;
+                    const t = randInt(5, 18);
+                    const r_pct = randInt(30, 75) / 10;
+                    const i = r_pct / 100 / 12;
+                    const n = t * 12;
+                    const FV = R * (Math.pow(1 + i, n) - 1) / i;
+                    
+                    p.fullStatement = MCF.pick([
+                    `An investor opens a savings account and pays in **$${R}** at the end of every month. The account earns **${r_pct.toFixed(1)}%** annual interest compounded monthly. How much will the account be worth after **${t} years**?`,
+                    `A saver opens an account and deposits **$${R}** at the end of every month. The account earns **${r_pct.toFixed(1)}%** annual interest compounded monthly. How much will the account be worth after **${t} years**?`,
+                    `Someone starts a savings plan, paying in **$${R}** at the end of every month. The account earns **${r_pct.toFixed(1)}%** annual interest compounded monthly. How much will the account be worth after **${t} years**?`
+                ]);
+                    p.prompt = mcfPick(["Select the future value of the payments:", "How much is saved up by the end?", "Pick the accumulated amount:"]);
+                    const correctStr = formatMoney(FV);
+                    const dist1 = formatMoney(R * (Math.pow(1 + r_pct/100, t) - 1) / (r_pct/100)); // annual error
+                    const dist2 = formatMoney(FV - R*12);
+                    const dist3 = formatMoney(R * n); // simple sum
+                    const mc = shuffleMC(correctStr, [dist1, dist2, dist3]);
+                    p.options = mc.options; p.ans = mc.ansLetter;
+                    p.hint = "Use Future Value of an Annuity formula: \\(FV = R \\times \\dfrac{(1 + i)^n - 1}{i}\\). Find periodic rate i and total periods n first.";
+                    p.steps = [
+                        { title: `Step 1: Decide Why This Needs the Annuity Formula`, math: `\\(R = ${R}, \\quad i = \\dfrac{${r_pct/100}}{12} \\approx ${i.toFixed(6)}, \\quad n = ${t} \\times 12 = ${n}\\)`, explanation: ( "Calculate monthly interest rate and total regular payment periods.") + ` Regular payments need the annuity formula, not the plain compound one. Get the per-period rate and the total number of payments first.`},
+                        { title: "Step 2: Put the Numbers Into the Annuity Formula", math: `\\(FV = ${R} \\times \\dfrac{(1 + ${i.toFixed(6)})^{${n}} - 1}{${i.toFixed(6)}}\\)`, explanation: ( "Put the numbers into the future value annuity formula.") + ` Rate per period, and the exponent counts payments not years. Trap: pairing a yearly rate with a monthly payment count.`},
+                        { title: "Step 3: Work Out the Exponents", math: `\\((1 + ${i.toFixed(6)})^{${n}} \\approx ${Math.pow(1+i, n).toFixed(6)} \\implies ${R} \\times \\dfrac{${(Math.pow(1+i,n)-1).toFixed(6)}}{${i.toFixed(6)}} = ${FV.toFixed(2)}\\)`, explanation: ( "Compute the exponent value, subtract 1, divide by periodic rate, and multiply by deposit size.") + ` Do the power on its own and keep several decimal places. Rounding this piece early moves the money answer by dollars.`}
+                    ];
+                    break;
+                }
+                case "q12": {
+                    p.title = "Simple vs Compound Interest";
+                    const P = randInt(5, 20) * 100;
+                    const r_pct = randInt(4, 12);
+                    const r = r_pct / 100;
+                    const I1 = P * r;
+                    const I2_compound = (P + I1) * r;
+                    const delta = I2_compound - I1;
+                    
+                    p.fullStatement = `Imagine you invest **$${formatNumberText(P)}** at a **${r_pct}%** annual interest rate. Under simple interest, you earn **$${formatNumberText(I1)}** in the first year and **$${formatNumberText(I1)}** in the second year. Under compound interest (compounded annually), you also earn **$${formatNumberText(I1)}** in the first year. How much interest will the compound account earn specifically in the **second year**?`;
+                    p.prompt = mcfPick(["Select the interest earned in year two:", "How much interest is added in the second year?", "Pick the second year's interest:"]);
+                    const correctStr = formatMoney(I2_compound);
+                    const dist1 = formatMoney(I1);
+                    const dist2 = formatMoney(I2_compound + I1);
+                    const dist3 = formatMoney(I2_compound + delta);
+                    const mc = shuffleMC(correctStr, [dist1, dist2, dist3]);
+                    p.options = mc.options; p.ans = mc.ansLetter;
+                    p.hint = "Compound interest calculates year two returns based on the new total balance (original principal plus year one interest).";
+                    p.steps = [
+                        { title: `Step 1: Work Out Where the Two Differ`, math: `\\(A_1 = ${P} + ${I1} = ${P + I1}\\)`, explanation: ( "Add year one interest to the initial deposit to find the updated principal balance.") + ` The two kinds of interest are identical in the first year. The difference only starts once interest begins earning interest.`},
+                        { title: "Step 2: Calculate Year Two Compound Interest", math: `\\(I_2 = ${P + I1} \\times ${r} = ${I2_compound.toFixed(2)}\\)`, explanation: ( `Multiply the new balance by the ${r_pct}% interest rate to calculate year two earnings.`) + ` In year two, compound interest is paid on the new bigger balance. Simple interest is still paid only on the original amount.`},
+                        { title: "Step 3: Observe Simple vs Compound Difference", math: `\\(\\Delta = ${I2_compound.toFixed(2)} - ${I1} = ${delta.toFixed(2)}\\)`, explanation: ( `Compound interest earns an extra $${delta.toFixed(2)} because interest is calculated on the first year's earnings.`) + ` That gap widens every year, which is why compound ends up ahead. Trap: expecting a difference in the very first year.`}
+                    ];
+                    break;
+                }
+                case "q13": {
+                    const b = randInt(3, 8);
+                    const k = [0, 0, randInt(1, 6), -randInt(1, 6)][randInt(0, 3)];
+                    const down = randInt(1, 2) === 1;
+                    const kTerm = k === 0 ? "" : (k > 0 ? ` + ${k}` : ` - ${-k}`);
+                    const fn = `y = ${down ? "-" : ""}${b}^x${kTerm}`;
+                    p.title = "Horizontal Asymptotes";
+                    p.fullStatement = `Consider the exponential function \\(${fn}\\). Which statement correctly identifies the **horizontal asymptote** and explains why the curve never reaches it?`;
+                    p.prompt = mcfPick(["Select the most accurate explanation:", "Which explanation is correct?", "Pick the statement that is mathematically right:"]);
+                    const correctStr = `\\(y = ${k}\\), because \\(${b}^x\\) is always positive and shrinks toward 0 without ever equalling it.`;
+                    const cands = [];
+                    /* the asymptote is in the wrong place */
+                    if (k !== 0) cands.push(`\\(y = 0\\), because every exponential curve levels off onto the x-axis no matter what is added to it.`);
+                    cands.push(`\\(y = ${-k}\\), because the constant term shifts the curve in the opposite direction to its sign.`);
+                    cands.push(`\\(x = ${k}\\), because the asymptote is always a vertical line through the constant term.`);
+                    /* the reasoning is wrong */
+                    cands.push(`\\(y = ${k}\\), because \\(${b}^x\\) becomes negative for negative x and cancels the constant term.`);
+                    cands.push(`\\(y = ${k}\\), because multiplying by ${b} adds a fixed amount each step until the curve flattens completely.`);
+                    if (k !== 0) cands.push(`\\(y = ${k}\\), because the curve touches the asymptote exactly once at \\(x = 0\\).`);
+                    const mc = shuffleMC(correctStr, distractors3(correctStr, cands));
+                    p.options = mc.options; p.ans = mc.ansLetter;
+                    p.hint = `Work out what \\(${b}^x\\) itself approaches for very negative x, then apply ${down ? "the reflection and " : ""}the constant term to that boundary value.`;
+                    p.steps = [
+                        { title: `Step 1: Decide What Question an Asymptote Answers`, math: `\\(${b}^{-10} = \\dfrac{1}{${b}^{10}} \\approx 0.0000001\\)`, explanation: ( "Negative exponents give very small positive values that shrink toward zero but never reach it.") + ` An asymptote is about what happens far out. So imagine \\(x\\) running a long way in one direction, not one number.`},
+                        { title: "Step 2: Take the Limit of the Power", math: `\\(\\text{As } x \\to -\\infty, \\quad ${b}^x \\to 0 \\text{ but } ${b}^x > 0\\)`, explanation: ( "Zero is a boundary the power approaches, not a value it attains.") + ` The power shrinks toward zero but never actually reaches it. That is why the curve gets close to a line without touching it.`},
+                        { title: "Step 3: Apply the Transformations", math: `\\(${down ? `-${b}^x \\to 0^{-}` : `${b}^x \\to 0^{+}`}${k === 0 ? "" : `, \\quad \\text{then } +(${k})`}\\)`, explanation: ( down ? `The reflection sends the curve toward zero from below, and the constant term moves that boundary to ${k}.` : (k === 0 ? "There is no constant term, so the boundary stays at zero." : `The constant term lifts the boundary from 0 to ${k}.`)) + ` A constant added on the end slides the whole curve, and the asymptote slides with it. A minus in front flips it but leaves the line where it is.`},
+                        { title: "Step 4: Name the Asymptote", math: `\\(y = ${k} \\implies \\text{Horizontal Asymptote}\\)`, explanation: ( "A line the curve approaches indefinitely without touching is a horizontal asymptote.") + ` The asymptote is the constant on the end, written as \\(y = \\) that number. Trap: answering \\(y = 0\\) out of habit when a constant was added.`}
+                    ];
+                    break;
+                }
+                case "q14": {
+                    p.title = "Exponent Common Misconceptions";
+                    const a = randInt(3, 5); const b = randInt(4, 7);
+                    if (scenario === 1) { // Product Law Mistake
+                        p.fullStatement = `A student simplifies the expression \\(x^{${a}} \\times x^{${b}}\\) and claims the answer is \\(x^{${a * b}}\\). Explain the mistake made and state the correct rule and answer.`;
+                        p.prompt = mcfPick(["Select the mistake that was made:", "Which statement describes the error?", "Pick the correct description of the mistake:"]);
+                        const correctStr = `Mistake: Multiplied the exponents instead of adding them. Rule: Product of Powers; Answer: \\(x^{${a+b}}\\)`
+                        const dist1 = `Mistake: Added the exponents instead of multiplying them. Rule: Power of a Power Law; Answer: \\(x^{${a+b}}\\)`
+                        const dist2 = `Mistake: Multiplied the base variables together instead. Rule: Quotient of Powers; Answer: \\(x^{${Math.abs(a-b)}}\\)`
+                        const dist3 = `Mistake: Left the coefficients unmultiplied. Rule: Negative Exponent Law; Answer: \\(2x^{${a+b}}\\)`
+                        const mc = shuffleMC(correctStr, [dist1, dist2, dist3]);
+                        p.options = mc.options; p.ans = mc.ansLetter;
+                        p.hint = "When multiplying terms with identical bases, you must add the exponents together instead of multiplying them.";
+                        p.steps = [
+                            { title: `Step 1: Decide Which Law Should Have Been Used`, math: `\\(${a} \\times ${b} = ${a*b} \\quad (\\text{Incorrect exponent operation})\\)`, explanation: ( "The student multiplied the exponents instead of applying the proper additive law.") + ` Each exponent law does a different job, so name the operation before judging the step. Multiplying powers of the same base means adding the exponents, not multiplying them.`},
+                            { title: "Step 2: Apply the Correct Product Law", math: `\\(x^m \\times x^n = x^{m + n} \\implies x^{${a}} \\times x^{${b}} = x^{${a} + ${b}}\\)`, explanation: ( "The product law states that exponents must be added when multiplying terms with like bases.") + ` Compare the two laws side by side. A bracket raised to a power multiplies the exponents, while multiplying two powers adds them. Trap: reaching for the bracket rule when there is no bracket.`},
+                            { title: "Step 3: State the Correct Result", math: `\\(x^{${a+b}}\\)`, explanation: ( `The expression correctly simplifies to \\(x^{${a+b}}\\).`) + ` Write the corrected version out in full. Seeing the wrong and right versions together is what makes the difference stick.`}
+                        ];
+                    } else { // Power of Power Mistake
+                        p.fullStatement = MCF.pick([
+                    `A student wrote \\\\((x^{${a}})^{${b}} = x^{${a+b}}\\\\). What went wrong, and what is the correct result?`,
+                    `Find the mistake in this step and give the right answer: \\\\((x^{${a}})^{${b}} = x^{${a+b}}\\\\).`,
+                    `This simplification is wrong: \\\\((x^{${a}})^{${b}} = x^{${a+b}}\\\\). Which law was misused, and what should it be?`
+                ]);
+                        p.prompt = mcfPick(["Select the correct analysis of the mistake:", "Which block explains the error correctly?", "Pick the accurate breakdown of the mistake:"]);
+                        /* Every option now names a rule of comparable length and writes the
+                           mistake as a full clause, so the answer is no longer the longest. */
+                        const correctStr = `Mistake: Added exponents instead of multiplying. Rule: Power of a Power; Answer: \\(x^{${a*b}}\\)`
+                        const dist1 = `Mistake: Multiplied exponents instead of adding them. Rule: Product of Powers; Answer: \\(x^{${a*b}}\\)`
+                        const dist2 = `Mistake: Squared the base variable itself. Rule: Quotient of Powers; Answer: \\(x^{${Math.abs(a-b)}}\\)`
+                        const dist3 = `Mistake: Treated the constant as an exponent. Rule: Negative Exponent Law; Answer: \\(x^{${a}}\\)`;
+                        const mc = shuffleMC(correctStr, [dist1, dist2, dist3]);
+                        p.options = mc.options; p.ans = mc.ansLetter;
+                        p.hint = "A power raised to another power requires multiplying the exponents together.";
+                        p.steps = [
+                            { title: `Step 1: Decide Which Law This Actually Is`, math: `\\(${a} + ${b} = ${a+b} \\quad (\\text{Incorrect additive mapping})\\)`, explanation: ( "The student added the exponents instead of multiplying them.") + ` Each exponent law does a different job, so name the operation before touching anything. Powers of powers multiply, and products of powers add.`},
+                            { title: "Step 2: Apply Power of a Power Law Rules", math: `\\((x^m)^n = x^{m \\times n} \\implies x^{${a} \\times ${b}}\\)`, explanation: ( ( "The power of a power law states that exponents must be multiplied.") + ` A power outside a bracket multiplies the exponent inside. Trap: adding the two exponents, which is the law for multiplying, not for brackets.`) + ` Compare the two laws side by side. Brackets multiply the exponents, while multiplying powers adds them. Naming which one applies is the whole question.`},
+                            { title: "Step 3: State Correct Result", math: `\\(x^{${a*b}}\\)`, explanation: ( ( `The expression correctly simplifies to \\(x^{${a*b}}\\).`) + ` Write the corrected version out. Comparing it to the wrong one side by side is what makes the mistake stick in your memory.`) + ` Write the corrected version out in full. Seeing the wrong and right versions together is what makes the difference stick.`}
+                        ];
+                    }
+                    break;
+                }
+                case "q15": {
+                    const t = randInt(10, 25);
+                    const borrowing = randInt(1, 2) === 1;
+                    const onFrequency = randInt(1, 2) === 1;   /* simple-vs-compound, or how often it compounds */
+                    p.title = "Choosing Between Interest Options";
+                    p.prompt = mcfPick(["Select the correct reason:", "Which reason explains this?", "Pick the statement that justifies it:"]);
+
+                    /* Each branch used to carry its own four sentences, so the winning sentence
+                       appeared only where it was correct -- four sentences memorised and the
+                       question never had to be read. The two branches below now share one pool
+                       each, and which sentence wins depends on whether you are the saver or the
+                       borrower. An option that is false FOR THIS QUESTION is a valid distractor
+                       even when the reasoning clause it contains is true on its own. */
+                    let correctStr, cands;
+                    if (!onFrequency) {
+                        const compound = "Compound interest, because each year's interest joins the balance and then earns interest itself.";
+                        const simple   = "Simple interest, because the charge stays on the original principal, so the total stays smaller.";
+                        const bogusA   = "Compound interest, because the quoted annual interest rate is raised by the bank every single year.";
+                        const bogusB   = "Simple interest, because interest stops being charged once the term has run for a full ten years.";
+                        correctStr = borrowing ? simple : compound;
+                        cands = [borrowing ? compound : simple, bogusA, bogusB];
+                        p.fullStatement = borrowing
+                            ? `You must **borrow** money and repay it in a single lump sum after **${t} years**. Would you prefer to be charged **simple interest** or **compound interest**? Choose the statement that provides the correct justification.`
+                            : `You are **investing** capital in a savings account for a duration of **${t} years**. Would you prefer **simple interest** or **compound interest**? Choose the statement that provides the correct justification.`;
+                        p.steps = [
+                            { title: `Step 1: Decide What Makes One Option Beat the Other`, math: "\\(\\text{Simple} \\to \\text{linear}, \\quad \\text{Compound} \\to \\text{exponential}\\)", explanation: ( "Simple interest always charges the rate on the starting amount. Compound interest charges it on a balance that already holds past interest.") + ` Simple interest adds the same amount every year, and compound interest multiplies. So compound eventually wins, but not straight away.`},
+                            { title: "Step 2: Decide Which Side You Are On", math: borrowing ? "\\(\\text{Borrower wants the smaller final amount}\\)" : "\\(\\text{Investor wants the larger final balance}\\)", explanation: ( borrowing ? "You have to hand over the accumulated total, so slower growth is better for you." : "You keep whatever the account accumulates, so faster growth is better for you.") + ` Work out the totals for the time given in the question. A short time can leave simple interest ahead if its rate is higher.`},
+                            { title: "Step 3: Conclude", math: `\\(\\text{Over } ${t} \\text{ years, exponential} > \\text{linear}\\)`, explanation: ( borrowing ? `The same compounding that helps a saver is what makes a loan expensive, so simple interest is preferred here.` : `Compounding wins by a wide margin over ${t} years, so compound interest is preferred.`) + ` Pick the option with the bigger total for that time period. Trap: assuming compound always wins without checking the numbers.`}
+                        ];
+                    } else {
+                        const monthly = "The monthly account, because interest joins the balance more often, so later interest earns more.";
+                        const annual  = "The annual account, because interest joins the balance less often, so less interest is added.";
+                        const bogusA  = "The annual account, because compounding the interest less frequently produces a higher final balance.";
+                        const bogusB  = "Either account, because the same quoted annual rate must always give the same final balance.";
+                        correctStr = borrowing ? annual : monthly;
+                        cands = [borrowing ? monthly : annual, bogusA, bogusB];
+                        p.fullStatement = borrowing
+                            ? `Two lenders both offer to lend you money for **${t} years** at the same quoted annual interest rate. One compounds **annually**, the other compounds **monthly**. Which should you take, and why?`
+                            : `Two savings accounts both hold your money for **${t} years** and both quote the same annual interest rate. One compounds **annually**, the other compounds **monthly**. Which should you choose, and why?`;
+                        p.steps = [
+                            { title: "Step 1: Convert the Rate", math: "\\(i = \\dfrac{r}{12}, \\quad n = 12t\\)", explanation: "Monthly compounding applies a twelfth of the annual rate, but twelve times as often." },
+                            { title: "Step 2: Compare What Each One Grows To", math: `\\(\\left(1 + \\dfrac{r}{12}\\right)^{12 \\times ${t}} > (1 + r)^{${t}}\\)`, explanation: "Adding interest sooner means every later period is calculated on a slightly larger balance." },
+                            { title: "Step 3: Decide Which Side You Are On", math: borrowing ? "\\(\\text{Fastest growth} \\to \\text{worst loan}\\)" : "\\(\\text{Fastest growth} \\to \\text{best account}\\)", explanation: borrowing ? "The balance that grows fastest is the worst one to owe, so the annual loan costs less." : "The balance that grows fastest is the best one to own, so the monthly account pays more." }
+                        ];
+                    }
+                    const mc = shuffleMC(correctStr, distractors3(correctStr, cands));
+                    p.options = mc.options; p.ans = mc.ansLetter;
+                    p.hint = borrowing
+                        ? "Work out which arrangement makes the balance grow fastest, then remember that as the borrower you are the one who has to pay that balance."
+                        : "Work out which arrangement makes the balance grow fastest, then remember that as the saver you are the one who keeps that balance.";
+                    break;
+                }
+                case "q16": {
+                    p.title = "Working Back to the Starting Loan";
+                    const PV_target = randInt(15, 60) * 1000;
+                    const t = randInt(3, 8);
+                    const r_pct = randInt(45, 95) / 10;
+                    const i = r_pct / 100 / 12;
+                    const n = t * 12;
+                    const A = PV_target * Math.pow(1 + i, n);
+                    
+                    p.fullStatement = MCF.pick([
+                    `A commercial startup loan is to be repaid in a single lump-sum payment at the end of **${t} years**. At an interest rate of **${r_pct.toFixed(1)}%** per annum compounded monthly, the total amount required to pay off the loan will be **$${formatNumberText(A.toFixed(2))}**. What was the original amount of funding (Present Value) issued?`,
+                    `A business loan is paid back in one lump sum after **${t} years**. At an interest rate of **${r_pct.toFixed(1)}%** per annum compounded monthly, the total amount required to pay off the loan will be **$${formatNumberText(A.toFixed(2))}**. What was the original amount of funding (Present Value) issued?`,
+                    `A startup borrows money and repays it all at once after **${t} years**. At an interest rate of **${r_pct.toFixed(1)}%** per annum compounded monthly, the total amount required to pay off the loan will be **$${formatNumberText(A.toFixed(2))}**. What was the original amount of funding (Present Value) issued?`
+                ]);
+                    p.prompt = mcfPick(["Select the original loan amount (to the nearest dollar):", "How much was borrowed at the start?", "Pick the starting loan, rounded to the nearest dollar:"]);
+                    const correctStr = formatMoney(PV_target);
+                    const dist1 = formatMoney(PV_target - 1500);
+                    const dist2 = formatMoney(A / (1 + (r_pct/100) * t));
+                    const dist3 = formatMoney(PV_target + 2000);
+                    const mc = shuffleMC(correctStr, [dist1, dist2, dist3]);
+                    p.options = mc.options; p.ans = mc.ansLetter;
+                    p.hint = "Apply Present Value formula for lump sums: \\(PV = A(1 + i)^{-n}\\) using monthly parameter adjustments.";
+                    p.steps = [
+                        { title: `Step 1: Decide Which Direction This Runs`, math: `\\(i = \\dfrac{${r_pct/100}}{12} \\approx ${i.toFixed(6)}, \\quad n = ${t} \\times 12 = ${n}\\)`, explanation: ( "Find the monthly periodic interest rate and the total number of compounding periods.") + ` You know the amount owed later and want the amount borrowed today, so this runs backwards. Get the per-period rate and periods first.`},
+                        { title: "Step 2: Set Up the Present Value Formula", math: `\\(PV = ${A.toFixed(2)} \\times (1 + ${i.toFixed(6)})^{-${n}}\\)`, explanation: ( ( "Set up the equation to discount the final lump-sum payment back to present value.") + ` Put the future amount on top and the growth factor on the bottom. Dividing is what turns a future amount back into a value today.`) + ` Put the future amount on top and the growth factor on the bottom. Dividing is what turns a future amount back into a value today.`},
+                        { title: "Step 3: Divide to Discount It Back", math: `\\((1 + ${i.toFixed(6)})^{-${n}} \\approx ${Math.pow(1+i, -n).toFixed(6)} \\implies ${A.toFixed(2)} \\times ${Math.pow(1+i, -n).toFixed(6)} = ${PV_target.toFixed(0)}\\)`, explanation: ( ( `Multiply the final payment by the discount factor to find the original loan amount of $${formatNumber(PV_target)}.`) + ` Work out the power first, then divide. The starting loan must come out smaller than the amount owed later.`) + ` Work out the power first, then divide. The starting loan must come out smaller than the amount owed later.`}
+                    ];
+                    break;
+                }
+                case "q17": {
+                    p.title = "Total Interest Earned on Regular Payments";
+                    const R = randInt(1, 5) * 100;
+                    const t = randInt(4, 12);
+                    const r_pct = randInt(35, 85) / 10;
+                    const i = r_pct / 100 / 12;
+                    const n = t * 12;
+                    const FV = R * (Math.pow(1 + i, n) - 1) / i;
+                    const totalDeposits = R * n;
+                    const interest = FV - totalDeposits;
+                    
+                    p.fullStatement = MCF.pick([
+                    `Alex deposits **$${R}** every month into a retirement savings account earning **${r_pct.toFixed(1)}%** per year, compounded monthly. How much **interest** is earned after **${t} years**?`,
+                    `Someone pays **$${R}** into a savings account at the end of every month. The account earns **${r_pct.toFixed(1)}%** per year, compounded monthly. Find the **interest earned** over **${t} years**.`,
+                    `A saver puts **$${R}** away each month for **${t} years** at **${r_pct.toFixed(1)}%** per year, compounded monthly. How much of the final balance is **interest**?`
+                ]);
+                    p.prompt = mcfPick(["Select the total interest earned:", "How much of the total is interest?", "Pick the total interest:"]);
+                    const correctStr = formatMoney(interest);
+                    const dist1 = formatMoney(FV);
+                    const dist2 = formatMoney(totalDeposits);
+                    const dist3 = formatMoney(interest + 450);
+                    const mc = shuffleMC(correctStr, [dist1, dist2, dist3]);
+                    p.options = mc.options; p.ans = mc.ansLetter;
+                    p.hint = "Calculate the total future value of the annuity first, then subtract the sum of all monthly principal deposits.";
+                    p.steps = [
+                        { title: `Step 1: Decide How to Get at the Interest`, math: `\\(i = \\dfrac{${r_pct/100}}{12} \\approx ${i.toFixed(6)}, \\quad n = ${n} \\implies FV = ${R} \\times \\dfrac{(1+${i.toFixed(6)})^{${n}} - 1}{${i.toFixed(6)}}\\)`, explanation: ( "Determine periodic rate, compounding periods, and evaluate future value amount.") + ` Total interest is not a formula on its own. Work out what the account grows to first, then take the deposits away at the end.`},
+                        { title: "Step 2: Calculate Future Value Summation", math: `\\((1+${i.toFixed(6)})^{${n}} \\approx ${Math.pow(1+i, n).toFixed(6)} \\implies FV = ${FV.toFixed(2)}\\)`, explanation: ( ( `Evaluate the compound growth expression to find the total account balance of $${formatNumber(FV.toFixed(2))}.`) + ` Use the annuity formula with the per-period rate and the total number of payments. Keep several decimal places through the power.`) + ` Use the annuity formula with the per-period rate and the total number of payments. Keep several decimal places through the power.`},
+                        { title: "Step 3: Subtract Total Principal Deposits", math: `\\(\\text{Deposits} = ${R} \\times ${n} = ${totalDeposits} \\implies I = ${FV.toFixed(2)} - ${totalDeposits} = ${interest.toFixed(2)}\\)`, explanation: ( ( "Subtract the total out-of-pocket deposits from the final balance to find the net interest earned.") + ` Add up every payment you made, then take that away from the final balance. What is left is the interest. Trap: giving the balance instead.`) + ` Add up every payment you made, then take that away from the final balance. What is left is the interest. Trap: giving the balance instead.`}
+                    ];
+                    break;
+                }
+                case "q18": {
+                    p.title = "Half-Life Calculations";
+                    const initial = randInt(8, 25) * 10;
+                    const halfLife = randInt(3, 14);
+                    const cycles = 2; // Fixed for 2 steps
+                    const midTime = halfLife;
+                    const finalTime = halfLife * 2;
+                    const midMass = initial / 2;
+                    const finalMass = initial / 4;
+                    
+                    p.fullStatement = MCF.pick([
+                    `A radioactive isotope sample decays exponentially over time. Tracking logs demonstrate that an initial element mass of **${initial} g** decreases to exactly **${midMass} g** after **${midTime} hours**, and subsequently drops to **${finalMass} g** at the **${finalTime}-hour** mark. Determine the **half-life** of the substance.`,
+                    `A radioactive sample decays over time. Records show that a starting mass of **${initial} g** decreases to exactly **${midMass} g** after **${midTime} hours**, and subsequently drops to **${finalMass} g** at the **${finalTime}-hour** mark. Determine the **half-life** of the substance.`,
+                    `A scientist tracks a decaying sample. It begins at a mass of **${initial} g** decreases to exactly **${midMass} g** after **${midTime} hours**, and subsequently drops to **${finalMass} g** at the **${finalTime}-hour** mark. Determine the **half-life** of the substance.`
+                ]);
+                    p.prompt = mcfPick(["Select the half-life:", "How long does it take to halve?", "Pick the half-life time:"]);
+                    const correctStr = `${halfLife} hours`;
+                    const dist1 = `${halfLife / 2} hours`;
+                    const dist2 = `${finalTime} hours`;
+                    const dist3 = `${halfLife + 2} hours`;
+                    const mc = shuffleMC(correctStr, [dist1, dist2, dist3]);
+                    p.options = mc.options; p.ans = mc.ansLetter;
+                    p.hint = "Half-life is defined as the time duration required for a decaying substance mass to decrease to exactly half of its initial value.";
+                    p.steps = [
+                        { title: `Step 1: Work Out What Half-Life Really Asks`, math: `\\(\\text{Initial Mass} = ${initial}\\text{ g} \\implies \\text{Target Half-Mass} = ${midMass}\\text{ g}\\)`, explanation: ( "Determine the mass value that represents exactly half of the initial sample size.") + ` Half-life is about how long it takes to halve. So look for where the amount drops to half, not at single values.`},
+                        { title: "Step 2: Match It to the Times in the Table", math: `\\(\\text{Mass drops from } ${initial}\\text{ g} \\text{ to } ${midMass}\\text{ g} \\text{ at timestamp } t = ${midTime} \\text{ hours}\\)`, explanation: ( ( "Find the elapsed time required to reach the target half-mass value.") + ` Find two rows where the second amount is half the first, then look at the time between them. That gap is one half-life.`) + ` Find two rows where the second amount is half the first, then look at the time between them. That gap is one half-life.`},
+                        { title: "Step 3: Confirm Consistent Decay Cycle Ratios", math: `\\(${midMass}\\text{ g} \\to ${finalMass}\\text{ g} \\quad (\\text{Another half reduction}) \\implies \\text{Takes another } ${halfLife} \\text{ hours } (${finalTime} - ${midTime} = ${halfLife})\\)`, explanation: ( ( "Verify the interval is consistent by checking the next reduction cycle.") + ` Check a different pair of rows and confirm the same gap. A real half-life stays the same no matter where in the table you look.`) + ` Check a different pair of rows and confirm the same gap. A real half-life stays the same no matter where in the table you look.`}
+                    ];
+                    break;
+                }
+            }
+            return p;
+        }
+
+        // --- Core Application Logic ---
+
+        function renderMathElements() {
+            if (window.renderMathInElement) {
+                renderMathInElement(document.body, {
+                    delimiters: [
+                        {left: '$$', right: '$$', display: true},
+                        {left: '\\(', right: '\\)', display: false}
+                    ],
+                    throwOnError: false
+                });
+            }
+        }
+
+        window.onload = renderMathElements;
+
+        function displaySolution() {
+            document.getElementById("solution-reveal-layer").style.display = "none";
+            var __hb = document.getElementById("hint-box"); if (__hb) __hb.style.display = "none";
+            const placeholder = document.getElementById("placeholder");
+            const quizStation = document.getElementById("quiz-station");
+            const assetMount = document.getElementById("asset-viewport-mount-point");
+            const mountPoint = document.getElementById("dynamic-input-mount-point");
+            const promptLabel = document.getElementById("input-prompt-label");
+
+            placeholder.style.display = "none";
+            quizStation.style.display = "block";
+            
+            if (currentProblemData.assetType && currentProblemData.assetType !== "none") {
+                assetMount.style.display = "flex";
+                assetMount.innerHTML = currentProblemData.assetHtml;
+            } else {
+                assetMount.style.display = "none";
+            }
+
+            document.getElementById("question-statement-display").innerHTML = mcfRich(currentProblemData.fullStatement);
+            promptLabel.innerHTML = mcfRich(currentProblemData.prompt);
+            
+            let html = '<div class="mc-options-list">';
+            for (let i = 0; i < currentProblemData.options.length; i++) {
+                const opt = currentProblemData.options[i];
+                const letter = opt.charAt(0);
+                const sel = currentState.selectedMcOption === letter ? "selected" : "";
+                const dis = currentState.answered ? "disabled" : "";
+                html += '<div class="mc-option-card ' + sel + ' ' + dis + '" onclick="selectMcOptionCard(\'' + letter + '\')"><span class="mc-badge">' + letter + '</span><span>' + opt.substring(3) + '</span></div>';
+            }
+            html += '</div>';
+            mountPoint.innerHTML = html;
+
+            if (currentState.answered) {
+                lockQuizInterface(currentState.isCorrect);
+                if (currentState.solRevealed) revealSolutionWorkspace();
+            } else {
+                unlockQuizInterface();
+            }
+
+            setTimeout(renderMathElements, 10);
+        }
+
+
+
+
+        function transmitDataToTeacherSpreadsheet(payload) {
+            fetch(TEACHER_SPREADSHEET_SCRIPT_URL, {
+                method: "POST",
+                mode: "no-cors",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            }).catch(err => console.error("Database cloud logging failure:", err));
+        }
+
+
+
+
+
+
+
+
+
+        function updateHudScoreboard() {
+            document.getElementById("hud-score").innerText = globalScore;
+            document.getElementById("hud-attempts").innerText = globalAttempts;
+        }
+    
+
+        MCF.init({ generate: generateProblem,
+                   /* 이 유닛은 그래프를 buildGraph(spec) 으로 그린다 (자산과 보기 둘 다) */
+                   renderAsset: function (p) { return p.graphSpec ? buildGraph(p.graphSpec) : (p.assetHtml || ""); },
+                   renderOption: function (p, i) {
+                     return (p.optionSpecs && p.optionSpecs[i]) ? buildGraph(p.optionSpecs[i]) : "";
+                   },
+                   logUrl: (typeof TEACHER_SPREADSHEET_SCRIPT_URL !== "undefined" ? TEACHER_SPREADSHEET_SCRIPT_URL : null),
+                   unitId: "Unit_3", lessonId: "Practice_Test" });
+</script>
+    <script src="../progress.js"></script>
+</body>
+</html>

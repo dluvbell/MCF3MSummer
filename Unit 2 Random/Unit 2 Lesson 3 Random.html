@@ -1,0 +1,1307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCF3M Unit 2 Lesson 3 Practice Studio</title>
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+
+    <!-- mcf-core.js 가 그리는 요소들의 기본 스타일. 아래 <style> 보다 먼저 와야
+         파일 고유 스타일이 이기고, 빠진 클래스만 여기서 메워진다.
+         폴더 위치를 몰라도 되게 두 경로를 다 건다(없는 쪽은 404 로 무시). -->
+    <link rel="stylesheet" href="../mcf-core.css">
+    <link rel="stylesheet" href="mcf-core.css">
+    <style>
+        :root {
+            --primary-color: #0f172a;
+            --secondary-color: #2563eb;
+            --disabled-color: #94a3b8;
+            --text-color: #334155;
+            --math-color: #000000;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --border-color: #cbd5e1;
+            --highlight-bg: #eff6ff;
+            --explanation-bg: #f1f5f9;
+            --rule-bg: #fef08a;
+            --rule-text: #713f12;
+            --success-color: #16a34a;
+            --error-color: #dc2626;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.8;
+            margin: 0;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: -0.025em;
+        }
+
+        .scoreboard {
+            background-color: #1e293b;
+            color: white;
+            display: inline-flex;
+            gap: 20px;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-weight: 700;
+            margin-top: 15px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.2);
+        }
+
+        .scoreboard span {
+            color: #60a5fa;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .profile-box, .selector-box {
+            background-color: var(--card-bg);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-color);
+            margin-bottom: 25px;
+        }
+
+        .profile-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .profile-grid input {
+            width: 100%;
+            padding: 12px;
+            font-size: 1rem;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        .profile-grid input:focus {
+            border-color: var(--secondary-color);
+        }
+
+        label {
+            display: block;
+            font-weight: 700;
+            color: var(--primary-color);
+            font-size: 1.1rem;
+            margin-bottom: 12px;
+        }
+
+        .selector-controls {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        select {
+            flex: 1;
+            padding: 16px;
+            font-size: 1.1rem;
+            font-family: inherit;
+            border-radius: 8px;
+            border: 2px solid var(--border-color);
+            background-color: white;
+            color: var(--primary-color);
+            outline: none;
+            cursor: pointer;
+        }
+
+        .solution-container {
+            background-color: var(--card-bg);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-color);
+            min-height: 200px;
+        }
+
+        .placeholder-text {
+            color: #64748b;
+            text-align: center;
+            font-style: italic;
+            padding: 60px 0;
+            font-size: 1.1rem;
+        }
+
+        .quiz-interface-box {
+            background-color: var(--explanation-bg);
+            border: 1px solid var(--border-color);
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+
+        .math-render-viewport {
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+        }
+
+        .mc-options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 10px;
+        }
+
+        .mc-option-card {
+            background: white;
+            border: 2px solid var(--border-color);
+            padding: 14px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1.05rem;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .mc-option-card:hover:not(.disabled) {
+            border-color: var(--secondary-color);
+            background-color: var(--highlight-bg);
+        }
+
+        .mc-option-card.selected {
+            border-color: var(--secondary-color);
+            background-color: #dbeafe;
+            color: #1e40af;
+        }
+
+        .mc-option-card.disabled {
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .mc-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background-color: #e2e8f0;
+            color: var(--primary-color);
+            font-weight: 800;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+
+        .mc-option-card.selected .mc-badge {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+
+        .feedback-msg-area {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            display: none;
+            padding: 10px 15px;
+            border-radius: 6px;
+        }
+
+        .feedback-success {
+            background-color: #dcfce7;
+            color: var(--success-color);
+            border-left: 5px solid var(--success-color);
+        }
+
+        .feedback-error {
+            background-color: #fee2e2;
+            color: var(--error-color);
+            border-left: 5px solid var(--error-color);
+        }
+
+        .quiz-action-bar {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .solution-reveal-window {
+            display: none;
+            border-top: 3px double var(--border-color);
+            margin-top: 30px;
+            padding-top: 30px;
+        }
+
+        .step-block {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e2e8f0;
+            display: none;
+        }
+
+        .step-title {
+            font-weight: 800;
+            color: var(--secondary-color);
+            display: block;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 8px;
+        }
+
+        .step-math {
+            font-size: 1.3rem;
+            font-weight: 700;
+            background-color: var(--explanation-bg);
+            padding: 14px 20px;
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin: 8px 0;
+            color: var(--math-color);
+            letter-spacing: 0.02em;
+            flex-wrap: wrap;
+        }
+
+        .step-explanation {
+            display: block;
+            font-size: 1.05rem;
+            color: #334155;
+            margin-top: 6px;
+        }
+
+        .final-answer-box {
+            background-color: var(--highlight-bg);
+            border-left: 6px solid var(--secondary-color);
+            padding: 20px 25px;
+            border-radius: 0 8px 8px 0;
+            margin-top: 30px;
+            display: none;
+        }
+
+        .final-answer-label {
+            font-weight: 800;
+            color: var(--secondary-color);
+            display: block;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .final-answer-math {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            margin-top: 6px;
+            display: inline-flex;
+            align-items: center;
+            letter-spacing: 0.02em;
+        }
+
+        .control-panel {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid var(--border-color);
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 14px 24px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            border-radius: 8px;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary { background-color: var(--secondary-color); color: white; }
+        .btn-primary:hover:not(:disabled) { background-color: #1d4ed8; }
+        .btn-success { background-color: var(--success-color); color: white; }
+        .btn-success:hover:not(:disabled) { background-color: #166534; }
+        .btn-secondary { background-color: var(--explanation-bg); color: var(--primary-color); border: 1px solid var(--border-color); }
+        .btn-secondary:hover:not(:disabled) { background-color: #e2e8f0; }
+        .btn-accent { background-color: var(--primary-color); color: white; }
+        .btn-accent:hover:not(:disabled) { background-color: #1e293b; }
+
+        .btn:disabled {
+            background-color: var(--disabled-color);
+            color: #f1f5f9;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+        
+        .question-statement-card {
+            background: #ffffff;
+            border-left: 4px solid var(--secondary-color);
+            padding: 16px 20px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            border-radius: 0 6px 6px 0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .hint-box {
+            display: none;
+            background-color: #fef9c3;
+            border-left: 5px solid #eab308;
+            color: #713f12;
+            padding: 12px 16px;
+            border-radius: 0 6px 6px 0;
+            margin-bottom: 15px;
+            font-size: 1.05rem;
+            font-weight: 600;
+        }
+        .btn-hint { background-color: #fde047; color: #713f12; }
+        .btn-hint:hover:not(:disabled) { background-color: #facc15; }
+
+        .coord-svg {
+            width: 100%;
+            height: auto;
+            display: block;
+            background: #ffffff;
+            border-radius: 6px;
+        }
+        .math-render-viewport .coord-svg { width: 330px; max-width: 100%; }
+
+        .mc-options-list.graph-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+        .mc-option-card.graph-card {
+            flex-direction: column;
+            align-items: stretch;
+            padding: 10px;
+        }
+        .mc-option-card.graph-card .mc-badge { align-self: flex-start; margin-bottom: 6px; }
+        .option-graph { width: 100%; border: 1px solid var(--border-color); border-radius: 6px; overflow: hidden; }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>MCF3M Unit 2 Lesson 3 Studio</h1>
+        <p>Infinite Practice: Introduction to Functions, Domain, Range & Algebraic Evaluations</p>
+        <div class="scoreboard">
+            <div>Score: <span id="hud-score">0</span></div>
+            <div>Tries: <span id="hud-attempts">0</span></div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="profile-box">
+            <label>Student Profile Setup:</label>
+            <div class="profile-grid">
+                <input type="text" id="first-name" placeholder="First name" autocomplete="off">
+                <input type="text" id="last-name" placeholder="Last name" autocomplete="off">
+            </div>
+        </div>
+
+        <div class="selector-box">
+            <label for="question-select">Select Practice Concept:</label>
+            <div class="selector-controls">
+                <select id="question-select" onchange="triggerNewQuestion()">
+                    <option value="">-- Choose a Topic to Begin --</option>
+                    <option value="t1">Type 1: Vertex from Vertex Form</option>
+                    <option value="t2">Type 2: Translations of y = x&sup2;</option>
+                    <option value="t3">Type 3: Stretches and Compressions</option>
+                    <option value="t4">Type 4: Combined Transformations</option>
+                    <option value="t5">Type 5: Match the Equation to its Graph</option>
+                    <option value="t6">Type 6: Equation from a Graph</option>
+                </select>
+                <button class="btn btn-accent" onclick="triggerNewQuestion()">Generate New</button>
+            </div>
+        </div>
+
+        <div class="solution-container" id="display-window">
+            <div id="placeholder" class="placeholder-text">
+                Choose a concept and click "Generate New" to create a dynamic practice problem.
+            </div>
+
+            <div id="quiz-station" class="quiz-interface-box" style="display: none;">
+                <div id="asset-viewport-mount-point" class="math-render-viewport" style="display: none;"></div>
+
+                <div id="question-statement-display" class="question-statement-card"></div>
+
+                <label id="input-prompt-label" style="margin-bottom: 12px; font-weight: 700; display: block;"></label>
+                
+                <div id="dynamic-input-mount-point" style="margin-top: 10px;"></div>
+
+                <div id="hint-box" class="hint-box"></div>
+                <div id="feedback-msg" class="feedback-msg-area"></div>
+
+                <div class="quiz-action-bar">
+                    <button class="btn btn-success" id="check-ans-btn" onclick="evaluateStudentAnswer()">Check Answer</button>
+                    <button class="btn btn-hint" id="hint-btn" onclick="toggleHint()">Hint</button>
+                    <button class="btn btn-secondary" id="reveal-sol-btn" disabled onclick="unlockSolutionPanel()">Show Solution Steps</button>
+                </div>
+            </div>
+
+            <div class="solution-reveal-window" id="solution-reveal-layer">
+                <div id="solution-workspace-injected"></div>
+                
+                <div class="control-panel" id="controls-panel">
+                    <button class="btn btn-secondary" id="restart-btn" onclick="restartSolution()">Restart Steps</button>
+                    <button class="btn btn-primary" id="next-btn" onclick="showNextStep()">Next Step &rarr;</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- mcf-core.js 는 보통 상위 폴더(index.html·progress.js 옆)에 둔다.
+         같은 폴더에 두는 경우도 있어 두 경로를 다 건다. 없는 쪽은 404 로 무시되고,
+         둘 다 있으면 두 번째는 core 내부 가드가 막는다. -->
+    <script src="../mcf-core.js"></script>
+    <script src="mcf-core.js"></script>
+    <script>
+    /* core 를 못 찾으면 Generate 가 조용히 무반응이 된다. 원인이 안 보이므로 안내를 띄운다. */
+    if (typeof MCF === "undefined") {
+      document.addEventListener("DOMContentLoaded", function () {
+        var box = document.getElementById("placeholder");
+        if (box) {
+          box.innerHTML =
+            '<strong style="color:#b91c1c">mcf-core.js \uB97C \uCC3E\uC744 \uC218 \uC5C6\uC2B5\uB2C8\uB2E4.</strong><br><br>' +
+            'This lesson needs <code>mcf-core.js</code>.<br>' +
+            'Put it next to <code>progress.js</code> and <code>index.html</code> ' +
+            '(the folder above this one), or in this same folder.';
+          box.style.display = "block";
+        }
+        var b = document.querySelector(".btn-generate");
+        if (b) b.disabled = true;
+      });
+    }
+    </script>
+    <script>
+
+        /* ── mcf-core.js 로 옮겨간 이름들의 지역 별칭 ── */
+        const randInt = MCF.randInt;
+        const gcd = MCF.gcd;
+        const gcd3 = MCF.gcd3;
+        const mcfPick = MCF.pick;
+        const mcfRich = MCF.rich;
+        const mcfShuffle = MCF.shuffle;
+        const mcfKey = MCF.key;
+        const mcfDedupe = MCF.dedupe;
+        const mcfFactorKey = MCF.factorKey;
+        const mcfUniqueByValue = MCF.uniqueByValue;
+        const mcfSpareOption = MCF.spareOption;
+        const shuffleMC = MCF.shuffleMC;
+        const M = MCF.M;
+        const Mu = MCF.Mu;
+        /* --- audit fix: uniform in-place shuffle (Fisher-Yates) --- */
+        /* Picks one of several wordings for the same question, so a student cannot
+           recognise a type by its sentence alone. */
+
+
+        /* --- audit fix: 같은 보기가 두 번 나오면 하나로 합친다.
+           정답과 글자가 똑같은 보기를 골랐는데 오답 처리되는 것을 막는다. --- */
+        /* Nudge one number inside an existing option to build a replacement
+           distractor. Skips digit groups that follow a thousands separator, so
+           "\\$11\\,045.96" is altered at the 11 and never left malformed.
+           Uniqueness is checked by the caller, so this can never reproduce the
+           correct answer. */
+        /* Two options can differ only in whitespace -- an empty middle term leaves
+           "4x^2  + 16" beside "4x^2 + 16" -- and MathJax renders them identically, so
+           the student sees the same card twice and only one of them scores. Compare
+           options on this normalised key, not on the raw string. */
+
+
+
+        const TEACHER_SPREADSHEET_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwygR6-l7XPRC1KL-Pqci33Yw_4pmCWa8mW7gNHJ_RsmN41ax15-d0sE-CrIxU0z22m/exec";
+
+        let globalScore = 0;
+        let globalAttempts = 0;
+        let currentProblemData = null;
+        let currentState = { answered: false, selectedMcOption: "", isCorrect: false, currentStep: 0, solRevealed: false, attempts: 0 };
+        let visibleStepElements = [];
+        let currentStepIndex = 0;
+
+        // --- Math & Logic Utilities ---
+
+        function fmtCoef(c, isFirst) {
+            if (c === 0) return "";
+            if (c === 1) return isFirst ? "" : "+";
+            if (c === -1) return "-";
+            return (c > 0 && !isFirst ? "+" + c : c.toString());
+        }
+
+        function fmtTerm(c, v, isFirst) {
+            if (c === 0) return "";
+            let s = fmtCoef(c, isFirst);
+            if (s === "+" && v !== "") s = "+";
+            if (s === "-" && v !== "") s = "-";
+            if (v === "") return (c > 0 && !isFirst ? "+" + c : c.toString());
+            if (c === 1) return isFirst ? v : "+" + v;
+            if (c === -1) return "-" + v;
+            return (c > 0 && !isFirst ? "+" + c + v : c + v);
+        }
+
+        /* audit fix: 예비 오답이 "0","1" 두 개뿐이라 정답·오답과 겹치면 보기가 3개로 줄었다.
+           정답 주변 정수를 넉넉히 만들어 항상 4개가 채워지게 한다. */
+        function mcfNearby(v) {
+            const out = [];
+            for (let d = 1; d <= 6; d++) { out.push(v - d, v + d); }
+            return out.filter(n => n !== v && n >= -8 && n <= 8).map(String);
+        }
+
+        /* Last-resort spare options.
+
+           Some types pass an empty fallback list, so when two of their planned
+           distractors happened to land on the same value the question dropped to three
+           options. This nudges the number inside the correct answer instead, keeping the
+           surrounding text and the number of decimal places exactly as they were, so the
+           spare reads like every other option. Returns null when the answer holds no
+           number, in which case the old three-option behaviour still applies. */
+
+
+        function gdef(v, d) { return (v === undefined || v === null) ? d : v; }
+
+        // --- SVG Graphing Engine ---
+        function buildGraph(spec) {
+            const xmin = gdef(spec.xmin, -7), xmax = gdef(spec.xmax, 7);
+            const ymin = gdef(spec.ymin, -7), ymax = gdef(spec.ymax, 7);
+            const W = 300, H = 300, pad = 10;
+            const X = function (x) { return pad + (x - xmin) / (xmax - xmin) * (W - 2 * pad); };
+            const Y = function (y) { return pad + (ymax - y) / (ymax - ymin) * (H - 2 * pad); };
+            const uid = "g" + Math.random().toString(36).slice(2, 8);
+            
+            let s = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" class="coord-svg">`;
+            /* Arrow direction fix: orient="auto" rotates a marker to the direction the
+               path is travelling AT that point. At the start of a path that direction
+               points inward, so a start arrowhead pointed back into the curve instead of
+               away from it. The -s markers below are the same triangle mirrored, and are
+               used for every marker-start. */
+            s += '<defs>';
+            /* audit fix 2026-07-30: 화살촉은 격자 경계 바깥으로 4 * stroke-width 만큼
+               뻗기 때문에, 클립 사각형이 격자에 딱 맞으면 촉이 잘려 안 보였다.
+               곡선 자체는 drawCurve에서 이미 격자 안으로 잘라 그린다. */
+            const clipPad = 10;
+            s += `<clipPath id="clip-${uid}"><rect x="${pad - clipPad}" y="${pad - clipPad}" width="${W - 2 * pad + 2 * clipPad}" height="${H - 2 * pad + 2 * clipPad}"/></clipPath>`;
+            s += `<marker id="ax-${uid}" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#0f172a"/></marker>`;
+            s += `<marker id="ax-s-${uid}" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M8,0 L0,4 L8,8 Z" fill="#0f172a"/></marker>`;
+            s += `<marker id="cv-${uid}" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#2563eb"/></marker>`;
+            s += `<marker id="cv-s-${uid}" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M8,0 L0,4 L8,8 Z" fill="#2563eb"/></marker>`;
+            s += '</defs>';
+            
+            for (let gx = Math.ceil(xmin); gx <= xmax; gx++) s += `<line x1="${X(gx)}" y1="${Y(ymax)}" x2="${X(gx)}" y2="${Y(ymin)}" stroke="#e8edf3" stroke-width="1"/>`;
+            for (let gy = Math.ceil(ymin); gy <= ymax; gy++) s += `<line x1="${X(xmin)}" y1="${Y(gy)}" x2="${X(xmax)}" y2="${Y(gy)}" stroke="#e8edf3" stroke-width="1"/>`;
+            s += `<line x1="${X(xmin)}" y1="${Y(0)}" x2="${X(xmax)}" y2="${Y(0)}" stroke="#0f172a" stroke-width="2" marker-start="url(#ax-s-${uid})" marker-end="url(#ax-${uid})"/>`;
+            s += `<line x1="${X(0)}" y1="${Y(ymin)}" x2="${X(0)}" y2="${Y(ymax)}" stroke="#0f172a" stroke-width="2" marker-start="url(#ax-s-${uid})" marker-end="url(#ax-${uid})"/>`;
+            
+            for (let gx = Math.ceil(xmin); gx <= xmax; gx++) { if (gx !== 0 && gx % 2 === 0) s += `<text x="${X(gx)}" y="${Y(0) + 12}" font-size="10" font-weight="bold" fill="#0f172a" text-anchor="middle">${gx}</text>`; }
+            for (let gy = Math.ceil(ymin); gy <= ymax; gy++) { if (gy !== 0 && gy % 2 === 0) s += `<text x="${X(0) - 5}" y="${Y(gy) + 3}" font-size="10" font-weight="bold" fill="#0f172a" text-anchor="end">${gy}</text>`; }
+            s += `<text x="${X(0) - 5}" y="${Y(0) + 12}" font-size="10" font-weight="bold" fill="#0f172a" text-anchor="end">0</text>`;
+            
+            const curves = spec.curves || [];
+            for (let i = 0; i < curves.length; i++) s += `<g clip-path="url(#clip-${uid})">${drawCurve(curves[i], X, Y, xmin, xmax, ymin, ymax, uid)}</g>`;
+            const dots = spec.dots || [];
+            for (let i = 0; i < dots.length; i++) { 
+                const dd = dots[i]; 
+                s += `<circle cx="${X(dd.x)}" cy="${Y(dd.y)}" r="4.5" fill="${dd.open ? '#ffffff' : '#2563eb'}" stroke="#2563eb" stroke-width="2"/>`; 
+            }
+            s += '</svg>';
+            return s;
+        }
+
+        /* --- audit fix 2026-07-30: 화살촉이 화면에서 사라지던 문제 ---
+           곡선은 clipPath로 잘리는데 SVG marker는 자르기 전 path 끝점에 붙는다.
+           포물선처럼 끝점이 격자 밖인 곡선은 화살촉이 통째로 잘려 나가서,
+           "화살표를 보고 무한히 뻗는지 판단하라"는 문항이 성립하지 않았다.
+           이제 곡선을 격자 안으로 먼저 자르고, 그 끝에서 화살촉을 붙인다. */
+        function mcfClipRuns(pts, xmin, xmax, ymin, ymax) {
+            const EPS = 1e-9;
+            /* Liang-Barsky. 선분의 양 끝이 둘 다 격자 밖이면서 격자를 가로지르는
+               경우(기울기 큰 직선)도 놓치지 않으려면 구간별 정식 클리핑이 필요하다. */
+            function clipSeg(a, b) {
+                let t0 = 0, t1 = 1;
+                const dx = b[0] - a[0], dy = b[1] - a[1];
+                const pp = [-dx, dx, -dy, dy];
+                const qq = [a[0] - xmin, xmax - a[0], a[1] - ymin, ymax - a[1]];
+                for (let i = 0; i < 4; i++) {
+                    if (Math.abs(pp[i]) < EPS) { if (qq[i] < -EPS) return null; continue; }
+                    const r = qq[i] / pp[i];
+                    if (pp[i] < 0) { if (r > t1) return null; if (r > t0) t0 = r; }
+                    else { if (r < t0) return null; if (r < t1) t1 = r; }
+                }
+                return [[a[0] + dx * t0, a[1] + dy * t0], [a[0] + dx * t1, a[1] + dy * t1]];
+            }
+            const runs = [];
+            let cur = null;
+            for (let i = 0; i + 1 < pts.length; i++) {
+                const seg = clipSeg(pts[i], pts[i + 1]);
+                if (!seg) { if (cur) { runs.push(cur); cur = null; } continue; }
+                if (!cur) { cur = [seg[0], seg[1]]; continue; }
+                const last = cur[cur.length - 1];
+                if (Math.abs(last[0] - seg[0][0]) > 1e-7 || Math.abs(last[1] - seg[0][1]) > 1e-7) {
+                    runs.push(cur); cur = [seg[0], seg[1]];
+                } else cur.push(seg[1]);
+            }
+            if (cur) runs.push(cur);
+            return runs;
+        }
+
+        /* 화살촉 자체가 약 7px이라, 경계에 정확히 놓으면 clipPath에 반쯤 잘린다.
+           화살표가 붙는 쪽만 화면 좌표로 몇 px 물러나게 해서 전부 보이게 한다. */
+        function mcfRetreat(run, px, fromStart) {
+            const pts = fromStart ? run.slice().reverse() : run.slice();
+            let need = px;
+            while (pts.length >= 2 && need > 0) {
+                const a = pts[pts.length - 2], b = pts[pts.length - 1];
+                const dx = b[0] - a[0], dy = b[1] - a[1];
+                const len = Math.sqrt(dx * dx + dy * dy);
+                if (len <= 1e-9) { pts.pop(); continue; }
+                if (len > need) {
+                    const t = (len - need) / len;
+                    pts[pts.length - 1] = [a[0] + dx * t, a[1] + dy * t];
+                    need = 0;
+                } else {
+                    need -= len;
+                    pts.pop();
+                }
+            }
+            return fromStart ? pts.reverse() : pts;
+        }
+
+        function drawCurve(c, X, Y, xmin, xmax, ymin, ymax, uid) {
+            function path(pts, aStart, aEnd) {
+                if (pts.length < 2) return "";
+                const runs = mcfClipRuns(pts, xmin, xmax, ymin, ymax);
+                if (!runs.length) return "";
+                let out = "";
+                for (let r = 0; r < runs.length; r++) {
+                    let run = [];
+                    for (let i = 0; i < runs[r].length; i++) run.push([X(runs[r][i][0]), Y(runs[r][i][1])]);
+                    const headArrow = aStart && r === 0;
+                    const tailArrow = aEnd && r === runs.length - 1;
+                    /* 화살촉은 refX=4 * stroke-width 만큼 끝점 너머로 뻗는다.
+                       그만큼 물러나야 촉 끝이 정확히 격자 경계에 놓인다. */
+                    const arrowPad = 4 * 2.5;
+                    if (headArrow) run = mcfRetreat(run, arrowPad, true);
+                    if (tailArrow) run = mcfRetreat(run, arrowPad, false);
+                    if (run.length < 2) continue;
+                    let span = 0;
+                    for (let i = 1; i < run.length; i++) span += Math.abs(run[i][0] - run[i - 1][0]) + Math.abs(run[i][1] - run[i - 1][1]);
+                    if (span < 1) continue;
+                    let d = "";
+                    for (let i = 0; i < run.length; i++) d += (i === 0 ? "M" : "L") + run[i][0].toFixed(1) + "," + run[i][1].toFixed(1) + " ";
+                    let attr = 'stroke="#2563eb" stroke-width="2.5" fill="none" stroke-linejoin="round" stroke-linecap="round"';
+                    if (tailArrow) attr += ` marker-end="url(#cv-${uid})"`;
+                    if (headArrow) attr += ` marker-start="url(#cv-s-${uid})"`;
+                    out += `<path d="${d.trim()}" ${attr}/>`;
+                }
+                return out;
+            }
+            const lo = c.dom ? c.dom[0] : xmin, hi = c.dom ? c.dom[1] : xmax;
+            if (c.kind === "line") { return path([[lo, c.m * lo + c.b], [hi, c.m * hi + c.b]], c.arrowLeft, c.arrowRight); }
+            if (c.kind === "hline") { return path([[lo, c.y], [hi, c.y]], c.arrowLeft, c.arrowRight); }
+            if (c.kind === "vline") { const a = c.dom ? c.dom[0] : ymin, b = c.dom ? c.dom[1] : ymax; return path([[c.x, a], [c.x, b]], c.arrowLeft, c.arrowRight); }
+            if (c.kind === "abs") { const f = function (x) { return c.a * Math.abs(x - c.h) + c.k; }; return path([[lo, f(lo)], [c.h, f(c.h)], [hi, f(hi)]], c.arrowLeft, c.arrowRight); }
+            if (c.kind === "circle") { const rpx = (X(c.cx + c.r) - X(c.cx)).toFixed(1); return `<circle cx="${X(c.cx)}" cy="${Y(c.cy)}" r="${rpx}" stroke="#2563eb" stroke-width="2.5" fill="none"/>`; }
+            if (c.kind === "xparab") { const a = c.ydom ? c.ydom[0] : ymin, b = c.ydom ? c.ydom[1] : ymax; let pts = []; for (let i = 0; i <= 80; i++) { const y = a + (b - a) * i / 80; pts.push([c.a * (y - c.k) * (y - c.k) + c.h, y]); } return path(pts, false, false); }
+            let pts = [];
+            for (let i = 0; i <= 80; i++) {
+                const x = lo + (hi - lo) * i / 80; let y;
+                if (c.kind === "parab") y = c.a * (x - c.h) * (x - c.h) + c.k;
+                else if (c.kind === "cubic") y = c.a * (x - c.h) * (x - c.h) * (x - c.h) + c.k;
+                else y = 0;
+                pts.push([x, y]);
+            }
+            return path(pts, c.arrowLeft, c.arrowRight);
+        }
+
+        function buildOptionsHTML(problem, selectedLetter, disabled) {
+            const isGraph = problem.optionType === "graph";
+            let html = `<div class="mc-options-list ${isGraph ? 'graph-grid' : ''}">`;
+            for (let i = 0; i < problem.options.length; i++) {
+                const opt = problem.options[i];
+                const letter = opt.charAt(0);
+                const sel = selectedLetter === letter ? "selected" : "";
+                const dis = disabled ? "disabled" : "";
+                const body = isGraph ? (`<div class="option-graph">${buildGraph(problem.optionSpecs[i])}</div>`) : (`<span>${opt.substring(3)}</span>`);
+                html += `<div class="mc-option-card ${sel} ${dis} ${isGraph ? 'graph-card' : ''}" onclick="selectMcOptionCard('${letter}')"><span class="mc-badge">${letter}</span>${body}</div>`;
+            }
+            html += '</div>';
+            return html;
+        }
+
+        // --- Problem Generators ---
+        function generateProblem(typeId) {
+            let p = {
+                title: "", type: "mc", assetType: "none", optionType: "text",
+                fullStatement: "", prompt: "", options: [], optionSpecs: [],
+                hint: "", steps: [], ans: "", graphSpec: null, rawAns: ""
+            };
+
+            /* ---- shared helpers for vertex-form work ------------------------------ */
+
+            // a as it appears in front of the bracket: "", "-", "3", "-0.5" ...
+            function aStr(a) {
+                if (a === 1) return "";
+                if (a === -1) return "-";
+                if (a === 0.5) return "\\dfrac{1}{2}";
+                if (a === -0.5) return "-\\dfrac{1}{2}";
+                if (a === 0.25) return "\\dfrac{1}{4}";
+                if (a === -0.25) return "-\\dfrac{1}{4}";
+                if (a === 1 / 3) return "\\dfrac{1}{3}";
+                if (a === -1 / 3) return "-\\dfrac{1}{3}";
+                return String(a);
+            }
+            // (x - h) written the way students see it
+            function xPart(h) {
+                if (h === 0) return "x";
+                return h > 0 ? `(x - ${h})` : `(x + ${Math.abs(h)})`;
+            }
+            function kPart(k) {
+                if (k === 0) return "";
+                return k > 0 ? ` + ${k}` : ` - ${Math.abs(k)}`;
+            }
+            // full vertex form, e.g. \(y = -3(x + 2)^{2} - 5\)
+            function vertexForm(a, h, k) {
+                const base = h === 0 ? "x^{2}" : `${xPart(h)}^{2}`;
+                return `y = ${aStr(a)}${base}${kPart(k)}`;
+            }
+            function tex(s) { return `\\(${s}\\)`; }
+
+            // words for the stretch factor
+            function stretchWords(a) {
+                const m = Math.abs(a);
+                if (m === 1) return null;
+                if (m > 1) return `vertically stretched by a factor of ${m}`;
+                const denom = Math.round(1 / m);
+                return `vertically compressed by a factor of \\(\\dfrac{1}{${denom}}\\)`;
+            }
+            function shiftWords(h, k) {
+                const bits = [];
+                if (h !== 0) bits.push(`${Math.abs(h)} unit${Math.abs(h) === 1 ? "" : "s"} ${h > 0 ? "right" : "left"}`);
+                if (k !== 0) bits.push(`${Math.abs(k)} unit${Math.abs(k) === 1 ? "" : "s"} ${k > 0 ? "up" : "down"}`);
+                return bits;
+            }
+            function joinList(bits) {
+                if (bits.length === 0) return "";
+                if (bits.length === 1) return bits[0];
+                if (bits.length === 2) return bits[0] + " and " + bits[1];
+                return bits.slice(0, -1).join(", ") + ", and " + bits[bits.length - 1];
+            }
+            // vertex form -> standard form y = ax^2 + bx + c
+            function standardForm(a, h, k) {
+                const b = -2 * a * h;
+                const c = a * h * h + k;
+                const round = (v) => Math.round(v * 1000) / 1000;
+                const A = round(a), B = round(b), C = round(c);
+                let s = "y = ";
+                s += (A === 1 ? "" : A === -1 ? "-" : A) + "x^{2}";
+                if (B !== 0) s += (B > 0 ? " + " : " - ") + (Math.abs(B) === 1 ? "" : Math.abs(B)) + "x";
+                if (C !== 0) s += (C > 0 ? " + " : " - ") + Math.abs(C);
+                return s;
+            }
+            // a nice window that keeps the vertex and the arms on screen
+            function windowFor(a, h, k) {
+                return { xmin: -7, xmax: 7, ymin: -7, ymax: 7,
+                         curves: [{ kind: "parab", a: a, h: h, k: k, arrowLeft: true, arrowRight: true }] };
+            }
+
+            const A_POOL = [-3, -2, -1, -0.5, 0.5, 1, 2, 3];
+
+            /* ====================================================================== */
+            /* t1 — read the vertex straight off vertex form                          */
+            /* ====================================================================== */
+            if (typeId === "t1") {
+                p.title = "Vertex from Vertex Form";
+                const a = A_POOL[randInt(0, A_POOL.length - 1)];
+                let h = randInt(-6, 6); if (h === 0) h = randInt(1, 6) * (Math.random() < 0.5 ? 1 : -1);
+                let k = randInt(-6, 6); if (k === 0) k = randInt(1, 6) * (Math.random() < 0.5 ? 1 : -1);
+
+                p.fullStatement = mcfPick([
+                    `What are the coordinates of the vertex for the parabola with equation ${tex(vertexForm(a, h, k))}?`,
+                    `The parabola ${tex(vertexForm(a, h, k))} is written in vertex form. Where is its vertex?`,
+                    `Find the vertex of ${tex(vertexForm(a, h, k))}.`
+                ]);
+                p.prompt = mcfPick([
+                    "Select the coordinates of the vertex:",
+                    "Which point is the vertex?",
+                    "Pick the vertex:"
+                ]);
+
+                const correct = `\\((${h}, ${k})\\)`;
+                const mc = shuffleMC(correct, [
+                    `\\((${-h}, ${k})\\)`,
+                    `\\((${h}, ${-k})\\)`,
+                    `\\((${k}, ${h})\\)`
+                ], [
+                    `\\((${h + 1}, ${k})\\)`,
+                    `\\((${h}, ${k + 1})\\)`,
+                    `\\((${-h}, ${-k})\\)`,
+                    `\\((${h - 1}, ${k - 1})\\)`
+                ]);
+                p.options = mc.options; p.ans = mc.ansLetter; p.rawAns = correct;
+
+                p.hint = `In \\(y = a(x - h)^{2} + k\\) the vertex is \\((h, k)\\). Watch the sign inside the bracket.`;
+                p.steps = [
+                    { title: `Step 1: Decide Why You Can Read the Vertex Off`,
+                      math: `\\(y = a(x - h)^{2} + k\\)`,
+                      explanation: ( "Vertex form always has a subtraction sign inside the bracket.") + ` Vertex form is built so the vertex can be read off with no working. But it only works if you line your equation up with \\(y = a(x - h)^2 + k\\) exactly.`},
+                    { title: "Step 2: Read h from the bracket",
+                      math: `\\(${h === 0 ? "x" : xPart(h)}^{2} \\Rightarrow h = ${h}\\)`,
+                      explanation: ( h >= 0
+                        ? `The bracket already shows a minus, so h is ${h}.`
+                        : `The bracket shows a plus, and \\(x + ${Math.abs(h)}\\) means \\(x - (${h})\\). So h is ${h}.`) + ` Trap: copying the number you see without checking the sign in front of it first. A plus inside the bracket means \\(h\\) is negative.`},
+                    { title: "Step 3: Read k from the end",
+                      math: `\\(${kPart(k).trim() || "+ 0"} \\Rightarrow k = ${k}\\)`,
+                      explanation: ( `The number added at the end is k, so k is ${k}.`) + ` No sign flip happens out here, unlike inside the bracket, so take \\(k\\) exactly as it stands.`},
+                    { title: "Step 4: Write the vertex",
+                      math: correct,
+                      explanation: ( `The vertex is \\((${h}, ${k})\\). The number ${a} out front does not move it.`) + ` Write it as \\((h, k)\\) in that order. The number out front only changes the width and which way it opens.`}
+                ];
+            }
+
+            /* ====================================================================== */
+            /* t2 — translations only                                                 */
+            /* ====================================================================== */
+            else if (typeId === "t2") {
+                p.title = "Translations of y = x²";
+                let h = randInt(-6, 6); if (h === 0) h = randInt(1, 6) * (Math.random() < 0.5 ? 1 : -1);
+                let k = randInt(-6, 6); if (k === 0) k = randInt(1, 6) * (Math.random() < 0.5 ? 1 : -1);
+                const words = joinList(shiftWords(h, k));
+
+                p.fullStatement = mcfPick([
+                    `Which of the following equations represents a parabola that has been translated ${words} from the parent function \\(y = x^{2}\\)?`,
+                    `The parent function \\(y = x^{2}\\) is moved ${words}. Which equation describes the result?`,
+                    `Starting from \\(y = x^{2}\\), the graph is shifted ${words}. Which equation matches?`
+                ]);
+                p.prompt = mcfPick([
+                    "Select the correct equation:",
+                    "Which equation shows that move?",
+                    "Pick the equation in vertex form:"
+                ]);
+
+                const correct = tex(vertexForm(1, h, k));
+                const mc = shuffleMC(correct, [
+                    tex(vertexForm(1, -h, k)),
+                    tex(vertexForm(1, h, -k)),
+                    tex(vertexForm(1, -h, -k))
+                ], [
+                    tex(vertexForm(1, h + 1, k)),
+                    tex(vertexForm(1, h, k + 1)),
+                    tex(vertexForm(1, h - 1, k)),
+                    tex(vertexForm(1, h, k - 1))
+                ]);
+                p.options = mc.options; p.ans = mc.ansLetter; p.rawAns = correct;
+
+                p.hint = "A left or right move goes inside the bracket with the opposite sign. An up or down move is added at the end.";
+                p.steps = [
+                    { title: `Step 1: Decide Where Each Move Belongs`,
+                      math: `\\(${h === 0 ? "x" : xPart(h)}^{2}\\)`,
+                      explanation: ( h > 0
+                        ? `Moving ${h} right puts \\(- ${h}\\) inside the bracket. Inside the bracket the sign flips.`
+                        : `Moving ${Math.abs(h)} left puts \\(+ ${Math.abs(h)}\\) inside the bracket. Inside the bracket the sign flips.`) + ` A sideways move always lives inside the bracket. Trap: the sign flips in here, so right looks like a minus.`},
+                    { title: "Step 2: Handle the up or down move",
+                      math: `\\(${kPart(k).trim()}\\)`,
+                      explanation: ( k > 0
+                        ? `Moving ${k} up adds ${k} at the end. Outside the bracket the sign does not flip.`
+                        : `Moving ${Math.abs(k)} down takes away ${Math.abs(k)} at the end. Outside the bracket the sign does not flip.`) + ` Out here the sign behaves normally, which is the opposite of what happens inside the bracket.`},
+                    { title: "Step 3: Put the two together",
+                      math: correct,
+                      explanation: ( `The vertex has moved from \\((0, 0)\\) to \\((${h}, ${k})\\).`) + ` Check it by finding the vertex and making sure it matches both moves the question described.`}
+                ];
+            }
+
+            /* ====================================================================== */
+            /* t3 — vertical stretch or compression only                              */
+            /* ====================================================================== */
+            else if (typeId === "t3") {
+                p.title = "Stretches and Compressions";
+                const stretchPool = [2, 3, 4, 5, 0.5, 0.25, 1 / 3];
+                const a = stretchPool[randInt(0, stretchPool.length - 1)];
+                const isStretch = Math.abs(a) > 1;
+                const denom = Math.round(1 / a);
+                const words = isStretch
+                    ? `stretched vertically by a factor of ${a}`
+                    : `compressed vertically by a factor of \\(\\dfrac{1}{${denom}}\\)`;
+
+                p.fullStatement = mcfPick([
+                    `Which of the following equations represents a parabola that has been ${words}?`,
+                    `The parent function \\(y = x^{2}\\) is ${words}. Which equation is the result?`,
+                    `A parabola is ${words} from \\(y = x^{2}\\). Which equation matches?`
+                ]);
+                p.prompt = mcfPick([
+                    "Select the correct equation:",
+                    "Which equation shows that change?",
+                    "Pick the equation:"
+                ]);
+
+                const correct = tex(`y = ${aStr(a)}x^{2}`);
+                const flipped = isStretch ? 1 / a : Math.round(1 / a);
+                const mc = shuffleMC(correct, [
+                    tex(`y = ${aStr(flipped)}x^{2}`),
+                    tex(`y = (${isStretch ? a : `\\dfrac{1}{${denom}}`}x)^{2}`),
+                    tex(`y = x^{2} ${isStretch ? "+" : "-"} ${isStretch ? a : denom}`)
+                ], [
+                    tex(`y = -${aStr(a) || 1}x^{2}`),
+                    tex(`y = ${aStr(a) || 1}x`),
+                    tex(`y = x^{2}`),
+                    tex(`y = ${isStretch ? a + 1 : denom + 1}x^{2}`)
+                ]);
+                p.options = mc.options; p.ans = mc.ansLetter; p.rawAns = correct;
+
+                p.hint = "A vertical stretch multiplies the whole squared part. The number sits in front of the bracket, not inside it.";
+                p.steps = [
+                    { title: "Step 1: Decide where the number goes",
+                      math: `\\(y = a x^{2}\\)`,
+                      explanation: ( "A vertical change multiplies the y-values, so the number goes in front.") + ` Work out whether the change is vertical or horizontal first, because that decides where the number goes.`},
+                    { title: "Step 2: Choose the number",
+                      math: `\\(a = ${aStr(a) || 1}\\)`,
+                      explanation: ( isStretch
+                        ? `A stretch by ${a} makes every y-value ${a} times bigger, so a is ${a}.`
+                        : `A compression by one ${denom}th makes every y-value ${denom} times smaller, so a is one ${denom}th.`) + ` A stretch always gives a number bigger than 1, and a compression gives a fraction between 0 and 1. Trap: mixing those two up.`},
+                    { title: "Step 3: Write the equation",
+                      math: correct,
+                      explanation: ( isStretch
+                        ? `The graph is ${a} times as tall as \\(y = x^{2}\\) at every x-value.`
+                        : `The graph is ${denom} times shorter than \\(y = x^{2}\\) at every x-value.`) + ` Check it against the picture in your head, and remember the vertex has not moved at all.`}
+                ];
+            }
+
+            /* ====================================================================== */
+            /* t4 — combined: stretch/compression + reflection + translation           */
+            /* ====================================================================== */
+            else if (typeId === "t4") {
+                p.title = "Combined Transformations";
+                /* Half the time this is the classic three-part question (stretch,
+                   reflect in the x-axis, move up). The rest of the time the pieces are
+                   drawn at random so the wording cannot be memorised. */
+                const classic = Math.random() < 0.4;
+                let mag, reflect, h, k;
+                if (classic) {
+                    mag = randInt(2, 5);
+                    reflect = true;
+                    h = 0;
+                    k = randInt(1, 6);
+                } else {
+                    const pool = [2, 3, 4, 0.5, 0.25];
+                    mag = pool[randInt(0, pool.length - 1)];
+                    reflect = Math.random() < 0.5;
+                    h = randInt(-5, 5);
+                    k = randInt(-6, 6);
+                    if (h === 0 && k === 0) k = randInt(1, 6);
+                }
+                const a = reflect ? -mag : mag;
+
+                const bits = [];
+                const sw = stretchWords(a); if (sw) bits.push(sw);
+                if (reflect) bits.push("reflected about the x-axis");
+                shiftWords(h, k).forEach(b => bits.push("translated " + b));
+                const words = joinList(bits);
+
+                p.fullStatement = mcfPick([
+                    `Which of the following equations represents a parabola that has been ${words} from the parent function \\(y = x^{2}\\)?`,
+                    `Starting from \\(y = x^{2}\\), a parabola is ${words}. Which equation is the result?`,
+                    `The parent function \\(y = x^{2}\\) is ${words}. Which equation describes it?`
+                ]);
+                p.prompt = mcfPick([
+                    "Select the correct equation:",
+                    "Which equation shows all of those changes?",
+                    "Pick the equation in vertex form:"
+                ]);
+
+                const correct = tex(vertexForm(a, h, k));
+                const cands = [
+                    tex(vertexForm(-a, h, k)),        // forgot or added the reflection
+                    tex(vertexForm(a, -h, k)),        // wrong side
+                    tex(vertexForm(a, h, -k)),        // wrong direction up/down
+                    tex(vertexForm(a, -h, -k))
+                ];
+                const mc = shuffleMC(correct, mcfShuffle(cands.slice()).slice(0, 3), [
+                    tex(vertexForm(a, h + 1, k)),
+                    tex(vertexForm(a, h, k + 1)),
+                    tex(vertexForm(-a, -h, -k)),
+                    tex(vertexForm(a, h - 1, k - 1))
+                ]);
+                p.options = mc.options; p.ans = mc.ansLetter; p.rawAns = correct;
+
+                p.hint = "Build it one piece at a time: the number in front, then the sign, then the bracket, then the number at the end.";
+                p.steps = [
+                    { title: `Step 1: Split a Into Its Size and Its Sign`,
+                      math: `\\(|a| = ${Math.abs(a) === 1 ? 1 : aStr(Math.abs(a))}\\)`,
+                      explanation: ( sw ? `The graph is ${sw.replace(/vertically /, "")}, so the size of a is ${Math.abs(a)}.`
+                                      : "There is no stretch, so the size of a is 1.") + ` Deal with the size of \\(a\\) before its sign, because those are two separate pieces of information.`},
+                    { title: "Step 2: Sign of a",
+                      math: `\\(a = ${aStr(a) || 1}\\)`,
+                      explanation: ( reflect
+                        ? "A reflection about the x-axis makes a negative, so the parabola opens downward."
+                        : "There is no reflection, so a stays positive and the parabola opens upward.") + ` A reflection flips every height upside down, and a negative \\(a\\) is exactly what does that. Trap: putting the minus outside the whole equation.`},
+                    { title: "Step 3: Sideways move",
+                      math: `\\(${h === 0 ? "x" : xPart(h)}^{2}\\)`,
+                      explanation: ( h === 0
+                        ? "There is no sideways move, so the bracket is just x."
+                        : (h > 0 ? `Moving ${h} right puts \\(- ${h}\\) inside the bracket.`
+                                 : `Moving ${Math.abs(h)} left puts \\(+ ${Math.abs(h)}\\) inside the bracket.`)) + ` Check the wording for any left or right movement before you write a bracket. Trap: inventing one that was never asked for.`},
+                    { title: "Step 4: Up or down move",
+                      math: correct,
+                      explanation: ( k === 0
+                        ? `There is no vertical move, so nothing is added at the end. The vertex is \\((${h}, 0)\\).`
+                        : `${k > 0 ? "Add" : "Take away"} ${Math.abs(k)} at the end. The vertex ends up at \\((${h}, ${k})\\).`) + ` Check it by finding the vertex, which should match the up or down move in the question.`}
+                ];
+            }
+
+            /* ====================================================================== */
+            /* t5 — equation given, choose the graph                                  */
+            /* ====================================================================== */
+            else if (typeId === "t5") {
+                p.title = "Match the Equation to its Graph";
+                p.optionType = "graph";
+                const pool = [-2, -1, -0.5, 0.5, 1, 2];
+                const a = pool[randInt(0, pool.length - 1)];
+                let h = randInt(-4, 4); if (h === 0) h = randInt(1, 4) * (Math.random() < 0.5 ? 1 : -1);
+                let k = randInt(-4, 4); if (k === 0) k = randInt(1, 4) * (Math.random() < 0.5 ? 1 : -1);
+
+                p.fullStatement = mcfPick([
+                    `Which of the following graphs shows a parabola with the equation ${tex(vertexForm(a, h, k))}?`,
+                    `Which graph belongs to ${tex(vertexForm(a, h, k))}?`,
+                    `Select the graph of ${tex(vertexForm(a, h, k))}.`
+                ]);
+                p.prompt = mcfPick([
+                    "Tap the graph that matches the equation:",
+                    "Which graph is it?",
+                    "Pick the matching graph:"
+                ]);
+
+                /* Every option uses the same window so the student compares shape and
+                   position, not axis scales. */
+                const variants = [[a, h, k], [-a, h, k], [a, -h, k], [a, h, -k], [-a, -h, k], [a, -h, -k]];
+                const seen = {}; const picked = [];
+                for (const v of mcfShuffle(variants.slice())) {
+                    const key = v.join(",");
+                    const same = v[0] === a && v[1] === h && v[2] === k;
+                    if (same || seen[key]) continue;
+                    seen[key] = 1; picked.push(v);
+                    if (picked.length === 3) break;
+                }
+                const specs = [windowFor(a, h, k)].concat(picked.map(v => windowFor(v[0], v[1], v[2])));
+                const order = mcfShuffle([0, 1, 2, 3]);
+                const finalSpecs = order.map(i => specs[i]);
+                p.optionSpecs = finalSpecs;
+                p.options = ["A)", "B)", "C)", "D)"];
+                p.ans = "ABCD"[order.indexOf(0)];
+                p.rawAns = tex(vertexForm(a, h, k));
+
+                p.hint = `The vertex is at \\((${h}, ${k})\\). Find that point first, then check which way the parabola opens.`;
+                p.steps = [
+                    { title: `Step 1: Decide What to Check First`,
+                      math: `\\((h, k) = (${h}, ${k})\\)`,
+                      explanation: ( `Read h and k straight from the equation. The vertex sits at \\((${h}, ${k})\\).`) + ` The vertex is the fastest way to rule graphs out, so read it before looking at width or direction.`},
+                    { title: "Step 2: Which way does it open?",
+                      math: `\\(a = ${aStr(a) || 1}\\)`,
+                      explanation: ( a < 0
+                        ? "a is negative, so the parabola opens downward."
+                        : "a is positive, so the parabola opens upward.") + ` Only the sign of \\(a\\) decides this. A positive opens upward and a negative opens downward, whatever the rest looks like.`},
+                    { title: "Step 3: How wide is it?",
+                      math: `\\(|a| = ${Math.abs(a)}\\)`,
+                      explanation: ( Math.abs(a) > 1
+                        ? `Because \\(|a|\\) is bigger than 1, the curve is narrower than \\(y = x^{2}\\).`
+                        : (Math.abs(a) < 1
+                          ? `Because \\(|a|\\) is less than 1, the curve is wider than \\(y = x^{2}\\).`
+                          : `Because \\(|a|\\) is 1, the curve is the same width as \\(y = x^{2}\\).`)) + ` Compare against \\(y = x^2\\). A size bigger than 1 is narrower, and a fraction is wider.`},
+                    { title: "Step 4: Pick the graph",
+                      math: p.rawAns,
+                      explanation: ( `Only one graph has its vertex at \\((${h}, ${k})\\) and opens ${a < 0 ? "downward" : "upward"}.`) + ` Check all three features against the graph you chose. Trap: stopping after the vertex matches.`}
+                ];
+            }
+
+            /* ====================================================================== */
+            /* t6 — graph given, choose the equation (standard form options)          */
+            /* ====================================================================== */
+            else if (typeId === "t6") {
+                p.title = "Equation from a Graph";
+                p.assetType = "graph";
+                const pool = [-2, -1, 1, 2];
+                const a = pool[randInt(0, pool.length - 1)];
+                const h = randInt(-3, 3);
+                const k = randInt(-4, 4);
+                p.graphSpec = windowFor(a, h, k);
+
+                p.fullStatement = mcfPick([
+                    "Which equation corresponds to the parabola shown above?",
+                    "The parabola above is drawn on the grid. Which equation matches it?",
+                    "Look at the parabola above. Which equation describes it?"
+                ]);
+                p.prompt = mcfPick([
+                    "Select the equation in standard form:",
+                    "Which equation is it?",
+                    "Pick the matching equation:"
+                ]);
+
+                const correct = tex(standardForm(a, h, k));
+                const cands = [
+                    tex(standardForm(-a, h, k)),
+                    tex(standardForm(a, -h, k)),
+                    tex(standardForm(a, h, -k)),
+                    tex(standardForm(a, -h, -k))
+                ];
+                const uniq = [];
+                for (const c of mcfShuffle(cands.slice())) {
+                    if (c !== correct && uniq.indexOf(c) === -1) uniq.push(c);
+                    if (uniq.length === 3) break;
+                }
+                while (uniq.length < 3) {
+                    const c = tex(standardForm(a, h, k + uniq.length + 1));
+                    if (c !== correct && uniq.indexOf(c) === -1) uniq.push(c); else break;
+                }
+                const mc = shuffleMC(correct, uniq, [
+                    tex(standardForm(a, h + 1, k)),
+                    tex(standardForm(a, h, k + 1)),
+                    tex(standardForm(-a, -h, k)),
+                    tex(standardForm(a, h - 1, k - 1))
+                ]);
+                p.options = mc.options; p.ans = mc.ansLetter; p.rawAns = correct;
+
+                const bVal = -2 * a * h, cVal = a * h * h + k;
+                p.hint = "Read the vertex off the grid, write the equation in vertex form, then expand it.";
+                p.steps = [
+                    { title: `Step 1: Decide Which Feature to Read First`,
+                      math: `\\((${h}, ${k})\\)`,
+                      explanation: ( `The turning point of the curve sits at \\((${h}, ${k})\\).`) + ` The turning point gives you \\(h\\) and \\(k\\) straight away, so read it before anything else.`},
+                    { title: "Step 2: Find a",
+                      math: `\\(a = ${aStr(a) || 1}\\)`,
+                      explanation: ( a < 0
+                        ? `The curve opens downward, so a is negative. Its size is ${Math.abs(a)}.`
+                        : `The curve opens upward, so a is positive. Its size is ${Math.abs(a)}.`) + ` Direction gives you the sign and the width gives you the size. Trap: assuming \\(a\\) is 1 without checking the width.`},
+                    { title: "Step 3: Write it in vertex form",
+                      math: tex(vertexForm(a, h, k)),
+                      explanation: ( "Put the vertex and a into \\(y = a(x - h)^{2} + k\\).") + ` Remember the bracket holds \\(x - h\\), so the sign flips when you put \\(h\\) in.`},
+                    { title: "Step 4: Expand into standard form",
+                      math: correct,
+                      explanation: ( `Multiply out the bracket. That gives \\(x^{2}\\) times ${a}, an x-term of ${bVal}, and a constant of ${cVal}.`) + ` Expand the bracket first, then multiply through, then add the last number. Doing it in that order stops sign slips.`}
+                ];
+            }
+
+            return p;
+        }
+
+        // --- Core Application Logic ---
+
+        function renderMathElements() {
+            if (window.renderMathInElement) {
+                renderMathInElement(document.body, {
+                    delimiters: [
+                        {left: '$$', right: '$$', display: true},
+                        {left: '\\(', right: '\\)', display: false}
+                    ],
+                    throwOnError: false
+                });
+            }
+        }
+
+        window.onload = renderMathElements;
+
+        function displaySolution() {
+            document.getElementById("solution-reveal-layer").style.display = "none";
+            var __hb = document.getElementById("hint-box"); if (__hb) __hb.style.display = "none";
+            const placeholder = document.getElementById("placeholder");
+            const quizStation = document.getElementById("quiz-station");
+            const assetMount = document.getElementById("asset-viewport-mount-point");
+            const mountPoint = document.getElementById("dynamic-input-mount-point");
+            const promptLabel = document.getElementById("input-prompt-label");
+
+            placeholder.style.display = "none";
+            quizStation.style.display = "block";
+            
+            if (currentProblemData.assetType && currentProblemData.assetType !== "none") {
+                assetMount.style.display = "flex";
+                assetMount.innerHTML = currentProblemData.assetType === "graph" ? buildGraph(currentProblemData.graphSpec) : currentProblemData.assetHtml;
+            } else {
+                assetMount.style.display = "none";
+            }
+
+            document.getElementById("question-statement-display").innerHTML = currentProblemData.fullStatement;
+            promptLabel.innerHTML = currentProblemData.prompt;
+            
+            mountPoint.innerHTML = buildOptionsHTML(currentProblemData, currentState.selectedMcOption, currentState.answered);
+
+            if (currentState.answered) {
+                lockQuizInterface(currentState.isCorrect);
+                if (currentState.solRevealed) revealSolutionWorkspace();
+            } else {
+                unlockQuizInterface();
+            }
+
+            // Ensure LaTeX renders *after* the DOM is fully constructed
+            setTimeout(renderMathElements, 10);
+        }
+
+
+
+
+        function transmitDataToTeacherSpreadsheet(payload) {
+            fetch(TEACHER_SPREADSHEET_SCRIPT_URL, {
+                method: "POST",
+                mode: "no-cors",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            }).catch(err => console.error("Database cloud logging failure:", err));
+        }
+
+
+
+
+
+
+
+
+
+        function updateHudScoreboard() {
+            document.getElementById("hud-score").innerText = globalScore;
+            document.getElementById("hud-attempts").innerText = globalAttempts;
+        }
+    
+
+        MCF.init({ generate: generateProblem,
+                   /* 이 유닛은 그래프를 buildGraph(spec) 으로 그린다 (자산과 보기 둘 다) */
+                   renderAsset: function (p) { return p.graphSpec ? buildGraph(p.graphSpec) : (p.assetHtml || ""); },
+                   renderOption: function (p, i) {
+                     return (p.optionSpecs && p.optionSpecs[i]) ? buildGraph(p.optionSpecs[i]) : "";
+                   },
+                   logUrl: (typeof TEACHER_SPREADSHEET_SCRIPT_URL !== "undefined" ? TEACHER_SPREADSHEET_SCRIPT_URL : null),
+                   unitId: "Unit_2", lessonId: "Lesson_3" });
+</script>
+    <script src="../progress.js"></script>
+</body>
+</html>

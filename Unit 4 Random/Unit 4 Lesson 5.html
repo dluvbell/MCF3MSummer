@@ -1,0 +1,1019 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCF3M Lesson 5 Sinusoidal Applications Studio</title>
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+
+    <!-- mcf-core.js 가 그리는 요소들의 기본 스타일. 아래 <style> 보다 먼저 와야
+         파일 고유 스타일이 이기고, 빠진 클래스만 여기서 메워진다.
+         폴더 위치를 몰라도 되게 두 경로를 다 건다(없는 쪽은 404 로 무시). -->
+    <link rel="stylesheet" href="../mcf-core.css">
+    <link rel="stylesheet" href="mcf-core.css">
+    <style>
+        :root {
+            --primary-color: #0f172a;
+            --secondary-color: #2563eb;
+            --disabled-color: #94a3b8;
+            --text-color: #334155;
+            --math-color: #000000;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --border-color: #cbd5e1;
+            --highlight-bg: #eff6ff;
+            --explanation-bg: #f1f5f9;
+            --success-color: #16a34a;
+            --error-color: #dc2626;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.8;
+            margin: 0;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: -0.025em;
+        }
+
+        header p {
+            margin: 8px 0 0 0;
+            color: #94a3b8;
+            font-size: 1.05rem;
+        }
+
+        .scoreboard {
+            background-color: #1e293b;
+            color: white;
+            display: inline-flex;
+            gap: 20px;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-weight: 700;
+            margin-top: 15px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.2);
+        }
+
+        .scoreboard span {
+            color: #60a5fa;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .profile-box, .selector-box {
+            background-color: var(--card-bg);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-color);
+            margin-bottom: 25px;
+        }
+
+        .profile-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .profile-grid input {
+            width: 100%;
+            padding: 12px;
+            font-size: 1rem;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        .profile-grid input:focus {
+            border-color: var(--secondary-color);
+        }
+
+        label {
+            display: block;
+            font-weight: 700;
+            color: var(--primary-color);
+            font-size: 1.1rem;
+            margin-bottom: 12px;
+        }
+
+        .selector-controls {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        select {
+            flex: 1;
+            padding: 16px;
+            font-size: 1.1rem;
+            font-family: inherit;
+            border-radius: 8px;
+            border: 2px solid var(--border-color);
+            background-color: white;
+            color: var(--primary-color);
+            outline: none;
+            cursor: pointer;
+        }
+
+        .solution-container {
+            background-color: var(--card-bg);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-color);
+            min-height: 200px;
+        }
+
+        .placeholder-text {
+            color: #64748b;
+            text-align: center;
+            font-style: italic;
+            padding: 60px 0;
+            font-size: 1.1rem;
+        }
+
+        .quiz-interface-box {
+            background-color: var(--explanation-bg);
+            border: 1px solid var(--border-color);
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+
+        .math-render-viewport {
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+        }
+
+        .mc-options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 10px;
+        }
+
+        .mc-option-card {
+            background: white;
+            border: 2px solid var(--border-color);
+            padding: 14px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1.05rem;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .mc-option-card:hover:not(.disabled) {
+            border-color: var(--secondary-color);
+            background-color: var(--highlight-bg);
+        }
+
+        .mc-option-card.selected {
+            border-color: var(--secondary-color);
+            background-color: #dbeafe;
+            color: #1e40af;
+        }
+
+        .mc-option-card.disabled {
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .mc-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background-color: #e2e8f0;
+            color: var(--primary-color);
+            font-weight: 800;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+
+        .mc-option-card.selected .mc-badge {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+
+        .feedback-msg-area {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            display: none;
+            padding: 10px 15px;
+            border-radius: 6px;
+        }
+
+        .feedback-success {
+            background-color: #dcfce7;
+            color: var(--success-color);
+            border-left: 5px solid var(--success-color);
+        }
+
+        .feedback-error {
+            background-color: #fee2e2;
+            color: var(--error-color);
+            border-left: 5px solid var(--error-color);
+        }
+
+        .quiz-action-bar {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .solution-reveal-window {
+            display: none;
+            border-top: 3px double var(--border-color);
+            margin-top: 30px;
+            padding-top: 30px;
+        }
+
+        .step-block {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e2e8f0;
+            display: none;
+        }
+
+        .step-title {
+            font-weight: 800;
+            color: var(--secondary-color);
+            display: block;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 8px;
+        }
+
+        .step-math {
+            font-size: 1.3rem;
+            font-weight: 700;
+            background-color: var(--explanation-bg);
+            padding: 14px 20px;
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin: 8px 0;
+            color: var(--math-color);
+            letter-spacing: 0.02em;
+            flex-wrap: wrap;
+        }
+
+        .step-explanation {
+            display: block;
+            font-size: 1.05rem;
+            color: #334155;
+            margin-top: 6px;
+        }
+
+        .final-answer-box {
+            background-color: var(--highlight-bg);
+            border-left: 6px solid var(--secondary-color);
+            padding: 20px 25px;
+            border-radius: 0 8px 8px 0;
+            margin-top: 30px;
+            display: none;
+        }
+
+        .final-answer-label {
+            font-weight: 800;
+            color: var(--secondary-color);
+            display: block;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .final-answer-math {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            margin-top: 6px;
+            display: inline-flex;
+            align-items: center;
+            letter-spacing: 0.02em;
+        }
+
+        .control-panel {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid var(--border-color);
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 14px 24px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            border-radius: 8px;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary { background-color: var(--secondary-color); color: white; }
+        .btn-primary:hover:not(:disabled) { background-color: #1d4ed8; }
+        .btn-success { background-color: var(--success-color); color: white; }
+        .btn-success:hover:not(:disabled) { background-color: #166534; }
+        .btn-secondary { background-color: var(--explanation-bg); color: var(--primary-color); border: 1px solid var(--border-color); }
+        .btn-secondary:hover:not(:disabled) { background-color: #e2e8f0; }
+        .btn-accent { background-color: var(--primary-color); color: white; }
+        .btn-accent:hover:not(:disabled) { background-color: #1e293b; }
+
+        .btn:disabled {
+            background-color: var(--disabled-color);
+            color: #f1f5f9;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        .question-statement-card {
+            background: #ffffff;
+            border-left: 4px solid var(--secondary-color);
+            padding: 16px 20px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            border-radius: 0 6px 6px 0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .hint-box {
+            display: none;
+            background-color: #fef9c3;
+            border-left: 5px solid #eab308;
+            color: #713f12;
+            padding: 12px 16px;
+            border-radius: 0 6px 6px 0;
+            margin-bottom: 15px;
+            font-size: 1.05rem;
+            font-weight: 600;
+        }
+
+        .btn-hint { background-color: #fde047; color: #713f12; }
+        .btn-hint:hover:not(:disabled) { background-color: #facc15; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>MCF3M Lesson 5 Sinusoidal Applications Studio</h1>
+        <p>Grade 11 Mathematics - Sinusoidal Modeling &amp; Dynamic Word Problems</p>
+        <div class="scoreboard">
+            <div>Score: <span id="hud-score">0</span></div>
+            <div>Tries: <span id="hud-attempts">0</span></div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="profile-box">
+            <label>Student Profile Setup:</label>
+            <div class="profile-grid">
+                <input type="text" id="first-name" placeholder="First name" autocomplete="off">
+                <input type="text" id="last-name" placeholder="Last name" autocomplete="off">
+            </div>
+        </div>
+
+        <div class="selector-box">
+            <label for="question-select">Select Sinusoidal Concept:</label>
+            <div class="selector-controls">
+                <select id="question-select" onchange="triggerNewQuestion()">
+                    <option value="">-- Choose a Topic to Begin --</option>
+                    <option value="t1">Type 1: Rotating Objects &amp; Wheels (Height Graphs)</option>
+                    <option value="t2">Type 2: Oscillating &amp; Bouncing Motion Models</option>
+                    <option value="t3">Type 3: Ocean Tides &amp; Water Level Functions</option>
+                    <option value="t4">Type 4: Identifying Equations y = a sin(kx)</option>
+                    <option value="t5">Type 5: Seasonal &amp; Manufacturing Production Models</option>
+                </select>
+                <button class="btn btn-accent" onclick="triggerNewQuestion()">Generate New</button>
+            </div>
+        </div>
+
+        <div class="solution-container" id="display-window">
+            <div id="placeholder" class="placeholder-text">
+                Choose a concept and click "Generate New" to create a dynamic practice problem.
+            </div>
+
+            <div id="quiz-station" class="quiz-interface-box" style="display: none;">
+                <div id="asset-viewport-mount-point" class="math-render-viewport" style="display: none;"></div>
+
+                <div id="question-statement-display" class="question-statement-card"></div>
+
+                <label id="input-prompt-label" style="margin-bottom: 12px; font-weight: 700; display: block;"></label>
+                
+                <div id="dynamic-input-mount-point" style="margin-top: 10px;"></div>
+
+                <div id="hint-box" class="hint-box"></div>
+                <div id="feedback-msg" class="feedback-msg-area"></div>
+
+                <div class="quiz-action-bar">
+                    <button class="btn btn-success" id="check-ans-btn" onclick="evaluateStudentAnswer()">Check Answer</button>
+                    <button class="btn btn-hint" id="hint-btn" onclick="toggleHint()">Hint</button>
+                    <button class="btn btn-secondary" id="reveal-sol-btn" disabled onclick="unlockSolutionPanel()">Show Solution Steps</button>
+                </div>
+            </div>
+
+            <div class="solution-reveal-window" id="solution-reveal-layer">
+                <div id="solution-workspace-injected"></div>
+                
+                <div class="control-panel" id="controls-panel">
+                    <button class="btn btn-secondary" id="restart-btn" onclick="restartSolution()">Restart Steps</button>
+                    <button class="btn btn-primary" id="next-btn" onclick="showNextStep()">Next Step &rarr;</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- mcf-core.js 는 보통 상위 폴더(index.html·progress.js 옆)에 둔다.
+         같은 폴더에 두는 경우도 있어 두 경로를 다 건다. 없는 쪽은 404 로 무시되고,
+         둘 다 있으면 두 번째는 core 내부 가드가 막는다. -->
+    <script src="../mcf-core.js"></script>
+    <script src="mcf-core.js"></script>
+    <script>
+    /* core 를 못 찾으면 Generate 가 조용히 무반응이 된다. 원인이 안 보이므로 안내를 띄운다. */
+    if (typeof MCF === "undefined") {
+      document.addEventListener("DOMContentLoaded", function () {
+        var box = document.getElementById("placeholder");
+        if (box) {
+          box.innerHTML =
+            '<strong style="color:#b91c1c">mcf-core.js \uB97C \uCC3E\uC744 \uC218 \uC5C6\uC2B5\uB2C8\uB2E4.</strong><br><br>' +
+            'This lesson needs <code>mcf-core.js</code>.<br>' +
+            'Put it next to <code>progress.js</code> and <code>index.html</code> ' +
+            '(the folder above this one), or in this same folder.';
+          box.style.display = "block";
+        }
+        var b = document.querySelector(".btn-generate");
+        if (b) b.disabled = true;
+      });
+    }
+    </script>
+    <script>
+
+        /* ── mcf-core.js 로 옮겨간 이름들의 지역 별칭 ── */
+        const randInt = MCF.randInt;
+        const gcd = MCF.gcd;
+        const gcd3 = MCF.gcd3;
+        const mcfPick = MCF.pick;
+        const mcfRich = MCF.rich;
+        const mcfShuffle = MCF.shuffle;
+        const mcfKey = MCF.key;
+        const mcfDedupe = MCF.dedupe;
+        const mcfFactorKey = MCF.factorKey;
+        const mcfUniqueByValue = MCF.uniqueByValue;
+        const mcfSpareOption = MCF.spareOption;
+        const shuffleMC = MCF.shuffleMC;
+        const M = MCF.M;
+        const Mu = MCF.Mu;
+        const fmtTerm = MCF.fmtTerm;
+        /* --- audit fix: 같은 보기가 두 번 나오면 하나로 합친다.
+           정답과 글자가 똑같은 보기를 골랐는데 오답 처리되는 것을 막는다. --- */
+        /* Nudge one number inside an existing option to build a replacement
+           distractor. Skips digit groups that follow a thousands separator, so
+           "\\$11\\,045.96" is altered at the 11 and never left malformed.
+           Uniqueness is checked by the caller, so this can never reproduce the
+           correct answer. */
+        /* Two options can differ only in whitespace -- an empty middle term leaves
+           "4x^2  + 16" beside "4x^2 + 16" -- and MathJax renders them identically, so
+           the student sees the same card twice and only one of them scores. Compare
+           options on this normalised key, not on the raw string. */
+
+
+
+        const TEACHER_SPREADSHEET_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwygR6-l7XPRC1KL-Pqci33Yw_4pmCWa8mW7gNHJ_RsmN41ax15-d0sE-CrIxU0z22m/exec";
+
+        let globalScore = 0;
+        let globalAttempts = 0;
+        let currentProblemData = null;
+        let currentState = { answered: false, selectedMcOption: "", isCorrect: false, currentStep: 0, solRevealed: false, attempts: 0 };
+        let visibleStepElements = [];
+        let currentStepIndex = 0;
+
+        // --- Math & Logic Utilities ---
+
+
+        // --- Dynamic SVG Renderer ---
+        function renderDynamicSVG(spec) {
+            const W = 380, H = 230, padL = 55, padR = 30, padT = 25, padB = 40;
+            const viewW = W - padL - padR;
+            const viewH = H - padT - padB;
+
+            const mapX = (x) => padL + (x / spec.xMax) * viewW;
+            const mapY = (y) => padT + (1 - (y - spec.yMin) / (spec.yMax - spec.yMin)) * viewH;
+
+            let s = `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">`;
+            
+            if (spec.type === "wheel_rock") {
+                const maxVal = spec.maxVal, minVal = spec.minVal, midVal = (maxVal + minVal) / 2;
+                
+                [minVal, midVal, maxVal].forEach(v => {
+                    let yPos = mapY(v);
+                    s += `<line x1="${padL}" y1="${yPos}" x2="${W - padR}" y2="${yPos}" stroke="#e2e8f0" stroke-width="1"/>`;
+                });
+
+                const p = spec.period;
+                for (let x = p / 2; x <= spec.xMax; x += p / 2) {
+                    let xPos = mapX(x);
+                    s += `<line x1="${xPos}" y1="${padT}" x2="${xPos}" y2="${H - padB}" stroke="#e2e8f0" stroke-width="1"/>`;
+                }
+            } else if (spec.type === "sine_unshifted") {
+                let ampVal = Math.abs(spec.a);
+                [-ampVal, 0, ampVal].forEach(v => {
+                    let yPos = mapY(v);
+                    s += `<line x1="${padL}" y1="${yPos}" x2="${W - padR}" y2="${yPos}" stroke="#e2e8f0" stroke-width="1"/>`;
+                });
+                for (let deg = 45; deg <= spec.xMax; deg += 45) {
+                    let xPos = mapX(deg);
+                    s += `<line x1="${xPos}" y1="${padT}" x2="${xPos}" y2="${H - padB}" stroke="#e2e8f0" stroke-width="1"/>`;
+                }
+            } else if (spec.type === "factory_production") {
+                const maxVal = spec.c + spec.a;
+                const minVal = spec.c - spec.a;
+                const midVal = spec.c;
+                [minVal, midVal, maxVal].forEach(v => {
+                    let yPos = mapY(v);
+                    s += `<line x1="${padL}" y1="${yPos}" x2="${W - padR}" y2="${yPos}" stroke="#e2e8f0" stroke-width="1"/>`;
+                });
+                const step = spec.period / 4;
+                for (let x = step; x <= spec.xMax; x += step) {
+                    let xPos = mapX(x);
+                    s += `<line x1="${xPos}" y1="${padT}" x2="${xPos}" y2="${H - padB}" stroke="#e2e8f0" stroke-width="1"/>`;
+                }
+            }
+
+            // Main Axes
+            s += `<line x1="${padL}" y1="${mapY(0)}" x2="${W - padR}" y2="${mapY(0)}" stroke="#0f172a" stroke-width="1.5"/>`;
+            s += `<line x1="${padL}" y1="${padT}" x2="${padL}" y2="${H - padB}" stroke="#0f172a" stroke-width="1.5"/>`;
+
+            if (spec.xLabel) s += `<text x="${W - padR - 5}" y="${H - 12}" font-family="Arial" font-size="11" font-weight="bold" text-anchor="end">${spec.xLabel}</text>`;
+            if (spec.yLabel) s += `<text x="${padL - 10}" y="${padT - 10}" font-family="Arial" font-size="11" font-weight="bold">${spec.yLabel}</text>`;
+
+            if (spec.type === "wheel_rock") {
+                const maxVal = spec.maxVal, minVal = spec.minVal, midVal = (maxVal + minVal) / 2;
+                
+                [minVal, midVal, maxVal].forEach(v => {
+                    let yPos = mapY(v);
+                    s += `<line x1="${padL - 5}" y1="${yPos}" x2="${padL}" y2="${yPos}" stroke="#0f172a" stroke-width="1.5"/>`;
+                    s += `<text x="${padL - 8}" y="${yPos + 4}" font-family="Arial" font-size="10" font-weight="bold" text-anchor="end">${v}</text>`;
+                });
+
+                s += `<line x1="${padL}" y1="${mapY(midVal)}" x2="${W - padR}" y2="${mapY(midVal)}" stroke="#94a3b8" stroke-dasharray="4,4" stroke-width="1.5"/>`;
+
+                const p = spec.period;
+                for (let x = p / 2; x <= spec.xMax; x += p / 2) {
+                    let xPos = mapX(x);
+                    s += `<line x1="${xPos}" y1="${mapY(0)}" x2="${xPos}" y2="${mapY(0) + 5}" stroke="#0f172a" stroke-width="1.5"/>`;
+                    s += `<text x="${xPos}" y="${mapY(0) + 18}" font-family="Arial" font-size="10" font-weight="bold" text-anchor="middle">${x}</text>`;
+                }
+
+                let pts = [];
+                const amp = (maxVal - minVal) / 2;
+                for (let i = 0; i <= 200; i++) {
+                    let x = (spec.xMax * i) / 200;
+                    let y = midVal - amp * Math.cos((2 * Math.PI / p) * x);
+                    pts.push(`${mapX(x).toFixed(1)},${mapY(y).toFixed(1)}`);
+                }
+                s += `<path d="M ${pts.join(' L ')}" fill="none" stroke="#2563eb" stroke-width="2.5"/>`;
+            } 
+            else if (spec.type === "sine_unshifted") {
+                let ampVal = Math.abs(spec.a);
+                [-ampVal, ampVal].forEach(v => {
+                    let yPos = mapY(v);
+                    s += `<line x1="${padL - 5}" y1="${yPos}" x2="${padL}" y2="${yPos}" stroke="#0f172a" stroke-width="1.5"/>`;
+                    s += `<text x="${padL - 8}" y="${yPos + 4}" font-family="Arial" font-size="10" font-weight="bold" text-anchor="end">${v}</text>`;
+                });
+
+                for (let deg = 90; deg <= spec.xMax; deg += 90) {
+                    let xPos = mapX(deg);
+                    s += `<line x1="${xPos}" y1="${mapY(0) - 3}" x2="${xPos}" y2="${mapY(0) + 3}" stroke="#0f172a" stroke-width="1.5"/>`;
+                    s += `<text x="${xPos}" y="${mapY(0) + 16}" font-family="Arial" font-size="10" font-weight="bold" text-anchor="middle">${deg}°</text>`;
+                }
+
+                let pts = [];
+                for (let i = 0; i <= 200; i++) {
+                    let xDeg = (spec.xMax * i) / 200;
+                    let y = spec.a * Math.sin((spec.k * xDeg * Math.PI) / 180);
+                    pts.push(`${mapX(xDeg).toFixed(1)},${mapY(y).toFixed(1)}`);
+                }
+                s += `<path d="M ${pts.join(' L ')}" fill="none" stroke="#2563eb" stroke-width="2.5"/>`;
+            }
+            else if (spec.type === "factory_production") {
+                const maxVal = spec.c + spec.a;
+                const minVal = spec.c - spec.a;
+                const midVal = spec.c;
+
+                [minVal, midVal, maxVal].forEach(v => {
+                    let yPos = mapY(v);
+                    s += `<line x1="${padL - 5}" y1="${yPos}" x2="${padL}" y2="${yPos}" stroke="#0f172a" stroke-width="1.5"/>`;
+                    s += `<text x="${padL - 8}" y="${yPos + 4}" font-family="Arial" font-size="10" font-weight="bold" text-anchor="end">${v}</text>`;
+                });
+
+                s += `<line x1="${padL}" y1="${mapY(midVal)}" x2="${W - padR}" y2="${mapY(midVal)}" stroke="#94a3b8" stroke-dasharray="4,4" stroke-width="1.5"/>`;
+
+                const step = spec.period / 4;
+                for (let x = step; x <= spec.xMax; x += step) {
+                    let xPos = mapX(x);
+                    s += `<line x1="${xPos}" y1="${mapY(0)}" x2="${xPos}" y2="${mapY(0) + 5}" stroke="#0f172a" stroke-width="1.5"/>`;
+                    s += `<text x="${xPos}" y="${mapY(0) + 18}" font-family="Arial" font-size="10" font-weight="bold" text-anchor="middle">${x}</text>`;
+                }
+
+                let pts = [];
+                for (let i = 0; i <= 200; i++) {
+                    let x = (spec.xMax * i) / 200;
+                    let y = spec.c + spec.a * Math.sin((spec.k * x * Math.PI) / 180);
+                    pts.push(`${mapX(x).toFixed(1)},${mapY(y).toFixed(1)}`);
+                }
+                s += `<path d="M ${pts.join(' L ')}" fill="none" stroke="#2563eb" stroke-width="2.5"/>`;
+            }
+
+            s += `</svg>`;
+            return s;
+        }
+
+        // --- Problem Generators ---
+        /* audit fix (diversity round): one phrasing per type meant students learned to
+           recognise the sentence instead of the maths. mcfPick rotates the wording. */
+
+        function generateProblem(typeId) {
+            if (!typeId) return null;
+            let p = {
+                title: "", type: "mc", assetType: "none", optionType: "text",
+                fullStatement: "", prompt: "", options: [], optionSpecs: [],
+                hint: "", steps: [], ans: "", rawAns: "", assetHtml: ""
+            };
+
+            if (typeId === "t1") {
+                p.title = "Rotating Objects & Wheels (Height Graphs)";
+                p.assetType = "dynamic_svg";
+                const scenario = randInt(1, 4);
+                let minVal, maxVal, period, xUnit, yUnit, objectName, locationName;
+
+                if (scenario === 1) {
+                    minVal = 0; maxVal = randInt(26, 38); period = randInt(4, 8);
+                    xUnit = "s"; yUnit = "cm"; objectName = "rock caught in a bicycle tire"; locationName = "the ground";
+                } else if (scenario === 2) {
+                    minVal = randInt(1, 3); maxVal = randInt(30, 50); period = [16, 20, 24, 30][randInt(0, 3)];
+                    xUnit = "s"; yUnit = "m"; objectName = "passenger on a Ferris wheel"; locationName = "the ground";
+                } else if (scenario === 3) {
+                    minVal = -randInt(1, 4); maxVal = randInt(8, 16); period = [10, 12, 16, 20][randInt(0, 3)];
+                    xUnit = "s"; yUnit = "m"; objectName = "bucket on a water wheel"; locationName = "water level";
+                } else {
+                    minVal = randInt(15, 25); maxVal = randInt(75, 115); period = randInt(3, 6);
+                    xUnit = "s"; yUnit = "m"; objectName = "tip of a wind turbine blade"; locationName = "the ground";
+                }
+
+                const amp = (maxVal - minVal) / 2;
+                const meanH = (maxVal + minVal) / 2;
+
+                p.graphSpec = {
+                    xMax: period * 3, yMax: maxVal + 5, yMin: Math.min(0, minVal - 3),
+                    maxVal: maxVal, minVal: minVal, period: period,
+                    xLabel: `time (${xUnit})`, yLabel: `height (${yUnit})`,
+                    type: "wheel_rock"
+                };
+
+                /* period was printed raw here, .toFixed(1) in dist1 and raw again in dist3,
+                   so the options had three different widths and the answer sat at the short
+                   end. One formatting rule for all four removes the tell. */
+                const per = (v) => Number(v).toFixed(1);
+                const correctStr = `Amplitude = \\(${amp.toFixed(1)}\\text{ ${yUnit}}\\), Mean Height = \\(${meanH.toFixed(1)}\\text{ ${yUnit}}\\), Period = \\(${per(period)}\\text{ ${xUnit}}\\);`;
+                const dist1 = `Amplitude = \\(${(maxVal - minVal).toFixed(1)}\\text{ ${yUnit}}\\), Mean Height = \\(${meanH.toFixed(1)}\\text{ ${yUnit}}\\), Period = \\(${per(period/2)}\\text{ ${xUnit}}\\);`;
+                const dist2 = `Amplitude = \\(${amp.toFixed(1)}\\text{ ${yUnit}}\\), Mean Height = \\(${maxVal.toFixed(1)}\\text{ ${yUnit}}\\), Period = \\(${per(period)}\\text{ ${xUnit}}\\);`;
+                const dist3 = `Amplitude = \\(${meanH.toFixed(1)}\\text{ ${yUnit}}\\), Mean Height = \\(${amp.toFixed(1)}\\text{ ${yUnit}}\\), Period = \\(${per(period*2)}\\text{ ${xUnit}}\\);`;
+
+                const mc = shuffleMC(correctStr, [dist1, dist2, dist3]);
+                p.options = mc.options; p.ans = mc.ansLetter;
+
+                p.fullStatement = `The height of a ${objectName} relative to ${locationName} over time is represented by the grid graph below. Determine its amplitude, mean height (equation of axis), and period.`;
+                p.prompt = mcfPick([
+                    "Select the correct properties from the graph:",
+                    "Which set of values does this graph show?",
+                    "Read the graph and pick the matching amplitude, mean height, and period:"
+                ]);
+                p.hint = `Find Max = \\(${maxVal}\\text{ ${yUnit}}\\), Min = \\(${minVal}\\text{ ${yUnit}}\\). Amplitude = \\(\\dfrac{\\text{Max}-\\text{Min}}{2}\\), Mean Height = \\(\\dfrac{\\text{Max}+\\text{Min}}{2}\\).`;
+
+                p.steps = [
+                    { title: "Step 1: Read the Top and Bottom Off the Graph", math: `\\(\\text{Max} = ${maxVal}\\text{ ${yUnit}}, \\quad \\text{Min} = ${minVal}\\text{ ${yUnit}}\\)` , explanation: `Everything else on this question is built from just two readings, so get them right first. Follow the highest peak across to the vertical axis (${maxVal}) and the lowest trough across to the same axis (${minVal}). Read the axis, not the gridline count.` },
+                    { title: "Step 2: Work Out the Amplitude", math: `\\(\\text{Amplitude} = \\dfrac{${maxVal} - (${minVal})}{2} = \\dfrac{${maxVal - minVal}}{2} = ${amp.toFixed(1)}\\text{ ${yUnit}}\\)` , explanation: `The amplitude measures from the middle up to the peak, so it is only half the full drop from top to bottom. Take the whole distance ${maxVal - minVal} and halve it. Handing in ${maxVal - minVal} instead of ${amp.toFixed(1)} is the usual error here.` },
+                    { title: "Step 3: Work Out the Mean Height", math: `\\(\\text{Mean Height} = \\dfrac{${maxVal} + (${minVal})}{2} = \\dfrac{${maxVal + minVal}}{2} = ${meanH.toFixed(1)}\\text{ ${yUnit}}\\)` , explanation: `The mean height is the level the wave is balanced around, sitting exactly halfway between ${maxVal} and ${minVal}. Same two numbers as the amplitude, but added instead of subtracted: subtract for how far it swings, add for where it sits.` },
+                    { title: "Step 4: Measure the Period", math: `\\(\\text{Period} = ${period}\\text{ ${xUnit}}\\)` , explanation: `The period is how long one complete trip takes before the pattern repeats. Measure from one peak to the very next peak, or from one trough to the next. Peak to trough is only half a cycle, which is where most wrong answers come from.` }
+                ];
+            }
+            else if (typeId === "t2") {
+                p.title = "Oscillating & Bouncing Motion Models";
+                p.assetType = "none";
+                const scenario = randInt(1, 4);
+                let minBelow, maxAbove, objectText, refText, unitStr;
+
+                if (scenario === 1) {
+                    minBelow = randInt(15, 45); maxAbove = randInt(35, 75);
+                    objectText = "A gymnast bouncing on a trampoline"; refText = "trampoline frame level"; unitStr = "cm";
+                } else if (scenario === 2) {
+                    minBelow = randInt(10, 30); maxAbove = randInt(40, 80);
+                    objectText = "An engine piston oscillating vertically"; refText = "the central reference line"; unitStr = "mm";
+                } else if (scenario === 3) {
+                    minBelow = randInt(20, 50); maxAbove = randInt(20, 50);
+                    objectText = "A weighted mass hanging from a spring"; refText = "equilibrium rest position"; unitStr = "cm";
+                } else {
+                    minBelow = randInt(2, 6); maxAbove = randInt(4, 10);
+                    objectText = "An ocean navigation buoy bobbing in waves"; refText = "calm sea level"; unitStr = "m";
+                }
+
+                const maxVal = maxAbove;
+                const minVal = -minBelow;
+                const amp = (maxVal - minVal) / 2;
+                const meanH = (maxVal + minVal) / 2;
+
+                const correctStr = `Amplitude = \\(${amp.toFixed(1)}\\text{ ${unitStr}}\\), Mean Height = \\(${meanH.toFixed(1)}\\text{ ${unitStr}}\\);`;
+                const dist1 = `Amplitude = \\(${(maxVal - minVal).toFixed(1)}\\text{ ${unitStr}}\\), Mean Height = \\(${meanH.toFixed(1)}\\text{ ${unitStr}}\\);`;
+                const dist2 = `Amplitude = \\(${amp.toFixed(1)}\\text{ ${unitStr}}\\), Mean Height = \\(${maxVal.toFixed(1)}\\text{ ${unitStr}}\\);`;
+                const dist3 = `Amplitude = \\(${meanH.toFixed(1)}\\text{ ${unitStr}}\\), Mean Height = \\(${amp.toFixed(1)}\\text{ ${unitStr}}\\);`;
+
+                const mc = shuffleMC(correctStr, [dist1, dist2, dist3]);
+                p.options = mc.options; p.ans = mc.ansLetter;
+
+                p.fullStatement = `${objectText} reaches a minimum height of \\(${minBelow}\\text{ ${unitStr}}\\) below ${refText} and a maximum height of \\(${maxAbove}\\text{ ${unitStr}}\\) above ${refText}. Determine the amplitude and mean height of the periodic motion relative to ${refText}.`;
+                p.prompt = mcfPick([
+                    "Select the correct amplitude and mean height:",
+                    "Which pair gives the amplitude and the mean height?",
+                    "Pick the matching amplitude and mean height:"
+                ]);
+                p.hint = `Assign Min = \\(-${minBelow}\\text{ ${unitStr}}\\), Max = \\(+${maxAbove}\\text{ ${unitStr}}\\). Amplitude = \\(\\dfrac{\\text{Max}-\\text{Min}}{2}\\), Mean Height = \\(\\dfrac{\\text{Max}+\\text{Min}}{2}\\).`;
+
+                p.steps = [
+                    { title: "Step 1: Turn the Words Into Signed Numbers", math: `\\(\\text{Max} = +${maxAbove}\\text{ ${unitStr}}, \\quad \\text{Min} = -${minBelow}\\text{ ${unitStr}}\\)` , explanation: `The question describes distances above and below a reference level, but the formulas need signed numbers. Above counts as positive (+${maxAbove}) and below counts as negative (-${minBelow}). Leaving the minus off is what wrecks the arithmetic in the next two steps.` },
+                    { title: "Step 2: Work Out the Amplitude", math: `\\(\\text{Amplitude} = \\dfrac{${maxAbove} - (-${minBelow})}{2} = \\dfrac{${maxAbove + minBelow}}{2} = ${amp.toFixed(1)}\\text{ ${unitStr}}\\)` , explanation: `Subtracting the negative turns into adding, so the total swing is ${maxAbove} + ${minBelow} = ${maxAbove + minBelow}. The amplitude is half of that, because it measures from the middle to one end and not all the way across.` },
+                    { title: "Step 3: Work Out the Mean Height", math: `\\(\\text{Mean Height} = \\dfrac{${maxAbove} + (-${minBelow})}{2} = \\dfrac{${maxAbove - minBelow}}{2} = ${meanH.toFixed(1)}\\text{ ${unitStr}}\\)` , explanation: `This time you add the two signed values and halve the result, which lands you exactly midway between them. ${meanH < 0 ? "It comes out negative, meaning the wave is centred below the reference level rather than on it." : (meanH === 0 ? "It comes out as zero, meaning the wave is centred right on the reference level." : "It comes out positive, meaning the wave is centred above the reference level.")}` }
+                ];
+            }
+            else if (typeId === "t3") {
+                p.title = "Ocean Tides & Water Level Functions";
+                p.assetType = "none";
+                const scenario = randInt(1, 3);
+                let locName = ["coastal dock", "harbor channel", "pier observation station"][scenario - 1];
+
+                const amp = (randInt(15, 45) / 10);
+                const k = [15, 30][randInt(0, 1)];
+                const phase = randInt(1, 4);
+                const mid = (randInt(40, 90) / 10);
+                const evalT = randInt(1, 6);
+
+                const innerAngle = k * (evalT - phase);
+                const rad = innerAngle * Math.PI / 180;
+                const sinVal = Math.sin(rad);
+                const calculatedH = amp * sinVal + mid;
+
+                const correctStr = `\\(${calculatedH.toFixed(2)}\\text{ m}\\)`;
+                const dist1 = `\\(${(calculatedH + amp).toFixed(2)}\\text{ m}\\)`;
+                const dist2 = `\\(${(calculatedH - 1.5).toFixed(2)}\\text{ m}\\)`;
+                const dist3 = `\\(${(mid).toFixed(2)}\\text{ m}\\)`;
+
+                const mc = shuffleMC(correctStr, [dist1, dist2, dist3]);
+                p.options = mc.options; p.ans = mc.ansLetter;
+
+                p.fullStatement = `The water height \\(h(t)\\) in metres at a ${locName} is modeled by the sinusoidal function \\(h(t) = ${amp.toFixed(1)}\\sin(${k}(t - ${phase}))^\\circ + ${mid.toFixed(1)}\\), where \\(t\\) is the number of hours past midnight (\\(12:00\\text{ am}\\)). Calculate the water height at \\(${evalT}:00\\text{ am}\\).`;
+                p.prompt = `Select the calculated water height at ${evalT}:00 am:`;
+                p.hint = `Substitute \\(t = ${evalT}\\) into the equation. Calculate inner angle \\(${k}(${evalT} - ${phase})^\\circ\\), find sine, then evaluate \\(h(${evalT})\\).`;
+
+                p.steps = [
+                    { title: "Step 1: Put the Time Into the Equation", math: `\\(t = ${evalT}\\text{ hours } \\implies h(${evalT}) = ${amp.toFixed(1)}\\sin(${k}(${evalT} - ${phase}))^\\circ + ${mid.toFixed(1)}\\)`, explanation: `The equation is already built for you, so this question is about using it rather than finding it. ${evalT}:00 am means \\(t = ${evalT}\\). Replace every t with ${evalT} and leave everything else exactly as it is.` },
+                    { title: "Step 2: Work Out the Angle Inside First", math: `\\(${k}(${evalT} - ${phase})^\\circ = ${k}(${evalT - phase})^\\circ = ${innerAngle}^\\circ\\)`, explanation: `Order of operations: finish everything inside the sine before touching the sine itself. Do the bracket, ${evalT} - ${phase} = ${evalT - phase}, then multiply by ${k} to get ${innerAngle}°. ${innerAngle < 0 ? "A negative angle is fine and your calculator handles it normally." : "This is the angle you feed into the calculator."}` },
+                    { title: "Step 3: Take the Sine of That Angle", math: `\\(\\sin(${innerAngle}^\\circ) \\approx ${sinVal.toFixed(4)}\\)`, explanation: `Your calculator has to be in degree mode here, since the angle is written with a degree symbol. Sine always comes back between -1 and 1, so if you get something bigger the mode is wrong.` },
+                    { title: "Step 4: Finish the Arithmetic", math: `\\(h(${evalT}) = ${amp.toFixed(1)}(${sinVal.toFixed(4)}) + ${mid.toFixed(1)} = ${calculatedH.toFixed(2)}\\text{ m}\\)`, explanation: `Multiply the sine value by ${amp.toFixed(1)} first, then add ${mid.toFixed(1)} last. The answer has to land within ${amp.toFixed(1)} of ${mid.toFixed(1)}. That is as far as the water ever moves from its average level.` }
+                ];
+            }
+            else if (typeId === "t4") {
+                p.title = "Identifying Equations y = a sin(kx)";
+                p.assetType = "dynamic_svg";
+
+                const ampVal = randInt(2, 5);
+                const isNegative = Math.random() > 0.5;
+                const a = isNegative ? -ampVal : ampVal;
+                const period = [90, 120, 180, 240, 360][randInt(0, 4)];
+                const k = 360 / period;
+
+                p.graphSpec = {
+                    a: a, k: k, period: period, amp: ampVal,
+                    xMax: 360, yMax: ampVal + 1, yMin: -ampVal - 1,
+                    type: "sine_unshifted"
+                };
+
+                const correctEq = `y = ${a}\\sin(${k % 1 === 0 ? k : k.toFixed(1)}x)`;
+                const dist1 = `y = ${-a}\\sin(${k % 1 === 0 ? k : k.toFixed(1)}x)`;
+                const dist2 = `y = ${a}\\sin(${period}x)`;
+                const dist3 = `y = ${k % 1 === 0 ? k : k.toFixed(1)}\\sin(${a}x)`;
+
+                const mc = shuffleMC(`\\(${correctEq}\\)`, [`\\(${dist1}\\)`, `\\(${dist2}\\)`, `\\(${dist3}\\)`]);
+                p.options = mc.options; p.ans = mc.ansLetter;
+
+                p.fullStatement = MCF.pick([
+                    `Determine the equation of the grid graph shown below in the standard form \\(y = a\\sin(kx)\\), where \\(x\\) is measured in degrees.`,
+                    `The graph below is a sine curve. Write its equation in the form \\(y = a\\sin(kx)\\), with \\(x\\) in degrees.`,
+                    `Read the amplitude and period off the graph below, then pick the matching equation \\(y = a\\sin(kx)\\).`
+                ]);
+                p.prompt = mcfPick([
+                    "Select the correct sinusoidal equation:",
+                    "Which equation draws this graph?",
+                    "Pick the equation that matches the picture:"
+                ]);
+                p.hint = `1. The peak height gives \\(|a| = ${ampVal}\\). ${isNegative ? 'Curve moves downwards first, so a is negative.' : 'Curve moves upwards first, so a is positive.'} 2. Period is \\(${period}^\\circ \\implies k = \\frac{360^\\circ}{${period}^\\circ} = ${k}\\).`;
+
+                p.steps = [
+                    { title: "Step 1: Find the Height and the Direction (a)", math: `\\(|a| = ${ampVal} \\implies a = ${a}\\)` , explanation: isNegative ? "The peak reaches " + ampVal + ". Since the graph starts by going down into a trough, 'a' is negative." : "The peak reaches " + ampVal + ". Since the graph starts by going up into a peak, 'a' is positive." },
+                    { title: "Step 2: Measure One Full Cycle", math: `\\(\\text{Period} = ${period}^\\circ\\)` , explanation: `Follow the wave until it starts repeating itself, then read that width off the x-axis. Peak to the next peak works, so does trough to the next trough. Stopping halfway is the usual miscount, so this one runs ${period}°.` },
+                    { title: "Step 3: Turn the Period Into k", math: `\\(k = \\dfrac{360^\\circ}{\\text{Period}} = \\dfrac{360^\\circ}{${period}^\\circ} = ${k}\\)` , explanation: `A plain sine wave takes 360° for one cycle. This one takes ${period}°, so it fits ${k} cycles into every 360°, and that count is what k means. ${k > 1 ? "k bigger than 1 squeezes the wave together." : "k smaller than 1 stretches the wave out."} Notice k and the period pull in opposite directions.` },
+                    { title: "Step 4: Put a and k Into the Equation", math: `\\(${correctEq}\\)` , explanation: "Drop a in front of the sine and k inside the bracket next to x. Check the wrong answers before choosing. They usually differ only by the sign of a, or by k and the period being swapped." }
+                ];
+            }
+            else if (typeId === "t5") {
+                p.title = "Seasonal & Manufacturing Production Models";
+                p.assetType = "dynamic_svg";
+
+                const scenario = randInt(1, 4);
+                let product, unitName, periodMonths, midVal, ampVal;
+
+                if (scenario === 1) {
+                    product = "pairs of shoes"; unitName = "pairs"; periodMonths = 4; midVal = 50000; ampVal = 30000;
+                } else if (scenario === 2) {
+                    product = "toys"; unitName = "units"; periodMonths = 6; midVal = 40000; ampVal = 20000;
+                } else if (scenario === 3) {
+                    product = "bicycles"; unitName = "bikes"; periodMonths = 12; midVal = 15000; ampVal = 10000;
+                } else {
+                    product = "solar power generation"; unitName = "kWh"; periodMonths = 12; midVal = 2500; ampVal = 1200;
+                }
+
+                midVal = midVal + randInt(-2, 2) * 1000;
+                ampVal = ampVal + randInt(-1, 2) * 1000;
+                const kDeg = 360 / periodMonths;
+
+                p.graphSpec = {
+                    a: ampVal, k: kDeg, c: midVal, period: periodMonths,
+                    xMax: periodMonths, yMax: midVal + ampVal + 10000, yMin: 0,
+                    xLabel: "t (months)", yLabel: `n(t) ${unitName}`,
+                    type: "factory_production"
+                };
+
+                const correctEq = `n(t) = ${ampVal}\\sin(${kDeg}^\\circ t) + ${midVal}`;
+                const dist1 = `n(t) = ${midVal}\\sin(${kDeg}^\\circ t) + ${ampVal}`;
+                const dist2 = `n(t) = ${ampVal}\\sin(${periodMonths}^\\circ t) + ${midVal}`;
+                const dist3 = `n(t) = ${midVal + ampVal}\\sin(${kDeg}^\\circ t) + ${midVal}`;
+
+                const mc = shuffleMC(`\\(${correctEq}\\)`, [`\\(${dist1}\\)`, `\\(${dist2}\\)`, `\\(${dist3}\\)`]);
+                p.options = mc.options; p.ans = mc.ansLetter;
+
+                p.fullStatement = `The periodic output of ${product} manufactured over time is modeled on the grid graph below, where \\(t\\) is time in months and \\(n(t)\\) is output. Determine the equation in the form \\(n(t) = a\\sin(kt) + c\\).`;
+                p.prompt = mcfPick([
+                    "Select the correct sinusoidal function:",
+                    "Which function models this production graph?",
+                    "Pick the equation that fits the graph:"
+                ]);
+                p.hint = `Midline \\(c = ${midVal}\\). Amplitude \\(a = \\text{Peak} - c = ${midVal + ampVal} - ${midVal} = ${ampVal}\\). Period = \\(${periodMonths}\\text{ months} \\implies k = \\frac{360^\\circ}{${periodMonths}} = ${kDeg}^\\circ\\).`;
+
+                p.steps = [
+                    { title: "Step 1: Find the Middle Line (c)", math: `\\(c = ${midVal}\\)` , explanation: `The dashed horizontal line is the average level the production swings around, and that value is c. Start here rather than at the peak, because the next step measures the peak from this line.` },
+                    { title: "Step 2: Measure From the Middle Up to the Peak (a)", math: `\\(a = \\text{Peak} - c = ${midVal + ampVal} - ${midVal} = ${ampVal}\\)` , explanation: `The amplitude is the climb from the middle line to the top, not the height of the peak above zero. Peak ${midVal + ampVal} minus middle ${midVal} gives ${ampVal}. Reading ${midVal + ampVal} straight off the graph as the amplitude is the trap here.` },
+                    { title: "Step 3: Turn the Period Into k", math: `\\(\\text{Period} = ${periodMonths}\\text{ months} \\implies k = \\dfrac{360^\\circ}{${periodMonths}} = ${kDeg}^\\circ\\)` , explanation: `The pattern repeats every ${periodMonths} months, and a full sine cycle is 360°. So each month is worth \\(360 \\div ${periodMonths} = ${kDeg}\\)°. That is what k does: it converts months into degrees so the sine can use them.` },
+                    { title: "Step 4: Put the Three Pieces Together", math: `\\(${correctEq}\\)` , explanation: "Each piece has one place it belongs. a goes in front of the sine, k inside the bracket beside t, and c on the end. Test it by putting in a t you can check against the graph." }
+                ];
+            }
+
+            return p;
+        }
+
+        // --- Core Application Logic ---
+
+        function renderMathElements() {
+            if (window.renderMathInElement) {
+                renderMathInElement(document.body, {
+                    delimiters: [
+                        {left: '$$', right: '$$', display: true},
+                        {left: '\\(', right: '\\)', display: false}
+                    ],
+                    throwOnError: false
+                });
+            }
+        }
+
+        window.onload = renderMathElements;
+
+        function displaySolution() {
+            document.getElementById("solution-reveal-layer").style.display = "none";
+            var __hb = document.getElementById("hint-box"); if (__hb) __hb.style.display = "none";
+            const placeholder = document.getElementById("placeholder");
+            const quizStation = document.getElementById("quiz-station");
+            const assetMount = document.getElementById("asset-viewport-mount-point");
+            const mountPoint = document.getElementById("dynamic-input-mount-point");
+            const promptLabel = document.getElementById("input-prompt-label");
+
+            placeholder.style.display = "none";
+            quizStation.style.display = "block";
+            
+            if (currentProblemData.assetType && currentProblemData.assetType !== "none") {
+                assetMount.style.display = "flex";
+                assetMount.innerHTML = renderDynamicSVG(currentProblemData.graphSpec);
+            } else {
+                assetMount.style.display = "none";
+            }
+
+            document.getElementById("question-statement-display").innerHTML = currentProblemData.fullStatement;
+            promptLabel.innerHTML = currentProblemData.prompt;
+            
+            let html = '<div class="mc-options-list">';
+            for (let i = 0; i < currentProblemData.options.length; i++) {
+                const opt = currentProblemData.options[i];
+                const letter = opt.charAt(0);
+                const sel = currentState.selectedMcOption === letter ? "selected" : "";
+                const dis = currentState.answered ? "disabled" : "";
+                html += '<div class="mc-option-card ' + sel + ' ' + dis + '" onclick="selectMcOptionCard(\'' + letter + '\')"><span class="mc-badge">' + letter + '</span><span>' + opt.substring(3) + '</span></div>';
+            }
+            html += '</div>';
+            mountPoint.innerHTML = html;
+
+            if (currentState.answered) {
+                lockQuizInterface(currentState.isCorrect);
+                if (currentState.solRevealed) revealSolutionWorkspace();
+            } else {
+                unlockQuizInterface();
+            }
+
+            setTimeout(renderMathElements, 10);
+        }
+
+
+
+
+        function transmitDataToTeacherSpreadsheet(payload) {
+            fetch(TEACHER_SPREADSHEET_SCRIPT_URL, {
+                method: "POST",
+                mode: "no-cors",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            }).catch(err => console.error("Database cloud logging failure:", err));
+        }
+
+
+
+
+
+
+
+
+
+        function updateHudScoreboard() {
+            document.getElementById("hud-score").innerText = globalScore;
+            document.getElementById("hud-attempts").innerText = globalAttempts;
+        }
+    
+
+        MCF.init({ generate: generateProblem,
+                   /* 이 유닛은 그래프를 p.assetHtml 이 아니라 renderDynamicSVG(p.graphSpec) 로 그린다 */
+                   renderAsset: function (p) { return p.graphSpec ? renderDynamicSVG(p.graphSpec) : ""; },
+                   logUrl: (typeof TEACHER_SPREADSHEET_SCRIPT_URL !== "undefined" ? TEACHER_SPREADSHEET_SCRIPT_URL : null),
+                   unitId: "Unit_4", lessonId: "Lesson_5" });
+</script>
+    <script src="../progress.js"></script>
+</body>
+</html>

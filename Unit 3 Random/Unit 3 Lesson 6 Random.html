@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCF3M Unit 3 Lesson 6 Practice Studio</title>
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+
+    <!-- mcf-core.js 가 그리는 요소들의 기본 스타일. 아래 <style> 보다 먼저 와야
+         파일 고유 스타일이 이기고, 빠진 클래스만 여기서 메워진다. -->
+    <link rel="stylesheet" href="../mcf-core.css">
+    <link rel="stylesheet" href="mcf-core.css">
+    <style>
+        :root {
+            --primary-color: #0f172a;
+            --secondary-color: #2563eb;
+            --disabled-color: #94a3b8;
+            --text-color: #334155;
+            --math-color: #000000;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --border-color: #cbd5e1;
+            --highlight-bg: #eff6ff;
+            --explanation-bg: #f1f5f9;
+            --rule-bg: #fef08a;
+            --rule-text: #713f12;
+            --success-color: #16a34a;
+            --error-color: #dc2626;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.8;
+            margin: 0;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: -0.025em;
+        }
+
+        header p {
+            margin: 8px 0 0 0;
+            color: #94a3b8;
+            font-size: 1.05rem;
+        }
+
+        .scoreboard {
+            background-color: #1e293b;
+            color: white;
+            display: inline-flex;
+            gap: 20px;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-weight: 700;
+            margin-top: 15px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.2);
+        }
+
+        .scoreboard span {
+            color: #60a5fa;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .profile-box, .selector-box {
+            background-color: var(--card-bg);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-color);
+            margin-bottom: 25px;
+        }
+
+        .profile-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .profile-grid input {
+            width: 100%;
+            padding: 12px;
+            font-size: 1rem;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        .profile-grid input:focus {
+            border-color: var(--secondary-color);
+        }
+
+        label {
+            display: block;
+            font-weight: 700;
+            color: var(--primary-color);
+            font-size: 1.1rem;
+            margin-bottom: 12px;
+        }
+
+        .selector-controls {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        select {
+            flex: 1;
+            padding: 16px;
+            font-size: 1.1rem;
+            font-family: inherit;
+            border-radius: 8px;
+            border: 2px solid var(--border-color);
+            background-color: white;
+            color: var(--primary-color);
+            outline: none;
+            cursor: pointer;
+        }
+
+        .solution-container {
+            background-color: var(--card-bg);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-color);
+            min-height: 200px;
+        }
+
+        .placeholder-text {
+            color: #64748b;
+            text-align: center;
+            font-style: italic;
+            padding: 60px 0;
+            font-size: 1.1rem;
+        }
+
+        .quiz-interface-box {
+            background-color: var(--explanation-bg);
+            border: 1px solid var(--border-color);
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+
+        .math-render-viewport {
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+        }
+
+        .mc-options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 10px;
+        }
+
+        .mc-option-card {
+            background: white;
+            border: 2px solid var(--border-color);
+            padding: 14px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1.05rem;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .mc-option-card:hover:not(.disabled) {
+            border-color: var(--secondary-color);
+            background-color: var(--highlight-bg);
+        }
+
+        .mc-option-card.selected {
+            border-color: var(--secondary-color);
+            background-color: #dbeafe;
+            color: #1e40af;
+        }
+
+        .mc-option-card.disabled {
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .mc-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background-color: #e2e8f0;
+            color: var(--primary-color);
+            font-weight: 800;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+
+        .mc-option-card.selected .mc-badge {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+
+        .feedback-msg-area {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            display: none;
+            padding: 10px 15px;
+            border-radius: 6px;
+        }
+
+        .feedback-success {
+            background-color: #dcfce7;
+            color: var(--success-color);
+            border-left: 5px solid var(--success-color);
+        }
+
+        .feedback-error {
+            background-color: #fee2e2;
+            color: var(--error-color);
+            border-left: 5px solid var(--error-color);
+        }
+
+        .quiz-action-bar {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .solution-reveal-window {
+            display: none;
+            border-top: 3px double var(--border-color);
+            margin-top: 30px;
+            padding-top: 30px;
+        }
+
+        .step-block {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e2e8f0;
+            display: none;
+        }
+
+        .step-title {
+            font-weight: 800;
+            color: var(--secondary-color);
+            display: block;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 8px;
+        }
+
+        .step-math {
+            font-size: 1.3rem;
+            font-weight: 700;
+            background-color: var(--explanation-bg);
+            padding: 14px 20px;
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin: 8px 0;
+            color: var(--math-color);
+            letter-spacing: 0.02em;
+            flex-wrap: wrap;
+        }
+
+        .step-explanation {
+            display: block;
+            font-size: 1.05rem;
+            color: #334155;
+            margin-top: 6px;
+        }
+
+        .final-answer-box {
+            background-color: var(--highlight-bg);
+            border-left: 6px solid var(--secondary-color);
+            padding: 20px 25px;
+            border-radius: 0 8px 8px 0;
+            margin-top: 30px;
+            display: none;
+        }
+
+        .final-answer-label {
+            font-weight: 800;
+            color: var(--secondary-color);
+            display: block;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .final-answer-math {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            margin-top: 6px;
+            display: inline-flex;
+            align-items: center;
+            letter-spacing: 0.02em;
+        }
+
+        .control-panel {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid var(--border-color);
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 14px 24px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            border-radius: 8px;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary { background-color: var(--secondary-color); color: white; }
+        .btn-primary:hover:not(:disabled) { background-color: #1d4ed8; }
+        .btn-success { background-color: var(--success-color); color: white; }
+        .btn-success:hover:not(:disabled) { background-color: #166534; }
+        .btn-secondary { background-color: var(--explanation-bg); color: var(--primary-color); border: 1px solid var(--border-color); }
+        .btn-secondary:hover:not(:disabled) { background-color: #e2e8f0; }
+        .btn-accent { background-color: var(--primary-color); color: white; }
+        .btn-accent:hover:not(:disabled) { background-color: #1e293b; }
+
+        .btn:disabled {
+            background-color: var(--disabled-color);
+            color: #f1f5f9;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        .question-statement-card {
+            background: #ffffff;
+            border-left: 4px solid var(--secondary-color);
+            padding: 16px 20px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            border-radius: 0 6px 6px 0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .hint-box {
+            display: none;
+            background-color: #fef9c3;
+            border-left: 5px solid #eab308;
+            color: #713f12;
+            padding: 12px 16px;
+            border-radius: 0 6px 6px 0;
+            margin-bottom: 15px;
+            font-size: 1.05rem;
+            font-weight: 600;
+        }
+
+        .btn-hint { background-color: #fde047; color: #713f12; }
+        .btn-hint:hover:not(:disabled) { background-color: #facc15; }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>MCF3M Unit 3 Lesson 6</h1>
+        <p>Infinite Practice: Ordinary Simple Annuities &mdash; Future Value, Present Value &amp; Payments</p>
+        <div class="scoreboard">
+            <div>Score: <span id="hud-score">0</span></div>
+            <div>Tries: <span id="hud-attempts">0</span></div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="profile-box">
+            <label>Student Profile Setup:</label>
+            <div class="profile-grid">
+                <input type="text" id="first-name" placeholder="First name" autocomplete="off">
+                <input type="text" id="last-name" placeholder="Last name" autocomplete="off">
+            </div>
+        </div>
+
+        <div class="selector-box">
+            <label for="question-select">Select Practice Concept:</label>
+            <div class="selector-controls">
+                <select id="question-select" onchange="triggerNewQuestion()">
+                    <option value="">-- Select an Annuity Application Concept --</option>
+                    <option value="t1">Type 1: Future Value of an Annuity (Calculate FV)</option>
+                    <option value="t2">Type 2: Writing the Future Value Formula</option>
+                    <option value="t3">Type 3: Sinking Fund Payments (Calculate R for FV)</option>
+                    <option value="t4">Type 4: Present Value of an Annuity (Calculate PV)</option>
+                    <option value="t5">Type 5: Loan Payments (Find R from PV)</option>
+                </select>
+                <button class="btn btn-accent" onclick="triggerNewQuestion()">Generate New</button>
+            </div>
+        </div>
+
+        <div class="solution-container" id="display-window">
+            <div id="placeholder" class="placeholder-text">
+                Choose a concept and click "Generate New" to create a dynamic practice problem.
+            </div>
+
+            <div id="quiz-station" class="quiz-interface-box" style="display: none;">
+                <div id="asset-viewport-mount-point" class="math-render-viewport" style="display: none;"></div>
+
+                <div id="question-statement-display" class="question-statement-card"></div>
+
+                <label id="input-prompt-label" style="margin-bottom: 12px; font-weight: 700; display: block;"></label>
+                
+                <div id="dynamic-input-mount-point" style="margin-top: 10px;"></div>
+
+                <div id="hint-box" class="hint-box"></div>
+                <div id="feedback-msg" class="feedback-msg-area"></div>
+
+                <div class="quiz-action-bar">
+                    <button class="btn btn-success" id="check-ans-btn" onclick="evaluateStudentAnswer()">Check Answer</button>
+                    <button class="btn btn-hint" id="hint-btn" onclick="toggleHint()">Hint</button>
+                    <button class="btn btn-secondary" id="reveal-sol-btn" disabled onclick="unlockSolutionPanel()">Show Solution Steps</button>
+                </div>
+            </div>
+
+            <div class="solution-reveal-window" id="solution-reveal-layer">
+                <div id="solution-workspace-injected"></div>
+                
+                <div class="control-panel" id="controls-panel">
+                    <button class="btn btn-secondary" id="restart-btn" onclick="restartSolution()">Restart Steps</button>
+                    <button class="btn btn-primary" id="next-btn" onclick="showNextStep()">Next Step &rarr;</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- mcf-core.js 는 보통 상위 폴더(index.html·progress.js 옆)에 둔다.
+         같은 폴더에 두는 경우도 있어 두 경로를 다 건다. 없는 쪽은 404 로 무시되고,
+         둘 다 있으면 두 번째는 core 내부 가드가 막는다. -->
+    <script src="../mcf-core.js"></script>
+    <script src="mcf-core.js"></script>
+    <script>
+    /* core 를 못 찾으면 Generate 가 조용히 무반응이 된다. 원인이 안 보이므로 안내를 띄운다. */
+    if (typeof MCF === "undefined") {
+      document.addEventListener("DOMContentLoaded", function () {
+        var box = document.getElementById("placeholder");
+        if (box) {
+          box.innerHTML =
+            '<strong style="color:#b91c1c">mcf-core.js \uB97C \uCC3E\uC744 \uC218 \uC5C6\uC2B5\uB2C8\uB2E4.</strong><br><br>' +
+            'This lesson needs <code>mcf-core.js</code>.<br>' +
+            'Put it next to <code>progress.js</code> and <code>index.html</code> ' +
+            '(the folder above this one), or in this same folder.';
+          box.style.display = "block";
+        }
+        var b = document.querySelector(".btn-generate");
+        if (b) b.disabled = true;
+      });
+    }
+    </script>
+    <script>
+
+        /* ── mcf-core.js 로 옮겨간 이름들의 지역 별칭 ── */
+        const randInt = MCF.randInt;
+        const gcd = MCF.gcd;
+        const gcd3 = MCF.gcd3;
+        const mcfPick = MCF.pick;
+        const mcfRich = MCF.rich;
+        const mcfShuffle = MCF.shuffle;
+        const mcfKey = MCF.key;
+        const mcfDedupe = MCF.dedupe;
+        const mcfFactorKey = MCF.factorKey;
+        const mcfUniqueByValue = MCF.uniqueByValue;
+        const mcfSpareOption = MCF.spareOption;
+        const shuffleMC = MCF.shuffleMC;
+        const M = MCF.M;
+        const Mu = MCF.Mu;
+        const fmtTerm = MCF.fmtTerm;
+        /* --- audit fix: 같은 보기가 두 번 나오면 하나로 합친다.
+           정답과 글자가 똑같은 보기를 골랐는데 오답 처리되는 것을 막는다. --- */
+        /* Nudge one number inside an existing option to build a replacement
+           distractor. Skips digit groups that follow a thousands separator, so
+           "\\$11\\,045.96" is altered at the 11 and never left malformed.
+           Uniqueness is checked by the caller, so this can never reproduce the
+           correct answer. */
+        /* Two options can differ only in whitespace -- an empty middle term leaves
+           "4x^2  + 16" beside "4x^2 + 16" -- and MathJax renders them identically, so
+           the student sees the same card twice and only one of them scores. Compare
+           options on this normalised key, not on the raw string. */
+        /* Picks one of several wordings for the same question. Types that only ever
+           printed one sentence taught students to recognise the sentence instead of
+           reading the maths. */
+
+
+
+
+        const TEACHER_SPREADSHEET_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwygR6-l7XPRC1KL-Pqci33Yw_4pmCWa8mW7gNHJ_RsmN41ax15-d0sE-CrIxU0z22m/exec";
+
+        let globalScore = 0;
+        let globalAttempts = 0;
+        let currentProblemData = null;
+        let currentState = { answered: false, selectedMcOption: "", isCorrect: false, currentStep: 0, solRevealed: false, attempts: 0 };
+        let visibleStepElements = [];
+        let currentStepIndex = 0;
+
+        // --- Math & Logic Utilities ---
+
+
+        function formatMoney(amount) {
+            let parts = parseFloat(amount).toFixed(2).split(".");
+            parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, "\\,");
+            return "\\(\\$" + parts.join(".") + "\\)";
+        }
+
+        function formatNumber(num) {
+            let parts = parseFloat(num).toString().split(".");
+            parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, "\\,");
+            return parts.join(".");
+        }
+
+        // --- Problem Generators ---
+        function generateProblem(typeId) {
+            if (!typeId) return null;
+            let p = {
+                title: "", type: "mc", assetType: "none", optionType: "text",
+                fullStatement: "", prompt: "", options: [], optionSpecs: [],
+                hint: "", steps: [], ans: "", rawAns: ""
+            };
+
+            const scenario = randInt(1, 3);
+
+            if (typeId === "t1") {
+                p.title = "Future Value of an Annuity (Calculate FV)";
+                let R, freq, freqStr, paymentStr, years, r_pct;
+
+                if (scenario === 1) { freq = 4; freqStr = "quarterly"; paymentStr = "at the end of every quarter"; R = randInt(2, 8) * 100; years = randInt(4, 8); r_pct = randInt(36, 72) / 10; }
+                else if (scenario === 2) { freq = 12; freqStr = "monthly"; paymentStr = "at the end of every month"; R = randInt(1, 5) * 50; years = randInt(3, 7); r_pct = randInt(24, 60) / 10; }
+                else { freq = 1; freqStr = "annually"; paymentStr = "at the end of each year"; R = randInt(10, 40) * 100; years = randInt(5, 12); r_pct = randInt(40, 80) / 10; }
+
+                const r = r_pct / 100;
+                const i = r / freq;
+                const n = years * freq;
+                const base = 1 + i;
+                /* i is usually a repeating decimal (0.043 / 12), and printing it raw put
+                   "1.0035833333333333" on screen. That was ugly in every solution step and
+                   it made the correct option the longest one every single time. Round for
+                   display only -- the arithmetic keeps the exact value. */
+                /* audit fix 2026-07-30: toFixed(6)은 소수점 자릿수라서, i가 0.0035 정도면
+                   유효숫자가 4자리밖에 안 남는다. 그 값을 n(최대 300)제곱하는 과정에서
+                   오차가 커져, 화면에 적힌 산술이 화면에 적힌 답을 내지 않았다
+                   (t4는 최대 $50.84 차이). 유효숫자 10자리로 표시하면 센트까지 재현된다.
+                   baseShow는 iShow에서 유도해야 Step 2와 Step 3의 숫자가 어긋나지 않는다. */
+                const iShow = Number(i.toPrecision(10));
+                const baseShow = Number((1 + iShow).toFixed(12));
+                const rShow = Number(r.toPrecision(10));
+                /* 반올림된 값 앞에서는 = 가 아니라 ≈ 라야 참이 된다 */
+                const iRel = (Math.abs(iShow - i) <= Math.abs(i) * 1e-12) ? "=" : "\\approx";
+                const factor = Math.pow(base, n);
+                const factorShow = Number(factor.toPrecision(10));
+                const FV = R * (factor - 1) / i;
+
+                p.fullStatement = `An investor deposits \\(\\$${formatNumber(R)}\\) ${paymentStr} into an account. If the plan earns \\(${r_pct.toFixed(1)}\\%\\)/a interest compounded ${freqStr}, what is the total accumulated value of the plan after \\(${years}\\) years?`;
+                p.prompt = mcfPick(["Select the correct total value (rounded to 2 decimal places):", "Which amount is in the account at the end (to the nearest cent)?", "Pick the final balance, rounded to two decimal places:"]);
+
+                const correctStr = formatMoney(FV);
+                /* audit fix 2026-07-30: freq === 1 이면 i === r 이고 n === years 라서
+                   아래 두 오답이 정답과 완전히 같은 값이 된다. 그때 4개 보기 중 서로
+                   다른 값이 2개뿐이 되고, dedupe가 채워 넣는 값이 전부 반올림된 정수라
+                   "센트가 붙은 유일한 보기"가 정답이 되어버렸다. 연 1회 복리일 때는
+                   다른 오해 모델로 바꾼다. */
+                const dist1 = freq === 1
+                    ? formatMoney(R * (factor - 1) / i * base)                // 기초 납입(annuity due)으로 착각
+                    : formatMoney(R * (Math.pow(1 + r, years) - 1) / r);      // 연 단위로 착각
+                const dist2 = formatMoney(R * n); // Just sum of payments
+                const dist3 = freq === 1
+                    ? formatMoney(R * (Math.pow(base, n - 1) - 1) / i)        // 기간 수를 하나 적게 셈
+                    : formatMoney(R * (factor - 1) / r);                      // Divided by r instead of i
+
+                const mc = shuffleMC(correctStr, [dist1, dist2, dist3]);
+                p.options = mc.options; p.ans = mc.ansLetter;
+
+                p.hint = `Use the Future Value of an Annuity formula: \\(FV = R \\times \\dfrac{(1 + i)^n - 1}{i}\\). Find ${freqStr} rate i and total periods n first.`;
+                p.steps = [
+                    { title: `Step 1: Decide Why This Needs the Annuity Formula`, math: `\\(R = ${R}, \\quad i = \\dfrac{${rShow}}{${freq}} ${iRel} ${iShow}, \\quad n = ${years} \\times ${freq} = ${n}\\)`, explanation: ( "Write down the payment R, the rate for one period i, and the number of periods n.") + ` An annuity is a run of equal payments, not one lump sum. So it needs the annuity formula, not the plain compound one. Sort the rate and periods out before substituting.`},
+                    { title: "Step 2: Put the Numbers Into the Future Value Formula", math: `\\(FV = ${R} \\times \\dfrac{(1 + ${iShow})^{${n}} - 1}{${iShow}}\\)`, explanation: ( "Put those numbers into the future value formula for regular payments.") + ` The rate must be per period and the exponent must count periods. Trap: using the yearly rate when the payments are monthly.`},
+                    { title: "Step 3: Work Out the Power", math: `\\((${baseShow})^{${n}} \\approx ${factorShow}\\)`, explanation: ( "Compute the exponential compounding growth base scalar factor using a calculator.") + ` Do the power on its own first and keep several decimal places. Rounding this piece early is the single biggest source of wrong money answers.`},
+                    { title: "Step 4: Finish the Arithmetic", math: `\\(FV = ${R} \\times \\dfrac{${Number((factorShow - 1).toPrecision(10))}}{${iShow}} \\approx ${FV.toFixed(2)}\\)`, explanation: ( "Subtract, then divide, then multiply. Round the answer to two decimal places.") + ` Subtract 1, divide by the rate, then multiply by the payment. Check it makes sense: the total must be bigger than all the payments added up.`}
+                ];
+            }
+            else if (typeId === "t2") {
+                p.title = "Writing the Future Value Formula";
+                let R, freq, freqStr, paymentStr, years, r_pct;
+
+                if (scenario === 1) { freq = 4; freqStr = "quarterly"; paymentStr = "every 3 months"; R = randInt(2, 6) * 100; years = randInt(4, 9); r_pct = randInt(32, 64) / 10; }
+                else if (scenario === 2) { freq = 12; freqStr = "monthly"; paymentStr = "at the end of every month"; R = randInt(1, 4) * 100; years = randInt(3, 8); r_pct = randInt(24, 48) / 10; }
+                else { freq = 2; freqStr = "semi-annually"; paymentStr = "semi-annually"; R = randInt(10, 50) * 100; years = randInt(4, 10); r_pct = randInt(40, 70) / 10; }
+
+                const r = r_pct / 100;
+                const i = r / freq;
+                const n = years * freq;
+                const base = 1 + i;
+                /* i is usually a repeating decimal (0.043 / 12), and printing it raw put
+                   "1.0035833333333333" on screen. That was ugly in every solution step and
+                   it made the correct option the longest one every single time. Round for
+                   display only -- the arithmetic keeps the exact value. */
+                /* audit fix 2026-07-30: toFixed(6)은 소수점 자릿수라서, i가 0.0035 정도면
+                   유효숫자가 4자리밖에 안 남는다. 그 값을 n(최대 300)제곱하는 과정에서
+                   오차가 커져, 화면에 적힌 산술이 화면에 적힌 답을 내지 않았다
+                   (t4는 최대 $50.84 차이). 유효숫자 10자리로 표시하면 센트까지 재현된다.
+                   baseShow는 iShow에서 유도해야 Step 2와 Step 3의 숫자가 어긋나지 않는다. */
+                const iShow = Number(i.toPrecision(10));
+                const baseShow = Number((1 + iShow).toFixed(12));
+                const rShow = Number(r.toPrecision(10));
+                /* 반올림된 값 앞에서는 = 가 아니라 ≈ 라야 참이 된다 */
+                const iRel = (Math.abs(iShow - i) <= Math.abs(i) * 1e-12) ? "=" : "\\approx";
+
+                p.fullStatement = `A person makes regular deposits of \\(\\$${formatNumber(R)}\\) ${paymentStr} for \\(${years}\\) years into an account that pays \\(${r_pct.toFixed(1)}\\%\\)/a interest compounded ${freqStr}. Which mathematical formula structure correctly models the future value of this annuity?`;
+                p.prompt = mcfPick(["Select the correct algebraic formula setup:", "Which line shows the formula filled in correctly?", "Pick the setup that matches this question:"]);
+
+                const correctStr = `\\(FV = ${R} \\times \\dfrac{(${baseShow})^{${n}} - 1}{${iShow}}\\)`;
+                const dist1 = `\\(FV = ${R} \\times \\dfrac{(${Number((1 + rShow).toFixed(12))})^{${years}} - 1}{${rShow}}\\)`; // Annualized
+                const dist2 = `\\(FV = ${R} \\times \\dfrac{(${baseShow})^{${years}} - 1}{${iShow}}\\)`; // Wrong n
+                /* Only the answer used to pair the small periodic rate (many decimals)
+                   with the large exponent, so it was the longest option almost every time.
+                   This distractor divides by the frequency twice, making it longer than the
+                   answer, so length stops identifying the answer. */
+                const iTwice = Number((i / freq).toPrecision(10));
+                const dist3 = `\\(FV = ${R} \\times \\dfrac{(${Number((1 + iTwice).toFixed(12))})^{${n * freq}} - 1}{${iTwice}}\\)`; // Divided by the frequency twice
+
+                const mc = shuffleMC(correctStr, [dist1, dist2, dist3]);
+                p.options = mc.options; p.ans = mc.ansLetter;
+
+                p.hint = `Divide the nominal rate by ${freq} and multiply the annual period term by ${freq} to map the target equation parts.`;
+                p.steps = [
+                    { title: `Step 1: Decide What One Period Is Here`, math: `\\(i = \\dfrac{${rShow}}{${freq}} ${iRel} ${iShow}\\)`, explanation: ( `Divide annual rate ${r_pct.toFixed(1)}% by ${freqStr} compounding frequency.`) + ` Everything in the formula is per period, so the yearly rate has to be split first. Divide it by how many payments happen each year.`},
+                    { title: "Step 2: Count the Total Number of Periods", math: `\\(n = ${years} \\times ${freq} = ${n}\\)`, explanation: ( `Multiply duration span ${years} years by ${freq} deposits per year.`) + ` Multiply the number of years by how many payments happen each year. That total is what goes in the exponent, not the number of years.`},
+                    { title: "Step 3: Build the Future Value Equation", math: `\\(FV = R \\times \\dfrac{(1 + i)^n - 1}{i} \\implies ${R} \\times \\dfrac{(${baseShow})^{${n}} - 1}{${iShow}}\\)`, explanation: ( "Put each piece into the future value formula for regular payments.") + ` Put the payment, the per-period rate, and the total periods into the formula. Trap: mixing a yearly rate with a monthly period count.`}
+                ];
+            }
+            else if (typeId === "t3") {
+                p.title = "Sinking Fund Payments (Calculate R for FV)";
+                let FV, freq, freqStr, paymentStr, years, r_pct;
+
+                if (scenario === 1) { freq = 12; freqStr = "monthly"; paymentStr = "monthly"; FV = randInt(10, 30) * 1000; years = randInt(2, 5); r_pct = randInt(36, 72) / 10; }
+                else if (scenario === 2) { freq = 2; freqStr = "semi-annually"; paymentStr = "semi-annual"; FV = randInt(40, 100) * 1000; years = randInt(4, 8); r_pct = randInt(40, 80) / 10; }
+                else { freq = 4; freqStr = "quarterly"; paymentStr = "quarterly"; FV = randInt(15, 50) * 1000; years = randInt(3, 7); r_pct = randInt(32, 64) / 10; }
+
+                const r = r_pct / 100;
+                const i = r / freq;
+                const n = years * freq;
+                const base = 1 + i;
+                /* i is usually a repeating decimal (0.043 / 12), and printing it raw put
+                   "1.0035833333333333" on screen. That was ugly in every solution step and
+                   it made the correct option the longest one every single time. Round for
+                   display only -- the arithmetic keeps the exact value. */
+                /* audit fix 2026-07-30: toFixed(6)은 소수점 자릿수라서, i가 0.0035 정도면
+                   유효숫자가 4자리밖에 안 남는다. 그 값을 n(최대 300)제곱하는 과정에서
+                   오차가 커져, 화면에 적힌 산술이 화면에 적힌 답을 내지 않았다
+                   (t4는 최대 $50.84 차이). 유효숫자 10자리로 표시하면 센트까지 재현된다.
+                   baseShow는 iShow에서 유도해야 Step 2와 Step 3의 숫자가 어긋나지 않는다. */
+                const iShow = Number(i.toPrecision(10));
+                const baseShow = Number((1 + iShow).toFixed(12));
+                const rShow = Number(r.toPrecision(10));
+                /* 반올림된 값 앞에서는 = 가 아니라 ≈ 라야 참이 된다 */
+                const iRel = (Math.abs(iShow - i) <= Math.abs(i) * 1e-12) ? "=" : "\\approx";
+                const factor = Math.pow(base, n);
+                const factorShow = Number(factor.toPrecision(10));
+                const R = FV * i / (factor - 1);
+
+                p.fullStatement = `A company needs to accumulate \\(\\$${formatNumber(FV)}\\) for future expenses in \\(${years}\\) years. They plan to make equal ${paymentStr} deposits into an account earning \\(${r_pct.toFixed(1)}\\%\\)/a interest compounded ${freqStr}. What size payment must they make?`;
+                p.prompt = mcfPick(["Select the required regular payment size:", "How much must be put in each period?", "Pick the size of each regular deposit:"]);
+
+                const correctStr = formatMoney(R);
+                const dist1 = formatMoney(FV * r / (Math.pow(1 + r, years) - 1)); // Annual mistake
+                const dist2 = formatMoney(FV / n); // Simple division
+                const dist3 = formatMoney(R + 55); 
+
+                const mc = shuffleMC(correctStr, [dist1, dist2, dist3]);
+                p.options = mc.options; p.ans = mc.ansLetter;
+
+                p.hint = `Rearrange the future value formula to isolate payment variable R: \\(R = \\dfrac{FV \\times i}{(1 + i)^n - 1}\\).`;
+                p.steps = [
+                    { title: `Step 1: Decide Which Way the Formula Runs`, math: `\\(FV = ${FV}, \\quad i = \\dfrac{${rShow}}{${freq}} ${iRel} ${iShow}, \\quad n = ${years} \\times ${freq} = ${n}\\)`, explanation: ( "Write down the goal amount, the rate for one period, and the number of deposits.") + ` Here you know the target amount and want the payment, so the formula gets rearranged to give the payment instead.`},
+                    { title: "Step 2: Put the Numbers Into the Rearranged Formula", math: `\\(R = \\dfrac{${FV} \\times ${iShow}}{(1 + ${iShow})^{${n}} - 1}\\)`, explanation: ( "Put those numbers into the rearranged payment formula.") + ` The goal amount goes on top and the annuity factor on the bottom. Rate per period and periods in the exponent, as always.`},
+                    { title: "Step 3: Work Out the Power First", math: `\\((${baseShow})^{${n}} \\approx ${factorShow}\\)`, explanation: ( "Evaluate the interest growth factor base raised to the power.") + ` Do the power on its own and keep several decimal places. Rounding here changes the payment by dollars, not cents.`},
+                    { title: "Step 4: Finish the Fraction", math: `\\(R = \\dfrac{${Number((FV * iShow).toPrecision(10))}}{${factorShow} - 1} = \\dfrac{${Number((FV * iShow).toPrecision(10))}}{${Number((factorShow - 1).toPrecision(10))}} \\approx ${R.toFixed(2)}\\)`, explanation: ( `Divide the numerator product by the denominator decimal value to find the payment of $${R.toFixed(2)}.`) + ` Subtract 1, divide by the rate, then divide the goal by that answer. Check it makes sense: the payment must be far smaller than the goal.`}
+                ];
+            }
+            else if (typeId === "t4") {
+                p.title = "Present Value of an Annuity (Calculate PV)";
+                let R, freq, freqStr, paymentStr, years, r_pct;
+
+                if (scenario === 1) { freq = 12; freqStr = "monthly"; paymentStr = "at the end of every month"; R = randInt(10, 25) * 100; years = randInt(10, 25); r_pct = randInt(36, 72) / 10; }
+                else if (scenario === 2) { freq = 2; freqStr = "semi-annually"; paymentStr = "every 6 months"; R = randInt(20, 60) * 100; years = randInt(8, 15); r_pct = randInt(40, 70) / 10; }
+                else { freq = 1; freqStr = "annually"; paymentStr = "at the end of each year"; R = randInt(40, 80) * 100; years = randInt(5, 12); r_pct = randInt(45, 85) / 10; }
+
+                const r = r_pct / 100;
+                const i = r / freq;
+                const n = years * freq;
+                const base = 1 + i;
+                /* i is usually a repeating decimal (0.043 / 12), and printing it raw put
+                   "1.0035833333333333" on screen. That was ugly in every solution step and
+                   it made the correct option the longest one every single time. Round for
+                   display only -- the arithmetic keeps the exact value. */
+                /* audit fix 2026-07-30: toFixed(6)은 소수점 자릿수라서, i가 0.0035 정도면
+                   유효숫자가 4자리밖에 안 남는다. 그 값을 n(최대 300)제곱하는 과정에서
+                   오차가 커져, 화면에 적힌 산술이 화면에 적힌 답을 내지 않았다
+                   (t4는 최대 $50.84 차이). 유효숫자 10자리로 표시하면 센트까지 재현된다.
+                   baseShow는 iShow에서 유도해야 Step 2와 Step 3의 숫자가 어긋나지 않는다. */
+                const iShow = Number(i.toPrecision(10));
+                const baseShow = Number((1 + iShow).toFixed(12));
+                const rShow = Number(r.toPrecision(10));
+                /* 반올림된 값 앞에서는 = 가 아니라 ≈ 라야 참이 된다 */
+                const iRel = (Math.abs(iShow - i) <= Math.abs(i) * 1e-12) ? "=" : "\\approx";
+                const factor = Math.pow(base, -n);
+                const factorShow = Number(factor.toPrecision(10));
+                const PV = R * (1 - factor) / i;
+
+                p.fullStatement = `Determine the initial capital sum that must be deposited into a fund today to receive regular payouts of \\(\\$${formatNumber(R)}\\) ${paymentStr} for \\(${years}\\) years. Assume the fund earns interest at a rate of \\(${r_pct.toFixed(1)}\\%\\)/a compounded ${freqStr}.`;
+                p.prompt = mcfPick(["Select the required starting present value capital:", "How much has to be deposited today?", "Pick the amount needed at the start:"]);
+
+                const correctStr = formatMoney(PV);
+                /* audit fix 2026-07-30: freq === 1 이면 i === r, n === years 라서 dist3이
+                   정답과 같은 값이 된다. 연 1회 복리일 때는 다른 오해 모델로 바꾼다. */
+                const dist1 = formatMoney(R * (Math.pow(1 + r, years) - 1) / r); // FV mistake
+                const dist2 = formatMoney(R * n); // Simple sum
+                const dist3 = freq === 1
+                    ? formatMoney(R * (1 - factor) / i * base)                 // 기초 수령(annuity due)으로 착각
+                    : formatMoney(R * (1 - Math.pow(1 + r, -years)) / r);      // Annual mistake
+
+                const mc = shuffleMC(correctStr, [dist1, dist2, dist3]);
+                p.options = mc.options; p.ans = mc.ansLetter;
+
+                p.hint = `Use Present Value of an Annuity formula: \\(PV = R \\times \\dfrac{1 - (1 + i)^{-n}}{i}\\). Note the negative exponent parameter.`;
+                p.steps = [
+                    { title: `Step 1: Decide Why the Exponent Turns Negative`, math: `\\(R = ${R}, \\quad i = \\dfrac{${rShow}}{${freq}} ${iRel} ${iShow}, \\quad n = ${years} \\times ${freq} = ${n}\\)`, explanation: ( "Identify periodic payout amount, periodic interest rate, and total periods.") + ` Present value asks what a run of future payments is worth today, so the powers come out negative. That is what discounting looks like.`},
+                    { title: "Step 2: Put the Numbers Into the Present Value Formula", math: `\\(PV = ${R} \\times \\dfrac{1 - (1 + ${iShow})^{-${n}}}{${iShow}}\\)`, explanation: ( "Put the numbers into the present value formula for regular payments.") + ` Rate per period, periods in the exponent, and a minus sign in front of the exponent. Trap: forgetting the minus, which gives a future value instead.`},
+                    { title: "Step 3: Work Out the Negative Power", math: `\\((${baseShow})^{-${n}} \\approx ${factorShow}\\)`, explanation: ( "Compute the negative power expression representing the discount factor.") + ` A negative power means one divided by that power. Work it out on its own and keep several decimal places.`},
+                    { title: "Step 4: Finish the Multiplying and Dividing", math: `\\(PV = ${R} \\times \\dfrac{1 - ${factorShow}}{${iShow}} = ${R} \\times \\dfrac{${Number((1 - factorShow).toPrecision(10))}}{${iShow}} \\approx ${PV.toFixed(2)}\\)`, explanation: ( `Perform subtraction, divide by periodic rate, and multiply by payout size to get $${PV.toFixed(2)}.`) + ` Subtract from 1, divide by the rate, then multiply by the payment. The answer must be smaller than all the payments added together.`}
+                ];
+            }
+            else if (typeId === "t5") {
+                p.title = "Loan Payments (Find R from PV)";
+                let PV, freq, freqStr, paymentStr, years, r_pct;
+
+                if (scenario === 1) { freq = 12; freqStr = "monthly"; paymentStr = "monthly"; PV = randInt(15, 45) * 1000; years = randInt(3, 7); r_pct = randInt(36, 84) / 10; }
+                else if (scenario === 2) { freq = 12; freqStr = "monthly"; paymentStr = "monthly"; PV = randInt(8, 25) * 1000; years = randInt(2, 6); r_pct = randInt(40, 75) / 10; }
+                else { freq = 12; freqStr = "monthly"; paymentStr = "monthly"; PV = randInt(40, 90) * 1000; years = randInt(5, 12); r_pct = randInt(45, 95) / 10; }
+
+                const r = r_pct / 100;
+                const i = r / freq;
+                const n = years * freq;
+                const base = 1 + i;
+                /* i is usually a repeating decimal (0.043 / 12), and printing it raw put
+                   "1.0035833333333333" on screen. That was ugly in every solution step and
+                   it made the correct option the longest one every single time. Round for
+                   display only -- the arithmetic keeps the exact value. */
+                /* audit fix 2026-07-30: toFixed(6)은 소수점 자릿수라서, i가 0.0035 정도면
+                   유효숫자가 4자리밖에 안 남는다. 그 값을 n(최대 300)제곱하는 과정에서
+                   오차가 커져, 화면에 적힌 산술이 화면에 적힌 답을 내지 않았다
+                   (t4는 최대 $50.84 차이). 유효숫자 10자리로 표시하면 센트까지 재현된다.
+                   baseShow는 iShow에서 유도해야 Step 2와 Step 3의 숫자가 어긋나지 않는다. */
+                const iShow = Number(i.toPrecision(10));
+                const baseShow = Number((1 + iShow).toFixed(12));
+                const rShow = Number(r.toPrecision(10));
+                /* 반올림된 값 앞에서는 = 가 아니라 ≈ 라야 참이 된다 */
+                const iRel = (Math.abs(iShow - i) <= Math.abs(i) * 1e-12) ? "=" : "\\approx";
+                const factor = Math.pow(base, -n);
+                const factorShow = Number(factor.toPrecision(10));
+                const R = PV * i / (1 - factor);
+
+                p.fullStatement = MCF.pick([
+                    `A loan of \\(\\$${formatNumber(PV)}\\) is taken out at \\(${r_pct.toFixed(1)}\\%\\)/a interest compounded ${freqStr}. If the loan must be paid off completely over \\(${years}\\) years, calculate the required ${paymentStr} payment size.`,
+                    `Someone borrows \\(\\$${formatNumber(PV)}\\) at \\(${r_pct.toFixed(1)}\\%\\)/a compounded ${freqStr}, and clears it over \\(${years}\\) years. What ${paymentStr} payment does that take?`,
+                    `A \\(\\$${formatNumber(PV)}\\) loan runs for \\(${years}\\) years at \\(${r_pct.toFixed(1)}\\%\\)/a compounded ${freqStr}. Find the ${paymentStr} payment that pays it off exactly.`
+                ]);
+                p.prompt = mcfPick(["Select the matching regular payment value:", "How much is each payment?", "Pick the regular payment amount:"]);
+
+                const correctStr = formatMoney(R);
+                const dist1 = formatMoney(PV * r / (1 - Math.pow(1 + r, -years))); // Annual mistake
+                const dist2 = formatMoney(PV / n); // Simple division
+                const dist3 = formatMoney(PV * i / (Math.pow(1 + i, n) - 1)); // Sinking fund mistake
+
+                const mc = shuffleMC(correctStr, [dist1, dist2, dist3]);
+                p.options = mc.options; p.ans = mc.ansLetter;
+
+                p.hint = `Isolate payment variable R from the Present Value formula format: \\(R = \\dfrac{PV \\times i}{1 - (1 + i)^{-n}}\\).`;
+                p.steps = [
+                    { title: `Step 1: Decide Which Direction This Question Runs`, math: `\\(PV = ${PV}, \\quad i = \\dfrac{${rShow}}{${freq}} ${iRel} ${iShow}, \\quad n = ${years} \\times ${freq} = ${n}\\)`, explanation: ( "Determine periodic interest rate and total compounding periods for the term.") + ` A loan is a present value, and the payment is what you are solving for. So the formula runs the opposite way from a savings question.`},
+                    { title: "Step 2: Put the Numbers Into the Payment Formula", math: `\\(R = \\dfrac{${PV} \\times ${iShow}}{1 - (1 + ${iShow})^{-${n}}}\\)`, explanation: ( "Set up the algebraic expression using the rearranged present value annuity payment formula.") + ` The loan amount goes on top and the discount factor on the bottom. Rate per period, and the exponent counts payments not years.`},
+                    { title: "Step 3: Work Out the Discount Factor", math: `\\((${baseShow})^{-${n}} \\approx ${factorShow}\\)`, explanation: ( "Evaluate the negative exponent factor value component using a calculator.") + ` Work out the negative power first, then subtract it from 1 and divide by the rate. Keep several decimal places all the way through.`},
+                    { title: "Step 4: Finish the Division", math: `\\(R = \\dfrac{${Number((PV * iShow).toPrecision(10))}}{1 - ${factorShow}} = \\dfrac{${Number((PV * iShow).toPrecision(10))}}{${Number((1 - factorShow).toPrecision(10))}} \\approx ${R.toFixed(2)}\\)`, explanation: ( `Divide the numerator product by the denominator decimal difference to find the payment of $${R.toFixed(2)}.`) + ` Divide the loan by that factor to get the payment. Check it makes sense: the payments added up must come to more than the loan.`}
+                ];
+            }
+
+            return p;
+        }
+
+        function buildOptionsHTML(problem, selectedLetter, disabled) {
+            let html = '<div class="mc-options-list">';
+            for (let i = 0; i < problem.options.length; i++) {
+                const opt = problem.options[i];
+                const letter = opt.charAt(0);
+                const sel = selectedLetter === letter ? "selected" : "";
+                const dis = disabled ? "disabled" : "";
+                html += '<div class="mc-option-card ' + sel + ' ' + dis + '" onclick="selectMcOptionCard(\'' + letter + '\')"><span class="mc-badge">' + letter + '</span><span>' + opt.substring(3) + '</span></div>';
+            }
+            html += '</div>';
+            return html;
+        }
+
+        // --- Core Application Logic ---
+
+        function renderMathElements() {
+            if (window.renderMathInElement) {
+                renderMathInElement(document.body, {
+                    delimiters: [
+                        {left: '$$', right: '$$', display: true},
+                        {left: '\\(', right: '\\)', display: false}
+                    ],
+                    throwOnError: false
+                });
+            }
+        }
+
+        window.onload = renderMathElements;
+
+        function displaySolution() {
+            document.getElementById("solution-reveal-layer").style.display = "none";
+            var __hb = document.getElementById("hint-box"); if (__hb) __hb.style.display = "none";
+            const placeholder = document.getElementById("placeholder");
+            const quizStation = document.getElementById("quiz-station");
+            const assetMount = document.getElementById("asset-viewport-mount-point");
+            const mountPoint = document.getElementById("dynamic-input-mount-point");
+            const promptLabel = document.getElementById("input-prompt-label");
+
+            placeholder.style.display = "none";
+            quizStation.style.display = "block";
+            
+            if (currentProblemData.assetType && currentProblemData.assetType !== "none") {
+                assetMount.style.display = "flex";
+                assetMount.innerHTML = currentProblemData.assetHtml;
+            } else {
+                assetMount.style.display = "none";
+            }
+
+            document.getElementById("question-statement-display").innerHTML = currentProblemData.fullStatement;
+            promptLabel.innerHTML = currentProblemData.prompt;
+            
+            mountPoint.innerHTML = buildOptionsHTML(currentProblemData, currentState.selectedMcOption, currentState.answered);
+
+            if (currentState.answered) {
+                lockQuizInterface(currentState.isCorrect);
+                if (currentState.solRevealed) revealSolutionWorkspace();
+            } else {
+                unlockQuizInterface();
+            }
+
+            setTimeout(renderMathElements, 10);
+        }
+
+
+
+
+        function transmitDataToTeacherSpreadsheet(payload) {
+            fetch(TEACHER_SPREADSHEET_SCRIPT_URL, {
+                method: "POST",
+                mode: "no-cors",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            }).catch(err => console.error("Database cloud logging failure:", err));
+        }
+
+
+
+
+
+
+
+
+
+        function updateHudScoreboard() {
+            document.getElementById("hud-score").innerText = globalScore;
+            document.getElementById("hud-attempts").innerText = globalAttempts;
+        }
+    
+
+        MCF.init({ generate: generateProblem,
+                   /* 이 유닛은 그래프를 buildGraph(spec) 으로 그린다 (자산과 보기 둘 다) */
+                   renderAsset: function (p) { return p.graphSpec ? buildGraph(p.graphSpec) : (p.assetHtml || ""); },
+                   renderOption: function (p, i) {
+                     return (p.optionSpecs && p.optionSpecs[i]) ? buildGraph(p.optionSpecs[i]) : "";
+                   },
+                   logUrl: (typeof TEACHER_SPREADSHEET_SCRIPT_URL !== "undefined" ? TEACHER_SPREADSHEET_SCRIPT_URL : null),
+                   unitId: "Unit_3", lessonId: "Lesson_6" });
+</script>
+    <script src="../progress.js"></script>
+</body>
+</html>
